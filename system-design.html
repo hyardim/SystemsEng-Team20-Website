@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Design · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="system-design">
+    <div id="site-header"></div>
+
+    <main class="page-shell">
+      <section class="hero">
+        <p class="hero__eyebrow">System Design</p>
+        <h1>Service boundaries, request flow, and review workflow</h1>
+        <p>
+          Ambience-AI-1.5 is designed as a full-stack, multi-service application. The frontend,
+          backend, RAG service, and pgvector database each own a distinct part of the runtime. The
+          result is a system that can separate consultation state management from evidence retrieval
+          and model execution.
+        </p>
+      </section>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card">
+            <h2 id="topology">Deployment topology</h2>
+            <div class="diagram-card">
+              <h3>Compose-orchestrated architecture</h3>
+              <div class="diagram">
+                <div class="diagram__row">
+                  <div class="diagram__node">
+                    <strong>Frontend :3000</strong>
+                    React 19 + TypeScript + Vite + Tailwind + React Router.
+                  </div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node">
+                    <strong>Backend :8000</strong>
+                    FastAPI app exposing auth, chats, specialist, admin, notification, and RAG proxy routes.
+                  </div>
+                </div>
+                <div class="diagram__row">
+                  <div class="diagram__node">
+                    <strong>RAG service :8001</strong>
+                    FastAPI service for retrieval, grounded answer generation, revision, and PDF serving.
+                  </div>
+                  <div class="diagram__arrow">↔</div>
+                  <div class="diagram__node">
+                    <strong>PostgreSQL/pgvector :5432</strong>
+                    Stores consultation data plus vectorised guideline chunks and metadata.
+                  </div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node">
+                    <strong>Model endpoint</strong>
+                    Ollama on the host machine or a compatible external provider.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="request-flow">Main request flow</h2>
+            <div class="timeline-card">
+              <div class="timeline">
+                <div class="timeline__item" data-step="1">
+                  <strong>Frontend submits a GP message</strong>
+                  A protected GP route calls the backend with the consultation identifier and message content.
+                </div>
+                <div class="timeline__item" data-step="2">
+                  <strong>Backend persists chat state</strong>
+                  The user message is stored immediately. If the chat was still open, it is auto-submitted for review.
+                </div>
+                <div class="timeline__item" data-step="3">
+                  <strong>Backend triggers RAG generation</strong>
+                  Query text, specialty, and severity are sent to the RAG service.
+                </div>
+                <div class="timeline__item" data-step="4">
+                  <strong>RAG service retrieves evidence</strong>
+                  The service embeds the question, runs vector search, filters unsuitable chunks, and builds a grounded prompt.
+                </div>
+                <div class="timeline__item" data-step="5">
+                  <strong>Answer and citations return</strong>
+                  The backend stores the AI response and citation metadata as a message in the consultation timeline.
+                </div>
+                <div class="timeline__item" data-step="6">
+                  <strong>Specialist review updates the workflow</strong>
+                  The consultation can move through assignment, active review, approval, rejection, or revision-request states.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="review-workflow">Review workflow state machine</h2>
+            <div class="diagram-card">
+              <h3>Consultation status progression</h3>
+              <div class="diagram">
+                <div class="diagram__row">
+                  <div class="diagram__node"><strong>OPEN</strong>Chat exists but has not yet entered specialist workflow.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>SUBMITTED</strong>Triggered automatically after the first GP message or via explicit submit.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>ASSIGNED</strong>Specialist self-assigns the case.</div>
+                </div>
+                <div class="diagram__row">
+                  <div class="diagram__node"><strong>REVIEWING</strong>Specialist engages with the consultation, messages, or revision loop.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>APPROVED</strong>Terminal positive state.</div>
+                  <div class="diagram__arrow">or</div>
+                  <div class="diagram__node"><strong>REJECTED</strong>Terminal negative state, potentially with feedback.</div>
+                </div>
+              </div>
+            </div>
+            <p>
+              Message-level review overlays this chat-level state machine. Individual AI messages can
+              carry their own review metadata, allowing specialists to reject or replace a single
+              answer while keeping the broader consultation in progress.
+            </p>
+          </section>
+
+          <section class="section-card">
+            <h2 id="data-model">Data model</h2>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Entity</th>
+                    <th>Purpose</th>
+                    <th>Selected fields</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>User</td>
+                    <td>Identity, role, specialty, and active-state management.</td>
+                    <td>Email, password hash, role, specialty, is_active.</td>
+                  </tr>
+                  <tr>
+                    <td>Chat</td>
+                    <td>Consultation container and review state record.</td>
+                    <td>Title, status, specialty, severity, patient_context, specialist assignment, review metadata.</td>
+                  </tr>
+                  <tr>
+                    <td>Message</td>
+                    <td>Conversation timeline including AI evidence.</td>
+                    <td>Sender, content, citations, is_generating, review_status, review_feedback.</td>
+                  </tr>
+                  <tr>
+                    <td>Notification</td>
+                    <td>Workflow event delivery to users.</td>
+                    <td>Type, title, body, chat reference, read state.</td>
+                  </tr>
+                  <tr>
+                    <td>AuditLog</td>
+                    <td>Security and workflow traceability.</td>
+                    <td>User id, action, details, timestamp.</td>
+                  </tr>
+                  <tr>
+                    <td>FileAttachment</td>
+                    <td>Attachment metadata model for future upload workflows.</td>
+                    <td>Filename, path, type, size, uploader, chat link.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="api-surface">API responsibilities by service</h2>
+            <div class="card-grid">
+              <div class="mini-card">
+                <strong>Backend API</strong>
+                <p>Authentication, registration, profile, chats, specialist review, notifications, admin metrics, and audit visibility.</p>
+              </div>
+              <div class="mini-card">
+                <strong>RAG API</strong>
+                <p>Health checks, retrieval query endpoint, grounded answer endpoint, revision endpoint, and document-serving endpoint.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Frontend router</strong>
+                <p>Client-side view composition for landing pages, auth pages, role-protected task flows, and dashboards.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout callout--warning">
+            <h3>Architecture note</h3>
+            <p>
+              Backend startup currently relies on ORM <em>create_all</em> plus schema patch helpers,
+              which is practical for coursework iteration but weaker than a strictly migration-only
+              production workflow.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+    <script src="assets/site.js"></script>
+  </body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Requirements · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="requirements">
+    <div id="site-header"></div>
+
+    <main class="page-shell">
+      <section class="hero">
+        <p class="hero__eyebrow">Requirements</p>
+        <h1>Functional and non-functional requirements</h1>
+        <p>
+          The project requirements were driven by a clinical consultation use case rather than a
+          generic conversational AI goal. The resulting system has to support evidence-grounded
+          answers, multi-role review, and traceable operational behaviour under a realistic full-stack
+          deployment model.
+        </p>
+      </section>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card">
+            <h2 id="problem-definition">Problem definition</h2>
+            <p class="lede">
+              Primary care clinicians often need rapid answers for specialist-adjacent questions, but
+              generic LLM chat interfaces are not sufficient for high-stakes, evidence-backed decision
+              support. Ambience-AI-1.5 therefore focuses on guideline retrieval, transparent citations,
+              and a workflow where specialists can intervene directly before a case is considered
+              resolved.
+            </p>
+            <div class="quote-card">
+              <h3>Requirement framing</h3>
+              <blockquote>
+                The system must behave like a consultation support workflow with AI assistance, not
+                like an unbounded medical chatbot.
+              </blockquote>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="stakeholders">Stakeholders and user groups</h2>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Stakeholder</th>
+                    <th>Primary need</th>
+                    <th>System response</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>GP</td>
+                    <td>Ask a clinical question quickly and receive a grounded answer with sources.</td>
+                    <td>Protected GP routes, consultation creation, timeline view, and citation display.</td>
+                  </tr>
+                  <tr>
+                    <td>Specialist</td>
+                    <td>Review AI output, control workflow quality, and intervene when guidance is weak.</td>
+                    <td>Assignment queue, review endpoints, revision path, and manual response capability.</td>
+                  </tr>
+                  <tr>
+                    <td>Admin</td>
+                    <td>Observe operational health, manage users, and inspect audit history.</td>
+                    <td>Admin dashboards, user management endpoints, chat oversight, and audit log browsing.</td>
+                  </tr>
+                  <tr>
+                    <td>Project team</td>
+                    <td>Deploy and iterate on a multi-service architecture within coursework constraints.</td>
+                    <td>Docker Compose orchestration, modular services, and automated tests.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="functional-requirements">Core functional requirements</h2>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Authentication and access control</strong>
+                <p>JWT-based login, registration, password reset, and route-level role protection for GP, specialist, and admin users.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Consultation lifecycle</strong>
+                <p>Chats must progress through open, submitted, assigned, reviewing, approved, or rejected states.</p>
+              </div>
+              <div class="mini-card">
+                <strong>RAG-backed answer generation</strong>
+                <p>User questions must be forwarded to a retrieval service that returns grounded answers plus citation metadata.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Specialist control path</strong>
+                <p>Specialists must be able to self-assign, review whole chats or individual messages, request revisions, or manually replace answers.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Notifications and audit logs</strong>
+                <p>Users need status updates while admins need traceability for major workflow and security events.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Admin analytics</strong>
+                <p>The system must expose aggregate statistics over consultations, roles, AI responses, and RAG-grounded outputs.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="non-functional-requirements">Non-functional requirements</h2>
+            <div class="card-grid">
+              <div class="metric-card">
+                <strong>Groundedness</strong>
+                <p>Answers should cite retrieved guideline material and avoid unsupported free-form generation.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Auditability</strong>
+                <p>Major actions need server-side logs so admin users can inspect the workflow retrospectively.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Role isolation</strong>
+                <p>Users should only see and execute actions permitted by their operational role.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Deployability</strong>
+                <p>The stack should be runnable with Docker Compose on ports 3000, 8000, 8001, and 5432.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Extensibility</strong>
+                <p>The architecture should permit alternate model endpoints and evolving RAG retrieval modules.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Clinical restraint</strong>
+                <p>The system should prefer no-answer behaviour over hallucinated certainty when evidence quality is low.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="scope-boundaries">Scope boundaries and exclusions</h2>
+            <ul>
+              <li>The platform is specialised for neurology and rheumatology guideline assistance rather than general-purpose medical chat.</li>
+              <li>The current workflow is predominantly text-based; file attachments are modelled in the backend but not fully wired into the main chat path.</li>
+              <li>Polling is used for updates instead of websockets, which simplifies deployment but trades off push responsiveness.</li>
+              <li>The project includes cloud-hosting notes and alternative model-routing concepts, but not all of them belong to the main runtime path.</li>
+            </ul>
+            <div class="callout callout--warning">
+              <h3>Constraint summary</h3>
+              <p>
+                A coursework project must show end-to-end engineering depth, so the system balances a
+                real deployment shape with pragmatic shortcuts such as startup schema patching and an
+                evolving RAG module layout.
+              </p>
+            </div>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout">
+            <h3>Success criteria</h3>
+            <ul>
+              <li>Grounded AI responses with citations.</li>
+              <li>Role-aware consultation and review workflow.</li>
+              <li>Deployable multi-service stack.</li>
+              <li>Automated tests across frontend, backend, and RAG paths.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+    <script src="assets/site.js"></script>
+  </body>
+</html>

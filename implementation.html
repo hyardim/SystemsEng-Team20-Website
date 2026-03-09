@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="implementation">
+    <div id="site-header"></div>
+
+    <main class="page-shell">
+      <section class="hero">
+        <p class="hero__eyebrow">Implementation</p>
+        <h1>How the application is built in code</h1>
+        <p>
+          The implementation spans three major codebases inside the project: the React frontend, the
+          FastAPI backend, and the FastAPI RAG service. Docker Compose ties those pieces to a shared
+          PostgreSQL/pgvector runtime. This page summarises how those modules map onto the final
+          behaviour visible in the system.
+        </p>
+      </section>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card">
+            <h2 id="frontend-implementation">Frontend implementation</h2>
+            <p class="lede">
+              The frontend router defines public pages, GP pages, specialist pages, admin pages, and a
+              shared profile page. Auth state is persisted in localStorage and restored into React
+              context so page reloads do not immediately lose route protection state.
+            </p>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Routing model</strong>
+                <p>Protected route wrappers restrict views to allowed role sets such as GP/admin or specialist/admin.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Operational pages</strong>
+                <p>GP consultation views, specialist review pages, and admin dashboards are implemented as separate page modules.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Notifications</strong>
+                <p>A dropdown component polls every 15 seconds, tracks unread counts, and deep-links users into related consultations.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Admin charts</strong>
+                <p>Recharts components visualise consultation states, specialty distribution, and daily AI query volumes.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="backend-implementation">Backend implementation</h2>
+            <div class="card-grid">
+              <div class="metric-card">
+                <strong>Application bootstrap</strong>
+                <p>The backend creates ORM metadata at startup, ensures selected schema columns exist, and optionally seeds demo users.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Routers</strong>
+                <p>The main app includes auth, chats, specialist, notifications, admin, and RAG-related routers.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Persistence</strong>
+                <p>SQLAlchemy models represent users, chats, messages, notifications, audit logs, and file attachments.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Security</strong>
+                <p>JWT authentication and password hashing are part of the core backend service layer.</p>
+              </div>
+            </div>
+            <div class="subtle-divider"></div>
+            <p>
+              Workflow logic lives primarily in service modules. GP messaging persists messages and
+              triggers background AI generation. Specialist services manage assignment, review,
+              revision, manual replacement, audit logging, and notification generation. Admin services
+              aggregate statistics and expose oversight endpoints.
+            </p>
+          </section>
+
+          <section class="section-card">
+            <h2 id="rag-implementation">RAG service implementation</h2>
+            <div class="three-col">
+              <div class="mini-card">
+                <strong>Startup path</strong>
+                <p>The service loads the embedding model once, infers vector dimensionality, initialises pgvector schema, and warms the local model.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Answer path</strong>
+                <p>/answer embeds the query, retrieves chunks, filters them, builds a grounded prompt, and returns answer plus citation sets.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Revision path</strong>
+                <p>/revise uses the original query plus specialist feedback to regenerate a grounded answer.</p>
+              </div>
+            </div>
+            <div class="code-list">
+              <span>rag_service/src/main.py</span>
+              <span>rag_service/src/ingestion/*</span>
+              <span>rag_service/src/retrieval/*</span>
+              <span>rag_service/src/generation/*</span>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="deployment-implementation">Deployment implementation</h2>
+            <p>
+              Docker Compose defines the four primary runtime containers and their network. The
+              frontend exposes port 3000, the backend exposes 8000, the RAG service exposes 8001, and
+              PostgreSQL exposes 5432. Volume mounts are used for hot-reload paths and for making RAG
+              data/configuration available inside containers.
+            </p>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Main responsibility</th>
+                    <th>Key runtime details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>db_vector</td>
+                    <td>Application and vector database</td>
+                    <td>pgvector/pgvector:pg16 image, health checks, shared volume.</td>
+                  </tr>
+                  <tr>
+                    <td>backend</td>
+                    <td>App API and workflow control</td>
+                    <td>Depends on database health, receives DATABASE_URL and RAG service URL.</td>
+                  </tr>
+                  <tr>
+                    <td>rag_service</td>
+                    <td>Retrieval and generation engine</td>
+                    <td>Mounts data/configs, depends on database, reaches host model via host.docker.internal.</td>
+                  </tr>
+                  <tr>
+                    <td>frontend</td>
+                    <td>SPA user interface</td>
+                    <td>Built via frontend Dockerfile, mapped to host port 3000.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="known-limitations">Known implementation limitations</h2>
+            <ul>
+              <li>An older frontend API client remains in the repository even though a newer service path is in use.</li>
+              <li>A backend health router exists outside the main router list and appears unused in the primary runtime.</li>
+              <li>File attachments are modelled in the data layer but not fully integrated into the dominant consultation workflow.</li>
+              <li>Dual RAG API paths exist, reflecting an evolving design between deployed behaviour and modularised test targets.</li>
+              <li>Schema evolution currently uses startup helpers in addition to ORM table creation rather than a strict migration-only discipline.</li>
+            </ul>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout">
+            <h3>Implementation emphasis</h3>
+            <p>
+              The codebase’s strongest feature is the workflow integration between retrieval-backed AI
+              generation and specialist-controlled review, rather than raw model experimentation.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+    <script src="assets/site.js"></script>
+  </body>
+</html>

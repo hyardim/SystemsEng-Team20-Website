@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Research · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="research">
+    <div id="site-header"></div>
+
+    <main class="page-shell">
+      <section class="hero">
+        <p class="hero__eyebrow">Research</p>
+        <h1>Technical rationale behind the architecture</h1>
+        <p>
+          The project’s research emphasis is architectural and engineering-oriented: how to combine
+          retrieval-augmented generation, clinical evidence grounding, and human specialist oversight
+          into one coherent system that can be deployed, tested, and reasoned about transparently.
+        </p>
+      </section>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card">
+            <h2 id="why-rag">Why retrieval-augmented generation?</h2>
+            <p class="lede">
+              A generic LLM can provide fluent text, but fluency alone is not enough for clinical
+              support. The implemented design uses retrieval so generation is conditioned on indexed
+              guideline chunks from curated document sources. This improves answer traceability and
+              creates a concrete citation object that can be shown in the user interface.
+            </p>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Problem with plain generation</strong>
+                <p>Unconstrained models can hallucinate recommendations, omit provenance, and blur the difference between evidence and invention.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Reason for RAG</strong>
+                <p>Retrieved chunks become explicit context. The answer can then cite the exact subset of supporting evidence used in generation.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="why-separate-service">Why a separate RAG service?</h2>
+            <div class="card-grid">
+              <div class="metric-card">
+                <strong>Isolation of concerns</strong>
+                <p>Clinical retrieval, embeddings, and generation logic evolve independently from authentication and chat CRUD operations.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Operational flexibility</strong>
+                <p>The model runtime may be local via Ollama or external through a compatible endpoint, so a dedicated service boundary is useful.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Testability</strong>
+                <p>Retrieval modules, prompt construction, citation rules, and generation routing can be tested without entangling frontend logic.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="technology-choices">Technology selection rationale</h2>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Decision</th>
+                    <th>Rationale</th>
+                    <th>Trade-off</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>React + TypeScript SPA</td>
+                    <td>Good fit for route protection, multiple dashboards, and strongly typed page-level workflows.</td>
+                    <td>Requires client-side coordination for polling and local auth persistence.</td>
+                  </tr>
+                  <tr>
+                    <td>FastAPI backend</td>
+                    <td>Rapid API development, clean dependency injection, and strong Python ecosystem fit with auth and data tooling.</td>
+                    <td>Background-task and startup patch patterns can become less disciplined than migration-first setups.</td>
+                  </tr>
+                  <tr>
+                    <td>PostgreSQL + pgvector</td>
+                    <td>Keeps operational data and vector retrieval in the same database family while supporting semantic search.</td>
+                    <td>Combining transactional and vector concerns can complicate scaling later.</td>
+                  </tr>
+                  <tr>
+                    <td>sentence-transformers embeddings</td>
+                    <td>Practical local embedding pipeline with an established ecosystem.</td>
+                    <td>Embedding quality and speed remain bounded by local hardware and chosen model size.</td>
+                  </tr>
+                  <tr>
+                    <td>Polling instead of websockets</td>
+                    <td>Simpler deployment model for notifications and in-progress review state changes.</td>
+                    <td>Less efficient than server push and introduces deliberate latency.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="clinical-safety-research">Clinical safety and grounding decisions</h2>
+            <ul>
+              <li>Low-relevance retrieval results are filtered before they can influence generation.</li>
+              <li>Boilerplate phrases such as copyright or supplementary material are actively rejected from citation use.</li>
+              <li>Chunks without source-path metadata are excluded to avoid producing citations that cannot be opened.</li>
+              <li>If evidence quality is insufficient, the service returns a no-answer style response rather than inventing a recommendation.</li>
+              <li>Specialist review exists at both chat and per-message level, making clinical oversight part of the normal control flow.</li>
+            </ul>
+          </section>
+
+          <section class="section-card">
+            <h2 id="evolving-architecture">Evolving architecture and research honesty</h2>
+            <p>
+              The repository contains a mixture of mainline runtime code and newer modular RAG logic.
+              This is not unusual in a student engineering project, but it matters for honest reporting.
+              The website therefore treats the architecture as <em>implemented and evolving</em> rather
+              than pretending every documented path is equally productionised.
+            </p>
+            <div class="callout callout--danger">
+              <h3>Examples of evolution</h3>
+              <ul>
+                <li>There is an older frontend API client alongside a newer service layer.</li>
+                <li>An unused backend health router exists outside the main included routers.</li>
+                <li>Two RAG API paths co-exist: one drives the deployed app while some newer modular logic is covered in tests.</li>
+                <li>Some documentation mentions older model-routing ideas that are not the primary live path.</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout">
+            <h3>Research stance</h3>
+            <p>
+              The most important design question was not “which model is strongest?” but “how should
+              model output be constrained, reviewed, and evidenced inside a clinical workflow?”
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+    <script src="assets/site.js"></script>
+  </body>
+</html>

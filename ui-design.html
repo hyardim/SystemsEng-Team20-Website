@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UI Design · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="ui-design">
+    <div id="site-header"></div>
+
+    <main class="page-shell">
+      <section class="hero">
+        <p class="hero__eyebrow">UI Design</p>
+        <h1>Role-oriented interface design for consultation workflows</h1>
+        <p>
+          The frontend is not a single generic chat screen. It is a role-protected single-page
+          application whose information architecture separates GP creation tasks, specialist review
+          tasks, and admin observability. The interface design follows the workflow boundaries already
+          present in the backend services.
+        </p>
+      </section>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card">
+            <h2 id="information-architecture">Information architecture</h2>
+            <div class="diagram-card">
+              <h3>Route-level structure</h3>
+              <div class="diagram">
+                <div class="diagram__row">
+                  <div class="diagram__node"><strong>Public</strong>Landing, login, registration, password reset.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>GP routes</strong>Consultation list, new consultation form, consultation detail timeline.</div>
+                </div>
+                <div class="diagram__row">
+                  <div class="diagram__node"><strong>Specialist routes</strong>Queue view, assigned view, review detail page.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>Admin routes</strong>Dashboard, users, chats, and audit logs.</div>
+                </div>
+              </div>
+            </div>
+            <p>
+              The route tree in the frontend router demonstrates this separation explicitly. Role
+              restrictions are enforced on the client through protected routes and reinforced at the
+              backend API layer.
+            </p>
+          </section>
+
+          <section class="section-card">
+            <h2 id="gp-experience">GP user experience</h2>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Consultation creation</strong>
+                <p>The GP starts with a simple structured form: consultation title, specialty, severity, and question context.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Timeline detail view</strong>
+                <p>Messages are shown chronologically with citations attached to AI outputs, helping the GP understand where evidence came from.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Status awareness</strong>
+                <p>The UI surfaces whether a chat is open, submitted, assigned, reviewing, approved, or rejected.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Polling for progress</strong>
+                <p>The detail page refreshes while AI generation or review activity is still in progress.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="specialist-experience">Specialist review experience</h2>
+            <p class="lede">
+              The specialist interface is designed around intervention rather than passive reading. It
+              needs to support queue triage, self-assignment, message-level review, and manual
+              correction of AI-generated content.
+            </p>
+            <div class="card-grid">
+              <div class="metric-card">
+                <strong>Queue and assigned views</strong>
+                <p>Separate entry points reflect the distinction between newly submitted consultations and work already claimed by a specialist.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Per-message review</strong>
+                <p>AI outputs can be approved, rejected, marked for change requests, or replaced with a manual clinical answer.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Revision loop visibility</strong>
+                <p>Placeholder messages and polling make AI regeneration observable rather than opaque.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="admin-experience">Admin observability experience</h2>
+            <p>
+              The admin dashboard uses charts to visualise status distributions, specialty splits, and
+              daily AI query counts. This is not decorative; it reflects the admin service contract,
+              which exposes active consultations, grounded-response counts, daily AI query data, and
+              role-based user activity.
+            </p>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Charts</strong>
+                <p>Bar, pie, and area charts are rendered using Recharts, matching the dashboard’s statistical API payload.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Operational drill-down</strong>
+                <p>Separate admin pages provide user management, chat oversight, and audit-log exploration.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="interaction-patterns">Interaction patterns and UX trade-offs</h2>
+            <ul>
+              <li>Auth state is stored in context and restored from localStorage so route protection survives refreshes.</li>
+              <li>Notifications are refreshed on a 15-second polling loop instead of websockets.</li>
+              <li>Deep-link navigation from notifications sends the user directly to the related consultation detail view.</li>
+              <li>Because this is a clinical workflow, interpretability beats novelty: messages, statuses, and citations are emphasised over conversational decoration.</li>
+            </ul>
+            <div class="callout callout--warning">
+              <h3>UI limitation</h3>
+              <p>
+                The repository contains an older frontend API client that is no longer central to the
+                active UI flow. This is a maintainability issue rather than a user-facing defect, but
+                it is part of the implementation reality.
+              </p>
+            </div>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout">
+            <h3>Design principle</h3>
+            <p>
+              Each role sees the minimum interface necessary for its responsibilities, reducing both
+              cognitive load and accidental privilege overlap.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+    <script src="assets/site.js"></script>
+  </body>
+</html>

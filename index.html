@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ambience-AI-1.5 · Technical Project Report</title>
+    <meta
+      name="description"
+      content="Technical project report website for Ambience-AI-1.5, a full-stack clinical decision-support platform built around retrieval-augmented generation and specialist review workflows."
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="home">
+    <div id="site-header"></div>
+
+    <main class="page-shell">
+      <section class="hero">
+        <p class="hero__eyebrow">Technical systems report · full-stack clinical RAG platform</p>
+        <h1>Ambience-AI-1.5</h1>
+        <p>
+          Ambience-AI-1.5 is a microservices-based clinical consultation platform for neurology and
+          rheumatology workflows. It combines a React single-page frontend, a FastAPI backend, a
+          separate FastAPI RAG service, PostgreSQL with pgvector, and a local or externally hosted
+          medical LLM. The design goal is not to produce an unconstrained chatbot, but to support
+          grounded clinical question answering with explicit evidence retrieval, role-based review,
+          and auditability.
+        </p>
+        <div class="hero__meta">
+          <div>
+            <strong>4 runtime services</strong>
+            <span>Frontend, backend, RAG service, and pgvector database under Docker Compose.</span>
+          </div>
+          <div>
+            <strong>3 operational roles</strong>
+            <span>GP, specialist, and admin workflows are enforced through JWT-backed RBAC.</span>
+          </div>
+          <div>
+            <strong>Evidence-first answers</strong>
+            <span>AI responses carry citation metadata derived from retrieved medical guideline chunks.</span>
+          </div>
+          <div>
+            <strong>Human oversight built in</strong>
+            <span>Specialists can approve, reject, revise, or replace AI responses.</span>
+          </div>
+        </div>
+        <div class="page-links">
+          <a href="system-design.html">View architecture</a>
+          <a href="implementation.html">Inspect implementation</a>
+          <a href="testing.html">See evaluation and testing</a>
+        </div>
+      </section>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card">
+            <h2 id="project-overview">Project overview</h2>
+            <p class="lede">
+              The deployed system implements a consultation lifecycle that starts with a GP-authored
+              clinical question and ends with either a specialist-approved answer, a rejected answer,
+              or a manually replaced response. The backend persists consultations and messages,
+              proxies RAG requests, records audit events, and exposes admin analytics. The RAG
+              service retrieves guideline chunks, filters low-quality evidence, generates grounded
+              responses, and returns citations that can open original PDFs.
+            </p>
+            <div class="chip-row">
+              <span class="chip">React 19 + TypeScript + Vite + Tailwind</span>
+              <span class="chip">FastAPI + SQLAlchemy + PostgreSQL + JWT</span>
+              <span class="chip">sentence-transformers + pgvector + Ollama</span>
+              <span class="chip">Docker Compose orchestration</span>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="core-use-case">Core use case</h2>
+            <div class="timeline-card">
+              <div class="timeline">
+                <div class="timeline__item" data-step="1">
+                  <strong>GP creates a consultation</strong>
+                  The frontend exposes a protected GP route for consultation creation and detail views.
+                  The backend stores the consultation with clinical metadata such as specialty,
+                  severity, and patient context.
+                </div>
+                <div class="timeline__item" data-step="2">
+                  <strong>First clinical question is sent</strong>
+                  The first GP message persists to the database and auto-submits the chat for review,
+                  moving it from <em>open</em> to <em>submitted</em>.
+                </div>
+                <div class="timeline__item" data-step="3">
+                  <strong>Backend calls the RAG service</strong>
+                  A background task sends the query, specialty, and severity to the RAG API, which
+                  retrieves relevant chunks and generates a citation-backed answer.
+                </div>
+                <div class="timeline__item" data-step="4">
+                  <strong>AI answer is stored with citations</strong>
+                  Assistant messages carry structured citation metadata, including document identity,
+                  chunk information, and source-path-based document access.
+                </div>
+                <div class="timeline__item" data-step="5">
+                  <strong>Specialist review is applied</strong>
+                  The specialist queue supports self-assignment, review state transitions, change
+                  requests, or manual replacement of specific AI outputs.
+                </div>
+                <div class="timeline__item" data-step="6">
+                  <strong>Admin oversight remains available</strong>
+                  Admin endpoints aggregate users, chats, consultation states, AI query metrics, and
+                  audit logs for system governance.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="stack-snapshot">System architecture snapshot</h2>
+            <div class="diagram-card">
+              <h3>Runtime component map</h3>
+              <div class="diagram">
+                <div class="diagram__row">
+                  <div class="diagram__node">
+                    <strong>React frontend</strong>
+                    Route-protected SPA for GP, specialist, and admin journeys.
+                  </div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node">
+                    <strong>FastAPI backend</strong>
+                    Auth, chats, specialist review, notifications, admin analytics, and RAG proxying.
+                  </div>
+                </div>
+                <div class="diagram__row">
+                  <div class="diagram__node">
+                    <strong>PostgreSQL app data</strong>
+                    Users, chats, messages, notifications, audit logs, and attachment metadata.
+                  </div>
+                  <div class="diagram__arrow">↔</div>
+                  <div class="diagram__node">
+                    <strong>FastAPI RAG service</strong>
+                    Embedding, retrieval, grounding, answer generation, revision, and PDF serving.
+                  </div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node">
+                    <strong>LLM endpoint</strong>
+                    Local Ollama or an OpenAI-compatible hosted inference path.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="roles-and-governance">User roles and governance</h2>
+            <div class="card-grid">
+              <div class="mini-card">
+                <strong>GP</strong>
+                <p>Creates consultations, sends questions, views citation-backed AI answers, and tracks specialist review status.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Specialist</strong>
+                <p>Self-assigns cases, reviews AI output, requests revisions, and can replace generated text with a manual answer.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Admin</strong>
+                <p>Monitors system metrics, manages users, inspects chats globally, and reviews audit events.</p>
+              </div>
+            </div>
+            <div class="callout">
+              <h3>Design intent</h3>
+              <p>
+                Human review is a first-class workflow, not a post-hoc safeguard. The platform is
+                intentionally structured around specialist oversight, role restrictions, and evidence
+                traceability rather than autonomous advice generation.
+              </p>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="implementation-evidence">Evidence used for this report</h2>
+            <p>
+              This report is grounded in the repository structure and implementation artifacts rather
+              than abstract architecture claims. The main evidence sources include:
+            </p>
+            <div class="code-list">
+              <span>Ambience-AI-1.5/docker-compose.yml</span>
+              <span>Ambience-AI-1.5/backend/src/main.py</span>
+              <span>Ambience-AI-1.5/backend/src/db/models.py</span>
+              <span>Ambience-AI-1.5/backend/src/services/chat_service.py</span>
+              <span>Ambience-AI-1.5/backend/src/services/specialist_service.py</span>
+              <span>Ambience-AI-1.5/frontend/src/App.tsx</span>
+              <span>Ambience-AI-1.5/frontend/src/components/NotificationDropdown.tsx</span>
+              <span>Ambience-AI-1.5/frontend/src/pages/admin/AdminDashboardPage.tsx</span>
+              <span>Ambience-AI-1.5/rag_service/src/main.py</span>
+              <span>Automated tests in backend/tests, frontend/src/**/*.test.tsx, and rag_service/tests</span>
+            </div>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout callout--warning">
+            <h3>Honest caveat</h3>
+            <p>
+              The repository shows an evolving architecture. Some older or partially integrated code
+              paths remain alongside the main deployed runtime, so this report distinguishes core
+              runtime behaviour from experimental or legacy artefacts.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+    <script src="assets/site.js"></script>
+  </body>
+</html>
