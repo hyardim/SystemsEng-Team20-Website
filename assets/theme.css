@@ -1,0 +1,37 @@
+:root {
+	/* NHS core palette */
+	--nhs-blue: #005eb8;
+	--nhs-dark-blue: #003087;
+	--nhs-bright-blue: #0072ce;
+	--nhs-white: #ffffff;
+	--nhs-black: #212b32;
+
+	/* Supporting tints used across the report */
+	--nhs-pale-blue: #d8e8f8;
+	--nhs-soft-blue: #edf4fb;
+	--nhs-soft-blue-strong: #cfe1f5;
+	--nhs-border: #d9e2ef;
+	--nhs-text-muted: #5b6c7d;
+	--nhs-panel: #ffffff;
+	--nhs-panel-soft: #ffffff;
+	--nhs-page-bg: #ffffff;
+	--nhs-page-bg-alt: #ffffff;
+	--nhs-success: #007f3b;
+	--nhs-warning: #b36b00;
+	--nhs-danger: #ae2a19;
+
+	/* Semantic aliases used by the site */
+	--bg: #ffffff;
+	--bg-soft: #ffffff;
+	--panel: var(--nhs-panel);
+	--panel-soft: var(--nhs-panel-soft);
+	--line: var(--nhs-border);
+	--text: #132033;
+	--muted: var(--nhs-text-muted);
+	--heading: #07172d;
+	--brand: var(--nhs-blue);
+	--brand-strong: var(--nhs-dark-blue);
+	--accent: var(--nhs-bright-blue);
+	--warn: var(--nhs-warning);
+	--danger: var(--nhs-danger);
+}

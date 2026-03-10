@@ -1,86 +1,62 @@
-const navigation = [
-  { id: 'home', label: 'Home', href: 'index.html' },
-  { id: 'requirements', label: 'Requirements', href: 'requirements.html' },
-  { id: 'research', label: 'Research', href: 'research.html' },
-  { id: 'algorithms', label: 'Algorithms', href: 'algorithms.html' },
-  { id: 'ui-design', label: 'UI Design', href: 'ui-design.html' },
-  { id: 'system-design', label: 'System Design', href: 'system-design.html' },
-  { id: 'implementation', label: 'Implementation', href: 'implementation.html' },
-  { id: 'testing', label: 'Evaluation & Testing', href: 'testing.html' },
-  { id: 'conclusion', label: 'Conclusion', href: 'conclusion.html' },
-  { id: 'appendices', label: 'Appendices', href: 'appendices.html' },
-];
-
-function renderHeader() {
+function initializeHeader() {
   const page = document.body.dataset.page;
-  const host = document.getElementById('site-header');
-  if (!host) return;
+  const header = document.querySelector('.site-header');
+  const nav = document.querySelector('.site-nav');
+  const toggle = document.querySelector('.nav-toggle');
+  const githubBtn = document.querySelector('.site-header__github-btn');
 
-  host.innerHTML = `
-    <header class="site-header">
-      <div class="site-header__inner">
-        <a class="brand" href="index.html" aria-label="Ambience-AI-1.5 report home">
-          <span class="brand__mark">A15</span>
-          <span>
-            <p class="brand__eyebrow">UCL Computer Science · Team 20</p>
-            <p class="brand__title">Ambience-AI-1.5 Technical Project Report</p>
-          </span>
-        </a>
-        <button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button>
-        <nav class="site-nav" aria-label="Primary">
-          ${navigation
-            .map(
-              (item) => `<a href="${item.href}" class="${item.id === page ? 'is-active' : ''}">${item.label}</a>`,
-            )
-            .join('')}
-        </nav>
-      </div>
-    </header>
-  `;
+  if (page && nav) {
+    const activeLink = nav.querySelector(`[data-nav="${page}"]`);
+    if (activeLink) {
+      activeLink.classList.add('is-active');
+    }
+  }
 
-  const toggle = host.querySelector('.nav-toggle');
-  const nav = host.querySelector('.site-nav');
   if (toggle && nav) {
     toggle.addEventListener('click', () => nav.classList.toggle('is-open'));
   }
-}
 
-function renderFooter() {
-  const host = document.getElementById('site-footer');
-  if (!host) return;
+  if (githubBtn) {
+    githubBtn.addEventListener('click', () => {
+      // Placeholder: add repo URL later.
+    });
+  }
 
-  host.innerHTML = `
-    <footer class="site-footer">
-      <div class="site-footer__inner">
-        <section>
-          <h3>Ambience-AI-1.5</h3>
-          <p>
-            A technical systems report for a university software engineering project.
-            The system under study is a role-aware clinical consultation platform that combines
-            React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.
-          </p>
-          <p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p>
-        </section>
-        <section>
-          <h4>Key evidence base</h4>
-          <div class="site-footer__links">
-            <a href="implementation.html">Frontend, backend, and RAG implementation</a>
-            <a href="system-design.html">Architecture, flows, and data model</a>
-            <a href="testing.html">Automated test strategy and caveats</a>
-          </div>
-        </section>
-        <section>
-          <h4>Appendix items</h4>
-          <div class="site-footer__links">
-            <a href="appendices.html#user-manual">User manual</a>
-            <a href="appendices.html#deployment-manual">Deployment manual</a>
-            <a href="appendices.html#privacy">GDPR and privacy</a>
-            <a href="appendices.html#external-links">External blog and monthly video</a>
-          </div>
-        </section>
-      </div>
-    </footer>
+  const fallbackLogoSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="340" height="64" viewBox="0 0 340 64" role="img" aria-label="Ambience-AI-1.5">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#005eb8"/>
+          <stop offset="1" stop-color="#003087"/>
+        </linearGradient>
+      </defs>
+      <circle cx="24" cy="32" r="12" fill="url(#g)"/>
+      <path d="M24 23 L24 41 M15 32 L33 32" stroke="white" stroke-width="3" stroke-linecap="round"/>
+      <text x="44" y="39" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="url(#g)">Ambience-AI-1.5</text>
+    </svg>
   `;
+  const fallbackLogoSrc = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(fallbackLogoSvg)}`;
+
+  document.querySelectorAll('.brand__logo-image').forEach((logoImage) => {
+    const applyFallback = () => {
+      logoImage.src = fallbackLogoSrc;
+      logoImage.alt = 'Ambience-AI-1.5 logo';
+    };
+
+    logoImage.addEventListener('error', applyFallback, { once: true });
+    if (logoImage.complete && logoImage.naturalWidth === 0) {
+      applyFallback();
+    }
+  });
+
+  if (header) {
+    const updateHeaderScrollState = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 12);
+    };
+
+    updateHeaderScrollState();
+    window.addEventListener('scroll', updateHeaderScrollState, { passive: true });
+  }
 }
 
 function renderToc() {
@@ -111,18 +87,92 @@ function renderToc() {
   `;
 }
 
+function renderFooter() {
+  const footer = document.querySelector('.site-footer');
+  if (!footer) return;
+
+  footer.innerHTML = `
+    <div class="site-footer__inner site-footer__inner--custom">
+      <section class="site-footer__brand">
+        <h3>Ambience<br/>AI<br/>1.5</h3>
+      </section>
+
+      <section class="site-footer__about">
+        <h4 class="site-footer__heading">About Us</h4>
+        <p class="site-footer__about-text">Clinical guidance + AI insights for specialist-supported consultation workflows.</p>
+        <div class="site-footer__links site-footer__social">
+          <a href="#" data-placeholder-link="github">GitHub</a>
+          <a href="#" data-placeholder-link="youtube">YouTube</a>
+          <a href="#" data-placeholder-link="contact">Contact Us</a>
+        </div>
+      </section>
+
+      <section class="site-footer__docs">
+        <h4 class="site-footer__heading">Documentation</h4>
+        <div class="site-footer__docs-grid">
+          <a href="index.html">Home</a>
+          <a href="requirements.html">Requirements</a>
+          <a href="research.html">Research</a>
+          <a href="ui-design.html">UI Design</a>
+          <a href="system-design.html">System Design</a>
+          <a href="implementation.html">Implementation</a>
+          <a href="testing.html">Testing</a>
+          <a href="testing.html">Evaluation</a>
+          <a href="appendices.html">Appendices</a>
+          <a href="appendices.html#external-links">Blog</a>
+        </div>
+      </section>
+
+      <section class="site-footer__partners">
+        <h4 class="site-footer__heading">Project Partners</h4>
+        <div class="site-footer__partners-list">
+          <a class="partner-link" href="https://www.nhs.uk" target="_blank" rel="noreferrer" aria-label="NHS website">
+            <img class="partner-logo-image" src="assets/partners/nhs-logo.png" alt="NHS" data-label="NHS" />
+          </a>
+          <a class="partner-link" href="https://www.intel.com" target="_blank" rel="noreferrer" aria-label="Intel website">
+            <img class="partner-logo-image" src="assets/partners/intel-logo.png" alt="Intel" data-label="Intel" />
+          </a>
+          <a class="partner-link" href="https://www.ucl.ac.uk" target="_blank" rel="noreferrer" aria-label="UCL website">
+            <img class="partner-logo-image" src="assets/partners/ucl-logo.png" alt="UCL" data-label="UCL" />
+          </a>
+        </div>
+      </section>
+    </div>
+    <p class="site-footer__copyright">Copyright © 2026 Ambience AI 1.5. All rights reserved.</p>
+  `;
+}
+
 function markExternalPlaceholders() {
   document.querySelectorAll('[data-placeholder-link]').forEach((link) => {
     link.addEventListener('click', (event) => {
       event.preventDefault();
-      alert('Replace this placeholder with your published blog or monthly video URL before submission.');
+      alert('Placeholder link: replace with your final URL before submission.');
     });
   });
 }
 
+function initializePartnerLogos() {
+  document.querySelectorAll('.partner-logo-image').forEach((logoImage) => {
+    const parent = logoImage.closest('.partner-link');
+    const label = logoImage.dataset.label || 'Partner';
+
+    const showFallback = () => {
+      if (!parent) return;
+      parent.classList.add('is-missing-logo');
+      parent.setAttribute('data-fallback', label);
+    };
+
+    logoImage.addEventListener('error', showFallback, { once: true });
+    if (logoImage.complete && logoImage.naturalWidth === 0) {
+      showFallback();
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  renderHeader();
+  initializeHeader();
   renderFooter();
   renderToc();
   markExternalPlaceholders();
+  initializePartnerLogos();
 });

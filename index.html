@@ -8,205 +8,252 @@
       name="description"
       content="Technical project report website for Ambience-AI-1.5, a full-stack clinical decision-support platform built around retrieval-augmented generation and specialist review workflows."
     />
-    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260309" />
   </head>
   <body data-page="home">
-    <div id="site-header"></div>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="index.html" aria-label="Ambience-AI-1.5 home">
+          <img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" />
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="index.html" data-nav="home">Home</a>
+          <a href="requirements.html" data-nav="requirements">Requirements</a>
+          <a href="research.html" data-nav="research">Research</a>
+          <a href="ui-design.html" data-nav="ui-design">UI Design</a>
+          <a href="system-design.html" data-nav="system-design">System Design</a>
+          <a href="implementation.html" data-nav="implementation">Implementation</a>
+          <a href="testing.html" data-nav="testing">Testing</a>
+          <a href="testing.html" data-nav="evaluation">Evaluation</a>
+          <a href="appendices.html" data-nav="appendices">Appendices</a>
+          <a href="appendices.html#external-links" data-nav="blog">Blog</a>
+        </nav>
+        <button class="site-header__github-btn" type="button" aria-label="GitHub repository link">
+          GitHub ↗
+        </button>
+      </div>
+    </header>
 
     <main class="page-shell">
-      <section class="hero">
-        <p class="hero__eyebrow">Technical systems report · full-stack clinical RAG platform</p>
-        <h1>Ambience-AI-1.5</h1>
-        <p>
-          Ambience-AI-1.5 is a microservices-based clinical consultation platform for neurology and
-          rheumatology workflows. It combines a React single-page frontend, a FastAPI backend, a
-          separate FastAPI RAG service, PostgreSQL with pgvector, and a local or externally hosted
-          medical LLM. The design goal is not to produce an unconstrained chatbot, but to support
-          grounded clinical question answering with explicit evidence retrieval, role-based review,
-          and auditability.
-        </p>
-        <div class="hero__meta">
-          <div>
-            <strong>4 runtime services</strong>
-            <span>Frontend, backend, RAG service, and pgvector database under Docker Compose.</span>
-          </div>
-          <div>
-            <strong>3 operational roles</strong>
-            <span>GP, specialist, and admin workflows are enforced through JWT-backed RBAC.</span>
-          </div>
-          <div>
-            <strong>Evidence-first answers</strong>
-            <span>AI responses carry citation metadata derived from retrieved medical guideline chunks.</span>
-          </div>
-          <div>
-            <strong>Human oversight built in</strong>
-            <span>Specialists can approve, reject, revise, or replace AI responses.</span>
+      <section class="hero hero--home">
+        <div class="hero-home__content">
+          <p class="hero__eyebrow hero__eyebrow--pill">UCL CS Team 20 project</p>
+          <h1>The Ambience-AI-1.5 Clinical Decision-Support Platform</h1>
+          <p class="hero-home__summary">
+            A clinical support system that helps doctors get specialist guidance, receive
+            evidence-grounded AI answers linked to NHS medical guidelines, and send cases for
+            specialist review in neurology and rheumatology.
+          </p>
+          <div class="hero-home__actions">
+            <a class="button button--primary" href="#video">See project video</a>
+            <a class="button button--secondary" href="#abstract">Read the abstract</a>
           </div>
         </div>
-        <div class="page-links">
-          <a href="system-design.html">View architecture</a>
-          <a href="implementation.html">Inspect implementation</a>
-          <a href="testing.html">See evaluation and testing</a>
+        <div class="hero-home__visual" aria-label="Project preview placeholder">
+          <div class="project-shot project-shot--back"></div>
+          <div class="project-shot project-shot--mid"></div>
+          <div class="project-shot project-shot--front">
+            <div class="project-shot__badge">Project image placeholder</div>
+            <div class="project-shot__frame">
+              <div class="project-shot__sidebar"></div>
+              <div class="project-shot__canvas">
+                <div class="project-shot__topbar"></div>
+                <div class="project-shot__grid">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       <div class="page-grid">
         <div class="content-stack">
           <section class="section-card">
-            <h2 id="project-overview">Project overview</h2>
+            <h2 id="abstract">Abstract</h2>
             <p class="lede">
-              The deployed system implements a consultation lifecycle that starts with a GP-authored
-              clinical question and ends with either a specialist-approved answer, a rejected answer,
-              or a manually replaced response. The backend persists consultations and messages,
-              proxies RAG requests, records audit events, and exposes admin analytics. The RAG
-              service retrieves guideline chunks, filters low-quality evidence, generates grounded
-              responses, and returns citations that can open original PDFs.
+              This abstract is structured into the three required parts: problem statement, solution,
+              and achievement and impact.
             </p>
-            <div class="chip-row">
-              <span class="chip">React 19 + TypeScript + Vite + Tailwind</span>
-              <span class="chip">FastAPI + SQLAlchemy + PostgreSQL + JWT</span>
-              <span class="chip">sentence-transformers + pgvector + Ollama</span>
-              <span class="chip">Docker Compose orchestration</span>
-            </div>
-          </section>
-
-          <section class="section-card">
-            <h2 id="core-use-case">Core use case</h2>
-            <div class="timeline-card">
-              <div class="timeline">
-                <div class="timeline__item" data-step="1">
-                  <strong>GP creates a consultation</strong>
-                  The frontend exposes a protected GP route for consultation creation and detail views.
-                  The backend stores the consultation with clinical metadata such as specialty,
-                  severity, and patient context.
-                </div>
-                <div class="timeline__item" data-step="2">
-                  <strong>First clinical question is sent</strong>
-                  The first GP message persists to the database and auto-submits the chat for review,
-                  moving it from <em>open</em> to <em>submitted</em>.
-                </div>
-                <div class="timeline__item" data-step="3">
-                  <strong>Backend calls the RAG service</strong>
-                  A background task sends the query, specialty, and severity to the RAG API, which
-                  retrieves relevant chunks and generates a citation-backed answer.
-                </div>
-                <div class="timeline__item" data-step="4">
-                  <strong>AI answer is stored with citations</strong>
-                  Assistant messages carry structured citation metadata, including document identity,
-                  chunk information, and source-path-based document access.
-                </div>
-                <div class="timeline__item" data-step="5">
-                  <strong>Specialist review is applied</strong>
-                  The specialist queue supports self-assignment, review state transitions, change
-                  requests, or manual replacement of specific AI outputs.
-                </div>
-                <div class="timeline__item" data-step="6">
-                  <strong>Admin oversight remains available</strong>
-                  Admin endpoints aggregate users, chats, consultation states, AI query metrics, and
-                  audit logs for system governance.
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section class="section-card">
-            <h2 id="stack-snapshot">System architecture snapshot</h2>
-            <div class="diagram-card">
-              <h3>Runtime component map</h3>
-              <div class="diagram">
-                <div class="diagram__row">
-                  <div class="diagram__node">
-                    <strong>React frontend</strong>
-                    Route-protected SPA for GP, specialist, and admin journeys.
-                  </div>
-                  <div class="diagram__arrow">→</div>
-                  <div class="diagram__node">
-                    <strong>FastAPI backend</strong>
-                    Auth, chats, specialist review, notifications, admin analytics, and RAG proxying.
-                  </div>
-                </div>
-                <div class="diagram__row">
-                  <div class="diagram__node">
-                    <strong>PostgreSQL app data</strong>
-                    Users, chats, messages, notifications, audit logs, and attachment metadata.
-                  </div>
-                  <div class="diagram__arrow">↔</div>
-                  <div class="diagram__node">
-                    <strong>FastAPI RAG service</strong>
-                    Embedding, retrieval, grounding, answer generation, revision, and PDF serving.
-                  </div>
-                  <div class="diagram__arrow">→</div>
-                  <div class="diagram__node">
-                    <strong>LLM endpoint</strong>
-                    Local Ollama or an OpenAI-compatible hosted inference path.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section class="section-card">
-            <h2 id="roles-and-governance">User roles and governance</h2>
-            <div class="card-grid">
+            <div class="card-grid abstract-grid">
               <div class="mini-card">
-                <strong>GP</strong>
-                <p>Creates consultations, sends questions, views citation-backed AI answers, and tracks specialist review status.</p>
+                <strong>Problem statement</strong>
+                <p>
+                  Clinicians dealing with neurology and rheumatology cases need answers that are both
+                  fast and traceable to credible guidance. Generic LLM chat systems can produce fluent
+                  responses, but they do not reliably expose the evidence base behind an answer and do
+                  not naturally support specialist escalation, auditability, or role-aware workflow
+                  control in a clinical consultation setting.
+                </p>
               </div>
               <div class="mini-card">
-                <strong>Specialist</strong>
-                <p>Self-assigns cases, reviews AI output, requests revisions, and can replace generated text with a manual answer.</p>
+                <strong>Our solution</strong>
+                <p>
+                  Ambience-AI-1.5 implements a microservices-based consultation platform with a React
+                  frontend, a FastAPI backend, a dedicated FastAPI RAG service, PostgreSQL with
+                  pgvector, and a configurable medical LLM endpoint. A GP submits a consultation,
+                  guideline chunks are retrieved and used to generate a grounded answer with citations,
+                  and a specialist can then approve, reject, revise, or replace AI output inside the
+                  same operational workflow.
+                </p>
               </div>
               <div class="mini-card">
-                <strong>Admin</strong>
-                <p>Monitors system metrics, manages users, inspects chats globally, and reviews audit events.</p>
+                <strong>Achievement and impact</strong>
+                <p>
+                  The project demonstrates an end-to-end full-stack system in which retrieval-backed
+                  generation is integrated with human clinical oversight rather than treated as a
+                  standalone chatbot feature. The implemented platform supports role-based access,
+                  consultation lifecycle tracking, citation-aware AI responses, specialist review,
+                  notifications, admin analytics, and automated testing across frontend, backend, and
+                  RAG components.
+                </p>
               </div>
-            </div>
-            <div class="callout">
-              <h3>Design intent</h3>
-              <p>
-                Human review is a first-class workflow, not a post-hoc safeguard. The platform is
-                intentionally structured around specialist oversight, role restrictions, and evidence
-                traceability rather than autonomous advice generation.
-              </p>
             </div>
           </section>
 
           <section class="section-card">
-            <h2 id="implementation-evidence">Evidence used for this report</h2>
+            <h2 id="video">Project video</h2>
             <p>
-              This report is grounded in the repository structure and implementation artifacts rather
-              than abstract architecture claims. The main evidence sources include:
+              An approximately 8-minute project video will be embedded here to introduce the system
+              and demonstrate the finished functionality across GP, specialist, and admin workflows.
             </p>
-            <div class="code-list">
-              <span>Ambience-AI-1.5/docker-compose.yml</span>
-              <span>Ambience-AI-1.5/backend/src/main.py</span>
-              <span>Ambience-AI-1.5/backend/src/db/models.py</span>
-              <span>Ambience-AI-1.5/backend/src/services/chat_service.py</span>
-              <span>Ambience-AI-1.5/backend/src/services/specialist_service.py</span>
-              <span>Ambience-AI-1.5/frontend/src/App.tsx</span>
-              <span>Ambience-AI-1.5/frontend/src/components/NotificationDropdown.tsx</span>
-              <span>Ambience-AI-1.5/frontend/src/pages/admin/AdminDashboardPage.tsx</span>
-              <span>Ambience-AI-1.5/rag_service/src/main.py</span>
-              <span>Automated tests in backend/tests, frontend/src/**/*.test.tsx, and rag_service/tests</span>
+            <div class="video-placeholder">
+              <div class="video-placeholder__inner">
+                <span class="badge">Video placeholder</span>
+                <h3>8-minute introduction and feature walkthrough</h3>
+                <p>
+                  Replace this placeholder with the final video embed or public video link once the
+                  recording is ready.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="team">Development team</h2>
+            <p>
+              Team member cards are prepared below. Names are filled in now, while email addresses,
+              final role allocations, photos, and optional LinkedIn/background notes can be added in
+              the next pass.
+            </p>
+            <div class="team-grid">
+              <article class="member-card">
+                <div class="avatar-placeholder">H</div>
+                <h3>Hakan</h3>
+                <p class="member-meta">Email to be added</p>
+                <p>Main contribution and role labels to be added.</p>
+                <p class="muted">Optional: LinkedIn profile and short background.</p>
+              </article>
+              <article class="member-card">
+                <div class="avatar-placeholder">I</div>
+                <h3>Ivan</h3>
+                <p class="member-meta">Email to be added</p>
+                <p>Main contribution and role labels to be added.</p>
+                <p class="muted">Optional: LinkedIn profile and short background.</p>
+              </article>
+              <article class="member-card">
+                <div class="avatar-placeholder">K</div>
+                <h3>Kavin</h3>
+                <p class="member-meta">Email to be added</p>
+                <p>Main contribution and role labels to be added.</p>
+                <p class="muted">Optional: LinkedIn profile and short background.</p>
+              </article>
+              <article class="member-card">
+                <div class="avatar-placeholder">W</div>
+                <h3>William</h3>
+                <p class="member-meta">Email to be added</p>
+                <p>Main contribution and role labels to be added.</p>
+                <p class="muted">Optional: LinkedIn profile and short background.</p>
+              </article>
+              <article class="member-card">
+                <div class="avatar-placeholder">D</div>
+                <h3>Daniel</h3>
+                <p class="member-meta">Email to be added</p>
+                <p>Main contribution and role labels to be added.</p>
+                <p class="muted">Optional: LinkedIn profile and short background.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="project-management">Project management</h2>
+            <p>
+              A dedicated Gantt chart will be inserted here for the project schedule covering the
+              period from 20 October 2025 to 27 March 2026.
+            </p>
+            <div class="gantt-placeholder">
+              <span class="badge badge--warning">Gantt chart placeholder</span>
+              <h3>Project plan timeline</h3>
+              <p>
+                Leave this area reserved for the final project management chart. Once you send the
+                asset, it can be added here as an image or embedded figure.
+              </p>
             </div>
           </section>
         </div>
 
         <aside class="toc-panel">
           <div id="page-toc"></div>
+          <div class="callout">
+            <h3>Home page checklist</h3>
+            <ul>
+              <li>Project title</li>
+              <li>Three-part abstract</li>
+              <li>Video placeholder</li>
+              <li>Team section with placeholders</li>
+              <li>Gantt chart placeholder</li>
+            </ul>
+          </div>
           <div class="callout callout--warning">
-            <h3>Honest caveat</h3>
+            <h3>Still needed from you</h3>
             <p>
-              The repository shows an evolving architecture. Some older or partially integrated code
-              paths remain alongside the main deployed runtime, so this report distinguishes core
-              runtime behaviour from experimental or legacy artefacts.
+              To complete this page fully, send the team emails, role allocations, optional LinkedIn
+              links, any member background text, the final video URL, and the Gantt chart asset.
             </p>
           </div>
         </aside>
       </div>
     </main>
 
-    <div id="site-footer"></div>
-    <script src="assets/site.js"></script>
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <section>
+          <h3>Ambience-AI-1.5</h3>
+          <p>
+            A technical systems report for a university software engineering project. The system under
+            study is a role-aware clinical consultation platform that combines React, FastAPI,
+            PostgreSQL with pgvector, and a grounded medical RAG service.
+          </p>
+          <p class="muted">
+            This website intentionally describes implementation details, deployment paths, safeguards,
+            testing, and known limitations rather than product marketing claims.
+          </p>
+        </section>
+        <section>
+          <h4>Key evidence base</h4>
+          <div class="site-footer__links">
+            <a href="implementation.html">Frontend, backend, and RAG implementation</a>
+            <a href="system-design.html">Architecture, flows, and data model</a>
+            <a href="testing.html">Automated test strategy and caveats</a>
+          </div>
+        </section>
+        <section>
+          <h4>Appendix items</h4>
+          <div class="site-footer__links">
+            <a href="appendices.html#user-manual">User manual</a>
+            <a href="appendices.html#deployment-manual">Deployment manual</a>
+            <a href="appendices.html#privacy">GDPR and privacy</a>
+            <a href="appendices.html#external-links">External blog and monthly video</a>
+          </div>
+        </section>
+      </div>
+    </footer>
+    <script src="assets/site.js?v=20260309"></script>
   </body>
 </html>
