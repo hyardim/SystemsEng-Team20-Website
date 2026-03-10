@@ -101,25 +101,33 @@ function renderFooter() {
         <h4 class="site-footer__heading">About Us</h4>
         <p class="site-footer__about-text">Clinical guidance + AI insights for specialist-supported consultation workflows.</p>
         <div class="site-footer__links site-footer__social">
-          <a href="#" data-placeholder-link="github">GitHub</a>
-          <a href="#" data-placeholder-link="youtube">YouTube</a>
-          <a href="#" data-placeholder-link="contact">Contact Us</a>
+          <a href="#" data-placeholder-link="github" aria-label="GitHub">
+            <img src="assets/icons/github.svg" alt="" aria-hidden="true" />
+            <span>GitHub</span>
+          </a>
+          <a href="#" data-placeholder-link="youtube" aria-label="YouTube">
+            <img src="assets/icons/youtube.svg" alt="" aria-hidden="true" />
+            <span>YouTube</span>
+          </a>
+          <a href="mailto:daniel.rotariu.24@ucl.ac.uk" aria-label="Contact us">
+            <img src="assets/icons/contact.svg" alt="" aria-hidden="true" />
+            <span>Contact Us</span>
+          </a>
         </div>
       </section>
 
       <section class="site-footer__docs">
         <h4 class="site-footer__heading">Documentation</h4>
         <div class="site-footer__docs-grid">
-          <a href="index.html">Home</a>
           <a href="requirements.html">Requirements</a>
-          <a href="research.html">Research</a>
-          <a href="ui-design.html">UI Design</a>
-          <a href="system-design.html">System Design</a>
-          <a href="implementation.html">Implementation</a>
           <a href="testing.html">Testing</a>
+          <a href="research.html">Research</a>
           <a href="testing.html">Evaluation</a>
+          <a href="ui-design.html">UI Design</a>
           <a href="appendices.html">Appendices</a>
+          <a href="system-design.html">System Design</a>
           <a href="appendices.html#external-links">Blog</a>
+          <a href="implementation.html">Implementation</a>
         </div>
       </section>
 
@@ -171,8 +179,8 @@ function initializePartnerLogos() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initializeHeader();
-  renderFooter();
   renderToc();
+  renderFooter();
   markExternalPlaceholders();
   initializePartnerLogos();
 });

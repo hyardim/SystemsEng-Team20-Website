@@ -8,7 +8,7 @@
       name="description"
       content="Technical project report website for Ambience-AI-1.5, a full-stack clinical decision-support platform built around retrieval-augmented generation and specialist review workflows."
     />
-    <link rel="stylesheet" href="assets/styles.css?v=20260309" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260310" />
   </head>
   <body data-page="home">
     <header class="site-header">
@@ -73,7 +73,7 @@
         </div>
       </section>
 
-      <div class="page-grid">
+      <div class="page-grid page-grid--single">
         <div class="content-stack">
           <section class="section-card">
             <h2 id="abstract">Abstract</h2>
@@ -117,66 +117,148 @@
             </div>
           </section>
 
-          <section class="section-card">
-            <h2 id="video">Project video</h2>
-            <p>
-              An approximately 8-minute project video will be embedded here to introduce the system
-              and demonstrate the finished functionality across GP, specialist, and admin workflows.
-            </p>
-            <div class="video-placeholder">
-              <div class="video-placeholder__inner">
-                <span class="badge">Video placeholder</span>
-                <h3>8-minute introduction and feature walkthrough</h3>
-                <p>
-                  Replace this placeholder with the final video embed or public video link once the
-                  recording is ready.
-                </p>
-              </div>
+          <section class="section-card section-card--video">
+            <h2 id="video">Video</h2>
+            <p class="video-lede">Watch our project demo video to see our solution in action.</p>
+            <div class="video-embed-shell">
+              <iframe
+                src="https://www.youtube.com/embed/VIDEO_ID"
+                title="Project demo video"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
             </div>
           </section>
 
-          <section class="section-card">
+          <section class="team-section">
             <h2 id="team">Development team</h2>
-            <p>
-              Team member cards are prepared below. Names are filled in now, while email addresses,
-              final role allocations, photos, and optional LinkedIn/background notes can be added in
-              the next pass.
-            </p>
+            <p class="team-subtitle">Meet the team that drove our passionate project to success.</p>
             <div class="team-grid">
               <article class="member-card">
-                <div class="avatar-placeholder">H</div>
-                <h3>Hakan</h3>
-                <p class="member-meta">Email to be added</p>
+                <div class="avatar-placeholder avatar-placeholder--photo">
+                  <img class="avatar-photo" src="assets/team/hakan.jpg" alt="Hakan profile photo" />
+                </div>
+                <h3>Yardim Hakan</h3>
+                <p class="member-meta">hakan.yardim.24@ucl.ac.uk</p>
                 <p>Main contribution and role labels to be added.</p>
-                <p class="muted">Optional: LinkedIn profile and short background.</p>
+                <div class="member-actions" aria-label="Contact links for Yardim Hakan">
+                  <a class="member-action" href="mailto:hakan.yardim.24@ucl.ac.uk" aria-label="Email Yardim Hakan">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M1.5 6.75A2.25 2.25 0 0 1 3.75 4.5h16.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25H3.75a2.25 2.25 0 0 1-2.25-2.25V6.75Zm2.64-.75L12 11.24 19.86 6H4.14ZM21 7.41l-8.58 5.72a.75.75 0 0 1-.84 0L3 7.41v9.84c0 .41.34.75.75.75h16.5c.41 0 .75-.34.75-.75V7.41Z" />
+                    </svg>
+                  </a>
+                  <a class="member-action" href="https://github.com/hyardim" target="_blank" rel="noopener noreferrer" aria-label="Yardim Hakan GitHub profile">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.66-.22.66-.49 0-.24-.01-.88-.02-1.73-2.78.62-3.37-1.38-3.37-1.38-.45-1.18-1.12-1.49-1.12-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.15-4.56-5.11 0-1.13.39-2.06 1.03-2.79-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.06A9.33 9.33 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.91-1.34 2.75-1.06 2.75-1.06.55 1.42.2 2.47.1 2.73.64.73 1.03 1.66 1.03 2.79 0 3.97-2.34 4.84-4.57 5.1.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.17.58.67.48A10.22 10.22 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z" />
+                    </svg>
+                  </a>
+                  <a class="member-action" href="https://www.linkedin.com/in/hyardim/" target="_blank" rel="noopener noreferrer" aria-label="Yardim Hakan LinkedIn profile">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M6.94 8.5a1.56 1.56 0 1 1 0-3.12 1.56 1.56 0 0 1 0 3.12ZM5.56 9.75h2.75V18H5.56V9.75Zm4.5 0h2.64v1.13h.04c.37-.7 1.27-1.44 2.62-1.44 2.8 0 3.32 1.89 3.32 4.34V18h-2.75v-3.74c0-.89-.02-2.03-1.2-2.03-1.2 0-1.39.97-1.39 1.97V18h-2.75V9.75Z" />
+                    </svg>
+                  </a>
+                </div>
               </article>
               <article class="member-card">
-                <div class="avatar-placeholder">I</div>
-                <h3>Ivan</h3>
-                <p class="member-meta">Email to be added</p>
+                <div class="avatar-placeholder avatar-placeholder--photo">
+                  <img class="avatar-photo" src="assets/team/ivan.jpg" alt="Vargin Ivan profile photo" />
+                </div>
+                <h3>Vargin Ivan</h3>
+                <p class="member-meta">ivan.vargin.24@ucl.ac.uk</p>
                 <p>Main contribution and role labels to be added.</p>
-                <p class="muted">Optional: LinkedIn profile and short background.</p>
+                <div class="member-actions" aria-label="Contact links for Vargin Ivan">
+                  <a class="member-action" href="mailto:ivan.vargin.24@ucl.ac.uk" aria-label="Email Vargin Ivan">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M1.5 6.75A2.25 2.25 0 0 1 3.75 4.5h16.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25H3.75a2.25 2.25 0 0 1-2.25-2.25V6.75Zm2.64-.75L12 11.24 19.86 6H4.14ZM21 7.41l-8.58 5.72a.75.75 0 0 1-.84 0L3 7.41v9.84c0 .41.34.75.75.75h16.5c.41 0 .75-.34.75-.75V7.41Z" />
+                    </svg>
+                  </a>
+                  <a class="member-action" href="https://github.com/IvanVarginUCL" target="_blank" rel="noopener noreferrer" aria-label="Vargin Ivan GitHub profile">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.66-.22.66-.49 0-.24-.01-.88-.02-1.73-2.78.62-3.37-1.38-3.37-1.38-.45-1.18-1.12-1.49-1.12-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.15-4.56-5.11 0-1.13.39-2.06 1.03-2.79-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.06A9.33 9.33 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.91-1.34 2.75-1.06 2.75-1.06.55 1.42.2 2.47.1 2.73.64.73 1.03 1.66 1.03 2.79 0 3.97-2.34 4.84-4.57 5.1.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.17.58.67.48A10.22 10.22 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z" />
+                    </svg>
+                  </a>
+                  <a class="member-action" href="https://www.linkedin.com/in/ivan-vargin/" target="_blank" rel="noopener noreferrer" aria-label="Vargin Ivan LinkedIn profile">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M6.94 8.5a1.56 1.56 0 1 1 0-3.12 1.56 1.56 0 0 1 0 3.12ZM5.56 9.75h2.75V18H5.56V9.75Zm4.5 0h2.64v1.13h.04c.37-.7 1.27-1.44 2.62-1.44 2.8 0 3.32 1.89 3.32 4.34V18h-2.75v-3.74c0-.89-.02-2.03-1.2-2.03-1.2 0-1.39.97-1.39 1.97V18h-2.75V9.75Z" />
+                    </svg>
+                  </a>
+                </div>
               </article>
               <article class="member-card">
-                <div class="avatar-placeholder">K</div>
-                <h3>Kavin</h3>
-                <p class="member-meta">Email to be added</p>
+                <div class="avatar-placeholder avatar-placeholder--photo">
+                  <img class="avatar-photo" src="assets/team/kavin.jpg" alt="Anbarasan Kavinchandar profile photo" />
+                </div>
+                <h3>Anbarasan Kavinchandar</h3>
+                <p class="member-meta">kavin.kavinchandar.24@ucl.ac.uk</p>
                 <p>Main contribution and role labels to be added.</p>
-                <p class="muted">Optional: LinkedIn profile and short background.</p>
+                <div class="member-actions" aria-label="Contact links for Anbarasan Kavinchandar">
+                  <a class="member-action" href="mailto:kavin.kavinchandar.24@ucl.ac.uk" aria-label="Email Anbarasan Kavinchandar">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M1.5 6.75A2.25 2.25 0 0 1 3.75 4.5h16.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25H3.75a2.25 2.25 0 0 1-2.25-2.25V6.75Zm2.64-.75L12 11.24 19.86 6H4.14ZM21 7.41l-8.58 5.72a.75.75 0 0 1-.84 0L3 7.41v9.84c0 .41.34.75.75.75h16.5c.41 0 .75-.34.75-.75V7.41Z" />
+                    </svg>
+                  </a>
+                  <a class="member-action" href="https://github.com/Quantakavin" target="_blank" rel="noopener noreferrer" aria-label="Anbarasan Kavinchandar GitHub profile">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.66-.22.66-.49 0-.24-.01-.88-.02-1.73-2.78.62-3.37-1.38-3.37-1.38-.45-1.18-1.12-1.49-1.12-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.15-4.56-5.11 0-1.13.39-2.06 1.03-2.79-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.06A9.33 9.33 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.91-1.34 2.75-1.06 2.75-1.06.55 1.42.2 2.47.1 2.73.64.73 1.03 1.66 1.03 2.79 0 3.97-2.34 4.84-4.57 5.1.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.17.58.67.48A10.22 10.22 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z" />
+                    </svg>
+                  </a>
+                  <a class="member-action" href="https://www.linkedin.com/in/kavin2/" target="_blank" rel="noopener noreferrer" aria-label="Anbarasan Kavinchandar LinkedIn profile">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M6.94 8.5a1.56 1.56 0 1 1 0-3.12 1.56 1.56 0 0 1 0 3.12ZM5.56 9.75h2.75V18H5.56V9.75Zm4.5 0h2.64v1.13h.04c.37-.7 1.27-1.44 2.62-1.44 2.8 0 3.32 1.89 3.32 4.34V18h-2.75v-3.74c0-.89-.02-2.03-1.2-2.03-1.2 0-1.39.97-1.39 1.97V18h-2.75V9.75Z" />
+                    </svg>
+                  </a>
+                </div>
               </article>
               <article class="member-card">
-                <div class="avatar-placeholder">W</div>
-                <h3>William</h3>
-                <p class="member-meta">Email to be added</p>
+                <div class="avatar-placeholder avatar-placeholder--photo">
+                  <img class="avatar-photo" src="assets/team/william.jpg" alt="Goodwin William profile photo" />
+                </div>
+                <h3>Goodwin William</h3>
+                <p class="member-meta">william.goodwin.24@ucl.ac.uk</p>
                 <p>Main contribution and role labels to be added.</p>
-                <p class="muted">Optional: LinkedIn profile and short background.</p>
+                <div class="member-actions" aria-label="Contact links for Goodwin William">
+                  <a class="member-action" href="mailto:william.goodwin.24@ucl.ac.uk" aria-label="Email Goodwin William">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M1.5 6.75A2.25 2.25 0 0 1 3.75 4.5h16.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25H3.75a2.25 2.25 0 0 1-2.25-2.25V6.75Zm2.64-.75L12 11.24 19.86 6H4.14ZM21 7.41l-8.58 5.72a.75.75 0 0 1-.84 0L3 7.41v9.84c0 .41.34.75.75.75h16.5c.41 0 .75-.34.75-.75V7.41Z" />
+                    </svg>
+                  </a>
+                  <a class="member-action" href="https://github.com/goodwinw37" target="_blank" rel="noopener noreferrer" aria-label="Goodwin William GitHub profile">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.66-.22.66-.49 0-.24-.01-.88-.02-1.73-2.78.62-3.37-1.38-3.37-1.38-.45-1.18-1.12-1.49-1.12-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.15-4.56-5.11 0-1.13.39-2.06 1.03-2.79-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.06A9.33 9.33 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.91-1.34 2.75-1.06 2.75-1.06.55 1.42.2 2.47.1 2.73.64.73 1.03 1.66 1.03 2.79 0 3.97-2.34 4.84-4.57 5.1.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.17.58.67.48A10.22 10.22 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z" />
+                    </svg>
+                  </a>
+                  <a class="member-action" href="https://www.linkedin.com/in/william-goodwin720/" target="_blank" rel="noopener noreferrer" aria-label="Goodwin William LinkedIn profile">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M6.94 8.5a1.56 1.56 0 1 1 0-3.12 1.56 1.56 0 0 1 0 3.12ZM5.56 9.75h2.75V18H5.56V9.75Zm4.5 0h2.64v1.13h.04c.37-.7 1.27-1.44 2.62-1.44 2.8 0 3.32 1.89 3.32 4.34V18h-2.75v-3.74c0-.89-.02-2.03-1.2-2.03-1.2 0-1.39.97-1.39 1.97V18h-2.75V9.75Z" />
+                    </svg>
+                  </a>
+                </div>
               </article>
               <article class="member-card">
-                <div class="avatar-placeholder">D</div>
-                <h3>Daniel</h3>
-                <p class="member-meta">Email to be added</p>
+                <div class="avatar-placeholder avatar-placeholder--photo">
+                  <img class="avatar-photo" src="assets/team/daniel.jpg" alt="Rotariu Daniel profile photo" />
+                </div>
+                <h3>Rotariu Daniel</h3>
+                <p class="member-meta">daniel.rotariu.24@ucl.ac.uk</p>
                 <p>Main contribution and role labels to be added.</p>
-                <p class="muted">Optional: LinkedIn profile and short background.</p>
+                <div class="member-actions" aria-label="Contact links for Rotariu Daniel">
+                  <a class="member-action" href="mailto:daniel.rotariu.24@ucl.ac.uk" aria-label="Email Rotariu Daniel">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M1.5 6.75A2.25 2.25 0 0 1 3.75 4.5h16.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25H3.75a2.25 2.25 0 0 1-2.25-2.25V6.75Zm2.64-.75L12 11.24 19.86 6H4.14ZM21 7.41l-8.58 5.72a.75.75 0 0 1-.84 0L3 7.41v9.84c0 .41.34.75.75.75h16.5c.41 0 .75-.34.75-.75V7.41Z" />
+                    </svg>
+                  </a>
+                  <a class="member-action" href="https://github.com/Daniel75Beregsau" target="_blank" rel="noopener noreferrer" aria-label="Rotariu Daniel GitHub profile">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.66-.22.66-.49 0-.24-.01-.88-.02-1.73-2.78.62-3.37-1.38-3.37-1.38-.45-1.18-1.12-1.49-1.12-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.15-4.56-5.11 0-1.13.39-2.06 1.03-2.79-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.06A9.33 9.33 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.91-1.34 2.75-1.06 2.75-1.06.55 1.42.2 2.47.1 2.73.64.73 1.03 1.66 1.03 2.79 0 3.97-2.34 4.84-4.57 5.1.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.17.58.67.48A10.22 10.22 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z" />
+                    </svg>
+                  </a>
+                  <a class="member-action" href="https://www.linkedin.com/in/daniel-paul-rotariu-b56100284/" target="_blank" rel="noopener noreferrer" aria-label="Rotariu Daniel LinkedIn profile">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M6.94 8.5a1.56 1.56 0 1 1 0-3.12 1.56 1.56 0 0 1 0 3.12ZM5.56 9.75h2.75V18H5.56V9.75Zm4.5 0h2.64v1.13h.04c.37-.7 1.27-1.44 2.62-1.44 2.8 0 3.32 1.89 3.32 4.34V18h-2.75v-3.74c0-.89-.02-2.03-1.2-2.03-1.2 0-1.39.97-1.39 1.97V18h-2.75V9.75Z" />
+                    </svg>
+                  </a>
+                </div>
               </article>
             </div>
           </section>
@@ -198,26 +280,6 @@
           </section>
         </div>
 
-        <aside class="toc-panel">
-          <div id="page-toc"></div>
-          <div class="callout">
-            <h3>Home page checklist</h3>
-            <ul>
-              <li>Project title</li>
-              <li>Three-part abstract</li>
-              <li>Video placeholder</li>
-              <li>Team section with placeholders</li>
-              <li>Gantt chart placeholder</li>
-            </ul>
-          </div>
-          <div class="callout callout--warning">
-            <h3>Still needed from you</h3>
-            <p>
-              To complete this page fully, send the team emails, role allocations, optional LinkedIn
-              links, any member background text, the final video URL, and the Gantt chart asset.
-            </p>
-          </div>
-        </aside>
       </div>
     </main>
 
@@ -234,6 +296,20 @@
             This website intentionally describes implementation details, deployment paths, safeguards,
             testing, and known limitations rather than product marketing claims.
           </p>
+          <div class="site-footer__app-links" aria-label="Project links">
+            <a href="#" aria-label="GitHub">
+              <img src="assets/icons/github.svg" alt="" aria-hidden="true" />
+              <span>GitHub</span>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <img src="assets/icons/youtube.svg" alt="" aria-hidden="true" />
+              <span>YouTube</span>
+            </a>
+            <a href="mailto:daniel.rotariu.24@ucl.ac.uk" aria-label="Contact us">
+              <img src="assets/icons/contact.svg" alt="" aria-hidden="true" />
+              <span>Contact Us</span>
+            </a>
+          </div>
         </section>
         <section>
           <h4>Key evidence base</h4>
@@ -254,6 +330,6 @@
         </section>
       </div>
     </footer>
-    <script src="assets/site.js?v=20260309"></script>
+    <script src="assets/site.js?v=20260310"></script>
   </body>
 </html>
