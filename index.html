@@ -8,7 +8,7 @@
       name="description"
       content="Technical project report website for Ambience-AI-1.5, a full-stack clinical decision-support platform built around retrieval-augmented generation and specialist review workflows."
     />
-    <link rel="stylesheet" href="assets/styles.css?v=20260310" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260310b" />
   </head>
   <body data-page="home">
     <header class="site-header">
@@ -75,43 +75,43 @@
 
       <div class="page-grid page-grid--single">
         <div class="content-stack">
-          <section class="section-card">
+          <section class="section-card section-card--abstract">
             <h2 id="abstract">Abstract</h2>
             <p class="lede">
-              This abstract is structured into the three required parts: problem statement, solution,
-              and achievement and impact.
+              Ambience-AI-1.5 is a domain-adapted RAG clinical support system for routine Neurology
+              and Rheumatology queries in UK primary care.
             </p>
             <div class="card-grid abstract-grid">
               <div class="mini-card">
-                <strong>Problem statement</strong>
+                <strong>Problem Statement</strong>
                 <p>
-                  Clinicians dealing with neurology and rheumatology cases need answers that are both
-                  fast and traceable to credible guidance. Generic LLM chat systems can produce fluent
-                  responses, but they do not reliably expose the evidence base behind an answer and do
-                  not naturally support specialist escalation, auditability, or role-aware workflow
-                  control in a clinical consultation setting.
+                  General Practitioners regularly ask specialists repetitive questions about
+                  monitoring thresholds, referral criteria, medication pathways, and red-flag symptoms.
+                  Finding the correct NICE and BSR guidance in long documents is time-consuming, while
+                  generic LLM chat systems may produce unsupported answers and do not provide the
+                  transparency, escalation controls, or audit trace expected in NHS-facing workflows.
                 </p>
               </div>
               <div class="mini-card">
-                <strong>Our solution</strong>
+                <strong>Our Solution</strong>
                 <p>
-                  Ambience-AI-1.5 implements a microservices-based consultation platform with a React
-                  frontend, a FastAPI backend, a dedicated FastAPI RAG service, PostgreSQL with
-                  pgvector, and a configurable medical LLM endpoint. A GP submits a consultation,
-                  guideline chunks are retrieved and used to generate a grounded answer with citations,
-                  and a specialist can then approve, reject, revise, or replace AI output inside the
-                  same operational workflow.
+                  We built a guideline-grounded RAG pipeline that ingests NICE/BSR documents,
+                  retrieves relevant passages with vector search, and generates citation-linked answers
+                  for GP queries, with low-confidence refusal and specialist escalation pathways. The
+                  architecture remains modular across frontend, backend, retrieval, and model-serving
+                  layers: after loss of access to the original Intel Gaudi 2 environment, inference was
+                  migrated to a local model runtime with an optional cloud-hosted provider route,
+                  preserving the same safety and workflow logic.
                 </p>
               </div>
               <div class="mini-card">
-                <strong>Achievement and impact</strong>
+                <strong>Achievement and Impact</strong>
                 <p>
-                  The project demonstrates an end-to-end full-stack system in which retrieval-backed
-                  generation is integrated with human clinical oversight rather than treated as a
-                  standalone chatbot feature. The implemented platform supports role-based access,
-                  consultation lifecycle tracking, citation-aware AI responses, specialist review,
-                  notifications, admin analytics, and automated testing across frontend, backend, and
-                  RAG components.
+                  The delivered system demonstrates that evidence-grounded generation can be integrated
+                  into an end-to-end clinical workflow rather than exposed as a standalone chatbot.
+                  It supports role-based consultation handling, citation visibility, specialist review,
+                  and operational observability, while maintaining focus on safety targets such as
+                  evidence alignment and non-supported-claim avoidance on the project Golden Set.
                 </p>
               </div>
             </div>
@@ -266,16 +266,58 @@
           <section class="section-card">
             <h2 id="project-management">Project management</h2>
             <p>
-              A dedicated Gantt chart will be inserted here for the project schedule covering the
-              period from 20 October 2025 to 27 March 2026.
+              Planned schedule from 20 October 2025 to 27 March 2026 across infrastructure,
+              data processing, RAG development, interface delivery, and final validation.
             </p>
-            <div class="gantt-placeholder">
-              <span class="badge badge--warning">Gantt chart placeholder</span>
-              <h3>Project plan timeline</h3>
-              <p>
-                Leave this area reserved for the final project management chart. Once you send the
-                asset, it can be added here as an image or embedded figure.
-              </p>
+            <div class="gantt-chart" role="img" aria-label="Gantt chart showing project phases from October 2025 to March 2026">
+              <div class="gantt-chart__axis" aria-hidden="true">
+                <span class="gantt-chart__axis-label">Work package</span>
+                <div class="gantt-chart__months">
+                  <span>Oct</span>
+                  <span>Nov</span>
+                  <span>Dec</span>
+                  <span>Jan</span>
+                  <span>Feb</span>
+                  <span>Mar</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Foundation &amp; Infrastructure</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 0; --span: 4;">W1–4</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Data Processing</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 4; --span: 4;">W5–8</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Core RAG Pipeline Development</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 8; --span: 4;">W9–12</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">UI &amp; Interaction Layer</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 12; --span: 4;">W13–16</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Testing &amp; Final Delivery</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 16; --span: 4;">W17–20</span>
+                </div>
+              </div>
+
+              <p class="gantt-chart__note">Timeline expressed in 20 project weeks (5 phases × 4 weeks).</p>
             </div>
           </section>
         </div>
