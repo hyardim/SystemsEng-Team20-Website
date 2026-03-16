@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Requirements · Ambience-AI-1.5</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20260309" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260310b" />
   </head>
   <body data-page="requirements">
     <header class="site-header">
@@ -25,138 +25,351 @@
           <a href="appendices.html" data-nav="appendices">Appendices</a>
           <a href="appendices.html#external-links" data-nav="blog">Blog</a>
         </nav>
-        <button class="site-header__github-btn" type="button" aria-label="GitHub repository link">
-          GitHub ↗
-        </button>
+        <button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button>
       </div>
     </header>
 
     <main class="page-shell">
-      <section class="hero">
+      <section class="hero hero--requirements">
         <p class="hero__eyebrow">Requirements</p>
-        <h1>Functional and non-functional requirements</h1>
+        <h1>Requirements engineering and prioritisation</h1>
         <p>
-          The project requirements were driven by a clinical consultation use case rather than a
-          generic conversational AI goal. The resulting system has to support evidence-grounded
-          answers, multi-role review, and traceable operational behaviour under a realistic full-stack
-          deployment model.
+          This page documents partner context, goals, requirement collection methods, personas, use cases,
+          and a MoSCoW-prioritised functional/non-functional requirement baseline for Ambience-AI-1.5.
         </p>
       </section>
 
-      <div class="page-grid">
+      <div class="page-grid page-grid--single">
         <div class="content-stack">
-          <section class="section-card">
-            <h2 id="problem-definition">Problem definition</h2>
-            <p class="lede">
-              Primary care clinicians often need rapid answers for specialist-adjacent questions, but
-              generic LLM chat interfaces are not sufficient for high-stakes, evidence-backed decision
-              support. Ambience-AI-1.5 therefore focuses on guideline retrieval, transparent citations,
-              and a workflow where specialists can intervene directly before a case is considered
-              resolved.
+          <section class="section-card section-card--partner-intro">
+            <h2 id="partner-background">Partner introduction</h2>
+            <p class="lede partner-intro__subtitle">
+              Our project is supported by partners who shaped the system’s clinical direction,
+              infrastructure decisions, and deployment context.
             </p>
-            <div class="quote-card">
-              <h3>Requirement framing</h3>
-              <blockquote>
-                The system must behave like a consultation support workflow with AI assistance, not
-                like an unbounded medical chatbot.
-              </blockquote>
+            <div class="partner-intro__grid">
+              <article class="partner-intro__card partner-intro__card--featured">
+                <div class="partner-intro__head">
+                  <img src="assets/partners/ucl-logo.png" alt="UCL partner logo" class="partner-intro__logo" />
+                  <h3>University College London</h3>
+                </div>
+                <p>
+                  UCL supervision and systems-engineering guidance structured requirement prioritisation,
+                  delivery milestones, and evidence-based reporting standards.
+                </p>
+              </article>
+              <article class="partner-intro__card">
+                <div class="partner-intro__head">
+                  <img src="assets/partners/intel-logo.png" alt="Intel partner logo" class="partner-intro__logo" />
+                  <h3>Intel</h3>
+                </div>
+                <p>
+                  Intel hardware planning influenced early deployment objectives and performance
+                  constraints for local inference and infrastructure-aware system design.
+                </p>
+              </article>
+              <article class="partner-intro__card">
+                <div class="partner-intro__head">
+                  <img src="assets/partners/nhs-logo.png" alt="NHS partner logo" class="partner-intro__logo" />
+                  <h3>NHS Clinical Context</h3>
+                </div>
+                <p>
+                  NHS-facing workflow expectations informed core requirements around safe refusal,
+                  evidence visibility, and specialist escalation for uncertain outputs.
+                </p>
+              </article>
+            </div>
+            <div class="partner-intro__ack" role="note" aria-label="Acknowledgement">
+              <p>
+                We are also very thankful to MSc Student Ben, who helped us share knowledge because
+                of our overlapping projects.
+              </p>
+            </div>
+          </section>
+
+          <section class="section-card section-card--project-bg">
+            <h2 id="project-background">Project background</h2>
+            <div class="project-bg__grid">
+              <article class="project-bg__card">
+                <h3>The challenge</h3>
+                <p>
+                  GPs often need quick answers to routine Neurology and Rheumatology questions, yet
+                  relevant NICE and BSR guidance is spread across long documents. We also had to
+                  respect clinical safety: unsupported answers or missing citations were unacceptable,
+                  and some early retrievals lacked the right section granularity.
+                </p>
+              </article>
+              <article class="project-bg__card">
+                <h3>Our approach</h3>
+                <p>
+                  We built a retrieval-first workflow that prioritises guideline evidence, then
+                  generates structured responses with citations and an escalation path. We iterated
+                  chunking, retrieval thresholds, and response formatting based on review feedback to
+                  reduce ambiguity and improve confidence alignment.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <section class="section-card section-card--project-goals">
+            <h2 id="project-goals">Project goals</h2>
+            <div class="project-goals__inner">
+              <div class="two-col">
+                <div class="mini-card">
+                  <strong>Technical goals</strong>
+                  <ul>
+                    <li>Deploy a domain-adapted Med42 runtime with efficient inference performance on local hardware.</li>
+                    <li>Build a retrieval pipeline that surfaces the correct NICE and BSR guideline sections.</li>
+                    <li>Implement safety mechanisms for refusal when evidence is insufficient.</li>
+                    <li>Provide a clean, accessible web interface aligned with NHS usability guidance.</li>
+                  </ul>
+                </div>
+                <div class="mini-card">
+                  <strong>Non-technical goals</strong>
+                  <ul>
+                    <li>Improve GP access to accurate, guideline-based answers for routine queries.</li>
+                    <li>Reduce repetitive specialist workload through safe automation and escalation.</li>
+                    <li>Maintain trust through visible citations and clear evidence linkage.</li>
+                    <li>Ensure outputs remain clinically appropriate and easy to review.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card section-card--requirement-gathering">
+            <h2 id="requirement-gathering">Requirement gathering</h2>
+            <div class="requirement-gathering__inner">
+              <p class="lede">
+                We gathered requirements through weekly stakeholder meetings, one semi-structured
+                interview, and a short validation survey. This section directly answers how we
+                collected requirements, whether we designed a survey, and how we analysed the data.
+              </p>
+              <div class="requirement-methods">
+                <article class="mini-card requirement-methods__item">
+                  <strong>How did we collect requirements?</strong>
+                  <p>
+                    We combined three sources: (1) weekly meetings with supervisors/partners,
+                    (2) a semi-structured interview with a GP-style user profile, and
+                    (3) guideline-driven checks against NICE/BSR content.
+                  </p>
+                </article>
+                <article class="mini-card requirement-methods__item">
+                  <strong>Did we design a survey?</strong>
+                  <p>
+                    Yes. We designed a short survey with 7 items: five Likert-scale questions
+                    (trust, clarity, speed, citation usefulness, and escalation clarity) and
+                    two open-text questions for concerns and missing features.
+                  </p>
+                </article>
+                <article class="mini-card requirement-methods__item">
+                  <strong>How did we analyse the survey data?</strong>
+                  <p>
+                    We summarised Likert responses with averages and agreement rates, then coded
+                    open-text feedback into themes (citation visibility, answer brevity, and safe
+                    escalation wording) to update requirement priorities.
+                  </p>
+                </article>
+              </div>
+
+              <div class="interview-card" aria-label="Interview questions and findings">
+                <h3>Interview transcript summary (open each question)</h3>
+                <p>
+                  The interview was semi-structured and focused on real consultation workflow pain
+                  points. Each question below expands to show what we learned and which requirement
+                  it informed.
+                </p>
+
+                <details class="interview-item" open>
+                  <summary>Q1. When do you need support most during consultation?</summary>
+                  <div class="interview-item__body">
+                    <p>
+                      The need is highest when time is limited and guideline sections are lengthy.
+                      This led to a <strong>must-have</strong> requirement for concise outputs with
+                      immediate citation anchors.
+                    </p>
+                  </div>
+                </details>
+
+                <details class="interview-item">
+                  <summary>Q2. What makes an AI answer trustworthy in clinical contexts?</summary>
+                  <div class="interview-item__body">
+                    <p>
+                      Trust depended on visible evidence and source dates. This informed the
+                      requirement to show guideline source metadata and explicit citation placement.
+                    </p>
+                  </div>
+                </details>
+
+                <details class="interview-item">
+                  <summary>Q3. What should happen when evidence is weak or conflicting?</summary>
+                  <div class="interview-item__body">
+                    <p>
+                      Users preferred refusal + escalation over speculative guidance. We therefore
+                      prioritised low-confidence refusal logic with a clear specialist handoff path.
+                    </p>
+                  </div>
+                </details>
+
+                <details class="interview-item">
+                  <summary>Q4. How much detail is useful in the first response?</summary>
+                  <div class="interview-item__body">
+                    <p>
+                      Interview feedback preferred short answers first, with optional deeper detail.
+                      This translated into a concise response format and structured follow-up prompts.
+                    </p>
+                  </div>
+                </details>
+
+                <details class="interview-item">
+                  <summary>Q5. Which UI elements reduce cognitive load in busy sessions?</summary>
+                  <div class="interview-item__body">
+                    <p>
+                      Clear headings, compact answer blocks, and obvious escalation controls were
+                      prioritised. This informed our usability and accessibility non-functional
+                      requirements.
+                    </p>
+                  </div>
+                </details>
+              </div>
+
+              <div class="table-card requirement-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Source</th>
+                      <th>Collection method</th>
+                      <th>Analysis method</th>
+                      <th>Requirement impact</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Weekly supervisor + partner meetings</td>
+                      <td>Action logs and requirement review checkpoints</td>
+                      <td>Issue consolidation and acceptance-criteria refinement</td>
+                      <td>Safety, role controls, and traceability prioritised as Must-have</td>
+                    </tr>
+                    <tr>
+                      <td>Semi-structured interview</td>
+                      <td>Scenario-led Q&amp;A with clinical workflow focus</td>
+                      <td>Thematic coding of repeated concerns</td>
+                      <td>Citations, brevity, and escalation pathway strengthened</td>
+                    </tr>
+                    <tr>
+                      <td>Validation survey (Likert + open text)</td>
+                      <td>Short questionnaire after prototype walkthrough</td>
+                      <td>Response averages + agreement rates + theme extraction</td>
+                      <td>UI wording and confidence communication requirements refined</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </section>
 
           <section class="section-card">
-            <h2 id="stakeholders">Stakeholders and user groups</h2>
+            <h2 id="personas">Personas</h2>
+            <div class="three-col">
+              <div class="mini-card">
+                <strong>GP (primary user)</strong>
+                <p>Needs rapid, trustworthy, citation-backed answers during consultations.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Specialist reviewer</strong>
+                <p>Needs review controls to revise or approve AI outputs with full evidence visibility.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Administrator</strong>
+                <p>Needs operational oversight, audit logs, and user-role governance.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="use-cases">Use cases</h2>
+            <div class="diagram-card">
+              <h3>Use case diagram (high level)</h3>
+              <div class="diagram">
+                <div class="diagram__row">
+                  <div class="diagram__node"><strong>GP</strong>Submit query and inspect citations.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>RAG service</strong>Retrieve evidence and generate grounded answer.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>Specialist/Admin</strong>Review escalations and monitor operations.</div>
+                </div>
+              </div>
+            </div>
             <div class="table-card">
               <table>
                 <thead>
                   <tr>
-                    <th>Stakeholder</th>
-                    <th>Primary need</th>
-                    <th>System response</th>
+                    <th>ID</th>
+                    <th>Use case</th>
+                    <th>Actor</th>
+                    <th>Outcome</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>GP</td>
-                    <td>Ask a clinical question quickly and receive a grounded answer with sources.</td>
-                    <td>Protected GP routes, consultation creation, timeline view, and citation display.</td>
-                  </tr>
-                  <tr>
-                    <td>Specialist</td>
-                    <td>Review AI output, control workflow quality, and intervene when guidance is weak.</td>
-                    <td>Assignment queue, review endpoints, revision path, and manual response capability.</td>
-                  </tr>
-                  <tr>
-                    <td>Admin</td>
-                    <td>Observe operational health, manage users, and inspect audit history.</td>
-                    <td>Admin dashboards, user management endpoints, chat oversight, and audit log browsing.</td>
-                  </tr>
-                  <tr>
-                    <td>Project team</td>
-                    <td>Deploy and iterate on a multi-service architecture within coursework constraints.</td>
-                    <td>Docker Compose orchestration, modular services, and automated tests.</td>
-                  </tr>
+                  <tr><td>UC1</td><td>Submit routine clinical query</td><td>GP</td><td>Query enters retrieval+generation pipeline.</td></tr>
+                  <tr><td>UC2</td><td>Return grounded answer with citations</td><td>System</td><td>Evidence-linked response is displayed.</td></tr>
+                  <tr><td>UC3</td><td>Refuse and escalate low-confidence case</td><td>System/GP</td><td>Safe fallback and specialist handoff.</td></tr>
+                  <tr><td>UC4</td><td>Review and revise AI output</td><td>Specialist</td><td>Clinician-approved final answer recorded.</td></tr>
+                  <tr><td>UC5</td><td>Inspect logs and analytics</td><td>Admin</td><td>Traceable audit and usage monitoring.</td></tr>
                 </tbody>
               </table>
             </div>
           </section>
 
           <section class="section-card">
-            <h2 id="functional-requirements">Core functional requirements</h2>
-            <div class="two-col">
-              <div class="mini-card">
-                <strong>Authentication and access control</strong>
-                <p>JWT-based login, registration, password reset, and route-level role protection for GP, specialist, and admin users.</p>
-              </div>
-              <div class="mini-card">
-                <strong>Consultation lifecycle</strong>
-                <p>Chats must progress through open, submitted, assigned, reviewing, approved, or rejected states.</p>
-              </div>
-              <div class="mini-card">
-                <strong>RAG-backed answer generation</strong>
-                <p>User questions must be forwarded to a retrieval service that returns grounded answers plus citation metadata.</p>
-              </div>
-              <div class="mini-card">
-                <strong>Specialist control path</strong>
-                <p>Specialists must be able to self-assign, review whole chats or individual messages, request revisions, or manually replace answers.</p>
-              </div>
-              <div class="mini-card">
-                <strong>Notifications and audit logs</strong>
-                <p>Users need status updates while admins need traceability for major workflow and security events.</p>
-              </div>
-              <div class="mini-card">
-                <strong>Admin analytics</strong>
-                <p>The system must expose aggregate statistics over consultations, roles, AI responses, and RAG-grounded outputs.</p>
-              </div>
+            <h2 id="moscow-functional">MoSCoW requirement list (functional)</h2>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Functional requirement</th>
+                    <th>MoSCoW</th>
+                    <th>Acceptance criteria</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>FR1</td><td>Retrieve relevant NICE/BSR sections per query</td><td>Must</td><td>Retrieved context maps to guideline passages for test prompts.</td></tr>
+                  <tr><td>FR2</td><td>Generate evidence-grounded answer with citation references</td><td>Must</td><td>No clinically significant unsupported claims in golden-set checks.</td></tr>
+                  <tr><td>FR3</td><td>Low-confidence refusal with escalation option</td><td>Must</td><td>Below-threshold queries show safe refusal message.</td></tr>
+                  <tr><td>FR4</td><td>Role-based workflow actions (GP/specialist/admin)</td><td>Must</td><td>Permissions enforced consistently in UI and API.</td></tr>
+                  <tr><td>FR5</td><td>Display source version/effective date metadata</td><td>Should</td><td>Citations include version/date field when available.</td></tr>
+                  <tr><td>FR6</td><td>Consultation history and review trace</td><td>Should</td><td>Prior interactions are accessible in timeline view.</td></tr>
+                  <tr><td>FR7</td><td>Configurable provider routing for inference</td><td>Could</td><td>Deployment can target local and optional cloud provider route.</td></tr>
+                  <tr><td>FR8</td><td>Voice input for consultation queries</td><td>Won't</td><td>Excluded from this release scope.</td></tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
           <section class="section-card">
-            <h2 id="non-functional-requirements">Non-functional requirements</h2>
-            <div class="card-grid">
-              <div class="metric-card">
-                <strong>Groundedness</strong>
-                <p>Answers should cite retrieved guideline material and avoid unsupported free-form generation.</p>
-              </div>
-              <div class="metric-card">
-                <strong>Auditability</strong>
-                <p>Major actions need server-side logs so admin users can inspect the workflow retrospectively.</p>
-              </div>
-              <div class="metric-card">
-                <strong>Role isolation</strong>
-                <p>Users should only see and execute actions permitted by their operational role.</p>
-              </div>
-              <div class="metric-card">
-                <strong>Deployability</strong>
-                <p>The stack should be runnable with Docker Compose on ports 3000, 8000, 8001, and 5432.</p>
-              </div>
-              <div class="metric-card">
-                <strong>Extensibility</strong>
-                <p>The architecture should permit alternate model endpoints and evolving RAG retrieval modules.</p>
-              </div>
-              <div class="metric-card">
-                <strong>Clinical restraint</strong>
-                <p>The system should prefer no-answer behaviour over hallucinated certainty when evidence quality is low.</p>
-              </div>
+            <h2 id="moscow-non-functional">MoSCoW requirement list (non-functional)</h2>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Non-functional requirement</th>
+                    <th>Category</th>
+                    <th>MoSCoW</th>
+                    <th>Acceptance criteria</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>NFR1</td><td>Interactive latency for routine GP interactions</td><td>Performance</td><td>Must</td><td>Representative tests show responsive first output.</td></tr>
+                  <tr><td>NFR2</td><td>Local-first processing and controlled data transfer</td><td>Security/Privacy</td><td>Must</td><td>No unintended external transmission in local mode.</td></tr>
+                  <tr><td>NFR3</td><td>Graceful fallback on retrieval/model failure</td><td>Reliability</td><td>Must</td><td>Safe error message returned without service crash.</td></tr>
+                  <tr><td>NFR4</td><td>Readable, accessible interface for clinical workflows</td><td>Usability</td><td>Should</td><td>Clear text contrast and keyboard-accessible navigation.</td></tr>
+                  <tr><td>NFR5</td><td>Containerised deployment and modular codebase</td><td>Maintainability</td><td>Should</td><td>Main stack runs via Docker Compose with documented steps.</td></tr>
+                  <tr><td>NFR6</td><td>Provider-agnostic architecture for future evolution</td><td>Extensibility</td><td>Could</td><td>Endpoint switch requires config changes, not app rewrite.</td></tr>
+                  <tr><td>NFR7</td><td>Open-source release and full EHR integration</td><td>Open source/Scope</td><td>Won't</td><td>Out of scope for current delivery.</td></tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
@@ -179,18 +392,6 @@
           </section>
         </div>
 
-        <aside class="toc-panel">
-          <div id="page-toc"></div>
-          <div class="callout">
-            <h3>Success criteria</h3>
-            <ul>
-              <li>Grounded AI responses with citations.</li>
-              <li>Role-aware consultation and review workflow.</li>
-              <li>Deployable multi-service stack.</li>
-              <li>Automated tests across frontend, backend, and RAG paths.</li>
-            </ul>
-          </div>
-        </aside>
       </div>
     </main>
 
@@ -227,6 +428,7 @@
         </section>
       </div>
     </footer>
+
     <script src="assets/site.js?v=20260310"></script>
   </body>
 </html>
