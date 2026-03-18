@@ -25,6 +25,7 @@
         <div class="content-stack">
           <section class="section-card">
             <h2 id="topology">Deployment topology</h2>
+            <p>Ambience AI is built on a microservices architecture composed of three core backend services: a REST API backend, a dedicated RAG service, and a background retry worker. All services are containerised using Docker and communicate over an isolated <code>ambience_net</code> bridge network.</p>
             <div class="diagram-card">
               <h3>Compose-orchestrated architecture</h3>
               <div class="diagram">
@@ -55,6 +56,24 @@
                     Ollama on the host machine or a compatible external provider.
                   </div>
                 </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="core-services">Core services</h2>
+            <div class="card-grid">
+              <div class="mini-card">
+                <strong>REST API Backend — :8000</strong>
+                <p>Built with FastAPI (Python 3.11). Handles authentication, routing, and business logic across three RBAC roles: GP, Specialist, and Admin. Key responsibilities: JWT-based auth (8-day expiry, bcrypt hashing), chat lifecycle management (open → submitted → assigned → reviewing → approved/rejected), SSE-based AI response streaming, Redis-backed caching with user-scoped keys, and full audit logging for clinical compliance.</p>
+              </div>
+              <div class="mini-card">
+                <strong>RAG Service — :8001</strong>
+                <p>A standalone FastAPI service handling all AI inference. Receives queries from the backend, retrieves relevant medical evidence from the vector database, and generates grounded responses using the Med42 LLM. Exposes health check, retrieval, grounded answer, revision, and document-serving endpoints.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Background Retry Worker</strong>
+                <p>A Redis Queue (RQ)-based worker that processes failed RAG requests with exponential backoff (base 10 s, 2× multiplier, max 3 retries). SHA-256 hashing ensures idempotent retry deduplication, preventing duplicate AI responses from being stored on transient network failures.</p>
               </div>
             </div>
           </section>
@@ -121,6 +140,31 @@
 
           <section class="section-card">
             <h2 id="data-model">Data model</h2>
+            <p>PostgreSQL 16 serves as a polyglot database, handling three distinct data types in a single instance — eliminating the need for a separate vector database and keeping all data co-located for compliance.</p>
+            <div class="table-card" style="margin-bottom: 18px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th>Mechanism</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Relational data (users, chats, messages)</td>
+                    <td>Standard tables with foreign keys</td>
+                  </tr>
+                  <tr>
+                    <td>Semi-structured data (patient context, citations)</td>
+                    <td>JSONB columns</td>
+                  </tr>
+                  <tr>
+                    <td>Vector embeddings</td>
+                    <td>pgvector extension with HNSW indexing</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             <div class="table-card">
               <table>
                 <thead>
@@ -164,6 +208,105 @@
                 </tbody>
               </table>
             </div>
+            <h3>Key schema decisions</h3>
+            <ul>
+              <li><strong>Soft deletion</strong> — Chats use an <code>is_archived</code> flag rather than hard deletes, preserving audit trails.</li>
+              <li><strong>Enum-as-VARCHAR</strong> — Status enums are stored as VARCHAR (not native PostgreSQL ENUM types) for safe schema migrations without table rewrites.</li>
+              <li><strong>Cascade rules</strong> — Messages and files cascade-delete with their parent chat; notification foreign keys use <code>ON DELETE SET NULL</code> to preserve notification history after a chat is removed.</li>
+            </ul>
+          </section>
+
+          <section class="section-card">
+            <h2 id="rag-pipeline">RAG pipeline</h2>
+            <div class="timeline-card">
+              <div class="timeline">
+                <div class="timeline__item" data-step="1">
+                  <strong>Ingestion</strong>
+                  Clinical PDFs are chunked into 450-character segments with 100-character overlap, embedded using all-MiniLM-L6-v2 (384-dimensional vectors), and stored in pgvector with HNSW indexing.
+                </div>
+                <div class="timeline__item" data-step="2">
+                  <strong>Retrieval</strong>
+                  At query time the user's question is embedded and a cosine similarity search returns the top-k most relevant document chunks from the knowledge base.
+                </div>
+                <div class="timeline__item" data-step="3">
+                  <strong>Intelligent routing</strong>
+                  A composite score is computed across three dimensions — <em>complexity</em> (query length, sentence count, reasoning terms), <em>risk</em> (urgency flags, clinical keywords), and <em>ambiguity</em> (retrieval confidence and score gaps). Queries scoring above 0.65 route to the cloud model (Med42 70B on RunPod, 2× A100 GPUs); simpler queries use the local model (Med42 8B via Ollama). This hybrid approach optimises cost without sacrificing quality on high-stakes queries.
+                </div>
+                <div class="timeline__item" data-step="4">
+                  <strong>Generation</strong>
+                  Responses are grounded strictly in retrieved passages with bracketed citations [1], [2]. Both models expose an OpenAI-compatible <code>/v1/chat/completions</code> interface via vLLM, making the routing layer model-agnostic.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="caching">Caching strategy</h2>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cache target</th>
+                    <th>TTL</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Chat list</td>
+                    <td>30 s</td>
+                    <td>Invalidated on any write to the user's chats.</td>
+                  </tr>
+                  <tr>
+                    <td>Chat detail</td>
+                    <td>60 s</td>
+                    <td>Invalidated on message add or status change.</td>
+                  </tr>
+                  <tr>
+                    <td>User profile</td>
+                    <td>300 s</td>
+                    <td>Invalidated on profile update.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>All cache keys are scoped per user ID to prevent cross-tenant data leakage. Pattern-based bulk invalidation ensures consistency on write operations. If Redis is unavailable the system falls back gracefully to direct database queries with no change in API behaviour.</p>
+          </section>
+
+          <section class="section-card">
+            <h2 id="streaming">Real-time streaming</h2>
+            <p>
+              AI responses are streamed to the frontend using Server-Sent Events (SSE), removing the need for polling and improving perceived latency. A shared stream state machine prevents duplicate or missed events when concurrent streams are active on the same consultation.
+            </p>
+            <p>
+              Tokens are accepted as query parameters on SSE endpoints to work around a browser limitation: the <code>EventSource</code> API cannot set custom request headers, so the JWT cannot be passed in the standard <code>Authorization</code> header. The backend validates the token from the query string and immediately rejects unauthenticated connections.
+            </p>
+          </section>
+
+          <section class="section-card">
+            <h2 id="security">Security</h2>
+            <div class="card-grid">
+              <div class="mini-card">
+                <strong>Password hashing</strong>
+                <p>All passwords are hashed with bcrypt before storage. Plain-text passwords are never written to the database or logs.</p>
+              </div>
+              <div class="mini-card">
+                <strong>JWT authentication</strong>
+                <p>Tokens are validated on every protected request. 401 responses trigger automatic frontend logout. Tokens expire after 8 days.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Resource-level isolation</strong>
+                <p>Users can only access their own chats unless they are the assigned specialist. The backend enforces ownership checks at the query layer, not just the route layer.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Scoped cache keys</strong>
+                <p>Redis keys are namespaced per user ID, preventing information leakage between accounts even if cache entries share the same logical object type.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Immutable audit log</strong>
+                <p>All user actions are written to an <code>audit_logs</code> table. Rows are append-only — no update or delete paths exist in the application layer.</p>
+              </div>
+            </div>
           </section>
 
           <section class="section-card">
@@ -193,6 +336,12 @@
               Backend startup currently relies on ORM <em>create_all</em> plus schema patch helpers,
               which is practical for coursework iteration but weaker than a strictly migration-only
               production workflow.
+            </p>
+          </div>
+          <div class="callout">
+            <h3>Hybrid model routing</h3>
+            <p>
+              The default routing threshold is <strong>0.65</strong>. Queries above this score use Med42 70B (cloud, 2× A100); queries below use Med42 8B (local, Ollama). The local model runs on the host machine and is accessed from containers via <code>host.docker.internal</code> to leverage GPU resources outside the container runtime.
             </p>
           </div>
         </aside>
