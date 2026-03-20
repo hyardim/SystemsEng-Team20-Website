@@ -1,0 +1,133 @@
+<svg viewBox="0 0 960 560" xmlns="http://www.w3.org/2000/svg" font-family="Inter,system-ui,sans-serif">
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#005eb8"/>
+    </marker>
+    <marker id="b" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#b36b00"/>
+    </marker>
+    <marker id="c" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#0072ce"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="560" fill="#f8fafd" rx="12"/>
+
+  <!-- ── Docker boundary ── -->
+  <rect x="16" y="16" width="780" height="520" rx="14" fill="#edf4fb" stroke="#005eb8" stroke-width="2" stroke-dasharray="10,5"/>
+  <text x="36" y="42" font-size="13" font-weight="700" fill="#005eb8">Docker — ambience_net bridge network</text>
+
+  <!-- ══ ROW 1: Frontend · Backend · RAG ══ -->
+
+  <!-- Frontend :3000 -->
+  <rect x="40" y="64" width="160" height="90" rx="8" fill="#fff" stroke="#005eb8" stroke-width="1.5"/>
+  <rect x="40" y="64" width="160" height="30" rx="8" fill="#003087"/>
+  <rect x="40" y="84" width="160" height="10" fill="#003087"/>
+  <text x="120" y="84" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Frontend :3000</text>
+  <text x="120" y="110" text-anchor="middle" font-size="10" fill="#5b6c7d">React 19 · TypeScript · Vite</text>
+  <text x="120" y="125" text-anchor="middle" font-size="10" fill="#5b6c7d">Tailwind · React Router</text>
+  <text x="120" y="144" text-anchor="middle" font-size="9" fill="#0072ce">browser client</text>
+
+  <!-- Backend :8000 -->
+  <rect x="290" y="64" width="165" height="90" rx="8" fill="#fff" stroke="#005eb8" stroke-width="1.5"/>
+  <rect x="290" y="64" width="165" height="30" rx="8" fill="#003087"/>
+  <rect x="290" y="84" width="165" height="10" fill="#003087"/>
+  <text x="373" y="84" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Backend API :8000</text>
+  <text x="373" y="110" text-anchor="middle" font-size="10" fill="#5b6c7d">FastAPI · Python 3.11</text>
+  <text x="373" y="125" text-anchor="middle" font-size="10" fill="#5b6c7d">RBAC · SSE · JWT · bcrypt</text>
+  <text x="373" y="144" text-anchor="middle" font-size="9" fill="#0072ce">audit log · chat lifecycle</text>
+
+  <!-- RAG Service :8001 -->
+  <rect x="548" y="64" width="165" height="90" rx="8" fill="#fff" stroke="#005eb8" stroke-width="1.5"/>
+  <rect x="548" y="64" width="165" height="30" rx="8" fill="#003087"/>
+  <rect x="548" y="84" width="165" height="10" fill="#003087"/>
+  <text x="631" y="84" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">RAG Service :8001</text>
+  <text x="631" y="110" text-anchor="middle" font-size="10" fill="#5b6c7d">FastAPI · Python 3.11</text>
+  <text x="631" y="125" text-anchor="middle" font-size="10" fill="#5b6c7d">Retrieval · Routing · Generation</text>
+  <text x="631" y="144" text-anchor="middle" font-size="9" fill="#0072ce">Med42 · vLLM · citations</text>
+
+  <!-- ══ ROW 2: Redis · PostgreSQL · Retry Worker ══ -->
+
+  <!-- Redis -->
+  <rect x="40" y="270" width="160" height="82" rx="8" fill="#fff" stroke="#005eb8" stroke-width="1.5"/>
+  <rect x="40" y="270" width="160" height="28" rx="8" fill="#005eb8"/>
+  <rect x="40" y="288" width="160" height="10" fill="#005eb8"/>
+  <text x="120" y="288" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Redis</text>
+  <text x="120" y="312" text-anchor="middle" font-size="10" fill="#5b6c7d">Cache · RQ job queue</text>
+  <text x="120" y="327" text-anchor="middle" font-size="9" fill="#0072ce">TTL · user-scoped keys</text>
+  <text x="120" y="343" text-anchor="middle" font-size="9" fill="#5b6c7d">graceful DB fallback</text>
+
+  <!-- PostgreSQL :5432 -->
+  <rect x="290" y="270" width="165" height="82" rx="8" fill="#fff" stroke="#005eb8" stroke-width="1.5"/>
+  <rect x="290" y="270" width="165" height="28" rx="8" fill="#005eb8"/>
+  <rect x="290" y="288" width="165" height="10" fill="#005eb8"/>
+  <text x="373" y="288" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">PostgreSQL 16 :5432</text>
+  <text x="373" y="312" text-anchor="middle" font-size="10" fill="#5b6c7d">pgvector · HNSW indexing</text>
+  <text x="373" y="327" text-anchor="middle" font-size="9" fill="#0072ce">Relational · JSONB · vectors</text>
+  <text x="373" y="343" text-anchor="middle" font-size="9" fill="#5b6c7d">soft-delete · cascade rules</text>
+
+  <!-- Retry Worker -->
+  <rect x="548" y="270" width="165" height="82" rx="8" fill="#fff" stroke="#005eb8" stroke-width="1.5"/>
+  <rect x="548" y="270" width="165" height="28" rx="8" fill="#005eb8"/>
+  <rect x="548" y="288" width="165" height="10" fill="#005eb8"/>
+  <text x="631" y="288" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Retry Worker</text>
+  <text x="631" y="312" text-anchor="middle" font-size="10" fill="#5b6c7d">Redis Queue (RQ)</text>
+  <text x="631" y="327" text-anchor="middle" font-size="9" fill="#0072ce">Exp. backoff · SHA-256</text>
+  <text x="631" y="343" text-anchor="middle" font-size="9" fill="#5b6c7d">max 3 retries · idempotent</text>
+
+  <!-- ══ EXTERNAL: Med42 Cloud ══ -->
+  <rect x="820" y="52" width="128" height="112" rx="8" fill="#f0f8ff" stroke="#0072ce" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="884" y="42" text-anchor="middle" font-size="10" fill="#0072ce" font-style="italic">☁ External cloud</text>
+  <text x="884" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#003087">Med42 70B</text>
+  <text x="884" y="94" text-anchor="middle" font-size="10" fill="#5b6c7d">RunPod · 2× A100</text>
+  <text x="884" y="110" text-anchor="middle" font-size="10" fill="#5b6c7d">vLLM · OpenAI API</text>
+  <text x="884" y="126" text-anchor="middle" font-size="9" fill="#0072ce">complex queries (&gt;0.65)</text>
+  <text x="884" y="142" text-anchor="middle" font-size="9" fill="#5b6c7d">auto-fallback on error</text>
+
+  <!-- ══ EXTERNAL: Ollama host ══ -->
+  <rect x="548" y="450" width="165" height="74" rx="8" fill="#fff8f0" stroke="#b36b00" stroke-width="1.5"/>
+  <text x="631" y="442" text-anchor="middle" font-size="10" fill="#b36b00" font-style="italic">🖥 Host machine (outside Docker)</text>
+  <text x="631" y="474" text-anchor="middle" font-size="12" font-weight="700" fill="#7a4700">Ollama (host GPU)</text>
+  <text x="631" y="491" text-anchor="middle" font-size="10" fill="#7a4700">Med42 8B · local inference</text>
+  <text x="631" y="507" text-anchor="middle" font-size="9" fill="#b36b00">host.docker.internal</text>
+  <text x="631" y="518" text-anchor="middle" font-size="9" fill="#7a4700">simple queries (≤0.65)</text>
+
+  <!-- ══ ARROWS ══ -->
+
+  <!-- Frontend → Backend (HTTPS) -->
+  <line x1="200" y1="109" x2="288" y2="109" stroke="#005eb8" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="244" y="104" text-anchor="middle" font-size="9" fill="#005eb8">HTTPS</text>
+
+  <!-- Backend → RAG (HTTP) -->
+  <line x1="455" y1="109" x2="546" y2="109" stroke="#005eb8" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="500" y="104" text-anchor="middle" font-size="9" fill="#005eb8">HTTP</text>
+
+  <!-- Backend ↓ PostgreSQL (ORM) — straight down, no overlap -->
+  <line x1="373" y1="154" x2="373" y2="268" stroke="#005eb8" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="379" y="215" font-size="9" fill="#005eb8">ORM</text>
+
+  <!-- Backend → Redis — route LEFT then DOWN to avoid going through PostgreSQL -->
+  <path d="M 290,109 L 240,109 L 240,200 L 120,200 L 120,268" stroke="#005eb8" stroke-width="1.3" fill="none" marker-end="url(#a)"/>
+  <text x="176" y="196" text-anchor="middle" font-size="9" fill="#005eb8">cache R/W</text>
+
+  <!-- RAG → PostgreSQL — route DOWN then LEFT, staying in right-side gap -->
+  <path d="M 631,154 L 631,210 L 455,210 L 455,268" stroke="#005eb8" stroke-width="1.3" fill="none" marker-end="url(#a)"/>
+  <text x="540" y="206" text-anchor="middle" font-size="9" fill="#005eb8">pgvector search</text>
+
+  <!-- Retry Worker → Redis — route DOWN then LEFT, below all row-2 boxes -->
+  <path d="M 631,352 L 631,390 L 120,390 L 120,352" stroke="#0072ce" stroke-width="1.3" stroke-dasharray="5,3" fill="none" marker-end="url(#c)"/>
+  <text x="375" y="408" text-anchor="middle" font-size="9" fill="#0072ce">reads failed jobs from queue</text>
+
+  <!-- Retry Worker → RAG — straight up (retry call) -->
+  <line x1="631" y1="270" x2="631" y2="154" stroke="#0072ce" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#c)"/>
+  <text x="637" y="215" font-size="9" fill="#0072ce">retry</text>
+
+  <!-- RAG → Ollama (simple) — straight down -->
+  <line x1="631" y1="352" x2="631" y2="448" stroke="#b36b00" stroke-width="1.5" marker-end="url(#b)"/>
+  <text x="637" y="404" font-size="9" fill="#b36b00">simple</text>
+
+  <!-- RAG → Med42 Cloud (complex) — straight right -->
+  <line x1="713" y1="109" x2="818" y2="109" stroke="#0072ce" stroke-width="1.5" marker-end="url(#c)"/>
+  <text x="765" y="103" text-anchor="middle" font-size="9" fill="#0072ce">complex</text>
+</svg>

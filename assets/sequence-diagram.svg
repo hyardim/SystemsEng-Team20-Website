@@ -1,0 +1,97 @@
+<svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" font-family="Inter,system-ui,sans-serif">
+
+  <rect width="900" height="500" fill="#f8fafd" rx="12"/>
+
+  <defs>
+    <marker id="sa" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#003087"/>
+    </marker>
+    <marker id="sr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#5b6c7d"/>
+    </marker>
+  </defs>
+
+  <!-- ══ ACTOR BOXES ══ -->
+  <rect x="20"  y="16" width="110" height="38" rx="6" fill="#003087"/>
+  <text x="75"  y="39" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Frontend</text>
+
+  <rect x="200" y="16" width="124" height="38" rx="6" fill="#003087"/>
+  <text x="262" y="39" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Backend API</text>
+
+  <rect x="392" y="16" width="124" height="38" rx="6" fill="#003087"/>
+  <text x="454" y="39" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">RAG Service</text>
+
+  <rect x="584" y="16" width="124" height="38" rx="6" fill="#005eb8"/>
+  <text x="646" y="39" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">PostgreSQL</text>
+
+  <rect x="762" y="16" width="118" height="38" rx="6" fill="#005eb8"/>
+  <text x="821" y="39" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">LLM (Med42)</text>
+
+  <!-- ══ LIFELINES ══ -->
+  <line x1="75"  y1="54" x2="75"  y2="484" stroke="#d9e2ef" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="262" y1="54" x2="262" y2="484" stroke="#d9e2ef" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="454" y1="54" x2="454" y2="484" stroke="#d9e2ef" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="646" y1="54" x2="646" y2="484" stroke="#d9e2ef" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="821" y1="54" x2="821" y2="484" stroke="#d9e2ef" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- ══ ACTIVATION BARS ══ -->
+  <rect x="71"  y="88"  width="8" height="306" rx="2" fill="#d8e8f8" stroke="#005eb8" stroke-width="1"/>
+  <rect x="258" y="88"  width="8" height="306" rx="2" fill="#d8e8f8" stroke="#005eb8" stroke-width="1"/>
+  <rect x="450" y="174" width="8" height="180" rx="2" fill="#d8e8f8" stroke="#005eb8" stroke-width="1"/>
+  <rect x="642" y="116" width="8" height="260" rx="2" fill="#d8e8f8" stroke="#005eb8" stroke-width="1"/>
+  <rect x="817" y="264" width="8" height="54"  rx="2" fill="#d8e8f8" stroke="#005eb8" stroke-width="1"/>
+
+  <!-- ══ MESSAGES ══ -->
+
+  <!-- 1. Frontend → Backend: POST message -->
+  <line x1="79" y1="92" x2="256" y2="92" stroke="#003087" stroke-width="1.5" marker-end="url(#sa)"/>
+  <text x="167" y="87" text-anchor="middle" font-size="9" font-weight="600" fill="#003087">POST /chats/{id}/messages</text>
+
+  <!-- 2. Backend → PostgreSQL: INSERT user message -->
+  <line x1="266" y1="120" x2="640" y2="120" stroke="#003087" stroke-width="1.5" marker-end="url(#sa)"/>
+  <text x="453" y="115" text-anchor="middle" font-size="9" font-weight="600" fill="#003087">INSERT user message</text>
+
+  <!-- 2r. PostgreSQL → Backend: ok -->
+  <line x1="640" y1="140" x2="266" y2="140" stroke="#5b6c7d" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#sr)"/>
+  <text x="453" y="136" text-anchor="middle" font-size="9" fill="#5b6c7d">ok · auto-submit chat if open</text>
+
+  <!-- 3. Backend → RAG: POST /answer -->
+  <line x1="266" y1="174" x2="448" y2="174" stroke="#003087" stroke-width="1.5" marker-end="url(#sa)"/>
+  <text x="357" y="169" text-anchor="middle" font-size="9" font-weight="600" fill="#003087">POST /answer (query, specialty, severity)</text>
+
+  <!-- 4. RAG → PostgreSQL: vector search -->
+  <line x1="458" y1="204" x2="640" y2="204" stroke="#003087" stroke-width="1.5" marker-end="url(#sa)"/>
+  <text x="549" y="199" text-anchor="middle" font-size="9" font-weight="600" fill="#003087">cosine similarity search (pgvector)</text>
+
+  <!-- 4r. PostgreSQL → RAG: top-k chunks -->
+  <line x1="640" y1="224" x2="458" y2="224" stroke="#5b6c7d" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#sr)"/>
+  <text x="549" y="219" text-anchor="middle" font-size="9" fill="#5b6c7d">top-k document chunks</text>
+
+  <!-- Routing note -->
+  <rect x="368" y="238" width="178" height="22" rx="5" fill="#fff8f0" stroke="#b36b00" stroke-width="1"/>
+  <text x="457" y="253" text-anchor="middle" font-size="9" fill="#7a4700">route: score &gt; 0.65 → cloud, else local</text>
+
+  <!-- 5. RAG → LLM -->
+  <line x1="458" y1="270" x2="815" y2="270" stroke="#003087" stroke-width="1.5" marker-end="url(#sa)"/>
+  <text x="636" y="265" text-anchor="middle" font-size="9" font-weight="600" fill="#003087">POST /v1/chat/completions (grounded prompt)</text>
+
+  <!-- 5r. LLM → RAG: streamed tokens -->
+  <line x1="815" y1="294" x2="458" y2="294" stroke="#5b6c7d" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#sr)"/>
+  <text x="636" y="289" text-anchor="middle" font-size="9" fill="#5b6c7d">streamed token response</text>
+
+  <!-- 6. RAG → Backend: answer + citations -->
+  <line x1="450" y1="322" x2="266" y2="322" stroke="#5b6c7d" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#sr)"/>
+  <text x="357" y="317" text-anchor="middle" font-size="9" fill="#5b6c7d">grounded answer + citations [1][2]</text>
+
+  <!-- 7. Backend → PostgreSQL: INSERT AI message -->
+  <line x1="266" y1="352" x2="640" y2="352" stroke="#003087" stroke-width="1.5" marker-end="url(#sa)"/>
+  <text x="453" y="347" text-anchor="middle" font-size="9" font-weight="600" fill="#003087">INSERT AI message + citation metadata</text>
+
+  <!-- 8. Backend → Frontend: SSE stream -->
+  <line x1="258" y1="388" x2="79" y2="388" stroke="#003087" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#sa)"/>
+  <text x="167" y="383" text-anchor="middle" font-size="9" font-weight="600" fill="#003087">SSE stream — tokens to browser</text>
+
+  <!-- SSE note -->
+  <rect x="20" y="400" width="114" height="22" rx="4" fill="#edf4fb" stroke="#005eb8" stroke-width="1"/>
+  <text x="77" y="415" text-anchor="middle" font-size="8" fill="#005eb8">EventSource (?token=…)</text>
+</svg>
