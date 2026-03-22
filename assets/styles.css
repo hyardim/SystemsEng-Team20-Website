@@ -305,48 +305,18 @@ img {
 	transform: translateY(-1px);
 }
 
-/* ── Flow diagram ────────────────────────────── */
-.flow-diagram {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	background: white;
-	border: 1px solid rgba(0, 94, 184, 0.12);
-	border-radius: 16px;
-	padding: 20px 24px;
-	box-shadow: 0 2px 12px rgba(0, 94, 184, 0.08);
-	margin-bottom: 16px;
-}
-
-.flow-diagram__node {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 6px;
-	flex: 1;
-	font-size: 0.85rem;
-	font-weight: 600;
-	color: var(--nhs-dark-blue);
-}
-
-.flow-diagram__icon {
-	font-size: 2rem;
+/* ── Stat cards hero badge ───────────────────── */
+.stat-cards-hero__badge {
+	font-size: 4rem;
 	line-height: 1;
-}
-
-.flow-diagram__node--ai .flow-diagram__icon {
-	animation: pulse 2.5s ease-in-out infinite;
+	text-align: center;
+	margin-bottom: 20px;
+	animation: pulse 3s ease-in-out infinite;
 }
 
 @keyframes pulse {
 	0%, 100% { transform: scale(1); }
-	50% { transform: scale(1.12); }
-}
-
-.flow-diagram__arrow {
-	font-size: 1.4rem;
-	color: var(--nhs-blue);
-	opacity: 0.5;
+	50% { transform: scale(1.1); }
 }
 
 /* ── Stat cards ──────────────────────────────── */
