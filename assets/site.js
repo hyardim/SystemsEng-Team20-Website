@@ -215,7 +215,7 @@ function initScrollReveal() {
 }
 
 function initCounters() {
-  const counters = document.querySelectorAll('.stat-card__num[data-count]');
+  const counters = document.querySelectorAll('.stat-card__num[data-count], .hero-stat__num[data-count]');
   if (!counters.length) return;
 
   const animateCounter = (el) => {

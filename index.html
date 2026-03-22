@@ -8,7 +8,7 @@
       name="description"
       content="Technical project report website for Ambience-AI-1.5, a full-stack clinical decision-support platform built around retrieval-augmented generation and specialist review workflows."
     />
-    <link rel="stylesheet" href="assets/styles.css?v=20260322d" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260322e" />
   </head>
   <body data-page="home">
     <header class="site-header">
@@ -35,24 +35,29 @@
       </div>
     </header>
 
-    <main class="page-shell">
+    <main class="page-shell page-shell--home">
+
+      <!-- Full-width decorative banner -->
+      <div class="home-banner" aria-hidden="true">
+        <div class="home-banner__blob home-banner__blob--1"></div>
+        <div class="home-banner__blob home-banner__blob--2"></div>
+        <div class="home-banner__blob home-banner__blob--3"></div>
+        <div class="home-banner__grid"></div>
+        <div class="home-banner__label">Ambience-AI-1.5 · UCL COMP0016 · Team 20</div>
+      </div>
+
+      <!-- Two-column hero -->
       <section class="hero hero--home">
-        <div class="hero-home__bg" aria-hidden="true">
-          <div class="hero-home__blob hero-home__blob--1"></div>
-          <div class="hero-home__blob hero-home__blob--2"></div>
-          <div class="hero-home__blob hero-home__blob--3"></div>
-        </div>
-        <div class="hero-home__content">
+        <div class="hero-home__left">
           <p class="hero__eyebrow hero__eyebrow--pill home-anim home-anim--1">UCL CS Team 20 project</p>
-          <h1 class="home-anim home-anim--2">The Ambience-AI-1.5 Clinical Decision-Support Platform</h1>
+          <h1 class="home-anim home-anim--2">Clinical Decision-Support, Powered by AI</h1>
           <p class="hero-home__summary home-anim home-anim--3">
-            A clinical support system that helps doctors get specialist guidance, receive
-            evidence-grounded AI answers linked to NHS medical guidelines, and send cases for
-            specialist review in neurology and rheumatology.
+            Evidence-grounded AI answers linked to NHS guidelines, with specialist review workflows
+            for neurology and rheumatology — built for UK primary care.
           </p>
           <div class="hero-home__actions home-anim home-anim--4">
             <a class="button button--primary" href="#video">See project video</a>
-            <a class="button button--secondary" href="#abstract">Read the abstract</a>
+            <a class="button button--secondary" href="system-design.html">System design</a>
           </div>
           <div class="hero-home__stack home-anim home-anim--5">
             <span class="stack-chip">React 19</span>
@@ -63,26 +68,31 @@
             <span class="stack-chip">Docker</span>
           </div>
         </div>
-        <div class="hero-home__visual home-anim home-anim--2" aria-hidden="true">
-          <div class="stat-cards-hero__badge">🤖</div>
-          <div class="stat-cards">
-            <div class="stat-card">
-              <span class="stat-card__num" data-count="8">0</span>
-              <span class="stat-card__label">Docker services</span>
+        <div class="hero-home__right home-anim home-anim--3">
+          <a class="hero-quicklink" href="#abstract">
+            <span class="hero-quicklink__icon">📄</span>
+            <div>
+              <strong>Abstract</strong>
+              <p>Problem statement, solution overview, and project outcomes.</p>
             </div>
-            <div class="stat-card">
-              <span class="stat-card__num" data-count="2">0</span>
-              <span class="stat-card__label">AI models</span>
+            <span class="hero-quicklink__arrow">→</span>
+          </a>
+          <a class="hero-quicklink" href="#video">
+            <span class="hero-quicklink__icon">🎬</span>
+            <div>
+              <strong>Project video</strong>
+              <p>Watch the full demo of the Ambience-AI-1.5 platform.</p>
             </div>
-            <div class="stat-card">
-              <span class="stat-card__num" data-count="3">0</span>
-              <span class="stat-card__label">User roles</span>
+            <span class="hero-quicklink__arrow">→</span>
+          </a>
+          <a class="hero-quicklink" href="#team">
+            <span class="hero-quicklink__icon">👥</span>
+            <div>
+              <strong>Meet the team</strong>
+              <p>Five UCL engineers who built the system end-to-end.</p>
             </div>
-            <div class="stat-card">
-              <span class="stat-card__num" data-count="384">0</span>
-              <span class="stat-card__label">Vector dims</span>
-            </div>
-          </div>
+            <span class="hero-quicklink__arrow">→</span>
+          </a>
         </div>
       </section>
 
@@ -385,6 +395,6 @@
         </section>
       </div>
     </footer>
-    <script src="assets/site.js?v=20260322d"></script>
+    <script src="assets/site.js?v=20260322e"></script>
   </body>
 </html>
