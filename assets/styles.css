@@ -211,6 +211,183 @@ img {
 	max-width: 580px;
 }
 
+/* ── Home hero animated blobs ─────────────────── */
+.hero--home {
+	position: relative;
+	overflow: hidden;
+}
+
+.hero-home__bg {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 0;
+}
+
+.hero-home__blob {
+	position: absolute;
+	border-radius: 50%;
+	filter: blur(72px);
+	opacity: 0.18;
+}
+
+.hero-home__blob--1 {
+	width: 520px; height: 520px;
+	background: var(--nhs-blue);
+	top: -160px; right: -80px;
+	animation: blobDrift 14s ease-in-out infinite alternate;
+}
+
+.hero-home__blob--2 {
+	width: 380px; height: 380px;
+	background: #0072ce;
+	bottom: -100px; left: 10%;
+	animation: blobDrift 18s ease-in-out infinite alternate-reverse;
+}
+
+.hero-home__blob--3 {
+	width: 280px; height: 280px;
+	background: #21c7a8;
+	top: 40%; right: 30%;
+	animation: blobDrift 22s ease-in-out infinite alternate;
+}
+
+@keyframes blobDrift {
+	from { transform: translate(0, 0) scale(1); }
+	to   { transform: translate(40px, 30px) scale(1.08); }
+}
+
+.hero-home__content,
+.hero-home__visual {
+	position: relative;
+	z-index: 1;
+}
+
+/* ── Home hero stagger animations ────────────── */
+@keyframes heroSlideUp {
+	from { opacity: 0; transform: translateY(20px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+.home-anim {
+	opacity: 0;
+	animation: heroSlideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.home-anim--1 { animation-delay: 0.1s; }
+.home-anim--2 { animation-delay: 0.25s; }
+.home-anim--3 { animation-delay: 0.4s; }
+.home-anim--4 { animation-delay: 0.55s; }
+.home-anim--5 { animation-delay: 0.7s; }
+
+/* ── Stack chips ──────────────────────────────── */
+.hero-home__stack {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 22px;
+}
+
+.stack-chip {
+	display: inline-flex;
+	align-items: center;
+	padding: 4px 12px;
+	border-radius: 20px;
+	font-size: 0.82rem;
+	font-weight: 600;
+	background: rgba(0, 94, 184, 0.08);
+	border: 1px solid rgba(0, 94, 184, 0.2);
+	color: var(--nhs-dark-blue);
+	transition: background 0.2s, transform 0.2s;
+}
+
+.stack-chip:hover {
+	background: rgba(0, 94, 184, 0.15);
+	transform: translateY(-1px);
+}
+
+/* ── Flow diagram ────────────────────────────── */
+.flow-diagram {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	background: white;
+	border: 1px solid rgba(0, 94, 184, 0.12);
+	border-radius: 16px;
+	padding: 20px 24px;
+	box-shadow: 0 2px 12px rgba(0, 94, 184, 0.08);
+	margin-bottom: 16px;
+}
+
+.flow-diagram__node {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	flex: 1;
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: var(--nhs-dark-blue);
+}
+
+.flow-diagram__icon {
+	font-size: 2rem;
+	line-height: 1;
+}
+
+.flow-diagram__node--ai .flow-diagram__icon {
+	animation: pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+	0%, 100% { transform: scale(1); }
+	50% { transform: scale(1.12); }
+}
+
+.flow-diagram__arrow {
+	font-size: 1.4rem;
+	color: var(--nhs-blue);
+	opacity: 0.5;
+}
+
+/* ── Stat cards ──────────────────────────────── */
+.stat-cards {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 10px;
+}
+
+.stat-card {
+	background: white;
+	border: 1px solid rgba(0, 94, 184, 0.12);
+	border-radius: 12px;
+	padding: 14px 10px;
+	text-align: center;
+	box-shadow: 0 2px 8px rgba(0, 94, 184, 0.06);
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 94, 184, 0.12);
+}
+
+.stat-card__num {
+	display: block;
+	font-size: 1.7rem;
+	font-weight: 800;
+	color: var(--nhs-blue);
+	line-height: 1;
+	font-family: var(--ui-font);
+}
+
+.stat-card__label {
+	display: block;
+	font-size: 0.72rem;
+	color: var(--muted);
+	margin-top: 4px;
+	font-weight: 500;
+}
+
 .hero--home::after {
 	display: none;
 }

@@ -8,7 +8,7 @@
       name="description"
       content="Technical project report website for Ambience-AI-1.5, a full-stack clinical decision-support platform built around retrieval-augmented generation and specialist review workflows."
     />
-    <link rel="stylesheet" href="assets/styles.css?v=20260322b" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260322c" />
   </head>
   <body data-page="home">
     <header class="site-header">
@@ -37,37 +37,65 @@
 
     <main class="page-shell">
       <section class="hero hero--home">
+        <div class="hero-home__bg" aria-hidden="true">
+          <div class="hero-home__blob hero-home__blob--1"></div>
+          <div class="hero-home__blob hero-home__blob--2"></div>
+          <div class="hero-home__blob hero-home__blob--3"></div>
+        </div>
         <div class="hero-home__content">
-          <p class="hero__eyebrow hero__eyebrow--pill">UCL CS Team 20 project</p>
-          <h1>The Ambience-AI-1.5 Clinical Decision-Support Platform</h1>
-          <p class="hero-home__summary">
+          <p class="hero__eyebrow hero__eyebrow--pill home-anim home-anim--1">UCL CS Team 20 project</p>
+          <h1 class="home-anim home-anim--2">The Ambience-AI-1.5 Clinical Decision-Support Platform</h1>
+          <p class="hero-home__summary home-anim home-anim--3">
             A clinical support system that helps doctors get specialist guidance, receive
             evidence-grounded AI answers linked to NHS medical guidelines, and send cases for
             specialist review in neurology and rheumatology.
           </p>
-          <div class="hero-home__actions">
+          <div class="hero-home__actions home-anim home-anim--4">
             <a class="button button--primary" href="#video">See project video</a>
             <a class="button button--secondary" href="#abstract">Read the abstract</a>
           </div>
+          <div class="hero-home__stack home-anim home-anim--5">
+            <span class="stack-chip">React 19</span>
+            <span class="stack-chip">FastAPI</span>
+            <span class="stack-chip">pgvector</span>
+            <span class="stack-chip">Med42 LLM</span>
+            <span class="stack-chip">Redis</span>
+            <span class="stack-chip">Docker</span>
+          </div>
         </div>
-        <div class="hero-home__visual" aria-label="Project preview placeholder">
-          <div class="project-shot project-shot--back"></div>
-          <div class="project-shot project-shot--mid"></div>
-          <div class="project-shot project-shot--front">
-            <div class="project-shot__badge">Project image placeholder</div>
-            <div class="project-shot__frame">
-              <div class="project-shot__sidebar"></div>
-              <div class="project-shot__canvas">
-                <div class="project-shot__topbar"></div>
-                <div class="project-shot__grid">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-              </div>
+        <div class="hero-home__visual home-anim home-anim--2" aria-hidden="true">
+          <div class="flow-diagram">
+            <div class="flow-diagram__node flow-diagram__node--gp">
+              <span class="flow-diagram__icon">👨‍⚕️</span>
+              <span>GP</span>
+            </div>
+            <div class="flow-diagram__arrow">→</div>
+            <div class="flow-diagram__node flow-diagram__node--ai">
+              <span class="flow-diagram__icon">🤖</span>
+              <span>AI RAG</span>
+            </div>
+            <div class="flow-diagram__arrow">→</div>
+            <div class="flow-diagram__node flow-diagram__node--specialist">
+              <span class="flow-diagram__icon">🩺</span>
+              <span>Specialist</span>
+            </div>
+          </div>
+          <div class="stat-cards">
+            <div class="stat-card">
+              <span class="stat-card__num" data-count="8">0</span>
+              <span class="stat-card__label">Docker services</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card__num" data-count="2">0</span>
+              <span class="stat-card__label">AI models</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card__num" data-count="3">0</span>
+              <span class="stat-card__label">User roles</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card__num" data-count="384">0</span>
+              <span class="stat-card__label">Vector dims</span>
             </div>
           </div>
         </div>
@@ -372,6 +400,6 @@
         </section>
       </div>
     </footer>
-    <script src="assets/site.js?v=20260322b"></script>
+    <script src="assets/site.js?v=20260322c"></script>
   </body>
 </html>
