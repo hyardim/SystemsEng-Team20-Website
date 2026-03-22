@@ -26,6 +26,7 @@
           <section class="section-card">
             <h2 id="topology">Deployment topology</h2>
             <p>Ambience AI is built on a microservices architecture composed of three core backend services: a REST API backend, a dedicated RAG service, and a background retry worker. All services are containerised using Docker and communicate over an isolated <code>ambience_net</code> bridge network.</p>
+            <p>Ambience-AI is deployed as a containerised application across eight Docker services connected via a shared bridge network (<code>ambience_net</code>). In production, all inbound traffic enters through an Nginx reverse proxy on ports 80/443, which routes requests to either the Frontend (React/TypeScript, port 3000) or the Backend (FastAPI/Python, port 8000). In development, Vite's built-in dev server replaces Nginx entirely. The Backend communicates with the RAG Service (port 8001) for AI-related operations — answer generation, answer revision, and document ingestion — and with a RAG Worker for background retry processing of failed jobs. Persistent data is stored in PostgreSQL (port 5432) with the pgvector extension for vector embeddings, while Redis (port 6379) acts as both an application cache and the job queue that coordinates the RAG Worker. A Mailpit SMTP server (ports 1025/8025) handles email verification and password reset flows during development.</p>
             <div class="diagram-card">
               <h3>Compose-orchestrated architecture</h3>
               <div class="diagram">
