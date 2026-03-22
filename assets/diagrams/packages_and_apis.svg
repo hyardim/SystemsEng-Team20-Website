@@ -1,0 +1,375 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="860" viewBox="0 0 1100 860" font-family="Arial, sans-serif">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-color="#00000022"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="860" fill="#F0F4F5"/>
+
+  <!-- Title bar -->
+  <rect x="0" y="0" width="1100" height="52" fill="#005EB8"/>
+  <text x="550" y="33" text-anchor="middle" font-size="18" font-weight="bold" fill="white">Packages &amp; APIs — Ambience-AI</text>
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 1: KEY PACKAGES
+  ══════════════════════════════════════════════════ -->
+  <text x="25" y="74" font-size="13" font-weight="bold" fill="#003087">Key Packages</text>
+  <line x1="25" y1="78" x2="1075" y2="78" stroke="#ccc" stroke-width="1"/>
+
+  <!-- ── Backend column (x=25, w=335) ── -->
+  <g filter="url(#shadow)">
+    <rect x="25" y="84" width="335" height="248" rx="8" fill="white" stroke="#005EB8" stroke-width="1.5"/>
+    <rect x="25" y="84" width="335" height="26" rx="8" fill="#005EB8"/>
+    <rect x="25" y="98"  width="335" height="12" fill="#005EB8"/>
+    <text x="192" y="101" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Backend (FastAPI / Python)</text>
+
+    <!-- rows: y_base=110 + i*26 -->
+    <line x1="25" y1="112" x2="360" y2="112" stroke="#EEF" stroke-width="1"/>
+    <text x="37" y="126" font-size="10" font-weight="bold" fill="#003087">FastAPI</text>
+    <text x="130" y="126" font-size="10" fill="#555">REST API framework + auto OpenAPI docs</text>
+
+    <line x1="25" y1="132" x2="360" y2="132" stroke="#EEF" stroke-width="1"/>
+    <text x="37" y="146" font-size="10" font-weight="bold" fill="#003087">SQLAlchemy</text>
+    <text x="130" y="146" font-size="10" fill="#555">ORM for PostgreSQL models</text>
+
+    <line x1="25" y1="152" x2="360" y2="152" stroke="#EEF" stroke-width="1"/>
+    <text x="37" y="166" font-size="10" font-weight="bold" fill="#003087">Alembic</text>
+    <text x="130" y="166" font-size="10" fill="#555">Database schema migrations</text>
+
+    <line x1="25" y1="172" x2="360" y2="172" stroke="#EEF" stroke-width="1"/>
+    <text x="37" y="186" font-size="10" font-weight="bold" fill="#003087">Pydantic</text>
+    <text x="130" y="186" font-size="10" fill="#555">Request/response validation + settings</text>
+
+    <line x1="25" y1="192" x2="360" y2="192" stroke="#EEF" stroke-width="1"/>
+    <text x="37" y="206" font-size="10" font-weight="bold" fill="#003087">passlib / bcrypt</text>
+    <text x="130" y="206" font-size="10" fill="#555">Secure password hashing</text>
+
+    <line x1="25" y1="212" x2="360" y2="212" stroke="#EEF" stroke-width="1"/>
+    <text x="37" y="226" font-size="10" font-weight="bold" fill="#003087">PyJWT</text>
+    <text x="130" y="226" font-size="10" fill="#555">JWT token generation &amp; verification</text>
+
+    <line x1="25" y1="232" x2="360" y2="232" stroke="#EEF" stroke-width="1"/>
+    <text x="37" y="246" font-size="10" font-weight="bold" fill="#003087">httpx</text>
+    <text x="130" y="246" font-size="10" fill="#555">Async HTTP client (calls RAG service)</text>
+
+    <line x1="25" y1="252" x2="360" y2="252" stroke="#EEF" stroke-width="1"/>
+    <text x="37" y="266" font-size="10" font-weight="bold" fill="#003087">redis</text>
+    <text x="130" y="266" font-size="10" fill="#555">Response caching + rate-limit counters</text>
+
+    <line x1="25" y1="272" x2="360" y2="272" stroke="#EEF" stroke-width="1"/>
+    <text x="37" y="286" font-size="10" font-weight="bold" fill="#003087">pypdf</text>
+    <text x="130" y="286" font-size="10" fill="#555">PDF file attachment handling</text>
+    <line x1="25" y1="292" x2="360" y2="292" stroke="#EEF" stroke-width="1"/>
+    <text x="37" y="310" font-size="9" fill="#888" font-style="italic">see backend/requirements.txt for full list</text>
+  </g>
+
+  <!-- ── RAG Service column (x=383, w=335) ── -->
+  <g filter="url(#shadow)">
+    <rect x="383" y="84" width="335" height="248" rx="8" fill="white" stroke="#1D7A3A" stroke-width="1.5"/>
+    <rect x="383" y="84" width="335" height="26" rx="8" fill="#1D7A3A"/>
+    <rect x="383" y="98"  width="335" height="12" fill="#1D7A3A"/>
+    <text x="550" y="101" text-anchor="middle" font-size="12" font-weight="bold" fill="white">RAG Service (FastAPI / Python)</text>
+
+    <line x1="383" y1="112" x2="718" y2="112" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="126" font-size="10" font-weight="bold" fill="#003087">sentence-transformers</text>
+    <text x="540" y="126" font-size="10" fill="#555">Text embedding model</text>
+
+    <line x1="383" y1="132" x2="718" y2="132" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="146" font-size="10" font-weight="bold" fill="#003087">torch</text>
+    <text x="540" y="146" font-size="10" fill="#555">ML tensor ops for inference</text>
+
+    <line x1="383" y1="152" x2="718" y2="152" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="166" font-size="10" font-weight="bold" fill="#003087">pgvector</text>
+    <text x="540" y="166" font-size="10" fill="#555">Vector similarity search in PostgreSQL</text>
+
+    <line x1="383" y1="172" x2="718" y2="172" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="186" font-size="10" font-weight="bold" fill="#003087">pymupdf</text>
+    <text x="540" y="186" font-size="10" fill="#555">PDF text + table extraction</text>
+
+    <line x1="383" y1="192" x2="718" y2="192" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="206" font-size="10" font-weight="bold" fill="#003087">langchain-text-splitters</text>
+    <text x="540" y="206" font-size="10" fill="#555">Document chunking strategies</text>
+
+    <line x1="383" y1="212" x2="718" y2="212" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="226" font-size="10" font-weight="bold" fill="#003087">beautifulsoup4</text>
+    <text x="540" y="226" font-size="10" fill="#555">Web scraping for guideline sources</text>
+
+    <line x1="383" y1="232" x2="718" y2="232" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="246" font-size="10" font-weight="bold" fill="#003087">rq + redis</text>
+    <text x="540" y="246" font-size="10" fill="#555">Background retry job queue</text>
+
+    <line x1="383" y1="252" x2="718" y2="252" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="266" font-size="10" font-weight="bold" fill="#003087">SQLAlchemy + Alembic</text>
+    <text x="540" y="266" font-size="10" fill="#555">ORM + vector table migrations</text>
+
+    <line x1="383" y1="272" x2="718" y2="272" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="286" font-size="10" font-weight="bold" fill="#003087">httpx</text>
+    <text x="540" y="286" font-size="10" fill="#555">Async calls to Ollama / cloud LLM</text>
+    <line x1="383" y1="292" x2="718" y2="292" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="310" font-size="9" fill="#888" font-style="italic">see rag_service/pyproject.toml for full list</text>
+  </g>
+
+  <!-- ── Frontend column (x=741, w=335) ── -->
+  <g filter="url(#shadow)">
+    <rect x="741" y="84" width="335" height="248" rx="8" fill="white" stroke="#6B46C1" stroke-width="1.5"/>
+    <rect x="741" y="84" width="335" height="26" rx="8" fill="#6B46C1"/>
+    <rect x="741" y="98"  width="335" height="12" fill="#6B46C1"/>
+    <text x="908" y="101" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Frontend (React / TypeScript)</text>
+
+    <line x1="741" y1="112" x2="1076" y2="112" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="126" font-size="10" font-weight="bold" fill="#003087">React 19</text>
+    <text x="860" y="126" font-size="10" fill="#555">UI component framework</text>
+
+    <line x1="741" y1="132" x2="1076" y2="132" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="146" font-size="10" font-weight="bold" fill="#003087">React Router 7</text>
+    <text x="860" y="146" font-size="10" fill="#555">Client-side routing (role-based)</text>
+
+    <line x1="741" y1="152" x2="1076" y2="152" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="166" font-size="10" font-weight="bold" fill="#003087">Axios</text>
+    <text x="860" y="166" font-size="10" fill="#555">HTTP client with auth interceptors</text>
+
+    <line x1="741" y1="172" x2="1076" y2="172" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="186" font-size="10" font-weight="bold" fill="#003087">Tailwind CSS 4</text>
+    <text x="860" y="186" font-size="10" fill="#555">Utility-first styling framework</text>
+
+    <line x1="741" y1="192" x2="1076" y2="192" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="206" font-size="10" font-weight="bold" fill="#003087">Recharts</text>
+    <text x="860" y="206" font-size="10" fill="#555">Data visualisation (admin charts)</text>
+
+    <line x1="741" y1="212" x2="1076" y2="212" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="226" font-size="10" font-weight="bold" fill="#003087">crypto-js</text>
+    <text x="860" y="226" font-size="10" fill="#555">AES-GCM localStorage encryption</text>
+
+    <line x1="741" y1="232" x2="1076" y2="232" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="246" font-size="10" font-weight="bold" fill="#003087">Vitest + Testing Library</text>
+    <text x="860" y="246" font-size="10" fill="#555">Unit &amp; integration tests</text>
+
+    <line x1="741" y1="252" x2="1076" y2="252" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="266" font-size="10" font-weight="bold" fill="#003087">Playwright</text>
+    <text x="860" y="266" font-size="10" fill="#555">End-to-end browser tests</text>
+
+    <line x1="741" y1="272" x2="1076" y2="272" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="286" font-size="10" font-weight="bold" fill="#003087">MSW (Mock Service Worker)</text>
+    <text x="860" y="286" font-size="10" fill="#555">API mocking in tests</text>
+    <line x1="741" y1="292" x2="1076" y2="292" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="310" font-size="9" fill="#888" font-style="italic">see frontend/package.json for full list</text>
+  </g>
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 2: REST API ENDPOINTS
+  ══════════════════════════════════════════════════ -->
+  <text x="25" y="352" font-size="13" font-weight="bold" fill="#003087">REST API Endpoints</text>
+  <line x1="25" y1="356" x2="1075" y2="356" stroke="#ccc" stroke-width="1"/>
+
+  <!--
+    6 groups in 2 rows × 3 cols
+    col x: 25, 383, 741  w=335
+    row y: 362, 588
+    Method badge colours: GET=#1D7A3A  POST=#005EB8  PATCH=#C05800  DELETE=#CC0000
+  -->
+
+  <!-- helper macro: method badges -->
+  <!-- GET  -->  <!-- rect 22×13, text centered -->
+
+  <!-- ── Group 1: Auth (col1, row1) ── -->
+  <g filter="url(#shadow)">
+    <rect x="25" y="362" width="335" height="212" rx="8" fill="white" stroke="#4A5568" stroke-width="1.5"/>
+    <rect x="25" y="362" width="335" height="24" rx="8" fill="#4A5568"/>
+    <rect x="25" y="374" width="335" height="12" fill="#4A5568"/>
+    <text x="192" y="378" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Auth  /auth/*</text>
+
+    <!-- rows at y_base=386 + i*18 -->
+    <rect x="34"  y="389" width="30" height="12" rx="3" fill="#005EB8"/><text x="49"  y="399" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="70"  y="399" font-size="9" fill="#333">/login</text>
+
+    <rect x="34"  y="407" width="30" height="12" rx="3" fill="#005EB8"/><text x="49"  y="417" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="70"  y="417" font-size="9" fill="#333">/register</text>
+
+    <rect x="34"  y="425" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="47"  y="435" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="66"  y="435" font-size="9" fill="#333">/me</text>
+
+    <rect x="34"  y="443" width="30" height="12" rx="3" fill="#005EB8"/><text x="49"  y="453" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="70"  y="453" font-size="9" fill="#333">/logout  ·  /forgot-password</text>
+
+    <rect x="34"  y="461" width="30" height="12" rx="3" fill="#005EB8"/><text x="49"  y="471" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="70"  y="471" font-size="9" fill="#333">/reset-password/confirm</text>
+
+    <rect x="34"  y="479" width="30" height="12" rx="3" fill="#005EB8"/><text x="49"  y="489" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="70"  y="489" font-size="9" fill="#333">/verify-email/confirm</text>
+
+    <rect x="34"  y="497" width="30" height="12" rx="3" fill="#005EB8"/><text x="49"  y="507" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="70"  y="507" font-size="9" fill="#333">/resend-verification</text>
+
+    <rect x="34"  y="515" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="47"  y="525" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="66"  y="525" font-size="9" fill="#333">/verification-status</text>
+
+    <rect x="34"  y="533" width="38" height="12" rx="3" fill="#C05800"/><text x="53"  y="543" text-anchor="middle" font-size="8" font-weight="bold" fill="white">PATCH</text>
+    <text x="78"  y="543" font-size="9" fill="#333">/profile</text>
+    <line x1="34" y1="551" x2="348" y2="551" stroke="#EEF" stroke-width="1"/>
+    <text x="34"  y="564" font-size="9" fill="#888" font-style="italic">JWT: Bearer token required (except /login, /register)</text>
+  </g>
+
+  <!-- ── Group 2: Chats (col2, row1) ── -->
+  <g filter="url(#shadow)">
+    <rect x="383" y="362" width="335" height="212" rx="8" fill="white" stroke="#005EB8" stroke-width="1.5"/>
+    <rect x="383" y="362" width="335" height="24" rx="8" fill="#005EB8"/>
+    <rect x="383" y="374" width="335" height="12" fill="#005EB8"/>
+    <text x="550" y="378" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Chats  /chats/*</text>
+
+    <rect x="392" y="389" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="405" y="399" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="424" y="399" font-size="9" fill="#333">/   — list user's chats</text>
+
+    <rect x="392" y="407" width="30" height="12" rx="3" fill="#005EB8"/><text x="407" y="417" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="428" y="417" font-size="9" fill="#333">/   — create new chat</text>
+
+    <rect x="392" y="425" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="405" y="435" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="424" y="435" font-size="9" fill="#333">/{id}   — get chat + messages</text>
+
+    <rect x="392" y="443" width="38" height="12" rx="3" fill="#C05800"/><text x="411" y="453" text-anchor="middle" font-size="8" font-weight="bold" fill="white">PATCH</text>
+    <text x="436" y="453" font-size="9" fill="#333">/{id}   — update chat metadata</text>
+
+    <rect x="392" y="461" width="40" height="12" rx="3" fill="#CC0000"/><text x="412" y="471" text-anchor="middle" font-size="8" font-weight="bold" fill="white">DELETE</text>
+    <text x="438" y="471" font-size="9" fill="#333">/{id}   — archive chat</text>
+
+    <rect x="392" y="479" width="30" height="12" rx="3" fill="#005EB8"/><text x="407" y="489" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="428" y="489" font-size="9" fill="#333">/{id}/message   — send + trigger RAG</text>
+
+    <rect x="392" y="497" width="30" height="12" rx="3" fill="#005EB8"/><text x="407" y="507" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="428" y="507" font-size="9" fill="#333">/{id}/files   — upload attachment</text>
+
+    <rect x="392" y="515" width="30" height="12" rx="3" fill="#005EB8"/><text x="407" y="525" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="428" y="525" font-size="9" fill="#333">/{id}/submit   — submit for review</text>
+
+    <rect x="392" y="533" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="405" y="543" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="424" y="543" font-size="9" fill="#333">/{id}/stream   — SSE token stream</text>
+    <line x1="392" y1="551" x2="706" y2="551" stroke="#EEF" stroke-width="1"/>
+    <text x="392" y="564" font-size="9" fill="#888" font-style="italic">Role: GP (own chats). Admin can access all.</text>
+  </g>
+
+  <!-- ── Group 3: Specialist (col3, row1) ── -->
+  <g filter="url(#shadow)">
+    <rect x="741" y="362" width="335" height="194" rx="8" fill="white" stroke="#1D7A3A" stroke-width="1.5"/>
+    <rect x="741" y="362" width="335" height="24" rx="8" fill="#1D7A3A"/>
+    <rect x="741" y="374" width="335" height="12" fill="#1D7A3A"/>
+    <text x="908" y="378" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Specialist  /specialist/*</text>
+
+    <rect x="750" y="389" width="26" height="12" rx="3" fill="#1D7A3A" stroke="#fff" stroke-width="1"/><text x="763" y="399" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="782" y="399" font-size="9" fill="#333">/queue   — incoming queue</text>
+
+    <rect x="750" y="407" width="26" height="12" rx="3" fill="#1D7A3A" stroke="#fff" stroke-width="1"/><text x="763" y="417" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="782" y="417" font-size="9" fill="#333">/assigned   — my assigned cases</text>
+
+    <rect x="750" y="425" width="26" height="12" rx="3" fill="#1D7A3A" stroke="#fff" stroke-width="1"/><text x="763" y="435" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="782" y="435" font-size="9" fill="#333">/chats/{id}   — chat detail</text>
+
+    <rect x="750" y="443" width="30" height="12" rx="3" fill="#005EB8"/><text x="765" y="453" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="786" y="453" font-size="9" fill="#333">/chats/{id}/assign</text>
+
+    <rect x="750" y="461" width="30" height="12" rx="3" fill="#005EB8"/><text x="765" y="471" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="786" y="471" font-size="9" fill="#333">/chats/{id}/review</text>
+
+    <rect x="750" y="479" width="30" height="12" rx="3" fill="#005EB8"/><text x="765" y="489" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="786" y="489" font-size="9" fill="#333">/chats/{id}/message</text>
+
+    <rect x="750" y="497" width="30" height="12" rx="3" fill="#005EB8"/><text x="765" y="507" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="786" y="507" font-size="9" fill="#333">/chats/{id}/messages/{id}/review</text>
+
+    <line x1="750" y1="515" x2="1064" y2="515" stroke="#EEF" stroke-width="1"/>
+    <text x="750" y="533" font-size="9" fill="#888" font-style="italic">Role: Specialist only (Admin also has access)</text>
+    <line x1="750" y1="538" x2="1064" y2="538" stroke="#EEF" stroke-width="1"/>
+    <text x="750" y="546" font-size="9" fill="#888" font-style="italic">Notifications: GET / · GET /unread-count · PATCH /{id}/read · PATCH /read-all</text>
+  </g>
+
+  <!-- ── Group 4: Admin (col1, row2) ── -->
+  <g filter="url(#shadow)">
+    <rect x="25" y="588" width="335" height="222" rx="8" fill="white" stroke="#C05800" stroke-width="1.5"/>
+    <rect x="25" y="588" width="335" height="24" rx="8" fill="#C05800"/>
+    <rect x="25" y="600" width="335" height="12" fill="#C05800"/>
+    <text x="192" y="604" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Admin  /admin/*</text>
+
+    <rect x="34"  y="617" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="47"  y="627" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="66"  y="627" font-size="9" fill="#333">/stats   — dashboard overview</text>
+
+    <rect x="34"  y="635" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="47"  y="645" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="66"  y="645" font-size="9" fill="#333">/users   — list all users</text>
+
+    <rect x="34"  y="653" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="47"  y="663" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="66"  y="663" font-size="9" fill="#333">/users/{id}   — user detail</text>
+
+    <rect x="34"  y="671" width="38" height="12" rx="3" fill="#C05800"/><text x="53"  y="681" text-anchor="middle" font-size="8" font-weight="bold" fill="white">PATCH</text>
+    <text x="78"  y="681" font-size="9" fill="#333">/users/{id}   — update user</text>
+
+    <rect x="34"  y="689" width="40" height="12" rx="3" fill="#CC0000"/><text x="54"  y="699" text-anchor="middle" font-size="8" font-weight="bold" fill="white">DELETE</text>
+    <text x="80"  y="699" font-size="9" fill="#333">/users/{id}   — deactivate user</text>
+
+    <rect x="34"  y="707" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="47"  y="717" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="66"  y="717" font-size="9" fill="#333">/chats   ·   /chats/{id}</text>
+
+    <rect x="34"  y="725" width="38" height="12" rx="3" fill="#C05800"/><text x="53"  y="735" text-anchor="middle" font-size="8" font-weight="bold" fill="white">PATCH</text>
+    <text x="78"  y="735" font-size="9" fill="#333">/chats/{id}  ·  DELETE /chats/{id}</text>
+
+    <rect x="34"  y="743" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="47"  y="753" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="66"  y="753" font-size="9" fill="#333">/logs   — audit trail</text>
+
+    <rect x="34"  y="761" width="30" height="12" rx="3" fill="#005EB8"/><text x="49"  y="771" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="70"  y="771" font-size="9" fill="#333">/guidelines/upload</text>
+
+    <rect x="34"  y="779" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="47"  y="789" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="66"  y="789" font-size="9" fill="#333">/rag/status   — RAG queue status</text>
+  </g>
+
+  <!-- ── Group 5: RAG Service Internal (col2+col3, row2) ── -->
+  <g filter="url(#shadow)">
+    <rect x="383" y="588" width="693" height="222" rx="8" fill="white" stroke="#336791" stroke-width="1.5"/>
+    <rect x="383" y="588" width="693" height="24" rx="8" fill="#336791"/>
+    <rect x="383" y="600" width="693" height="12" fill="#336791"/>
+    <text x="729" y="604" text-anchor="middle" font-size="11" font-weight="bold" fill="white">RAG Service Internal API  (port 8001 — called by Backend only)</text>
+
+    <!-- left sub-column: x=392 to x=700 -->
+    <rect x="392" y="617" width="30" height="12" rx="3" fill="#005EB8"/><text x="407" y="627" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="428" y="627" font-size="9" fill="#333">/answer   — generate clinical AI response</text>
+
+    <rect x="392" y="635" width="30" height="12" rx="3" fill="#005EB8"/><text x="407" y="645" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="428" y="645" font-size="9" fill="#333">/revise   — specialist revision of AI answer</text>
+
+    <rect x="392" y="653" width="30" height="12" rx="3" fill="#005EB8"/><text x="407" y="663" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="428" y="663" font-size="9" fill="#333">/ingest   — upload + embed guideline PDF</text>
+
+    <rect x="392" y="671" width="30" height="12" rx="3" fill="#005EB8"/><text x="407" y="681" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="428" y="681" font-size="9" fill="#333">/query   — top-k vector similarity search</text>
+
+    <!-- right sub-column: x=715 to x=1064 -->
+    <rect x="720" y="617" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="733" y="627" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="752" y="627" font-size="9" fill="#333">/health   — service health check</text>
+
+    <rect x="720" y="635" width="30" height="12" rx="3" fill="#005EB8"/><text x="735" y="645" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+    <text x="756" y="645" font-size="9" fill="#333">/guidelines/sync   — trigger NICE/BSR sync</text>
+
+    <rect x="720" y="653" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="733" y="663" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="752" y="663" font-size="9" fill="#333">/guidelines/sync/status</text>
+
+    <rect x="720" y="671" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="733" y="681" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="752" y="681" font-size="9" fill="#333">/jobs/{id}   — retry job status</text>
+
+    <rect x="720" y="689" width="26" height="12" rx="3" fill="#1D7A3A"/><text x="733" y="699" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+    <text x="752" y="699" font-size="9" fill="#333">/docs/{id}   — stream source PDF</text>
+
+    <line x1="392" y1="706" x2="1064" y2="706" stroke="#EEF" stroke-width="1"/>
+    <text x="392" y="720" font-size="9" fill="#888" font-style="italic">External APIs consumed: Ollama (local) · Med42-70B via RunPod (cloud) · SMTP (Mailpit / Gmail)</text>
+    <text x="392" y="736" font-size="9" fill="#888" font-style="italic">Auth: RAG_INTERNAL_API_KEY shared secret between Backend and RAG Service containers</text>
+  </g>
+
+  <!-- Legend -->
+  <rect x="25" y="822" width="750" height="26" rx="6" fill="white" stroke="#ccc" stroke-width="1"/>
+  <rect x="40"  y="831" width="30" height="12" rx="3" fill="#1D7A3A"/><text x="55"  y="841" text-anchor="middle" font-size="8" font-weight="bold" fill="white">GET</text>
+  <text x="76"  y="841" font-size="10" fill="#333">Read</text>
+  <rect x="110" y="831" width="30" height="12" rx="3" fill="#005EB8"/><text x="125" y="841" text-anchor="middle" font-size="8" font-weight="bold" fill="white">POST</text>
+  <text x="146" y="841" font-size="10" fill="#333">Create / Action</text>
+  <rect x="218" y="831" width="38" height="12" rx="3" fill="#C05800"/><text x="237" y="841" text-anchor="middle" font-size="8" font-weight="bold" fill="white">PATCH</text>
+  <text x="262" y="841" font-size="10" fill="#333">Partial update</text>
+  <rect x="340" y="831" width="40" height="12" rx="3" fill="#CC0000"/><text x="360" y="841" text-anchor="middle" font-size="8" font-weight="bold" fill="white">DELETE</text>
+  <text x="386" y="841" font-size="10" fill="#333">Remove / deactivate</text>
+  <text x="510" y="841" font-size="10" fill="#888" font-style="italic">All backend endpoints require JWT unless marked public</text>
+</svg>

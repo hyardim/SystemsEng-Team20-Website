@@ -61,7 +61,16 @@
 
             <div class="diagram-card" style="margin-top:18px;">
               <h3>Architecture diagram</h3>
-              <img src="assets/arch-diagram.svg" alt="System architecture diagram" style="width:100%;height:auto;display:block;"/>
+              <img src="assets/diagrams/system_architecture.svg" alt="System architecture diagram" style="width:100%;height:auto;display:block;"/>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="site-map">Site map</h2>
+            <p>The application exposes three role-scoped route trees — GP, Specialist, and Admin — each accessible only after authentication. Public routes (landing, login, register) are accessible without credentials.</p>
+            <div class="diagram-card">
+              <h3>Frontend route structure</h3>
+              <img src="assets/diagrams/site_map.svg" alt="Site map showing frontend route structure" style="width:100%;height:auto;display:block;"/>
             </div>
           </section>
 
@@ -115,7 +124,7 @@
             </div>
             <div class="diagram-card" style="margin-top:18px;">
               <h3>Sequence diagram — GP message to AI response</h3>
-              <img src="assets/sequence-diagram.svg" alt="Sequence diagram — GP message to AI response" style="width:100%;height:auto;display:block;"/>
+              <img src="assets/diagrams/sequence_diagram.svg" alt="Sequence diagram — GP message to AI response" style="width:100%;height:auto;display:block;"/>
             </div>
           </section>
 
@@ -219,7 +228,7 @@
             </div>
             <div class="diagram-card" style="margin-top:18px;margin-bottom:18px;">
               <h3>Entity–relationship diagram</h3>
-              <img src="assets/er-diagram.svg" alt="Entity relationship diagram" style="width:100%;height:auto;display:block;"/>
+              <img src="assets/diagrams/er_diagram.svg" alt="Entity relationship diagram" style="width:100%;height:auto;display:block;"/>
             </div>
 
             <h3>Key schema decisions</h3>
@@ -338,6 +347,24 @@
                 <strong>Frontend router</strong>
                 <p>Client-side view composition for landing pages, auth pages, role-protected task flows, and dashboards.</p>
               </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="design-patterns">Design patterns</h2>
+            <p>Ambience AI applies several established software design patterns to ensure separation of concerns, maintainability, and testability across the full stack.</p>
+            <div class="diagram-card">
+              <h3>Applied patterns</h3>
+              <img src="assets/diagrams/design_patterns.svg" alt="Design patterns used in Ambience AI" style="width:100%;height:auto;display:block;"/>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="packages-apis">Packages and APIs</h2>
+            <p>The system is composed of well-defined internal API boundaries and relies on a curated set of open-source packages. Both the backend and RAG service expose OpenAI-compatible interfaces, making the system extensible to alternative model providers without code changes.</p>
+            <div class="diagram-card">
+              <h3>Package and API overview</h3>
+              <img src="assets/diagrams/packages_and_apis.svg" alt="Packages and APIs overview" style="width:100%;height:auto;display:block;"/>
             </div>
           </section>
         </div>

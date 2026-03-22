@@ -1,0 +1,279 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="660" viewBox="0 0 1200 660" font-family="Arial, sans-serif">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-color="#00000025"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="660" fill="#F0F4F5"/>
+
+  <!-- Title bar -->
+  <rect x="0" y="0" width="1200" height="52" fill="#005EB8"/>
+  <text x="600" y="33" text-anchor="middle" font-size="18" font-weight="bold" fill="white">Site Map — Ambience-AI Application Routes</text>
+
+  <!-- ==================== ROOT NODE ==================== -->
+  <g filter="url(#shadow)">
+    <rect x="490" y="68" width="220" height="42" rx="10" fill="#003087" stroke="#003087" stroke-width="2"/>
+    <text x="600" y="85" text-anchor="middle" font-size="13" font-weight="bold" fill="white">/ (Root)</text>
+    <text x="600" y="102" text-anchor="middle" font-size="11" fill="#AAC4E8">Landing Page</text>
+  </g>
+
+  <!-- ==================== AUTH SECTION ==================== -->
+  <!-- Root → Auth header (straight down) -->
+  <line x1="600" y1="110" x2="600" y2="145" stroke="#003087" stroke-width="2"/>
+
+  <g filter="url(#shadow)">
+    <rect x="428" y="145" width="344" height="28" rx="8" fill="#4A5568" stroke="#4A5568" stroke-width="1.5"/>
+    <text x="600" y="163" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Authentication Routes</text>
+  </g>
+
+  <!-- Auth header → horizontal bar at y=187 -->
+  <line x1="600" y1="173" x2="600" y2="187" stroke="#4A5568" stroke-width="1.5"/>
+  <!--
+    Auth boxes (height=32, font 9pt). All gaps ≥ 15px.
+    /login         x=30  w=72  right=102  cx=66
+    /register      x=117 w=90  right=207  cx=162   gap=15
+    /forgot-pwd    x=222 w=130 right=352  cx=287   gap=15
+    /reset-pwd     x=367 w=118 right=485  cx=426   gap=15
+    /verify-email  x=500 w=108 right=608  cx=554   gap=15
+    /resend-verif  x=623 w=148 right=771  cx=697   gap=15
+    /access-denied x=786 w=100 right=886  cx=836   gap=15
+    /* catch-all   x=901 w=94  right=995  cx=948   gap=15
+  -->
+  <line x1="66" y1="187" x2="948" y2="187" stroke="#4A5568" stroke-width="1.5"/>
+
+  <!-- /login -->
+  <line x1="66" y1="187" x2="66" y2="199" stroke="#4A5568" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="30" y="199" width="72" height="32" rx="7" fill="white" stroke="#4A5568" stroke-width="1.5"/>
+    <text x="66" y="213" text-anchor="middle" font-size="9" font-weight="bold" fill="#003087">/login</text>
+    <text x="66" y="225" text-anchor="middle" font-size="8" fill="#666">Sign In</text>
+  </g>
+
+  <!-- /register  gap=15 -->
+  <line x1="162" y1="187" x2="162" y2="199" stroke="#4A5568" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="117" y="199" width="90" height="32" rx="7" fill="white" stroke="#4A5568" stroke-width="1.5"/>
+    <text x="162" y="213" text-anchor="middle" font-size="9" font-weight="bold" fill="#003087">/register</text>
+    <text x="162" y="225" text-anchor="middle" font-size="8" fill="#666">Create Account</text>
+  </g>
+
+  <!-- /forgot-password  gap=15 -->
+  <line x1="287" y1="187" x2="287" y2="199" stroke="#4A5568" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="222" y="199" width="130" height="32" rx="7" fill="white" stroke="#4A5568" stroke-width="1.5"/>
+    <text x="287" y="213" text-anchor="middle" font-size="9" font-weight="bold" fill="#003087">/forgot-password</text>
+    <text x="287" y="225" text-anchor="middle" font-size="8" fill="#666">Request Reset</text>
+  </g>
+
+  <!-- /reset-password  gap=15 -->
+  <line x1="426" y1="187" x2="426" y2="199" stroke="#4A5568" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="367" y="199" width="118" height="32" rx="7" fill="white" stroke="#4A5568" stroke-width="1.5"/>
+    <text x="426" y="213" text-anchor="middle" font-size="9" font-weight="bold" fill="#003087">/reset-password</text>
+    <text x="426" y="225" text-anchor="middle" font-size="8" fill="#666">Set New Password</text>
+  </g>
+
+  <!-- /verify-email  gap=15 -->
+  <line x1="554" y1="187" x2="554" y2="199" stroke="#4A5568" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="500" y="199" width="108" height="32" rx="7" fill="white" stroke="#4A5568" stroke-width="1.5"/>
+    <text x="554" y="213" text-anchor="middle" font-size="9" font-weight="bold" fill="#003087">/verify-email</text>
+    <text x="554" y="225" text-anchor="middle" font-size="8" fill="#666">Email Confirmation</text>
+  </g>
+
+  <!-- /resend-verification  gap=15 -->
+  <line x1="697" y1="187" x2="697" y2="199" stroke="#4A5568" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="623" y="199" width="148" height="32" rx="7" fill="white" stroke="#4A5568" stroke-width="1.5"/>
+    <text x="697" y="213" text-anchor="middle" font-size="9" font-weight="bold" fill="#003087">/resend-verification</text>
+    <text x="697" y="225" text-anchor="middle" font-size="8" fill="#666">Resend Email</text>
+  </g>
+
+  <!-- /access-denied  gap=15 -->
+  <line x1="836" y1="187" x2="836" y2="199" stroke="#4A5568" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="786" y="199" width="100" height="32" rx="7" fill="white" stroke="#4A5568" stroke-width="1.5"/>
+    <text x="836" y="213" text-anchor="middle" font-size="9" font-weight="bold" fill="#003087">/access-denied</text>
+    <text x="836" y="225" text-anchor="middle" font-size="8" fill="#666">Forbidden</text>
+  </g>
+
+  <!-- /* catch-all  gap=15 -->
+  <line x1="948" y1="187" x2="948" y2="199" stroke="#4A5568" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="901" y="199" width="94" height="32" rx="7" fill="white" stroke="#4A5568" stroke-width="1.5"/>
+    <text x="948" y="213" text-anchor="middle" font-size="9" font-weight="bold" fill="#003087">* (catch-all)</text>
+    <text x="948" y="225" text-anchor="middle" font-size="8" fill="#666">Redirect → /</text>
+  </g>
+
+  <!-- ==================== PORTAL SPINE ==================== -->
+  <!--
+    Auth boxes end at x=995. Route spine connector from root RIGHT edge
+    at x=710, go right to x=1060 (clear of last auth box at x=995),
+    then down to y=295, left to admin centre x=1000.
+    No vertical line crosses any auth box.
+  -->
+  <path d="M 710 89 L 1060 89 L 1060 295 L 1000 295" fill="none" stroke="#003087" stroke-width="2"/>
+  <!-- Horizontal spine: GP=155, Specialist=560, Admin=1000 -->
+  <line x1="155" y1="295" x2="1000" y2="295" stroke="#888" stroke-width="2"/>
+  <line x1="155" y1="295" x2="155" y2="312" stroke="#005EB8" stroke-width="2"/>
+  <line x1="560" y1="295" x2="560" y2="312" stroke="#1D7A3A" stroke-width="2"/>
+  <line x1="1000" y1="295" x2="1000" y2="312" stroke="#C05800" stroke-width="2"/>
+
+  <!-- ==================== GP PORTAL ==================== -->
+  <g filter="url(#shadow)">
+    <rect x="15" y="312" width="280" height="38" rx="10" fill="#005EB8" stroke="#003087" stroke-width="1.5"/>
+    <text x="155" y="328" text-anchor="middle" font-size="13" font-weight="bold" fill="white">GP Portal</text>
+    <text x="155" y="343" text-anchor="middle" font-size="11" fill="#CCE0F5">/gp/*</text>
+  </g>
+  <line x1="155" y1="350" x2="155" y2="368" stroke="#005EB8" stroke-width="1.8"/>
+  <line x1="15" y1="368" x2="295" y2="368" stroke="#005EB8" stroke-width="1.5"/>
+
+  <!-- /gp/queries x=0 w=155 cx=77  |  /gp/query/:queryId x=170 w=155 cx=247  gap=15 -->
+  <line x1="77" y1="368" x2="77" y2="383" stroke="#005EB8" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="0" y="383" width="155" height="48" rx="8" fill="white" stroke="#005EB8" stroke-width="1.5"/>
+    <text x="77" y="400" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087">/gp/queries</text>
+    <text x="77" y="415" text-anchor="middle" font-size="9" fill="#555">Consultations List</text>
+    <text x="77" y="426" text-anchor="middle" font-size="9" fill="#888">Browse + filter all chats</text>
+  </g>
+
+  <line x1="247" y1="368" x2="247" y2="383" stroke="#005EB8" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="170" y="383" width="155" height="48" rx="8" fill="white" stroke="#005EB8" stroke-width="1.5"/>
+    <text x="247" y="400" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087">/gp/query/:queryId</text>
+    <text x="247" y="415" text-anchor="middle" font-size="9" fill="#555">Consultation Detail</text>
+    <text x="247" y="426" text-anchor="middle" font-size="9" fill="#888">Chat + SSE streaming</text>
+  </g>
+
+  <!-- /gp/queries/new child of /gp/queries -->
+  <line x1="77" y1="431" x2="77" y2="450" stroke="#005EB8" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <g filter="url(#shadow)">
+    <rect x="5" y="450" width="148" height="46" rx="8" fill="#E8F2FF" stroke="#005EB8" stroke-width="1.5"/>
+    <text x="79" y="466" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087">/gp/queries/new</text>
+    <text x="79" y="480" text-anchor="middle" font-size="9" fill="#555">New Consultation Form</text>
+    <text x="79" y="491" text-anchor="middle" font-size="9" fill="#888">Patient context + submit</text>
+  </g>
+
+  <!-- ==================== SPECIALIST PORTAL ==================== -->
+  <g filter="url(#shadow)">
+    <rect x="440" y="312" width="240" height="38" rx="10" fill="#1D7A3A" stroke="#145529" stroke-width="1.5"/>
+    <text x="560" y="328" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Specialist Portal</text>
+    <text x="560" y="343" text-anchor="middle" font-size="11" fill="#AADDB8">/specialist/*</text>
+  </g>
+  <line x1="560" y1="350" x2="560" y2="368" stroke="#1D7A3A" stroke-width="1.8"/>
+  <line x1="400" y1="368" x2="720" y2="368" stroke="#1D7A3A" stroke-width="1.5"/>
+
+  <!-- /specialist/queries x=400 w=155 cx=477  |  /specialist/query/:queryId x=570 w=165 cx=652  gap=15 -->
+  <line x1="477" y1="368" x2="477" y2="383" stroke="#1D7A3A" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="400" y="383" width="155" height="48" rx="8" fill="white" stroke="#1D7A3A" stroke-width="1.5"/>
+    <text x="477" y="400" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087">/specialist/queries</text>
+    <text x="477" y="415" text-anchor="middle" font-size="9" fill="#555">Assigned Queue</text>
+    <text x="477" y="426" text-anchor="middle" font-size="9" fill="#888">Incoming referrals</text>
+  </g>
+
+  <line x1="652" y1="368" x2="652" y2="383" stroke="#1D7A3A" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="570" y="383" width="165" height="48" rx="8" fill="white" stroke="#1D7A3A" stroke-width="1.5"/>
+    <text x="652" y="400" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087">/specialist/query/:queryId</text>
+    <text x="652" y="415" text-anchor="middle" font-size="9" fill="#555">Review Chat</text>
+    <text x="652" y="426" text-anchor="middle" font-size="9" fill="#888">Add specialist notes</text>
+  </g>
+
+  <!-- ==================== ADMIN PORTAL ==================== -->
+  <g filter="url(#shadow)">
+    <rect x="826" y="312" width="348" height="38" rx="10" fill="#C05800" stroke="#943F00" stroke-width="1.5"/>
+    <text x="1000" y="328" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Admin Portal</text>
+    <text x="1000" y="343" text-anchor="middle" font-size="11" fill="#FFD9B0">/admin/*</text>
+  </g>
+  <line x1="1000" y1="350" x2="1000" y2="368" stroke="#C05800" stroke-width="1.8"/>
+  <line x1="840" y1="368" x2="1175" y2="368" stroke="#C05800" stroke-width="1.5"/>
+
+  <!-- /admin/dashboard x=840 w=118 cx=899  gap(to chats)=12 -->
+  <line x1="899" y1="368" x2="899" y2="383" stroke="#C05800" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="840" y="383" width="118" height="48" rx="8" fill="white" stroke="#C05800" stroke-width="1.5"/>
+    <text x="899" y="400" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087">/admin/dashboard</text>
+    <text x="899" y="415" text-anchor="middle" font-size="9" fill="#555">Dashboard</text>
+    <text x="899" y="426" text-anchor="middle" font-size="9" fill="#888">Stats + overview</text>
+  </g>
+
+  <!-- /admin/chats x=970 w=100 cx=1020  gap=12 -->
+  <line x1="1020" y1="368" x2="1020" y2="383" stroke="#C05800" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="970" y="383" width="100" height="48" rx="8" fill="white" stroke="#C05800" stroke-width="1.5"/>
+    <text x="1020" y="400" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087">/admin/chats</text>
+    <text x="1020" y="415" text-anchor="middle" font-size="9" fill="#555">All Chats</text>
+    <text x="1020" y="426" text-anchor="middle" font-size="9" fill="#888">View all sessions</text>
+  </g>
+
+  <!-- /admin/logs x=1082 w=82 cx=1123  gap=12 -->
+  <line x1="1123" y1="368" x2="1123" y2="383" stroke="#C05800" stroke-width="1.5"/>
+  <g filter="url(#shadow)">
+    <rect x="1082" y="383" width="82" height="48" rx="8" fill="white" stroke="#C05800" stroke-width="1.5"/>
+    <text x="1123" y="400" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087">/admin/logs</text>
+    <text x="1123" y="415" text-anchor="middle" font-size="9" fill="#555">Audit Logs</text>
+    <text x="1123" y="426" text-anchor="middle" font-size="9" fill="#888">Security trail</text>
+  </g>
+
+  <!-- /admin/users child of dashboard cx=899  |  /admin/guidelines child of chats cx=1020 -->
+  <line x1="899" y1="431" x2="899" y2="450" stroke="#C05800" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <g filter="url(#shadow)">
+    <rect x="840" y="450" width="118" height="48" rx="8" fill="#FFF3E6" stroke="#C05800" stroke-width="1.5"/>
+    <text x="899" y="467" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087">/admin/users</text>
+    <text x="899" y="482" text-anchor="middle" font-size="9" fill="#555">User Management</text>
+    <text x="899" y="493" text-anchor="middle" font-size="9" fill="#888">List + create users</text>
+  </g>
+
+  <line x1="1020" y1="431" x2="1020" y2="450" stroke="#C05800" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <g filter="url(#shadow)">
+    <rect x="970" y="450" width="100" height="48" rx="8" fill="#FFF3E6" stroke="#C05800" stroke-width="1.5"/>
+    <text x="1020" y="467" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087">/admin/guidelines</text>
+    <text x="1020" y="482" text-anchor="middle" font-size="9" fill="#555">Guidelines</text>
+    <text x="1020" y="493" text-anchor="middle" font-size="9" fill="#888">NICE / BSR sync</text>
+  </g>
+
+  <!-- /admin/users/:id child of /admin/users -->
+  <line x1="899" y1="498" x2="899" y2="517" stroke="#C05800" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <g filter="url(#shadow)">
+    <rect x="840" y="517" width="118" height="46" rx="8" fill="#FFF3E6" stroke="#C05800" stroke-width="1.5"/>
+    <text x="899" y="534" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087">/admin/users/:id</text>
+    <text x="899" y="549" text-anchor="middle" font-size="9" fill="#555">User Detail</text>
+    <text x="899" y="560" text-anchor="middle" font-size="9" fill="#888">Edit + permissions</text>
+  </g>
+
+  <!-- /admin/rag/status child of /admin/logs -->
+  <line x1="1123" y1="431" x2="1123" y2="450" stroke="#C05800" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <g filter="url(#shadow)">
+    <rect x="1074" y="450" width="98" height="46" rx="8" fill="#FFF3E6" stroke="#C05800" stroke-width="1.5"/>
+    <text x="1123" y="466" text-anchor="middle" font-size="9" font-weight="bold" fill="#003087">/admin/rag/status</text>
+    <text x="1123" y="480" text-anchor="middle" font-size="9" fill="#555">RAG Status</text>
+    <text x="1123" y="491" text-anchor="middle" font-size="9" fill="#888">Processing queue info</text>
+  </g>
+
+  <!-- ==================== SHARED ROUTE NOTE ==================== -->
+  <g filter="url(#shadow)">
+    <rect x="340" y="450" width="175" height="34" rx="8" fill="white" stroke="#6B46C1" stroke-width="1.5"/>
+    <text x="427" y="464" text-anchor="middle" font-size="9" font-weight="bold" fill="#6B46C1">/profile</text>
+    <text x="427" y="477" text-anchor="middle" font-size="8" fill="#555">Profile Settings — all authenticated roles</text>
+  </g>
+  <text x="427" y="498" text-anchor="middle" font-size="8" fill="#6B46C1" font-style="italic">(shared protected route)</text>
+
+  <!-- ==================== LEGEND ==================== -->
+  <rect x="30" y="614" width="1000" height="32" rx="8" fill="white" stroke="#ccc" stroke-width="1"/>
+  <rect x="45" y="626" width="12" height="12" rx="3" fill="#005EB8"/>
+  <text x="62" y="636" font-size="10" fill="#003087">GP Portal</text>
+  <rect x="130" y="626" width="12" height="12" rx="3" fill="#1D7A3A"/>
+  <text x="147" y="636" font-size="10" fill="#003087">Specialist Portal</text>
+  <rect x="255" y="626" width="12" height="12" rx="3" fill="#C05800"/>
+  <text x="272" y="636" font-size="10" fill="#003087">Admin Portal</text>
+  <rect x="360" y="626" width="12" height="12" rx="3" fill="#4A5568"/>
+  <text x="377" y="636" font-size="10" fill="#003087">Auth Routes</text>
+  <rect x="455" y="626" width="12" height="12" rx="3" fill="#6B46C1"/>
+  <text x="472" y="636" font-size="10" fill="#003087">Shared Route</text>
+  <rect x="552" y="626" width="12" height="12" rx="3" fill="#E8F2FF" stroke="#005EB8" stroke-width="1"/>
+  <text x="569" y="636" font-size="10" fill="#003087">Nested / child route</text>
+  <text x="700" y="636" font-size="9" fill="#888" font-style="italic">All portal routes require JWT authentication and role-based access control</text>
+</svg>

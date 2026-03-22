@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="640" viewBox="0 0 1100 640" font-family="Arial, sans-serif">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-color="#00000022"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="640" fill="#F0F4F5"/>
+
+  <!-- Title bar -->
+  <rect x="0" y="0" width="1100" height="52" fill="#005EB8"/>
+  <text x="550" y="33" text-anchor="middle" font-size="18" font-weight="bold" fill="white">Design Patterns — Ambience-AI</text>
+
+  <!--
+    3 columns × 3 rows = 9 cards
+    col x:  25,  383,  741   w=335
+    row y:  68,  240,  412   h=158   gap=14
+    Colors: Backend=#005EB8  RAG=#1D7A3A  Frontend=#6B46C1  Shared=#C05800
+  -->
+
+  <!-- ══════════ ROW 1 ══════════ -->
+
+  <!-- Card 1: Repository Pattern (Backend) -->
+  <g filter="url(#shadow)">
+    <rect x="25"  y="68" width="335" height="158" rx="8" fill="white" stroke="#005EB8" stroke-width="1.5"/>
+    <rect x="25"  y="68" width="335" height="28"  rx="8" fill="#005EB8"/>
+    <rect x="25"  y="84" width="335" height="12"  fill="#005EB8"/>
+    <text x="192" y="87" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Repository Pattern</text>
+    <text x="37"  y="114" font-size="9" font-weight="bold" fill="#005EB8">● Backend</text>
+    <text x="37"  y="131" font-size="10" fill="#333">Abstracts all database access behind a standard</text>
+    <text x="37"  y="145" font-size="10" fill="#333">CRUD interface. One repository class per entity:</text>
+    <text x="37"  y="159" font-size="10" fill="#333">User, Chat, Message, AuditLog, Notification.</text>
+    <line x1="37" y1="170" x2="348" y2="170" stroke="#EEF" stroke-width="1"/>
+    <text x="37"  y="184" font-size="9" fill="#888" font-style="italic">📁 backend/src/repositories/</text>
+    <text x="37"  y="198" font-size="9" fill="#888" font-style="italic">     user_repository.py · chat_repository.py · …</text>
+  </g>
+
+  <!-- Card 2: Service Layer (Backend) -->
+  <g filter="url(#shadow)">
+    <rect x="383" y="68" width="335" height="158" rx="8" fill="white" stroke="#005EB8" stroke-width="1.5"/>
+    <rect x="383" y="68" width="335" height="28"  rx="8" fill="#005EB8"/>
+    <rect x="383" y="84" width="335" height="12"  fill="#005EB8"/>
+    <text x="550" y="87" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Service Layer</text>
+    <text x="395" y="114" font-size="9" font-weight="bold" fill="#005EB8">● Backend</text>
+    <text x="395" y="131" font-size="10" fill="#333">Encapsulates business logic between API routes</text>
+    <text x="395" y="145" font-size="10" fill="#333">and repositories. Handles auth flows, chat</text>
+    <text x="395" y="159" font-size="10" fill="#333">processing, email delivery, and notifications.</text>
+    <line x1="395" y1="170" x2="706" y2="170" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="184" font-size="9" fill="#888" font-style="italic">📁 backend/src/services/</text>
+    <text x="395" y="198" font-size="9" fill="#888" font-style="italic">     chat_service.py · auth_service.py · email_service.py · …</text>
+  </g>
+
+  <!-- Card 3: Dependency Injection (Backend) -->
+  <g filter="url(#shadow)">
+    <rect x="741" y="68" width="335" height="158" rx="8" fill="white" stroke="#005EB8" stroke-width="1.5"/>
+    <rect x="741" y="68" width="335" height="28"  rx="8" fill="#005EB8"/>
+    <rect x="741" y="84" width="335" height="12"  fill="#005EB8"/>
+    <text x="908" y="87" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Dependency Injection</text>
+    <text x="753" y="114" font-size="9" font-weight="bold" fill="#005EB8">● Backend</text>
+    <text x="753" y="131" font-size="10" fill="#333">FastAPI Depends() injects DB sessions and</text>
+    <text x="753" y="145" font-size="10" fill="#333">auth-verified user objects into route handlers,</text>
+    <text x="753" y="159" font-size="10" fill="#333">enforcing role-based access (GP / Specialist / Admin).</text>
+    <line x1="753" y1="170" x2="1064" y2="170" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="184" font-size="9" fill="#888" font-style="italic">📁 backend/src/api/deps.py</text>
+    <text x="753" y="198" font-size="9" fill="#888" font-style="italic">     get_current_user_obj() · get_admin_user() · get_db()</text>
+  </g>
+
+  <!-- ══════════ ROW 2 ══════════ -->
+
+  <!-- Card 4: Observer / Event Bus (Backend) -->
+  <g filter="url(#shadow)">
+    <rect x="25"  y="240" width="335" height="158" rx="8" fill="white" stroke="#005EB8" stroke-width="1.5"/>
+    <rect x="25"  y="240" width="335" height="28"  rx="8" fill="#005EB8"/>
+    <rect x="25"  y="256" width="335" height="12"  fill="#005EB8"/>
+    <text x="192" y="259" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Observer / Event Bus</text>
+    <text x="37"  y="286" font-size="9" font-weight="bold" fill="#005EB8">● Backend</text>
+    <text x="37"  y="303" font-size="10" fill="#333">Async pub/sub bus powers SSE token streaming.</text>
+    <text x="37"  y="317" font-size="10" fill="#333">Multiple subscribers per chat; a replay buffer</text>
+    <text x="37"  y="331" font-size="10" fill="#333">ensures late joiners receive in-flight tokens.</text>
+    <line x1="37" y1="342" x2="348" y2="342" stroke="#EEF" stroke-width="1"/>
+    <text x="37"  y="356" font-size="9" fill="#888" font-style="italic">📁 backend/src/utils/sse.py</text>
+    <text x="37"  y="370" font-size="9" fill="#888" font-style="italic">     _ChatEventBus · publish() · subscribe() · replay_buffer</text>
+  </g>
+
+  <!-- Card 5: Strategy — LLM Routing (RAG Service) -->
+  <g filter="url(#shadow)">
+    <rect x="383" y="240" width="335" height="158" rx="8" fill="white" stroke="#1D7A3A" stroke-width="1.5"/>
+    <rect x="383" y="240" width="335" height="28"  rx="8" fill="#1D7A3A"/>
+    <rect x="383" y="256" width="335" height="12"  fill="#1D7A3A"/>
+    <text x="550" y="259" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Strategy — LLM Routing</text>
+    <text x="395" y="286" font-size="9" font-weight="bold" fill="#1D7A3A">● RAG Service</text>
+    <text x="395" y="303" font-size="10" fill="#333">Scores query complexity, clinical risk, and</text>
+    <text x="395" y="317" font-size="10" fill="#333">retrieval confidence to select between a local</text>
+    <text x="395" y="331" font-size="10" fill="#333">Ollama model and a cloud LLM (Med42-70B).</text>
+    <line x1="395" y1="342" x2="706" y2="342" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="356" font-size="9" fill="#888" font-style="italic">📁 rag_service/src/generation/router.py</text>
+    <text x="395" y="370" font-size="9" fill="#888" font-style="italic">     select_generation_provider() · _score_complexity() · _score_risk()</text>
+  </g>
+
+  <!-- Card 6: Pipeline — Doc Ingestion (RAG Service) -->
+  <g filter="url(#shadow)">
+    <rect x="741" y="240" width="335" height="158" rx="8" fill="white" stroke="#1D7A3A" stroke-width="1.5"/>
+    <rect x="741" y="240" width="335" height="28"  rx="8" fill="#1D7A3A"/>
+    <rect x="741" y="256" width="335" height="12"  fill="#1D7A3A"/>
+    <text x="908" y="259" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Pipeline — Document Ingestion</text>
+    <text x="753" y="286" font-size="9" font-weight="bold" fill="#1D7A3A">● RAG Service</text>
+    <text x="753" y="303" font-size="10" fill="#333">8-stage sequential processor: EXTRACT → CLEAN</text>
+    <text x="753" y="317" font-size="10" fill="#333">→ SECTION → TABLE → METADATA → CHUNK</text>
+    <text x="753" y="331" font-size="10" fill="#333">→ EMBED → STORE. Fail-fast on stage errors.</text>
+    <line x1="753" y1="342" x2="1064" y2="342" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="356" font-size="9" fill="#888" font-style="italic">📁 rag_service/src/ingestion/pipeline.py</text>
+    <text x="753" y="370" font-size="9" fill="#888" font-style="italic">     IngestionPipeline · run_stage() · PipelineError</text>
+  </g>
+
+  <!-- ══════════ ROW 3 ══════════ -->
+
+  <!-- Card 7: Singleton (Shared) -->
+  <g filter="url(#shadow)">
+    <rect x="25"  y="412" width="335" height="158" rx="8" fill="white" stroke="#C05800" stroke-width="1.5"/>
+    <rect x="25"  y="412" width="335" height="28"  rx="8" fill="#C05800"/>
+    <rect x="25"  y="428" width="335" height="12"  fill="#C05800"/>
+    <text x="192" y="431" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Singleton</text>
+    <text x="37"  y="458" font-size="9" font-weight="bold" fill="#C05800">● Backend + RAG Service</text>
+    <text x="37"  y="475" font-size="10" fill="#333">Single shared instances of Settings (Pydantic</text>
+    <text x="37"  y="489" font-size="10" fill="#333">BaseSettings) and RedisCache ensure consistent</text>
+    <text x="37"  y="503" font-size="10" fill="#333">configuration and cache state across the app.</text>
+    <line x1="37" y1="514" x2="348" y2="514" stroke="#EEF" stroke-width="1"/>
+    <text x="37"  y="528" font-size="9" fill="#888" font-style="italic">📁 backend/src/core/config.py · utils/cache.py</text>
+    <text x="37"  y="542" font-size="9" fill="#888" font-style="italic">     rag_service/src/utils/db.py (DatabaseManager)</text>
+  </g>
+
+  <!-- Card 8: Context + Custom Hook (Frontend) -->
+  <g filter="url(#shadow)">
+    <rect x="383" y="412" width="335" height="158" rx="8" fill="white" stroke="#6B46C1" stroke-width="1.5"/>
+    <rect x="383" y="412" width="335" height="28"  rx="8" fill="#6B46C1"/>
+    <rect x="383" y="428" width="335" height="12"  fill="#6B46C1"/>
+    <text x="550" y="431" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Context + Custom Hook</text>
+    <text x="395" y="458" font-size="9" font-weight="bold" fill="#6B46C1">● Frontend</text>
+    <text x="395" y="475" font-size="10" fill="#333">AuthContext provides global JWT auth state via</text>
+    <text x="395" y="489" font-size="10" fill="#333">React Context API. useChatStream encapsulates</text>
+    <text x="395" y="503" font-size="10" fill="#333">full SSE lifecycle with automatic fallback polling.</text>
+    <line x1="395" y1="514" x2="706" y2="514" stroke="#EEF" stroke-width="1"/>
+    <text x="395" y="528" font-size="9" fill="#888" font-style="italic">📁 frontend/src/contexts/AuthContext.tsx</text>
+    <text x="395" y="542" font-size="9" fill="#888" font-style="italic">     frontend/src/hooks/useChatStream.ts</text>
+  </g>
+
+  <!-- Card 9: Protected Route (Frontend) -->
+  <g filter="url(#shadow)">
+    <rect x="741" y="412" width="335" height="158" rx="8" fill="white" stroke="#6B46C1" stroke-width="1.5"/>
+    <rect x="741" y="412" width="335" height="28"  rx="8" fill="#6B46C1"/>
+    <rect x="741" y="428" width="335" height="12"  fill="#6B46C1"/>
+    <text x="908" y="431" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Protected Route (HOC)</text>
+    <text x="753" y="458" font-size="9" font-weight="bold" fill="#6B46C1">● Frontend</text>
+    <text x="753" y="475" font-size="10" fill="#333">Higher-order component wrapping React Router v6</text>
+    <text x="753" y="489" font-size="10" fill="#333">routes. Validates JWT and user role; redirects</text>
+    <text x="753" y="503" font-size="10" fill="#333">unauthorised users to /access-denied.</text>
+    <line x1="753" y1="514" x2="1064" y2="514" stroke="#EEF" stroke-width="1"/>
+    <text x="753" y="528" font-size="9" fill="#888" font-style="italic">📁 frontend/src/components/ProtectedRoute.tsx</text>
+    <text x="753" y="542" font-size="9" fill="#888" font-style="italic">     frontend/src/components/ErrorBoundary.tsx</text>
+  </g>
+
+  <!-- Legend -->
+  <rect x="25" y="592" width="800" height="32" rx="8" fill="white" stroke="#ccc" stroke-width="1"/>
+  <rect x="40"  y="604" width="12" height="12" rx="2" fill="#005EB8"/>
+  <text x="57"  y="614" font-size="10" fill="#003087">Backend (FastAPI / Python)</text>
+  <rect x="220" y="604" width="12" height="12" rx="2" fill="#1D7A3A"/>
+  <text x="237" y="614" font-size="10" fill="#003087">RAG Service (FastAPI / Python)</text>
+  <rect x="430" y="604" width="12" height="12" rx="2" fill="#6B46C1"/>
+  <text x="447" y="614" font-size="10" fill="#003087">Frontend (React / TypeScript)</text>
+  <rect x="620" y="604" width="12" height="12" rx="2" fill="#C05800"/>
+  <text x="637" y="614" font-size="10" fill="#003087">Shared (Backend + RAG Service)</text>
+</svg>
