@@ -541,6 +541,9 @@ img {
 	border: none;
 	box-shadow: none;
 	padding: 10px 0 18px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	text-align: center;
 	color: var(--text);
 }
@@ -560,13 +563,16 @@ img {
 	max-width: 980px;
 	margin-left: auto;
 	margin-right: auto;
+	text-align: center;
 }
 
-.hero--requirements h1 {
+.hero.hero--requirements h1 {
 	text-align: center;
 	width: 100%;
 	max-width: none;
 	margin: 0 auto 10px;
+	font-size: clamp(3rem, 4.8vw, 4rem);
+	line-height: 1.08;
 }
 
 .hero-home__content {
@@ -1145,9 +1151,21 @@ img {
 
 .partner-intro__card--featured {
 	grid-column: 1 / -1;
-	width: calc((100% - 18px) / 2);
-	min-height: 230px;
+	width: min(1080px, 100%);
+	min-height: 0;
 	justify-self: center;
+	padding: 24px 28px;
+}
+
+.partner-intro__card--featured .partner-intro__head {
+	justify-content: center;
+	text-align: center;
+}
+
+.partner-intro__card--featured p {
+	max-width: 920px;
+	margin: 0 auto;
+	text-align: center;
 }
 
 .partner-intro__head {
@@ -1253,12 +1271,22 @@ img {
 	text-align: center;
 }
 
-.project-bg__grid {
+.section-card--project-bg .project-bg__grid {
 	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: minmax(0, 1fr);
 	gap: 18px;
 	width: min(var(--content-width), calc(100% - 40px));
 	margin: 0 auto;
+}
+
+.section-card--project-bg .project-bg__grid.project-bg__grid--stacked {
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: stretch;
+}
+
+.section-card--project-bg .project-bg__grid.project-bg__grid--stacked > .project-bg__card {
+	width: 100%;
 }
 
 .project-bg__card {
@@ -1272,6 +1300,7 @@ img {
 .project-bg__card h3 {
 	margin: 0 0 10px;
 	font-size: 1.5rem;
+	text-align: center;
 }
 
 .project-bg__card p {
@@ -1279,6 +1308,10 @@ img {
 	font-size: 1.02rem;
 	line-height: 1.58;
 	color: #4b5563;
+}
+
+.project-bg__card p + p {
+	margin-top: 12px;
 }
 
 .toc-panel {
@@ -2194,7 +2227,7 @@ tr:last-child td {
 		width: 100%;
 	}
 
-	.project-bg__grid {
+	.section-card--project-bg .project-bg__grid {
 		grid-template-columns: 1fr;
 	}
 

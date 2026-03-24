@@ -1,0 +1,229 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2140" viewBox="0 0 1600 2140" role="img" aria-labelledby="title desc">
+  <title id="title">Current implemented workflow for Ambience-AI-1.5</title>
+  <desc id="desc">Flowchart showing landing and authentication, GP consultation creation, consultation-chat guidance generation, specialist assignment and review, a request changes loop and an approved response returned to the GP.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#284b63"/>
+    </marker>
+  </defs>
+
+  <style>
+    .title { font: 700 28px Arial, sans-serif; fill: #143d6b; }
+    .subtitle { font: 400 16px Arial, sans-serif; fill: #48627a; }
+    .lane-title { font: 700 22px Arial, sans-serif; fill: #143d6b; }
+    .box-title { font: 700 18px Arial, sans-serif; fill: #12324f; }
+    .box-text { font: 400 16px Arial, sans-serif; fill: #24445f; }
+    .small-text { font: 400 14px Arial, sans-serif; fill: #48627a; }
+    .arrow-label { font: 600 18px Arial, sans-serif; fill: #36536d; }
+    .lane { stroke: #d6e1eb; stroke-width: 2; }
+    .lane-gp { fill: #f4f8ff; }
+    .lane-system { fill: #f3fbf5; }
+    .lane-specialist { fill: #fff9ef; }
+    .header { fill: #ffffff; stroke: #d6e1eb; stroke-width: 2; }
+    .auth-box { fill: #ffffff; stroke: #143d6b; stroke-width: 2.5; }
+    .gp-box { fill: #eaf2ff; stroke: #143d6b; stroke-width: 2.5; }
+    .system-box { fill: #edf8f0; stroke: #1f6f4a; stroke-width: 2.5; }
+    .specialist-box { fill: #fff0d9; stroke: #9a5d00; stroke-width: 2.5; }
+    .admin-box { fill: #fdebe7; stroke: #9a3324; stroke-width: 2.5; }
+    .note-box { fill: #fff8d8; stroke: #a37700; stroke-width: 2.5; }
+    .diamond { fill: #eef3ff; stroke: #143d6b; stroke-width: 2.5; }
+    .arrow { fill: none; stroke: #284b63; stroke-width: 2.5; marker-end: url(#arrow); }
+    .dashed { stroke-dasharray: 10 8; }
+  </style>
+
+  <rect width="1600" height="2140" fill="#f6f8fb"/>
+
+  <text x="70" y="58" class="title">Current workflow overview</text>
+  <text x="70" y="88" class="subtitle">This reflects the implemented code path: guidance is generated within the consultation chat and reviewed by a specialist before approval.</text>
+
+  <g transform="translate(0 100)">
+  <!-- Access and auth -->
+  <rect x="625" y="32" width="350" height="60" rx="20" class="auth-box" />
+  <text x="800" y="68" text-anchor="middle" class="box-title">Start</text>
+
+  <rect x="625" y="122" width="350" height="60" rx="20" class="auth-box" />
+  <text x="800" y="158" text-anchor="middle" class="box-title">Landing page</text>
+
+  <rect x="110" y="232" width="350" height="70" rx="20" class="auth-box" />
+  <text x="285" y="273" text-anchor="middle" class="box-title">Register account</text>
+
+  <rect x="110" y="342" width="350" height="70" rx="20" class="auth-box" />
+  <text x="285" y="376" text-anchor="middle" class="box-title">Verify email</text>
+  <text x="285" y="398" text-anchor="middle" class="small-text">required before sign-in</text>
+
+  <rect x="625" y="232" width="350" height="70" rx="20" class="auth-box" />
+  <text x="800" y="273" text-anchor="middle" class="box-title">Login</text>
+
+  <rect x="1140" y="232" width="350" height="70" rx="20" class="auth-box" />
+  <text x="1315" y="273" text-anchor="middle" class="box-title">Forgot password</text>
+
+  <rect x="1140" y="342" width="350" height="70" rx="20" class="auth-box" />
+  <text x="1315" y="383" text-anchor="middle" class="box-title">Reset password</text>
+
+  <polygon points="800,430 960,510 800,590 640,510" class="diamond" />
+  <text x="800" y="500" text-anchor="middle" class="box-title">Role-based</text>
+  <text x="800" y="522" text-anchor="middle" class="box-title">routing</text>
+
+  <rect x="110" y="620" width="350" height="76" rx="20" class="gp-box" />
+  <text x="285" y="666" text-anchor="middle" class="box-title">GP Portal</text>
+
+  <rect x="1140" y="620" width="350" height="76" rx="20" class="specialist-box" />
+  <text x="1315" y="666" text-anchor="middle" class="box-title">Specialist Portal</text>
+
+  <path d="M800 92 L800 122" class="arrow" />
+  <path d="M800 182 L800 232" class="arrow" />
+  <path d="M625 152 L460 152 L460 267" class="arrow" />
+  <path d="M975 267 L1140 267" class="arrow dashed" />
+  <path d="M285 302 L285 342" class="arrow" />
+  <path d="M460 377 L625 267" class="arrow" />
+  <path d="M1315 302 L1315 342" class="arrow" />
+  <path d="M1140 377 L975 267" class="arrow" />
+  <path d="M800 302 L800 430" class="arrow" />
+  <path d="M720 550 L285 620" class="arrow" />
+  <path d="M880 550 L1315 620" class="arrow" />
+
+  <!-- Swimlanes -->
+  <rect x="40" y="730" width="480" height="1320" rx="28" class="lane lane-gp" />
+  <rect x="560" y="730" width="480" height="1320" rx="28" class="lane lane-system" />
+  <rect x="1080" y="730" width="480" height="1320" rx="28" class="lane lane-specialist" />
+
+  <rect x="60" y="750" width="440" height="52" rx="16" class="header" />
+  <text x="280" y="783" text-anchor="middle" class="lane-title">GP workflow</text>
+
+  <rect x="580" y="750" width="440" height="52" rx="16" class="header" />
+  <text x="800" y="783" text-anchor="middle" class="lane-title">System workflow</text>
+
+  <rect x="1100" y="750" width="440" height="52" rx="16" class="header" />
+  <text x="1320" y="783" text-anchor="middle" class="lane-title">Specialist workflow</text>
+
+  <!-- GP lane -->
+  <rect x="80" y="840" width="400" height="88" rx="20" class="gp-box" />
+  <text x="280" y="876" text-anchor="middle" class="box-title">Open My Consultations</text>
+  <text x="280" y="898" text-anchor="middle" class="box-text">and choose New Consultation</text>
+
+  <rect x="80" y="960" width="400" height="136" rx="20" class="gp-box" />
+  <text x="280" y="994" text-anchor="middle" class="box-title">Enter consultation details</text>
+  <text x="280" y="1022" text-anchor="middle" class="box-text">title, age, sex, specialty, urgency,</text>
+  <text x="280" y="1046" text-anchor="middle" class="box-text">clinical context, question</text>
+  <text x="280" y="1070" text-anchor="middle" class="box-text">and optional files</text>
+
+  <rect x="80" y="1130" width="400" height="88" rx="20" class="gp-box" />
+  <text x="280" y="1166" text-anchor="middle" class="box-title">Submit consultation</text>
+  <text x="280" y="1188" text-anchor="middle" class="box-text">and open that chat</text>
+
+  <rect x="80" y="1250" width="400" height="88" rx="20" class="gp-box" />
+  <text x="280" y="1286" text-anchor="middle" class="box-title">Consultation chat opens</text>
+  <text x="280" y="1308" text-anchor="middle" class="box-text">submitted question appears first</text>
+
+  <rect x="80" y="1530" width="400" height="118" rx="20" class="note-box" />
+  <text x="280" y="1564" text-anchor="middle" class="box-title">Follow-up while submitted</text>
+  <text x="280" y="1590" text-anchor="middle" class="box-text">GPs can add more messages or files</text>
+  <text x="280" y="1614" text-anchor="middle" class="box-text">while status is open or submitted.</text>
+  <text x="280" y="1638" text-anchor="middle" class="small-text">After assignment, chat input becomes read-only.</text>
+
+  <rect x="80" y="1920" width="400" height="92" rx="20" class="gp-box" />
+  <text x="280" y="1958" text-anchor="middle" class="box-title">GP sees checked response</text>
+  <text x="280" y="1982" text-anchor="middle" class="box-text">and consultation status update</text>
+
+  <!-- System lane -->
+  <rect x="600" y="840" width="400" height="102" rx="20" class="system-box" />
+  <text x="800" y="874" text-anchor="middle" class="box-title">Consultation chat workflow</text>
+  <text x="800" y="902" text-anchor="middle" class="box-text">guidance is generated inside the chat</text>
+  <text x="800" y="926" text-anchor="middle" class="small-text">and stays linked to the same consultation.</text>
+
+  <rect x="600" y="1250" width="400" height="88" rx="20" class="system-box" />
+  <text x="800" y="1286" text-anchor="middle" class="box-title">Create consultation record</text>
+  <text x="800" y="1308" text-anchor="middle" class="box-text">status becomes submitted</text>
+
+  <rect x="600" y="1370" width="400" height="130" rx="20" class="system-box" />
+  <text x="800" y="1404" text-anchor="middle" class="box-title">Generate initial AI draft</text>
+  <text x="800" y="1432" text-anchor="middle" class="box-text">retrieve guideline context, choose</text>
+  <text x="800" y="1456" text-anchor="middle" class="box-text">local or cloud provider if needed</text>
+  <text x="800" y="1480" text-anchor="middle" class="box-text">and stream citations into the chat</text>
+
+  <rect x="600" y="1530" width="400" height="88" rx="20" class="system-box" />
+  <text x="800" y="1566" text-anchor="middle" class="box-title">List consultation in</text>
+  <text x="800" y="1588" text-anchor="middle" class="box-text">the specialist queue</text>
+
+  <rect x="600" y="1660" width="400" height="98" rx="20" class="system-box" />
+  <text x="800" y="1698" text-anchor="middle" class="box-title">Revise AI draft in the same chat</text>
+  <text x="800" y="1722" text-anchor="middle" class="box-text">when a specialist requests changes</text>
+
+  <!-- Specialist lane -->
+  <rect x="1120" y="840" width="400" height="88" rx="20" class="specialist-box" />
+  <text x="1320" y="872" text-anchor="middle" class="box-title">View queue of</text>
+  <text x="1320" y="896" text-anchor="middle" class="box-title">unassigned queries</text>
+  <text x="1320" y="918" text-anchor="middle" class="box-text">in Specialist Portal</text>
+
+  <rect x="1120" y="960" width="400" height="88" rx="20" class="specialist-box" />
+  <text x="1320" y="996" text-anchor="middle" class="box-title">Open query from queue</text>
+  <text x="1320" y="1018" text-anchor="middle" class="box-text">see the consultation chat and draft</text>
+
+  <rect x="1120" y="1080" width="400" height="88" rx="20" class="specialist-box" />
+  <text x="1320" y="1116" text-anchor="middle" class="box-title">Assign to me</text>
+  <text x="1320" y="1138" text-anchor="middle" class="box-text">status becomes assigned</text>
+
+  <rect x="1120" y="1200" width="400" height="116" rx="20" class="specialist-box" />
+  <text x="1320" y="1234" text-anchor="middle" class="box-title">Choose review action</text>
+  <text x="1320" y="1262" text-anchor="middle" class="box-text">approve or approve with comment,</text>
+  <text x="1320" y="1286" text-anchor="middle" class="box-text">request changes, manual response</text>
+  <text x="1320" y="1310" text-anchor="middle" class="box-text">or edit message</text>
+
+  <polygon points="1320,1328 1430,1396 1320,1464 1210,1396" class="diamond" />
+  <text x="1320" y="1388" text-anchor="middle" class="box-title">Request</text>
+  <text x="1320" y="1412" text-anchor="middle" class="box-title">changes?</text>
+
+  <rect x="1120" y="1500" width="400" height="112" rx="20" class="specialist-box" />
+  <text x="1320" y="1536" text-anchor="middle" class="box-title">Keep checked output in the chat</text>
+  <text x="1320" y="1564" text-anchor="middle" class="box-text">drafts, specialist comments,</text>
+  <text x="1320" y="1588" text-anchor="middle" class="box-text">edits, approvals and timestamps</text>
+
+  <polygon points="1320,1660 1450,1740 1320,1820 1190,1740" class="diamond" />
+  <text x="1320" y="1720" text-anchor="middle" class="box-title">All AI drafts</text>
+  <text x="1320" y="1744" text-anchor="middle" class="box-title">reviewed?</text>
+
+  <rect x="1120" y="1920" width="400" height="92" rx="20" class="specialist-box" />
+  <text x="1320" y="1958" text-anchor="middle" class="box-title">Close and approve consultation</text>
+  <text x="1320" y="1982" text-anchor="middle" class="box-text">status becomes approved</text>
+
+  <!-- Lane connectors -->
+  <path d="M285 696 L285 724 L280 724 L280 750" class="arrow" />
+  <path d="M1315 696 L1315 724 L1320 724 L1320 750" class="arrow" />
+  <path d="M280 802 L280 840" class="arrow" />
+  <path d="M1320 802 L1320 840" class="arrow" />
+
+  <path d="M280 928 L280 960" class="arrow" />
+  <path d="M280 1096 L280 1130" class="arrow" />
+  <path d="M280 1218 L280 1250" class="arrow" />
+  <path d="M480 1294 L600 1294" class="arrow" />
+
+  <path d="M800 1338 L800 1370" class="arrow" />
+  <path d="M800 1500 L800 1530" class="arrow" />
+  <path d="M1000 1574 L1088 1574 L1088 884 L1120 884" class="arrow dashed" />
+
+  <path d="M1320 928 L1320 960" class="arrow" />
+  <path d="M1320 1048 L1320 1080" class="arrow" />
+  <path d="M1320 1168 L1320 1200" class="arrow" />
+  <path d="M1320 1316 L1320 1328" class="arrow" />
+
+  <path d="M1210 1396 L1060 1396 L1060 1709 L1000 1709" class="arrow" />
+  <text x="1172" y="1384" class="arrow-label">yes</text>
+  <path d="M940 1660 L940 1642 L1042 1642 L1042 1124 L1120 1124" class="arrow dashed" />
+  <text x="1030" y="1172" text-anchor="end" class="arrow-label">revised draft</text>
+
+  <path d="M1320 1464 L1320 1500" class="arrow" />
+  <text x="1350" y="1486" class="arrow-label">no</text>
+  <path d="M1320 1612 L1320 1660" class="arrow" />
+
+  <path d="M1450 1740 L1540 1740 L1540 1258 L1520 1258" class="arrow" />
+  <text x="1548" y="1718" class="arrow-label">no</text>
+
+  <path d="M1320 1820 L1320 1920" class="arrow" />
+  <text x="1350" y="1866" class="arrow-label">yes</text>
+
+  <path d="M1120 1966 L480 1966" class="arrow" />
+
+  <path d="M280 1338 L280 1530" class="arrow dashed" />
+  </g>
+</svg>
