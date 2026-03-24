@@ -1,4 +1,5 @@
 function initializeHeader() {
+  const repoUrl = 'https://github.com/hyardim/Ambience-AI-1.5';
   const page = document.body.dataset.page;
   const header = document.querySelector('.site-header');
   const nav = document.querySelector('.site-nav');
@@ -17,9 +18,15 @@ function initializeHeader() {
   }
 
   if (githubBtn) {
-    githubBtn.addEventListener('click', () => {
-      // Placeholder: add repo URL later.
-    });
+    if (githubBtn.tagName === 'A') {
+      githubBtn.href = repoUrl;
+      githubBtn.target = '_blank';
+      githubBtn.rel = 'noopener noreferrer';
+    } else {
+      githubBtn.addEventListener('click', () => {
+        window.open(repoUrl, '_blank', 'noopener,noreferrer');
+      });
+    }
   }
 
   const fallbackLogoSvg = `
