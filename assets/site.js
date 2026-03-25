@@ -177,10 +177,45 @@ function initializePartnerLogos() {
   });
 }
 
+function initializeHeroStackCycle() {
+  const heroStack = document.querySelector('.hero-home__visual');
+  if (!heroStack) return;
+
+  const stackCards = [...heroStack.querySelectorAll('.project-shot')];
+  if (stackCards.length < 3) return;
+  const actionButton = heroStack.querySelector('.hero-stack-action');
+
+  const roleClasses = ['project-shot--back', 'project-shot--mid', 'project-shot--front'];
+  let rolesByCard = stackCards.map((card) => roleClasses.find((role) => card.classList.contains(role)));
+  if (rolesByCard.some((role) => !role)) return;
+
+  const applyRoles = () => {
+    stackCards.forEach((card, index) => {
+      roleClasses.forEach((role) => card.classList.remove(role));
+      card.classList.add(rolesByCard[index]);
+    });
+  };
+
+  const rotateRoles = () => {
+    rolesByCard = [rolesByCard[1], rolesByCard[2], rolesByCard[0]];
+    applyRoles();
+  };
+
+  heroStack.addEventListener('click', rotateRoles);
+
+  if (actionButton) {
+    actionButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      rotateRoles();
+    });
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initializeHeader();
   renderToc();
   renderFooter();
   markExternalPlaceholders();
   initializePartnerLogos();
+  initializeHeroStackCycle();
 });
