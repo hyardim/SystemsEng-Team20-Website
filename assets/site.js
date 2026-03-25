@@ -82,9 +82,75 @@ function renderToc() {
   host.innerHTML = `
     <h3>On this page</h3>
     <ul>
-      ${headings.map((heading) => `<li><a href="#${heading.id}">${heading.textContent}</a></li>`).join('')}
+      ${headings.map((heading) => `<li><a href="#${heading.id}" data-toc-link="${heading.id}">${heading.textContent}</a></li>`).join('')}
     </ul>
   `;
+
+  const links = [...host.querySelectorAll('[data-toc-link]')];
+  if (!links.length) return;
+
+  const setActiveLink = (id) => {
+    links.forEach((link) => {
+      link.classList.toggle('is-active', link.dataset.tocLink === id);
+    });
+  };
+
+  const getCurrentSectionId = () => {
+    const headerEl = document.querySelector('.site-header');
+    const headerHeight = headerEl ? headerEl.getBoundingClientRect().height : 0;
+    const scrollOffset = headerHeight + ((window.innerHeight / 2) - headerHeight) * 0.5;
+    let currentId = headings[0].id;
+
+    for (const heading of headings) {
+      if (heading.getBoundingClientRect().top - scrollOffset <= 0) {
+        currentId = heading.id;
+      } else {
+        break;
+      }
+    }
+
+    return currentId;
+  };
+
+  const updateActiveFromScroll = () => {
+    setActiveLink(getCurrentSectionId());
+  };
+
+  const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  links.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const targetId = link.dataset.tocLink;
+      const targetHeading = headings.find((heading) => heading.id === targetId);
+      if (!targetHeading) return;
+
+      event.preventDefault();
+
+      const targetTop = window.scrollY + targetHeading.getBoundingClientRect().top;
+      const headerEl = document.querySelector('.site-header');
+      const headerHeight = headerEl ? headerEl.getBoundingClientRect().height : 0;
+      const desiredViewportY = headerHeight + ((window.innerHeight / 2) - headerHeight) * 0.5;
+      const adjustedTop = targetTop - desiredViewportY + (targetHeading.offsetHeight / 2);
+
+      window.scrollTo({
+        top: Math.max(0, adjustedTop),
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      });
+
+      if (targetId) {
+        history.replaceState(null, '', `#${targetId}`);
+        setActiveLink(targetId);
+      }
+    });
+  });
+
+  updateActiveFromScroll();
+  window.addEventListener('scroll', updateActiveFromScroll, { passive: true });
+
+  if (window.location.hash) {
+    const hashed = window.location.hash.replace('#', '');
+    if (hashed) setActiveLink(hashed);
+  }
 }
 
 function renderFooter() {

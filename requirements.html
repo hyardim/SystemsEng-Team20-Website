@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Requirements · Ambience-AI-1.5</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20260322f" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260310b" />
   </head>
   <body data-page="requirements">
     <header class="site-header">
@@ -31,33 +31,19 @@
 
     <main class="page-shell">
       <section class="hero hero--requirements">
-        <p class="hero__eyebrow">Requirements</p>
-        <h1>Requirements engineering and prioritisation</h1>
-        <p>
-          This page documents partner context, goals, requirement collection methods, personas, use cases,
-          and a MoSCoW-prioritised functional/non-functional requirement baseline for Ambience-AI-1.5.
-        </p>
+        <h1 class="hero--requirements__title">Requirements</h1>
+        <p class="hero--requirements__detail">Project Requirements and Analysis</p>
       </section>
 
-      <div class="page-grid page-grid--single">
+      <div class="page-grid">
         <div class="content-stack">
-          <section class="section-card section-card--partner-intro">
+          <section class="section-card--partner-intro">
             <h2 id="partner-background">Partner introduction</h2>
             <p class="lede partner-intro__subtitle">
               Our project is supported by partners who shaped the system’s clinical direction,
               infrastructure decisions, and deployment context.
             </p>
             <div class="partner-intro__grid">
-              <article class="partner-intro__card partner-intro__card--featured">
-                <div class="partner-intro__head">
-                  <img src="assets/partners/ucl-logo.png" alt="UCL partner logo" class="partner-intro__logo" />
-                  <h3>University College London</h3>
-                </div>
-                <p>
-                  UCL supervision and systems-engineering guidance structured requirement prioritisation,
-                  delivery milestones, and evidence-based reporting standards.
-                </p>
-              </article>
               <article class="partner-intro__card">
                 <div class="partner-intro__head">
                   <img src="assets/partners/intel-logo.png" alt="Intel partner logo" class="partner-intro__logo" />
@@ -78,6 +64,16 @@
                   evidence visibility, and specialist escalation for uncertain outputs.
                 </p>
               </article>
+              <article class="partner-intro__card partner-intro__card--featured">
+                <div class="partner-intro__head">
+                  <img src="assets/partners/ucl-logo.png" alt="UCL partner logo" class="partner-intro__logo" />
+                  <h3>University College London</h3>
+                </div>
+                <p>
+                  UCL supervision and systems-engineering guidance structured requirement prioritisation,
+                  delivery milestones, and evidence-based reporting standards.
+                </p>
+              </article>
             </div>
             <div class="partner-intro__ack" role="note" aria-label="Acknowledgement">
               <p>
@@ -87,7 +83,7 @@
             </div>
           </section>
 
-          <section class="section-card section-card--project-bg">
+          <section class="section-card--project-bg">
             <h2 id="project-background">Project background</h2>
             <div class="project-bg__grid">
               <article class="project-bg__card">
@@ -111,7 +107,7 @@
             </div>
           </section>
 
-          <section class="section-card section-card--project-goals">
+          <section class="section-card--project-goals">
             <h2 id="project-goals">Project goals</h2>
             <div class="project-goals__inner">
               <div class="two-col">
@@ -137,7 +133,7 @@
             </div>
           </section>
 
-          <section class="section-card section-card--requirement-gathering">
+          <section class="section-card--requirement-gathering">
             <h2 id="requirement-gathering">Requirement gathering</h2>
             <div class="requirement-gathering__inner">
               <p class="lede">
@@ -268,7 +264,7 @@
             </div>
           </section>
 
-          <section class="section-card">
+          <section>
             <h2 id="personas">Personas</h2>
             <div class="three-col">
               <div class="mini-card">
@@ -286,7 +282,7 @@
             </div>
           </section>
 
-          <section class="section-card">
+          <section>
             <h2 id="use-cases">Use cases</h2>
             <div class="diagram-card">
               <h3>Use case diagram (high level)</h3>
@@ -321,7 +317,7 @@
             </div>
           </section>
 
-          <section class="section-card">
+          <section>
             <h2 id="moscow-functional">MoSCoW requirement list (functional)</h2>
             <div class="table-card">
               <table>
@@ -347,7 +343,7 @@
             </div>
           </section>
 
-          <section class="section-card">
+          <section>
             <h2 id="moscow-non-functional">MoSCoW requirement list (non-functional)</h2>
             <div class="table-card">
               <table>
@@ -373,7 +369,7 @@
             </div>
           </section>
 
-          <section class="section-card">
+          <section>
             <h2 id="scope-boundaries">Scope boundaries and exclusions</h2>
             <ul>
               <li>The platform is specialised for neurology and rheumatology guideline assistance rather than general-purpose medical chat.</li>
@@ -391,6 +387,8 @@
             </div>
           </section>
         </div>
+
+        <aside class="toc-panel" id="page-toc" aria-label="Page sections"></aside>
 
       </div>
     </main>
@@ -429,6 +427,6 @@
       </div>
     </footer>
 
-    <script src="assets/site.js?v=20260322f"></script>
+    <script src="assets/site.js?v=20260310"></script>
   </body>
 </html>
