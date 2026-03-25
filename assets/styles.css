@@ -99,10 +99,36 @@ img {
 .brand {
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	color: #111827;
-	font-weight: 700;
+	gap: 10px;
+	text-decoration: none;
 	white-space: nowrap;
+}
+
+.brand-icon {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+	width: 40px;
+	height: 36px;
+	filter: drop-shadow(0 0 7px rgba(0,200,235,0.5));
+}
+
+.brand-icon svg { width: 100%; height: 100%; }
+
+.brand-wordmark {
+	font-family: var(--ui-font);
+	font-size: 1.15rem;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+	line-height: 1;
+}
+
+.brand-wordmark__name { color: #0a2d6e; }
+.brand-wordmark__ai   { color: #0e8fa0; }
+
+/* Legacy image logo — hidden now that JS injects the new brand */
+.brand__logo-image {
+	display: none;
 }
 
 .brand__logo-image {
@@ -930,6 +956,16 @@ body:not([data-page="home"]) .page-shell {
 
 .section-card:hover {
 	box-shadow: 0 2px 6px rgba(7, 23, 45, 0.07), 0 12px 32px rgba(7, 23, 45, 0.1);
+}
+
+.section-bare {
+	padding: 8px 0;
+}
+
+.section-bare h2 {
+	color: var(--heading);
+	margin: 0 0 14px;
+	font-size: 1.7rem;
 }
 
 .section-card h2,
@@ -3752,4 +3788,51 @@ body[data-page="home"] .member-meta {
 	body[data-page="home"] .team-section {
 		padding: 26px 0 30px;
 	}
+}
+
+/* ── Security list — left-accent row layout ──────────────────── */
+.security-list {
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.security-list__item {
+	display: grid;
+	grid-template-columns: 200px 1fr;
+	align-items: baseline;
+	gap: 0 28px;
+	padding: 16px 0;
+	border-bottom: 1px solid rgba(7, 23, 45, 0.07);
+}
+
+.security-list__item:first-child {
+	border-top: 1px solid rgba(7, 23, 45, 0.07);
+}
+
+.security-list__item dt {
+	font-weight: 700;
+	font-size: 0.92rem;
+	color: var(--nhs-dark-blue, #003087);
+	letter-spacing: 0.01em;
+	padding-left: 14px;
+	border-left: 3px solid var(--nhs-blue, #005eb8);
+}
+
+.security-list__item dd {
+	margin: 0;
+	font-size: 0.95rem;
+	color: var(--text);
+	line-height: 1.65;
+}
+
+/* Diagram image — full width, no card wrapper */
+.diagram-img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 8px;
+	margin-top: 16px;
 }
