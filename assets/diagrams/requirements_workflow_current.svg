@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2140" viewBox="0 0 1600 2140" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2200" viewBox="0 0 1600 2200" role="img" aria-labelledby="title desc">
   <title id="title">Current implemented workflow for Ambience-AI-1.5</title>
   <desc id="desc">Flowchart showing landing and authentication, GP consultation creation, consultation-chat guidance generation, specialist assignment and review, a request changes loop and an approved response returned to the GP.</desc>
 
@@ -32,7 +32,7 @@
     .dashed { stroke-dasharray: 10 8; }
   </style>
 
-  <rect width="1600" height="2140" fill="#f6f8fb"/>
+  <rect width="1600" height="2200" fill="#f6f8fb"/>
 
   <text x="70" y="58" class="title">Current workflow overview</text>
   <text x="70" y="88" class="subtitle">This reflects the implemented code path: guidance is generated within the consultation chat and reviewed by a specialist before approval.</text>
@@ -73,7 +73,7 @@
 
   <path d="M800 92 L800 122" class="arrow" />
   <path d="M800 182 L800 232" class="arrow" />
-  <path d="M625 152 L460 152 L460 267" class="arrow" />
+  <path d="M625 152 L285 152 L285 232" class="arrow" />
   <path d="M975 267 L1140 267" class="arrow dashed" />
   <path d="M285 302 L285 342" class="arrow" />
   <path d="M460 377 L625 267" class="arrow" />

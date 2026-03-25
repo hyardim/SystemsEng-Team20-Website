@@ -1216,12 +1216,6 @@ body:not([data-page="home"]) .page-shell {
 	padding: 0;
 }
 
-.section-card--partner-intro h2 {
-	text-align: center;
-	font-size: 1.85rem;
-	margin-bottom: 12px;
-}
-
 .section-card--partner-intro .callout h3 {
 	text-align: center;
 	font-size: clamp(1.9rem, 2.6vw, 2.6rem);
@@ -1308,12 +1302,6 @@ body:not([data-page="home"]) .page-shell {
 	margin-right: calc(50% - 50vw);
 }
 
-.section-card--project-bg h2 {
-	text-align: center;
-	font-size: 1.85rem;
-	margin-bottom: 18px;
-}
-
 .section-card--requirement-gathering {
 	background: #f4f4f5;
 	border: none;
@@ -1332,14 +1320,6 @@ body:not([data-page="home"]) .page-shell {
 	padding: 0;
 }
 
-.section-card--project-goals h2,
-.section-card--project-goals h3,
-.section-card--requirement-gathering h2 {
-	text-align: center;
-	font-size: 1.85rem;
-	margin-bottom: 18px;
-}
-
 .project-goals__inner,
 .requirement-gathering__inner {
 	width: min(var(--content-width), calc(100% - (var(--shell-gutter) * 2)));
@@ -1347,7 +1327,7 @@ body:not([data-page="home"]) .page-shell {
 }
 
 .section-card--project-goals .mini-card,
-.section-card--requirement-gathering .mini-card {
+.section-card--requirement-gathering .mini-card:not(.requirement-methods__item) {
 	box-shadow: none;
 }
 
@@ -1355,7 +1335,7 @@ body:not([data-page="home"]) .page-shell {
 	margin-top: 36px;
 }
 
-.section-card--project-bg .project-goals__inner .mini-card {
+.section-card--project-bg .project-goals__inner .mini-card:not(.project-goals-card) {
 	box-shadow: none;
 }
 
@@ -1364,37 +1344,51 @@ body:not([data-page="home"]) .page-shell {
 }
 
 .section-card--project-bg .project-goals-card {
+	position: relative;
 	padding: 0;
-	border: 1px solid rgba(123, 140, 255, 0.25);
+	border: 1px solid rgba(0, 48, 135, 0.16);
 	border-radius: 12px;
 	overflow: hidden;
 	background: #ffffff;
-	border-left: 1px solid rgba(123, 140, 255, 0.25);
+	box-shadow: 0 4px 18px rgba(7, 23, 45, 0.05);
+}
+
+.section-card--project-bg .project-goals-card::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 92px;
+	background: var(--nhs-dark-blue);
+	pointer-events: none;
 }
 
 .section-card--project-bg .project-goals-card strong {
+	position: relative;
 	display: block;
 	margin: 0;
-	padding: 16px 18px 4px;
-	font-size: 1.9rem;
+	padding: 16px 24px 4px;
+	font-size: 1.72rem;
 	line-height: 1.2;
 	text-transform: capitalize;
 	color: #ffffff;
-	background: #6f83df;
+	background: transparent;
 }
 
 .section-card--project-bg .project-goals-card__subtitle {
+	position: relative;
 	display: block;
-	padding: 0 18px 16px;
+	padding: 0 24px 18px;
 	font-size: 0.96rem;
 	font-weight: 600;
-	color: rgba(255, 255, 255, 0.8);
-	background: #6f83df;
+	color: rgba(255, 255, 255, 0.82);
+	background: transparent;
 }
 
 .section-card--project-bg .project-goals-card ul {
 	margin: 0;
-	padding: 20px 24px 10px;
+	padding: 22px 32px 12px 40px;
 	list-style: disc;
 }
 
@@ -1406,7 +1400,7 @@ body:not([data-page="home"]) .page-shell {
 
 .section-card--project-bg .project-goals-card .muted {
 	margin: 0;
-	padding: 0 24px 22px;
+	padding: 0 32px 24px;
 	color: #4b5563;
 }
 
@@ -1534,6 +1528,16 @@ body[data-page="requirements"] .content-stack h2 {
 	text-align: left !important;
 	margin-left: 0 !important;
 	margin-right: 0 !important;
+}
+
+body[data-page="requirements"] .content-stack > section > h2 {
+	color: var(--heading);
+	font-size: 1.85rem !important;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	text-align: left !important;
+	margin: 0 0 18px !important;
+	line-height: 1.12;
 }
 
 body[data-page="requirements"] .content-stack .lede,
@@ -2000,13 +2004,72 @@ body[data-page="requirements"] .project-bg__grid {
 }
 
 body[data-page="requirements"] .section-card--project-bg .project-goals__inner {
-	margin-top: 52px;
+	margin-top: 40px;
 }
 
 .section-card--requirement-gathering .lede {
 	max-width: 980px;
 	margin: 0 auto 16px;
 	text-align: center;
+}
+
+body[data-page="requirements"] .requirement-gathering__inner > :is(.requirement-methods, .mini-card, .table-card, .interview-card) + :is(.requirement-methods, .mini-card, .table-card, .interview-card) {
+	margin-top: 20px;
+}
+
+body[data-page="requirements"] .content-stack > section > :is(.three-col, .two-col, .diagram-card, .table-card) + :is(.three-col, .two-col, .diagram-card, .table-card) {
+	margin-top: 20px;
+}
+
+body[data-page="requirements"] .personas-gallery {
+	margin-top: 30px;
+	padding-top: 30px;
+	border-top: 1px solid rgba(20, 61, 107, 0.14);
+}
+
+body[data-page="requirements"] .requirement-table > h3 {
+	padding: 16px 18px 0;
+}
+
+body[data-page="requirements"] .diagram-card--matrix {
+	--requirements-matrix-indent: clamp(20px, 2.4vw, 34px);
+	margin-top: 34px;
+	margin-bottom: 34px;
+	margin-left: var(--requirements-matrix-indent);
+	padding: 0;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	position: relative;
+}
+
+body[data-page="requirements"] .diagram-card--matrix::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: calc(-1 * var(--requirements-matrix-indent));
+	width: 2px;
+	background: rgba(20, 61, 107, 0.16);
+}
+
+body[data-page="requirements"] .diagram-card--matrix img {
+	border: none;
+	border-radius: 0;
+}
+
+body[data-page="requirements"] .diagram-card--workflow img {
+	margin-bottom: 18px;
+}
+
+body[data-page="requirements"] .use-cases__workflow-note {
+	margin: 0;
+}
+
+body[data-page="requirements"] .callout--constraint-summary {
+	background: #fffaf4;
+	border-color: rgba(199, 125, 18, 0.2);
+	box-shadow: none;
 }
 
 body[data-page="ui-design"] .page-grid {
@@ -2337,16 +2400,23 @@ body[data-page="ui-design"] .mini-card-group--outcomes .mini-card:hover {
 
 .requirement-methods {
 	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
+	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: 14px;
 	margin-top: 18px;
 }
 
 .requirement-methods__item {
 	border: 1px solid rgba(7, 23, 45, 0.09);
-	box-shadow: none;
+	box-shadow: 0 6px 20px rgba(7, 23, 45, 0.09);
 	background: #ffffff;
 	padding: 18px;
+	transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.requirement-methods__item:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 14px 30px rgba(7, 23, 45, 0.14);
+	border-color: rgba(0, 94, 184, 0.2);
 }
 
 .requirement-methods__item strong {
