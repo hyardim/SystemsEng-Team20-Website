@@ -8,7 +8,7 @@
       name="description"
       content="Technical project report website for Ambience-AI-1.5, a full-stack clinical decision-support platform built around retrieval-augmented generation and specialist review workflows."
     />
-    <link rel="stylesheet" href="assets/styles.css?v=20260322f" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260325s" />
   </head>
   <body data-page="home">
     <header class="site-header">
@@ -33,51 +33,36 @@
       </div>
     </header>
 
-    <main class="page-shell page-shell--home">
-
-      <!-- Full-width decorative banner -->
-      <div class="home-banner" aria-hidden="true">
-        <div class="home-banner__blob home-banner__blob--1"></div>
-        <div class="home-banner__blob home-banner__blob--2"></div>
-        <div class="home-banner__blob home-banner__blob--3"></div>
-        <div class="home-banner__grid"></div>
-        <div class="home-banner__label">Ambience-AI-1.5 · UCL COMP0016 · Team 20</div>
-      </div>
-
-      <!-- Two-column hero -->
+    <main class="page-shell">
       <section class="hero hero--home">
-        <div class="hero-home__left">
-          <p class="hero__eyebrow hero__eyebrow--pill home-anim home-anim--1">UCL COMP0016 · Team 20</p>
-          <h1 class="home-anim home-anim--2">Ambience-AI-1.5</h1>
-          <p class="hero-home__summary home-anim home-anim--3">
-            A clinical decision-support platform delivering evidence-grounded AI answers linked to NHS guidelines, with specialist review workflows for neurology and rheumatology — built for UK primary care.
+        <div class="hero-home__content">
+          <p class="hero__eyebrow hero__eyebrow--pill">UCL IXN Team 20 project</p>
+          <h1>The Ambience-AI-1.5 Clinical Decision-Support Platform</h1>
+          <p class="hero-home__summary">
+            A clinical support system that helps doctors get specialist guidance, receive
+            evidence-grounded AI answers linked to NHS medical guidelines, and send cases for
+            specialist review in neurology and rheumatology.
           </p>
+          <div class="hero-home__actions">
+            <a class="button button--primary" href="#video">See project video</a>
+            <a class="button button--secondary" href="#abstract">Read the abstract</a>
+          </div>
         </div>
-        <div class="hero-home__right home-anim home-anim--3">
-          <a class="hero-quicklink" href="#abstract">
-            <span class="hero-quicklink__icon">📄</span>
-            <div>
-              <strong>Abstract</strong>
-              <p>Problem statement, solution overview, and project outcomes.</p>
-            </div>
-            <span class="hero-quicklink__arrow">→</span>
-          </a>
-          <a class="hero-quicklink" href="#video">
-            <span class="hero-quicklink__icon">🎬</span>
-            <div>
-              <strong>Project video</strong>
-              <p>Watch the full demo of the Ambience-AI-1.5 platform.</p>
-            </div>
-            <span class="hero-quicklink__arrow">→</span>
-          </a>
-          <a class="hero-quicklink" href="#team">
-            <span class="hero-quicklink__icon">👥</span>
-            <div>
-              <strong>Meet the team</strong>
-              <p>Five UCL engineers who built the system end-to-end.</p>
-            </div>
-            <span class="hero-quicklink__arrow">→</span>
-          </a>
+        <div class="hero-home__visual" aria-label="Project UI preview stack">
+          <div class="project-shot project-shot--back">
+            <img class="project-shot__image" src="assets/demo/ui-new.png" alt="New interface preview" />
+          </div>
+          <div class="project-shot project-shot--mid">
+            <img class="project-shot__image" src="assets/demo/ui-review.png" alt="Review interface preview" />
+          </div>
+          <div class="project-shot project-shot--front">
+            <img class="project-shot__image" src="assets/demo/ui-queries.png" alt="Queries interface preview" />
+          </div>
+          <button class="hero-stack-action" type="button" aria-label="Rearrange UI preview cards">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 6h11.5l-2.2-2.2a1 1 0 1 1 1.4-1.4l3.9 3.9a1 1 0 0 1 0 1.4l-3.9 3.9a1 1 0 1 1-1.4-1.4L18.5 8H7a1 1 0 1 1 0-2Zm10 10H5.5l2.2 2.2a1 1 0 1 1-1.4 1.4l-3.9-3.9a1 1 0 0 1 0-1.4l3.9-3.9a1 1 0 1 1 1.4 1.4L5.5 14H17a1 1 0 1 1 0 2Z" />
+            </svg>
+          </button>
         </div>
       </section>
 
@@ -85,10 +70,10 @@
         <div class="content-stack">
           <section class="section-card section-card--abstract">
             <h2 id="abstract">Abstract</h2>
-            <p class="lede">
+            <!-- <p class="lede">
               Ambience-AI-1.5 is a domain-adapted RAG clinical support system for routine Neurology
               and Rheumatology queries in UK primary care.
-            </p>
+            </p> -->
             <div class="card-grid abstract-grid">
               <div class="mini-card">
                 <strong>Problem Statement</strong>
@@ -271,7 +256,7 @@
             </div>
           </section>
 
-          <section class="section-card">
+          <section class="section-card section-card--project-management">
             <h2 id="project-management">Project management</h2>
             <p>
               Planned schedule from 20 October 2025 to 27 March 2026 across infrastructure,
@@ -380,6 +365,6 @@
         </section>
       </div>
     </footer>
-    <script src="assets/site.js?v=20260322f"></script>
+    <script src="assets/site.js?v=20260310"></script>
   </body>
 </html>

@@ -89,9 +89,75 @@ function renderToc() {
   host.innerHTML = `
     <h3>On this page</h3>
     <ul>
-      ${headings.map((heading) => `<li><a href="#${heading.id}">${heading.textContent}</a></li>`).join('')}
+      ${headings.map((heading) => `<li><a href="#${heading.id}" data-toc-link="${heading.id}">${heading.textContent}</a></li>`).join('')}
     </ul>
   `;
+
+  const links = [...host.querySelectorAll('[data-toc-link]')];
+  if (!links.length) return;
+
+  const setActiveLink = (id) => {
+    links.forEach((link) => {
+      link.classList.toggle('is-active', link.dataset.tocLink === id);
+    });
+  };
+
+  const getCurrentSectionId = () => {
+    const headerEl = document.querySelector('.site-header');
+    const headerHeight = headerEl ? headerEl.getBoundingClientRect().height : 0;
+    const scrollOffset = headerHeight + ((window.innerHeight / 2) - headerHeight) * 0.5;
+    let currentId = headings[0].id;
+
+    for (const heading of headings) {
+      if (heading.getBoundingClientRect().top - scrollOffset <= 0) {
+        currentId = heading.id;
+      } else {
+        break;
+      }
+    }
+
+    return currentId;
+  };
+
+  const updateActiveFromScroll = () => {
+    setActiveLink(getCurrentSectionId());
+  };
+
+  const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  links.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const targetId = link.dataset.tocLink;
+      const targetHeading = headings.find((heading) => heading.id === targetId);
+      if (!targetHeading) return;
+
+      event.preventDefault();
+
+      const targetTop = window.scrollY + targetHeading.getBoundingClientRect().top;
+      const headerEl = document.querySelector('.site-header');
+      const headerHeight = headerEl ? headerEl.getBoundingClientRect().height : 0;
+      const desiredViewportY = headerHeight + ((window.innerHeight / 2) - headerHeight) * 0.5;
+      const adjustedTop = targetTop - desiredViewportY + (targetHeading.offsetHeight / 2);
+
+      window.scrollTo({
+        top: Math.max(0, adjustedTop),
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      });
+
+      if (targetId) {
+        history.replaceState(null, '', `#${targetId}`);
+        setActiveLink(targetId);
+      }
+    });
+  });
+
+  updateActiveFromScroll();
+  window.addEventListener('scroll', updateActiveFromScroll, { passive: true });
+
+  if (window.location.hash) {
+    const hashed = window.location.hash.replace('#', '');
+    if (hashed) setActiveLink(hashed);
+  }
 }
 
 function renderFooter() {
@@ -184,70 +250,83 @@ function initializePartnerLogos() {
   });
 }
 
-function initScrollReveal() {
-  if (!('IntersectionObserver' in window)) return;
+function initializeHeroStackCycle() {
+  const heroStack = document.querySelector('.hero-home__visual');
+  if (!heroStack) return;
 
-  const staggerSelectors = ['.mini-card', '.timeline__item'];
-  const revealSelectors  = ['.section-card', '.diagram-card', '.table-card', '.timeline-card', '.callout'];
+  const stackCards = [...heroStack.querySelectorAll('.project-shot')];
+  if (stackCards.length < 3) return;
+  const actionButton = heroStack.querySelector('.hero-stack-action');
 
-  // Mark stagger groups — reset index per parent container
-  staggerSelectors.forEach((sel) => {
-    document.querySelectorAll(sel).forEach((el, i) => {
-      el.classList.add('sr');
-      el.style.transitionDelay = `${(i % 6) * 80}ms`;
+  const roleClasses = ['project-shot--back', 'project-shot--mid', 'project-shot--front'];
+  let rolesByCard = stackCards.map((card) => roleClasses.find((role) => card.classList.contains(role)));
+  if (rolesByCard.some((role) => !role)) return;
+
+  const applyRoles = () => {
+    stackCards.forEach((card, index) => {
+      roleClasses.forEach((role) => card.classList.remove(role));
+      card.classList.add(rolesByCard[index]);
     });
-  });
-
-  revealSelectors.forEach((sel) => {
-    document.querySelectorAll(sel).forEach((el) => {
-      if (!el.classList.contains('sr')) el.classList.add('sr');
-    });
-  });
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('sr--visible');
-          // Clear stagger delay after it plays so hover transitions are instant
-          setTimeout(() => { entry.target.style.transitionDelay = ''; }, 600);
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.05 }
-  );
-
-  document.querySelectorAll('.sr').forEach((el) => observer.observe(el));
-}
-
-function initCounters() {
-  const counters = document.querySelectorAll('.stat-card__num[data-count], .hero-stat__num[data-count]');
-  if (!counters.length) return;
-
-  const animateCounter = (el) => {
-    const target = parseInt(el.dataset.count, 10);
-    const duration = 1200;
-    const start = performance.now();
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(eased * target);
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
   };
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        animateCounter(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
+  const rotateRoles = () => {
+    rolesByCard = [rolesByCard[1], rolesByCard[2], rolesByCard[0]];
+    applyRoles();
+  };
 
-  counters.forEach((el) => observer.observe(el));
+  heroStack.addEventListener('click', rotateRoles);
+
+  if (actionButton) {
+    actionButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      rotateRoles();
+    });
+  }
+}
+
+function initializeProjectTabs() {
+  document.querySelectorAll('[data-project-tabs]').forEach((tabsRoot) => {
+    const tabs = [...tabsRoot.querySelectorAll('[data-tab-target]')];
+    const panels = [...tabsRoot.querySelectorAll('[data-tab-panel]')];
+    if (!tabs.length || !panels.length) return;
+
+    const activateTab = (target) => {
+      tabs.forEach((tab) => {
+        const isActive = tab.dataset.tabTarget === target;
+        tab.classList.toggle('is-active', isActive);
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        tab.tabIndex = isActive ? 0 : -1;
+      });
+
+      panels.forEach((panel) => {
+        const isActive = panel.dataset.tabPanel === target;
+        panel.classList.toggle('is-active', isActive);
+        panel.hidden = !isActive;
+      });
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateTab(tab.dataset.tabTarget));
+
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+
+        let nextIndex = index;
+        if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+        if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === 'Home') nextIndex = 0;
+        if (event.key === 'End') nextIndex = tabs.length - 1;
+
+        const nextTab = tabs[nextIndex];
+        activateTab(nextTab.dataset.tabTarget);
+        nextTab.focus();
+      });
+    });
+
+    const initiallyActive = tabs.find((tab) => tab.classList.contains('is-active')) || tabs[0];
+    activateTab(initiallyActive.dataset.tabTarget);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -256,6 +335,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderFooter();
   markExternalPlaceholders();
   initializePartnerLogos();
-  initScrollReveal();
-  initCounters();
+  initializeHeroStackCycle();
+  initializeProjectTabs();
 });
