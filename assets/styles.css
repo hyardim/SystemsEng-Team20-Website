@@ -3850,6 +3850,11 @@ body[data-page="blog"] .toc-panel {
 
 /* Blog entries */
 
+body[data-page="blog"] .content-stack > section::before,
+body[data-page="blog"] .content-stack > section:nth-of-type(even)::before {
+	display: none !important;
+}
+
 body[data-page="blog"] .content-stack {
 	gap: 0;
 }
