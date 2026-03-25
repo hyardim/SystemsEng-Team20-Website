@@ -3773,9 +3773,9 @@ body[data-page="blog"] .toc-panel {
 	background: rgba(255, 255, 255, 0.96);
 	-webkit-backdrop-filter: blur(8px);
 	backdrop-filter: blur(8px);
-	border: 1.5px solid rgba(0, 94, 184, 0.18);
+	border: none;
 	border-radius: 14px;
-	box-shadow: 0 2px 10px rgba(7, 23, 45, 0.06);
+	box-shadow: none;
 	max-height: calc(100vh - 116px);
 	overflow: auto;
 	z-index: 10;
