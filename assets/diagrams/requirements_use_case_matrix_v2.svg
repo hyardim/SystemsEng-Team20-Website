@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1280" viewBox="0 0 1280 1280" role="img" aria-label="Use case overview matrix showing which actors are involved in the main Ambience-AI-1.5 use cases">
+  <rect width="1280" height="1280" fill="#f6f8fc"/>
+
+  <style>
+    .title { font: 700 30px Arial, sans-serif; fill: #143d6b; }
+    .subtitle { font: 400 16px Arial, sans-serif; fill: #52667d; }
+    .header { font: 700 20px Arial, sans-serif; fill: #143d6b; }
+    .rowlabel { font: 600 17px Arial, sans-serif; fill: #143d6b; }
+    .celltext { font: 700 17px Arial, sans-serif; fill: #143d6b; text-anchor: middle; dominant-baseline: middle; }
+    .note { font: 400 15px Arial, sans-serif; fill: #52667d; }
+    .card { fill: #ffffff; stroke: #d9e2ec; stroke-width: 2; }
+    .header-cell { fill: #eaf2ff; stroke: #143d6b; stroke-width: 2.5; }
+    .row-cell { fill: #f7fbff; stroke: #d9e2ec; stroke-width: 2; }
+    .yes-cell { fill: #dff3e6; stroke: #1f6f4a; stroke-width: 2; }
+    .no-cell { fill: #f4f6f8; stroke: #d9e2ec; stroke-width: 2; }
+  </style>
+
+  <rect x="40" y="40" width="1200" height="1200" rx="24" class="card"/>
+
+  <text x="80" y="92" class="title">Use case overview</text>
+  <text x="80" y="122" class="subtitle">This matrix summarises which actors are involved in the main use cases captured by the final requirements baseline.</text>
+  <text x="80" y="146" class="subtitle">It also highlights the later platform features that became explicit during iterative refinement.</text>
+
+  <!-- Header row -->
+  <rect x="80" y="190" width="470" height="64" rx="16" class="header-cell"/>
+  <rect x="590" y="190" width="180" height="64" rx="16" class="header-cell"/>
+  <rect x="790" y="190" width="180" height="64" rx="16" class="header-cell"/>
+  <rect x="990" y="190" width="180" height="64" rx="16" class="header-cell"/>
+
+  <text x="110" y="231" class="header">Main use case</text>
+  <text x="680" y="231" text-anchor="middle" class="header">GP</text>
+  <text x="880" y="231" text-anchor="middle" class="header">Specialist</text>
+  <text x="1080" y="231" text-anchor="middle" class="header">Admin</text>
+
+  <!-- Row 1 -->
+  <rect x="80" y="274" width="470" height="64" rx="14" class="row-cell"/>
+  <rect x="590" y="274" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="790" y="274" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="990" y="274" width="180" height="64" rx="14" class="yes-cell"/>
+  <text x="110" y="315" class="rowlabel">Authenticate / recover account access</text>
+  <text x="680" y="306" class="celltext">Yes</text>
+  <text x="880" y="306" class="celltext">Yes</text>
+  <text x="1080" y="306" class="celltext">Yes</text>
+
+  <!-- Row 2 -->
+  <rect x="80" y="354" width="470" height="64" rx="14" class="row-cell"/>
+  <rect x="590" y="354" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="790" y="354" width="180" height="64" rx="14" class="no-cell"/>
+  <rect x="990" y="354" width="180" height="64" rx="14" class="no-cell"/>
+  <text x="110" y="395" class="rowlabel">Submit consultation</text>
+  <text x="680" y="386" class="celltext">Yes</text>
+  <text x="880" y="386" class="celltext">-</text>
+  <text x="1080" y="386" class="celltext">-</text>
+
+  <!-- Row 3 -->
+  <rect x="80" y="434" width="470" height="64" rx="14" class="row-cell"/>
+  <rect x="590" y="434" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="790" y="434" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="990" y="434" width="180" height="64" rx="14" class="yes-cell"/>
+  <text x="110" y="475" class="rowlabel">Manage consultation lists</text>
+  <text x="680" y="466" class="celltext">Yes</text>
+  <text x="880" y="466" class="celltext">Yes</text>
+  <text x="1080" y="466" class="celltext">Yes</text>
+
+  <!-- Row 4 -->
+  <rect x="80" y="514" width="470" height="64" rx="14" class="row-cell"/>
+  <rect x="590" y="514" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="790" y="514" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="990" y="514" width="180" height="64" rx="14" class="yes-cell"/>
+  <text x="110" y="555" class="rowlabel">Upload chat attachments</text>
+  <text x="680" y="546" class="celltext">Yes</text>
+  <text x="880" y="546" class="celltext">Yes</text>
+  <text x="1080" y="546" class="celltext">Yes</text>
+
+  <!-- Row 5 -->
+  <rect x="80" y="594" width="470" height="64" rx="14" class="row-cell"/>
+  <rect x="590" y="594" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="790" y="594" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="990" y="594" width="180" height="64" rx="14" class="no-cell"/>
+  <text x="110" y="635" class="rowlabel">View consultation and evidence</text>
+  <text x="680" y="626" class="celltext">Yes</text>
+  <text x="880" y="626" class="celltext">Yes</text>
+  <text x="1080" y="626" class="celltext">-</text>
+
+  <!-- Row 6 -->
+  <rect x="80" y="674" width="470" height="64" rx="14" class="row-cell"/>
+  <rect x="590" y="674" width="180" height="64" rx="14" class="no-cell"/>
+  <rect x="790" y="674" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="990" y="674" width="180" height="64" rx="14" class="no-cell"/>
+  <text x="110" y="715" class="rowlabel">Review / revise draft response</text>
+  <text x="680" y="706" class="celltext">-</text>
+  <text x="880" y="706" class="celltext">Yes</text>
+  <text x="1080" y="706" class="celltext">-</text>
+
+  <!-- Row 7 -->
+  <rect x="80" y="754" width="470" height="64" rx="14" class="row-cell"/>
+  <rect x="590" y="754" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="790" y="754" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="990" y="754" width="180" height="64" rx="14" class="yes-cell"/>
+  <text x="110" y="795" class="rowlabel">Receive and act on notifications</text>
+  <text x="680" y="786" class="celltext">Yes</text>
+  <text x="880" y="786" class="celltext">Yes</text>
+  <text x="1080" y="786" class="celltext">Yes</text>
+
+  <!-- Row 8 -->
+  <rect x="80" y="834" width="470" height="64" rx="14" class="row-cell"/>
+  <rect x="590" y="834" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="790" y="834" width="180" height="64" rx="14" class="yes-cell"/>
+  <rect x="990" y="834" width="180" height="64" rx="14" class="yes-cell"/>
+  <text x="110" y="875" class="rowlabel">Manage own profile</text>
+  <text x="680" y="866" class="celltext">Yes</text>
+  <text x="880" y="866" class="celltext">Yes</text>
+  <text x="1080" y="866" class="celltext">Yes</text>
+
+  <!-- Row 9 -->
+  <rect x="80" y="914" width="470" height="64" rx="14" class="row-cell"/>
+  <rect x="590" y="914" width="180" height="64" rx="14" class="no-cell"/>
+  <rect x="790" y="914" width="180" height="64" rx="14" class="no-cell"/>
+  <rect x="990" y="914" width="180" height="64" rx="14" class="yes-cell"/>
+  <text x="110" y="955" class="rowlabel">Upload guideline PDFs for ingestion</text>
+  <text x="680" y="946" class="celltext">-</text>
+  <text x="880" y="946" class="celltext">-</text>
+  <text x="1080" y="946" class="celltext">Yes</text>
+
+  <!-- Row 10 -->
+  <rect x="80" y="994" width="470" height="64" rx="14" class="row-cell"/>
+  <rect x="590" y="994" width="180" height="64" rx="14" class="no-cell"/>
+  <rect x="790" y="994" width="180" height="64" rx="14" class="no-cell"/>
+  <rect x="990" y="994" width="180" height="64" rx="14" class="yes-cell"/>
+  <text x="110" y="1035" class="rowlabel">Monitor dashboard / users / chats / audit logs</text>
+  <text x="680" y="1026" class="celltext">-</text>
+  <text x="880" y="1026" class="celltext">-</text>
+  <text x="1080" y="1026" class="celltext">Yes</text>
+
+  <!-- Row 11 -->
+  <rect x="80" y="1074" width="470" height="64" rx="14" class="row-cell"/>
+  <rect x="590" y="1074" width="180" height="64" rx="14" class="no-cell"/>
+  <rect x="790" y="1074" width="180" height="64" rx="14" class="no-cell"/>
+  <rect x="990" y="1074" width="180" height="64" rx="14" class="yes-cell"/>
+  <text x="110" y="1115" class="rowlabel">Inspect RAG pipeline status</text>
+  <text x="680" y="1106" class="celltext">-</text>
+  <text x="880" y="1106" class="celltext">-</text>
+  <text x="1080" y="1106" class="celltext">Yes</text>
+
+  <text x="80" y="1188" class="note">Admin oversight includes chat, audit and RAG monitoring, but draft review remains specialist-only.</text>
+</svg>
