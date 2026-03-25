@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Development Blog · Ambience-AI-1.5</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20260325s" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260325b" />
   </head>
   <body data-page="blog">
     <header class="site-header">
@@ -41,8 +41,20 @@
       </div>
 
       <div class="page-grid">
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout blog-callout">
+            <h3>Note</h3>
+            <p>
+              Exact calendar dates can be overlaid later. The timeline assumes roughly one month of
+              server setup before access loss and a deliberate extended testing phase at the end.
+            </p>
+          </div>
+        </aside>
+
         <div class="content-stack">
-          <section class="section-card" id="overview">
+          <section class="blog-entry" id="overview">
+            <span class="blog-entry__tag">Overview</span>
             <h2>Timeline at a glance</h2>
             <p>
               The project moved through five practical phases: early discovery and requirement
@@ -55,8 +67,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-1-2">
-            <h2>Week 1-2: problem framing and first specialist interviews</h2>
+          <section class="blog-entry" id="week-1-2">
+            <span class="blog-entry__tag">Week 1–2</span>
+            <h2>Problem framing and first specialist interviews</h2>
             <p>
               We started by mapping the Advice and Guidance pain points with specialist input from
               Rheumatology and Neurology. The shared message was clear: faster responses are useful
@@ -70,8 +83,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-3-4">
-            <h2>Week 3-4: requirement baseline and acceptance criteria</h2>
+          <section class="blog-entry" id="week-3-4">
+            <span class="blog-entry__tag">Week 3–4</span>
+            <h2>Requirement baseline and acceptance criteria</h2>
             <p>
               We converted interview findings into explicit functional and non-functional requirements,
               then prioritized them with MoSCoW. At this stage, we also identified key risk areas:
@@ -85,8 +99,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-5-6">
-            <h2>Week 5-6: original server setup and first integrations</h2>
+          <section class="blog-entry" id="week-5-6">
+            <span class="blog-entry__tag">Week 5–6</span>
+            <h2>Original server setup and first integrations</h2>
             <p>
               A significant part of this period was spent setting up and validating the original
               Gaudi 2 server environment. We treated this as core engineering work, not overhead,
@@ -105,8 +120,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-7-8">
-            <h2>Week 7-8: stabilization while still on the original server</h2>
+          <section class="blog-entry" id="week-7-8">
+            <span class="blog-entry__tag">Week 7–8</span>
+            <h2>Stabilization while still on the original server</h2>
             <p>
               We spent another two weeks improving robustness on the Gaudi 2 path and aligning
               implementation details with the agreed requirements before a major environmental change.
@@ -123,8 +139,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-9-10">
-            <h2>Week 9-10: server access lost, architecture pivot starts</h2>
+          <section class="blog-entry" id="week-9-10">
+            <span class="blog-entry__tag">Week 9–10</span>
+            <h2>Server access lost — architecture pivot starts</h2>
             <p>
               Around one month into infrastructure work, access to the original server was lost.
               This forced a planned rework: keep the clinical workflow intact while changing the
@@ -137,8 +154,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-11-12">
-            <h2>Week 11-12: local-first route operational</h2>
+          <section class="blog-entry" id="week-11-12">
+            <span class="blog-entry__tag">Week 11–12</span>
+            <h2>Local-first route operational</h2>
             <p>
               By this point, the team had a working local-first path and resumed steady feature work.
               The key objective was to avoid user-facing workflow disruption despite backend routing
@@ -152,8 +170,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-13-14">
-            <h2>Week 13-14: workflow simplification and specialist gate hardening</h2>
+          <section class="blog-entry" id="week-13-14">
+            <span class="blog-entry__tag">Week 13–14</span>
+            <h2>Workflow simplification and specialist gate hardening</h2>
             <p>
               Requirement refinement and prototype review led to a major product decision: merge
               assistant-like interactions into one consultation-based journey where generation,
@@ -166,8 +185,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-15-16">
-            <h2>Week 15-16: platform breadth beyond core answering</h2>
+          <section class="blog-entry" id="week-15-16">
+            <span class="blog-entry__tag">Week 15–16</span>
+            <h2>Platform breadth beyond core answering</h2>
             <p>
               We used this phase to complete the features that make the system operationally usable
               rather than a narrow demo.
@@ -179,8 +199,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-17-18">
-            <h2>Week 17-18: integration hardening and defect burn-down</h2>
+          <section class="blog-entry" id="week-17-18">
+            <span class="blog-entry__tag">Week 17–18</span>
+            <h2>Integration hardening and defect burn-down</h2>
             <p>
               Before entering final testing, we focused on reducing integration risk between frontend,
               backend and retrieval services.
@@ -192,8 +213,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-19-20">
-            <h2>Week 19-20: testing wave 1 (functional and integration)</h2>
+          <section class="blog-entry" id="week-19-20">
+            <span class="blog-entry__tag">Week 19–20</span>
+            <h2>Testing wave 1 — functional and integration</h2>
             <p>
               The final stretch deliberately prioritized testing as a major body of work. We started
               with end-to-end functional checks and integration scenarios across role-based workflows.
@@ -205,8 +227,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-21-22">
-            <h2>Week 21-22: testing wave 2 (performance, reliability, usability)</h2>
+          <section class="blog-entry" id="week-21-22">
+            <span class="blog-entry__tag">Week 21–22</span>
+            <h2>Testing wave 2 — performance, reliability, usability</h2>
             <p>
               This period focused on non-functional validation and repeated bug-fix loops. Testing was
               intentionally iterative so we could re-run critical scenarios after each fix batch.
@@ -218,8 +241,9 @@
             </p>
           </section>
 
-          <section class="section-card" id="week-23-24">
-            <h2>Week 23-24: testing wave 3, evidence packaging and handover readiness</h2>
+          <section class="blog-entry" id="week-23-24">
+            <span class="blog-entry__tag">Week 23–24</span>
+            <h2>Testing wave 3, evidence packaging and handover readiness</h2>
             <p>
               Final weeks were dominated by validation evidence, final regressions and reporting
               consistency across requirements, implementation and testing documentation.
@@ -231,7 +255,8 @@
             </p>
           </section>
 
-          <section class="section-card" id="closing-note">
+          <section class="blog-entry blog-entry--closing" id="closing-note">
+            <span class="blog-entry__tag">Wrap-up</span>
             <h2>Closing note</h2>
             <p>
               This draft is intentionally realistic rather than perfectly linear. The largest hidden
@@ -240,21 +265,10 @@
             </p>
           </section>
         </div>
-
-        <aside class="toc-panel">
-          <div id="page-toc"></div>
-          <div class="callout">
-            <h3>Draft assumptions</h3>
-            <p>
-              This draft assumes about one month of original server setup before access loss and a
-              deliberately extended final testing period. Exact calendar dates can be overlaid later.
-            </p>
-          </div>
-        </aside>
       </div>
     </main>
 
     <footer class="site-footer"></footer>
-    <script src="assets/site.js?v=20260325s"></script>
+    <script src="assets/site.js?v=20260325b"></script>
   </body>
 </html>
