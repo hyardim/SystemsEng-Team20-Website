@@ -3759,16 +3759,16 @@ body[data-page="home"] .member-meta {
    ============================================== */
 
 body[data-page="blog"] .page-grid {
-	grid-template-columns: 260px minmax(0, 1fr);
-	gap: 40px;
+	grid-template-columns: 260px minmax(0, 1fr) !important;
+	gap: 40px !important;
 	align-items: start;
 }
 
 body[data-page="blog"] .toc-panel {
 	top: 102px;
 	position: sticky;
-	width: 100%;
-	max-width: 260px;
+	width: 100% !important;
+	max-width: 260px !important;
 	padding: 16px;
 	background: rgba(255, 255, 255, 0.96);
 	-webkit-backdrop-filter: blur(8px);
