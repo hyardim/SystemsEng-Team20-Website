@@ -1771,7 +1771,23 @@ body:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-
 }
 
 body[data-page="research"] .related-project-tabs {
-	margin-top: 18px;
+	margin-top: 28px;
+}
+
+body[data-page="research"] .technology-review-tabs {
+	margin-top: 36px;
+}
+
+body[data-page="research"] .page-shell {
+	padding-bottom: 44px;
+}
+
+body[data-page="research"] .report-page-header {
+	margin-bottom: 34px;
+}
+
+body[data-page="research"] h2#summary-of-technical-decisions + .lede {
+	color: var(--text);
 }
 
 body[data-page="research"] .related-project-tabs__tablist {
@@ -1876,8 +1892,9 @@ body[data-page="research"] .related-project-tabs__grid {
 body[data-page="research"] .related-project-tabs__block {
 	padding: 18px 20px;
 	border-radius: 16px;
-	background: rgba(255, 255, 255, 0.72);
+	background: #ffffff;
 	border: 1px solid rgba(7, 23, 45, 0.08);
+	box-shadow: none;
 }
 
 body[data-page="research"] .related-project-tabs__block h4,
@@ -1927,6 +1944,25 @@ body[data-page="research"] .related-project-tabs__reference-links a:hover {
 
 body[data-page="research"] .related-project-tabs__takeaway {
 	margin-top: 20px;
+	background: #ffffff;
+	box-shadow: none;
+}
+
+body[data-page="research"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .toc-panel {
+	top: 126px;
+	margin-top: 14px;
+}
+
+body[data-page="research"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section::before {
+	background: #f4f4f5;
+}
+
+body[data-page="research"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even)::before {
+	background: #ffffff;
+}
+
+body[data-page="research"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .content-stack > section:last-child {
+	padding-bottom: 22px;
 }
 
 @media (max-width: 820px) {

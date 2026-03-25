@@ -91,6 +91,26 @@ function initializeHeader() {
   }
 }
 
+function scrollElementToViewportCenter(targetElement) {
+  if (!targetElement) return;
+
+  const headerEl = document.querySelector('.site-header');
+  const headerHeight = headerEl ? headerEl.getBoundingClientRect().height : 0;
+  const targetTop = window.scrollY + targetElement.getBoundingClientRect().top;
+  const availableViewportHeight = Math.max(window.innerHeight - headerHeight, 0);
+  const adjustedTop =
+    targetTop
+    - headerHeight
+    - Math.max((availableViewportHeight - targetElement.offsetHeight) / 2, 0);
+  const prefersReducedMotion =
+    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  window.scrollTo({
+    top: Math.max(0, adjustedTop),
+    behavior: prefersReducedMotion ? 'auto' : 'smooth',
+  });
+}
+
 function renderToc() {
   const host = document.getElementById('page-toc');
   if (!host) return;
@@ -394,6 +414,35 @@ function initBlogNav() {
   }
 }
 
+function initializeReferenceLinks() {
+  const referenceLinks = [...document.querySelectorAll('a[href^="#ref-"]')];
+  if (!referenceLinks.length) return;
+
+  referenceLinks.forEach((link) => {
+    const targetSelector = link.getAttribute('href');
+    if (!targetSelector) return;
+
+    link.addEventListener('click', (event) => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+      const target = document.querySelector(targetSelector);
+      if (!target) return;
+
+      event.preventDefault();
+      scrollElementToViewportCenter(target);
+      history.replaceState(null, '', targetSelector);
+    });
+  });
+
+  if (window.location.hash.startsWith('#ref-')) {
+    const target = document.querySelector(window.location.hash);
+    if (target) {
+      requestAnimationFrame(() => scrollElementToViewportCenter(target));
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initializeHeader();
   renderToc();
@@ -403,4 +452,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeHeroStackCycle();
   initializeProjectTabs();
   initBlogNav();
+  initializeReferenceLinks();
 });
