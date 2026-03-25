@@ -86,86 +86,76 @@
           </section>
 
           <section class="section-card--project-bg">
-            <h2 id="project-background">Project background</h2>
+            <h2 id="project-background">Project background and goals</h2>
             <div class="project-bg__grid">
               <article class="project-bg__card">
                 <h3>The challenge</h3>
                 <p>
                   The NHS Advice and Guidance process allows GPs to seek non-urgent specialist input
-                  before deciding whether a patient needs referral, further investigation, or a
-                  change in management.
+                  before deciding whether a patient needs referral, further investigation or a
+                  change in management. In principle, it is intended to help patients receive the
+                  right next step without unnecessary delay, while making better use of specialist
+                  time.
                 </p>
                 <p>
-                  GPs often need quick answers to routine Neurology and Rheumatology questions, yet
-                  relevant NICE and BSR guidance is spread across long documents. We also had to
-                  respect clinical safety: unsupported answers or missing citations were unacceptable,
-                  and some early retrievals lacked the right section granularity.
+                  In the current Advice and Guidance process, GPs who need specialist advice often
+                  have to prepare requests manually, explain the case in free text and wait for a
+                  specialist to review and respond. Even when the question is routine, turnaround can
+                  still take a long time, which slows clinical decision-making and can contribute to
+                  longer patient wait times before the right action is taken. For patients, this can
+                  mean delays in reassurance, treatment decisions, referrals or follow-up planning
+                  while clinicians wait for the information they need.
                 </p>
                 <p>
-                  In the NHS Advice and Guidance process, GPs typically prepare requests manually and
-                  wait for specialist responses even when the underlying question is routine. This can
-                  delay clinical decision-making and lengthen patient waits for reassurance, treatment
-                  updates, referral decisions, or follow-up planning.
+                  The process is also costly for specialists. Consultants can spend hours of their
+                  time manually reading incoming queries, searching through NICE and BSR guidance,
+                  finding the relevant sections to support their answer and then drafting replies with
+                  appropriate citations. Many of these queries are repetitive, but they still require
+                  careful manual handling, which takes time away from more complex cases while keeping
+                  pressure high on both speed and safety.
                 </p>
                 <p>
-                  The workload is also heavy for specialists, who repeatedly search long guidance
-                  documents, identify the relevant NICE/BSR sections, and draft citation-backed
-                  responses by hand. Many queries are repetitive but still require careful manual
-                  handling to maintain safety and accountability, which takes time away from more
-                  complex cases while keeping pressure high on both speed and safety.
-                </p>
-                <p>
-                  Overall, the existing workflow is slow for GPs, labour-intensive for specialists,
-                  and difficult to scale without compromising traceability, evidence quality, or
-                  clinical oversight.
-                </p>
-                <p>
-                  The impact is ultimately felt by patients, because slower advice and slower access
-                  to specialist input can delay the point at which the right next step is taken.
+                  This means the existing workflow is slow for GPs, labour-intensive for specialists
+                  and difficult to scale without compromising traceability, evidence quality or
+                  clinical oversight. The impact is ultimately felt by patients, because slower
+                  advice and slower access to specialist input can delay the point at which the right
+                  next step is taken in their care.
                 </p>
               </article>
               <article class="project-bg__card">
-                <h3>Our approach</h3>
+                <h3>Our solution</h3>
                 <p>
-                  Our solution is to make the Advice and Guidance process more structured,
-                  transparent, and efficient for both GPs and specialists.
-                </p>
-                <p>
-                  We built a retrieval-first workflow that prioritises guideline evidence, then
-                  generates structured responses with citations and an escalation path. We iterated
-                  chunking, retrieval thresholds, and response formatting based on review feedback to
-                  reduce ambiguity and improve confidence alignment.
-                </p>
-                <p>
-                  At system level, this approach keeps answers grounded in retrieved guideline
-                  passages rather than unsupported generation. Requirements therefore emphasise
-                  structured submissions, evidence visibility, specialist review before GP-facing
-                  responses, and safe fallback behavior when confidence is low or scope is exceeded.
-                </p>
-                <p>
-                  A key mechanism is retrieval-augmented generation (RAG): the model first retrieves
-                  the most relevant guideline content, then uses that evidence to compose its answer.
+                  Our solution is to create a system that makes the Advice and Guidance process more
+                  structured, transparent and efficient for both GPs and specialists. At a high
+                  level, the platform should help GPs submit clearer requests, help specialists deal
+                  with routine cases more efficiently and make relevant guidance easier to surface and
+                  reference. A key part of this is the use of retrieval-augmented generation (RAG).
+                  In practice, this means the model first retrieves the most relevant guideline
+                  content and then uses that material to produce its answer. This helps keep answers
+                  grounded in the most relevant guideline material rather than being generated without
+                  clear supporting evidence.
                 </p>
                 <p>
                   The drafted requirements therefore focus on reducing repetitive manual work,
-                  improving evidence visibility, and preserving human oversight while keeping safe
-                  fallback behavior for uncertain, high-risk, or out-of-scope cases.
+                  improving evidence visibility and preserving human oversight. The system should
+                  support structured submissions, evidence-linked responses, specialist review before
+                  advice is returned and clear safe fallback behaviour when a case is uncertain, high
+                  risk or outside scope.
                 </p>
                 <p>
-                  From a patient perspective, the intended outcome is faster access to a usable
-                  specialist-reviewed response for routine cases while preserving oversight for complex
-                  decisions.
+                  From a patient perspective, this should mean guidance can be produced and checked
+                  more quickly, reducing the time patients wait for the next decision in their care.
+                  In practice, that means faster reassurance where appropriate, earlier movement
+                  towards the right investigation, treatment or referral and less uncertainty while
+                  clinicians wait for specialist input.
                 </p>
               </article>
             </div>
-          </section>
-
-          <section class="section-card--project-goals">
-            <h2 id="project-goals">Project goals</h2>
             <div class="project-goals__inner">
               <div class="two-col">
-                <div class="mini-card">
+                <div class="mini-card project-goals-card project-goals-card--technical">
                   <strong>Technical goals</strong>
+                  <span class="project-goals-card__subtitle">Solving existing problems</span>
                   <ul>
                     <li>Deploy a domain-adapted Med42 runtime with efficient inference performance on local hardware.</li>
                     <li>Build a retrieval pipeline that surfaces the correct NICE and BSR guideline sections.</li>
@@ -173,8 +163,9 @@
                     <li>Provide a clean, accessible web interface aligned with NHS usability guidance.</li>
                   </ul>
                 </div>
-                <div class="mini-card">
+                <div class="mini-card project-goals-card project-goals-card--nontechnical">
                   <strong>Non-technical goals</strong>
+                  <span class="project-goals-card__subtitle">The bigger picture</span>
                   <ul>
                     <li>Improve GP access to accurate, guideline-based answers for routine queries.</li>
                     <li>Reduce repetitive specialist workload through safe automation and more efficient review of routine cases.</li>

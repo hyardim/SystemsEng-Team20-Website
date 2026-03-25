@@ -28,6 +28,8 @@ body {
 
 body[data-page="requirements"] {
 	background: #ffffff;
+	overflow-x: clip;
+	--requirements-section-block-padding: clamp(34px, 3.2vw, 42px);
 }
 
 a {
@@ -1277,6 +1279,7 @@ img {
 }
 
 .section-card--project-goals h2,
+.section-card--project-goals h3,
 .section-card--requirement-gathering h2 {
 	text-align: center;
 	font-size: clamp(1.9rem, 2.6vw, 2.6rem);
@@ -1294,14 +1297,76 @@ img {
 	box-shadow: none;
 }
 
+.section-card--project-bg .project-goals__inner {
+	margin-top: 36px;
+}
+
+.section-card--project-bg .project-goals__inner .mini-card {
+	box-shadow: none;
+}
+
+.section-card--project-bg .project-goals__inner .two-col {
+	gap: 22px;
+}
+
+.section-card--project-bg .project-goals-card {
+	padding: 0;
+	border: 1px solid rgba(123, 140, 255, 0.25);
+	border-radius: 12px;
+	overflow: hidden;
+	background: #ffffff;
+	border-left: 1px solid rgba(123, 140, 255, 0.25);
+}
+
+.section-card--project-bg .project-goals-card strong {
+	display: block;
+	margin: 0;
+	padding: 16px 18px 4px;
+	font-size: 1.9rem;
+	line-height: 1.2;
+	text-transform: capitalize;
+	color: #ffffff;
+	background: linear-gradient(135deg, #6f83df 0%, #7b8cf4 100%);
+}
+
+.section-card--project-bg .project-goals-card__subtitle {
+	display: block;
+	padding: 0 18px 16px;
+	font-size: 0.96rem;
+	font-weight: 600;
+	color: rgba(255, 255, 255, 0.8);
+	background: linear-gradient(135deg, #6f83df 0%, #7b8cf4 100%);
+}
+
+.section-card--project-bg .project-goals-card ul {
+	margin: 0;
+	padding: 20px 24px 10px;
+	list-style: disc;
+}
+
+.section-card--project-bg .project-goals-card li {
+	margin: 0 0 12px;
+	color: #374151;
+	line-height: 1.55;
+}
+
+.section-card--project-bg .project-goals-card .muted {
+	margin: 0;
+	padding: 0 24px 22px;
+	color: #4b5563;
+}
+
 /* Requirements page: keep sidebar clear of content and align section titles left */
 body[data-page="requirements"] .page-grid {
-	grid-template-columns: minmax(0, 1fr) clamp(220px, 23vw, 300px);
-	gap: clamp(18px, 2.2vw, 34px);
+	grid-template-columns: minmax(0, 1fr) 330px;
+	gap: 30px;
 	align-items: start;
 }
 
 body[data-page="requirements"] .page-shell {
+	width: min(1700px, 100%);
+	padding-left: clamp(30px, 3.5vw, 44px);
+	padding-right: clamp(30px, 3.5vw, 44px);
 	padding-top: 0;
 }
 
@@ -1385,12 +1450,29 @@ body[data-page="requirements"] .content-stack {
 body[data-page="requirements"] .content-stack > section {
 	position: relative;
 	margin: 0;
-	padding: clamp(30px, 3vw, 37px) 0;
+	padding-top: var(--requirements-section-block-padding);
+	padding-bottom: calc(var(--requirements-section-block-padding) + 8px);
+	padding-left: 0;
+	padding-right: 0;
 	border: none !important;
 	border-radius: 0 !important;
 	box-shadow: none !important;
 	background: transparent !important;
 	z-index: 0;
+}
+
+body[data-page="requirements"] .content-stack > section > :first-child {
+	margin-top: 0 !important;
+}
+
+body[data-page="requirements"] .content-stack > section > :last-child {
+	margin-bottom: 0 !important;
+}
+
+body[data-page="requirements"] .content-stack > section > h2,
+body[data-page="requirements"] .content-stack > section > h3 {
+	margin-top: 0 !important;
+	line-height: 1.12;
 }
 
 body[data-page="requirements"] .content-stack > section::before {
@@ -1438,6 +1520,10 @@ body[data-page="requirements"] .project-bg__grid {
 	margin: 0;
 }
 
+body[data-page="requirements"] .section-card--project-bg .project-goals__inner {
+	margin-top: 52px;
+}
+
 .section-card--requirement-gathering .lede {
 	max-width: 980px;
 	margin: 0 auto 16px;
@@ -1446,7 +1532,7 @@ body[data-page="requirements"] .project-bg__grid {
 
 .project-bg__grid {
 	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: 1fr;
 	gap: 18px;
 	width: min(var(--content-width), calc(100% - (var(--shell-gutter) * 2)));
 	margin: 0 auto;
@@ -1470,6 +1556,10 @@ body[data-page="requirements"] .project-bg__grid {
 	font-size: 1.02rem;
 	line-height: 1.58;
 	color: #4b5563;
+}
+
+.project-bg__card p + p {
+	margin-top: 1.25rem;
 }
 
 .toc-panel {
