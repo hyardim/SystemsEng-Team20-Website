@@ -177,78 +177,10 @@ function initializePartnerLogos() {
   });
 }
 
-function initScrollReveal() {
-  if (!('IntersectionObserver' in window)) return;
-
-  const staggerSelectors = ['.mini-card', '.timeline__item'];
-  const revealSelectors  = ['.section-card', '.diagram-card', '.table-card', '.timeline-card', '.callout'];
-
-  // Mark stagger groups — reset index per parent container
-  staggerSelectors.forEach((sel) => {
-    document.querySelectorAll(sel).forEach((el, i) => {
-      el.classList.add('sr');
-      el.style.transitionDelay = `${(i % 6) * 80}ms`;
-    });
-  });
-
-  revealSelectors.forEach((sel) => {
-    document.querySelectorAll(sel).forEach((el) => {
-      if (!el.classList.contains('sr')) el.classList.add('sr');
-    });
-  });
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('sr--visible');
-          // Clear stagger delay after it plays so hover transitions are instant
-          setTimeout(() => { entry.target.style.transitionDelay = ''; }, 600);
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.05 }
-  );
-
-  document.querySelectorAll('.sr').forEach((el) => observer.observe(el));
-}
-
-function initCounters() {
-  const counters = document.querySelectorAll('.stat-card__num[data-count], .hero-stat__num[data-count]');
-  if (!counters.length) return;
-
-  const animateCounter = (el) => {
-    const target = parseInt(el.dataset.count, 10);
-    const duration = 1200;
-    const start = performance.now();
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(eased * target);
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        animateCounter(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  counters.forEach((el) => observer.observe(el));
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   initializeHeader();
   renderToc();
   renderFooter();
   markExternalPlaceholders();
   initializePartnerLogos();
-  initScrollReveal();
-  initCounters();
 });

@@ -2489,3 +2489,92 @@ body[data-page="ui-design"] .screen-grid + .two-col {
 	.hero { animation: none !important; }
 	.sr   { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
+
+/* Home-only rollback so non-home pages keep latest styling */
+body[data-page="home"] {
+	background: #ffffff;
+}
+
+body[data-page="home"] .hero {
+	padding: 36px;
+	background: #ffffff;
+	color: var(--text);
+}
+
+body[data-page="home"] .hero--home {
+	padding: 48px 0 28px;
+	background: transparent;
+	color: var(--text);
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+	gap: 48px;
+	align-items: center;
+	overflow: visible;
+	border: none;
+	box-shadow: none;
+	border-radius: 0;
+}
+
+body[data-page="home"] .hero--home::after {
+	display: none;
+}
+
+body[data-page="home"] .hero-home__content {
+	max-width: 620px;
+}
+
+body[data-page="home"] .hero--home .hero__eyebrow--pill {
+	width: auto;
+	align-self: flex-start;
+	background: #1e3a8a;
+	color: #ffffff !important;
+}
+
+body[data-page="home"] .hero--home h1 {
+	font-size: clamp(2.6rem, 5vw, 4.4rem);
+	line-height: 0.98;
+	max-width: 680px;
+	margin-bottom: 22px;
+	color: #05070b !important;
+	font-weight: 800;
+	letter-spacing: -0.04em;
+}
+
+body[data-page="home"] .hero--home p,
+body[data-page="home"] .hero-home__summary,
+body[data-page="home"] .project-shot__badge {
+	color: #000000 !important;
+}
+
+body[data-page="home"] .hero-home__summary {
+	font-size: 1.12rem;
+	line-height: 1.65;
+	margin-bottom: 30px;
+	max-width: 580px;
+}
+
+body[data-page="home"] .hero-home__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+body[data-page="home"] .hero-home__visual {
+	position: relative;
+	height: 470px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+@media (max-width: 820px) {
+	body[data-page="home"] .hero--home {
+		grid-template-columns: 1fr;
+		padding: 28px;
+		gap: 24px;
+	}
+
+	body[data-page="home"] .hero-home__visual {
+		height: 360px;
+	}
+}
