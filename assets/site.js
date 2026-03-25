@@ -277,6 +277,51 @@ function initializeHeroStackCycle() {
   }
 }
 
+function initializeProjectTabs() {
+  document.querySelectorAll('[data-project-tabs]').forEach((tabsRoot) => {
+    const tabs = [...tabsRoot.querySelectorAll('[data-tab-target]')];
+    const panels = [...tabsRoot.querySelectorAll('[data-tab-panel]')];
+    if (!tabs.length || !panels.length) return;
+
+    const activateTab = (target) => {
+      tabs.forEach((tab) => {
+        const isActive = tab.dataset.tabTarget === target;
+        tab.classList.toggle('is-active', isActive);
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        tab.tabIndex = isActive ? 0 : -1;
+      });
+
+      panels.forEach((panel) => {
+        const isActive = panel.dataset.tabPanel === target;
+        panel.classList.toggle('is-active', isActive);
+        panel.hidden = !isActive;
+      });
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateTab(tab.dataset.tabTarget));
+
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+
+        let nextIndex = index;
+        if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+        if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === 'Home') nextIndex = 0;
+        if (event.key === 'End') nextIndex = tabs.length - 1;
+
+        const nextTab = tabs[nextIndex];
+        activateTab(nextTab.dataset.tabTarget);
+        nextTab.focus();
+      });
+    });
+
+    const initiallyActive = tabs.find((tab) => tab.classList.contains('is-active')) || tabs[0];
+    activateTab(initiallyActive.dataset.tabTarget);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initializeHeader();
   renderToc();
@@ -284,4 +329,5 @@ document.addEventListener('DOMContentLoaded', () => {
   markExternalPlaceholders();
   initializePartnerLogos();
   initializeHeroStackCycle();
+  initializeProjectTabs();
 });

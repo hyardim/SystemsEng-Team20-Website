@@ -8,7 +8,7 @@
       name="description"
       content="UI design process for Ambience-AI-1.5, covering design principles, sketches, prototype iterations, evaluation, and the role-based clinical interface."
     />
-    <link rel="stylesheet" href="assets/styles.css?v=20260322f" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260325s" />
   </head>
   <body data-page="ui-design">
     <header class="site-header">
@@ -36,38 +36,19 @@
     </header>
 
     <main class="page-shell">
-      <section class="hero">
-        <p class="hero__eyebrow">UI Design</p>
-        <h1>Designing a trustworthy interface for AI-assisted clinical consultations</h1>
-        <p>
+      <div class="report-page-header">
+        <h1 class="report-page-title">UI Design</h1>
+        <p class="report-page-subtitle">
+          Designing a trustworthy interface for AI-assisted clinical consultations
+        </p>
+        <p class="report-page-summary">
           Ambience-AI-1.5 is not a consumer chatbot. The interface had to support structured GP intake,
           streamed evidence-grounded AI responses, specialist review, and admin governance inside one
           coherent product. Our design process therefore focused on trust, role clarity, and safe
           workflow transitions, using Nielsen's heuristics [1], WCAG 2.2 [2], and NHS service-design
           principles [3] as our main reference points.
         </p>
-        <!-- <div class="hero__meta">
-          <div>
-            <strong>3 role surfaces</strong>
-            <span>Separate GP, specialist, and admin workspaces reduce clutter and match clearly defined permission boundaries.</span>
-          </div>
-          <div>
-            <strong>Evidence first</strong>
-            <span>Inline citations, review state, and status feedback take priority over chat-like novelty or decorative patterns.</span>
-          </div>
-          <div>
-            <strong>2 clinical domains</strong>
-            <span>The consultation creation flow is explicitly scoped to neurology and rheumatology use in UK primary care.</span>
-          </div>
-        </div> -->
-        <div class="page-links" aria-label="UI design page anchors">
-          <a href="#design-principles">Design principles</a>
-          <a href="#workflow-mapping">Workflow mapping</a>
-          <a href="#sketches">Sketches</a>
-          <a href="#prototype">Prototype</a>
-          <a href="#final-design">Final design</a>
-        </div>
-      </section>
+      </div>
 
       <div class="page-grid">
         <div class="content-stack">
@@ -527,20 +508,11 @@
           </section>
         </div>
 
-        <aside class="toc-panel">
-          <div id="page-toc"></div>
-          <div class="callout">
-            <h3>Design principle</h3>
-            <p>
-              The final interface works because trust cues are layered: structured input, evidence
-              visibility, role separation, and message-level review all reinforce each other.
-            </p>
-          </div>
-        </aside>
+        <aside class="toc-panel" id="page-toc" aria-label="Page sections"></aside>
       </div>
     </main>
 
     <footer class="site-footer"></footer>
-    <script src="assets/site.js?v=20260322f"></script>
+    <script src="assets/site.js?v=20260325a"></script>
   </body>
 </html>
