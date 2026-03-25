@@ -2751,27 +2751,28 @@ tr:last-child td {
 }
 
 .diagram__arrow {
-	flex: 0 0 56px;
-	height: 2px;
+	flex: 0 0 72px;
+	height: 3px;
 	background: var(--brand);
 	position: relative;
 	align-self: center;
 	font-size: 0;
 	color: transparent;
-	margin: 0 4px;
+	margin: 0 12px;
+	border-radius: 2px;
 }
 
 .diagram__arrow::after {
 	content: "";
 	position: absolute;
-	right: -9px;
+	right: -13px;
 	top: 50%;
 	transform: translateY(-50%);
 	width: 0;
 	height: 0;
-	border-top: 7px solid transparent;
-	border-bottom: 7px solid transparent;
-	border-left: 10px solid var(--brand);
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-left: 14px solid var(--brand);
 }
 
 .timeline {
