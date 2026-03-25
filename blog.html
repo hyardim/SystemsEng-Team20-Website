@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Development Blog · Ambience-AI-1.5</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20260325b" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260325ao" />
   </head>
   <body data-page="blog">
     <header class="site-header">
@@ -33,40 +33,108 @@
       <div class="report-page-header">
         <h1 class="report-page-title">Development Blog</h1>
         <p class="report-page-subtitle">Weekly progression log for Ambience-AI-1.5</p>
-        <p class="report-page-summary">
-          This blog follows a realistic week-by-week engineering progression. It is based on the
-          requirements evidence trail and includes the original server setup period, the later
-          infrastructure pivot, and an intentionally large testing phase at the end.
-        </p>
       </div>
 
       <div class="page-grid">
         <aside class="toc-panel">
           <nav class="blog-nav" aria-label="Blog posts">
             <h3 class="blog-nav__title">All posts</h3>
+            <p class="blog-nav__intro">
+              Open any week to view the full development entry.
+            </p>
+
+            <div class="blog-nav__year-group">
+              <ul class="blog-nav__list">
+                <li>
+                  <a href="blog.html" class="is-active" aria-current="page">
+                    <span class="blog-nav__week">Timeline overview</span>
+                    <span class="blog-nav__meta">Browse every week from one central page</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
 
             <div class="blog-nav__year-group">
               <h4 class="blog-nav__year">2026</h4>
               <ul class="blog-nav__list">
-                <li><a href="#week-23-24">Week 23–24</a></li>
-                <li><a href="#week-21-22">Week 21–22</a></li>
-                <li><a href="#week-19-20">Week 19–20</a></li>
-                <li><a href="#week-17-18">Week 17–18</a></li>
-                <li><a href="#week-15-16">Week 15–16</a></li>
-                <li><a href="#week-13-14">Week 13–14</a></li>
-                <li><a href="#week-11-12">Week 11–12</a></li>
+                <li>
+                  <a href="blog-week-23-24.html">
+                    <span class="blog-nav__week">Week 23–24</span>
+                    <span class="blog-nav__meta">Testing wave 3 and handover readiness</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="blog-week-21-22.html">
+                    <span class="blog-nav__week">Week 21–22</span>
+                    <span class="blog-nav__meta">Performance, reliability, and usability testing</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="blog-week-19-20.html">
+                    <span class="blog-nav__week">Week 19–20</span>
+                    <span class="blog-nav__meta">Functional and integration testing</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="blog-week-17-18.html">
+                    <span class="blog-nav__week">Week 17–18</span>
+                    <span class="blog-nav__meta">Integration hardening and defect burn-down</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="blog-week-15-16.html">
+                    <span class="blog-nav__week">Week 15–16</span>
+                    <span class="blog-nav__meta">Platform breadth beyond core answering</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="blog-week-13-14.html">
+                    <span class="blog-nav__week">Week 13–14</span>
+                    <span class="blog-nav__meta">Workflow simplification and specialist gate hardening</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="blog-week-11-12.html">
+                    <span class="blog-nav__week">Week 11–12</span>
+                    <span class="blog-nav__meta">Local-first routing becomes operational</span>
+                  </a>
+                </li>
               </ul>
             </div>
 
             <div class="blog-nav__year-group">
               <h4 class="blog-nav__year">2025</h4>
               <ul class="blog-nav__list">
-                <li><a href="#week-9-10">Week 9–10</a></li>
-                <li><a href="#week-7-8">Week 7–8</a></li>
-                <li><a href="#week-5-6">Week 5–6</a></li>
-                <li><a href="#week-3-4">Week 3–4</a></li>
-                <li><a href="#week-1-2">Week 1–2</a></li>
-                <li><a href="#overview">Timeline overview</a></li>
+                <li>
+                  <a href="blog-week-9-10.html">
+                    <span class="blog-nav__week">Week 9–10</span>
+                    <span class="blog-nav__meta">Server access loss and architecture pivot</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="blog-week-7-8.html">
+                    <span class="blog-nav__week">Week 7–8</span>
+                    <span class="blog-nav__meta">Stabilization on the original server path</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="blog-week-5-6.html">
+                    <span class="blog-nav__week">Week 5–6</span>
+                    <span class="blog-nav__meta">Gaudi 2 setup and first integrations</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="blog-week-3-4.html">
+                    <span class="blog-nav__week">Week 3–4</span>
+                    <span class="blog-nav__meta">Requirement baseline and acceptance criteria</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="blog-week-1-2.html">
+                    <span class="blog-nav__week">Week 1–2</span>
+                    <span class="blog-nav__meta">Problem framing and specialist interviews</span>
+                  </a>
+                </li>
               </ul>
             </div>
           </nav>
@@ -74,7 +142,7 @@
 
         <div class="content-stack">
           <section class="blog-entry" id="overview">
-            <span class="blog-entry__tag">Overview</span>
+            <p class="blog-overview__eyebrow">Central overview</p>
             <h2>Timeline at a glance</h2>
             <p>
               The project moved through five practical phases: early discovery and requirement
@@ -82,197 +150,184 @@
               completion and stabilization, then an extended final testing period.
             </p>
             <p>
-              The weekly entries below are the main source of detail and should be treated as the
-              primary progression record.
+              The cards below summarise each milestone pair of weeks. Use the left timeline or the
+              week titles to open the detailed page for that stage of the project.
             </p>
           </section>
 
-          <section class="blog-entry" id="week-1-2">
-            <span class="blog-entry__tag">Week 1–2</span>
-            <h2>Problem framing and first specialist interviews</h2>
-            <p>
-              We started by mapping the Advice and Guidance pain points with specialist input from
-              Rheumatology and Neurology. The shared message was clear: faster responses are useful
-              only when evidence is visible and clinical accountability is preserved.
-            </p>
-            <p>
-              During these first two weeks, we agreed that our target workflow should be a structured
-              GP request that leads to a specialist-checked response rather than an unreviewed AI
-              output. We also narrowed scope to neurology and rheumatology guidance so retrieval could
-              be grounded in a realistic, manageable evidence base.
-            </p>
+          <section class="blog-year-block" aria-labelledby="blog-year-2026">
+            <h2 class="blog-year-block__label" id="blog-year-2026">2026 entries</h2>
+            <div class="blog-week-list">
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-23-24.html">Week 23–24</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2026 · Testing wave 3, evidence packaging, and handover readiness</p>
+                <p class="blog-week-card__summary">
+                  The final weeks consolidated regression evidence, tightened reporting consistency
+                  across the site, and prepared a clearer handover story aligned with the implemented
+                  system.
+                </p>
+              </article>
+
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-21-22.html">Week 21–22</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2026 · Testing wave 2: performance, reliability, and usability</p>
+                <p class="blog-week-card__summary">
+                  The second testing wave concentrated on non-functional behaviour, repeatedly
+                  re-running critical scenarios after each batch of improvements to keep regressions
+                  under control.
+                </p>
+              </article>
+
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-19-20.html">Week 19–20</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2026 · Testing wave 1: functional and integration coverage</p>
+                <p class="blog-week-card__summary">
+                  The final phase opened with deliberate end-to-end testing across GP, specialist, and
+                  admin workflows, feeding directly into a fix-and-retest loop.
+                </p>
+              </article>
+
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-17-18.html">Week 17–18</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2026 · Integration hardening and defect burn-down</p>
+                <p class="blog-week-card__summary">
+                  Before final validation, effort concentrated on review-state edge cases, retrieval
+                  and fallback reliability, and keeping the containerised setup reproducible.
+                </p>
+              </article>
+
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-15-16.html">Week 15–16</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2026 · Platform breadth beyond core answering</p>
+                <p class="blog-week-card__summary">
+                  The system expanded beyond question answering into a more usable platform, with
+                  structured submission flows, attachments, notifications, and admin-facing visibility.
+                </p>
+              </article>
+
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-13-14.html">Week 13–14</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2026 · Workflow simplification and specialist gate hardening</p>
+                <p class="blog-week-card__summary">
+                  Requirement refinement led to a cleaner product decision: merge assistant-like
+                  interactions into a single consultation-based path and make review state changes more
+                  traceable and auditable.
+                </p>
+              </article>
+
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-11-12.html">Week 11–12</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2026 · Local-first route operational</p>
+                <p class="blog-week-card__summary">
+                  After the pivot, the team restored a stable local-first path and validated failure
+                  handling so infrastructure changes did not alter the user-facing consultation and
+                  review journey.
+                </p>
+              </article>
+            </div>
           </section>
 
-          <section class="blog-entry" id="week-3-4">
-            <span class="blog-entry__tag">Week 3–4</span>
-            <h2>Requirement baseline and acceptance criteria</h2>
-            <p>
-              We converted interview findings into explicit functional and non-functional requirements,
-              then prioritized them with MoSCoW. At this stage, we also identified key risk areas:
-              uncertain model outputs, deployment uncertainty, and governance expectations.
-            </p>
-            <p>
-              We used this period to lock the must-have baseline around grounded retrieval, specialist
-              approval and safe fallback behavior. In parallel, we drafted measurable acceptance
-              criteria for latency, auditability and reliability, and planned the initial deployment
-              path around Intel's Gaudi 2 server environment available at that time.
-            </p>
-          </section>
+          <section class="blog-year-block" aria-labelledby="blog-year-2025">
+            <h2 class="blog-year-block__label" id="blog-year-2025">2025 entries</h2>
+            <div class="blog-week-list">
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-9-10.html">Week 9–10</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2025 · Server access lost and the architecture pivot begins</p>
+                <p class="blog-week-card__summary">
+                  Losing access to the original server forced the biggest pivot in the project: the
+                  clinical workflow had to stay intact while the deployment path moved toward local
+                  processing with controlled cloud fallback.
+                </p>
+              </article>
 
-          <section class="blog-entry" id="week-5-6">
-            <span class="blog-entry__tag">Week 5–6</span>
-            <h2>Original server setup and first integrations</h2>
-            <p>
-              A significant part of this period was spent setting up and validating the original
-              Gaudi 2 server environment. We treated this as core engineering work, not overhead,
-              because model runtime behavior and infrastructure constraints directly affected design.
-            </p>
-            <p>
-              A major milestone in this phase was installing the Med42 70B model on the server and
-              getting a stable first run. That process took longer than expected because we had to work
-              through low-level setup tasks first, including driver updates, runtime compatibility
-              checks and environment configuration before inference would run reliably.
-            </p>
-            <p>
-              By the end of Week 6, we had environment checks, early retrieval and first-generation
-              flow running in controlled scenarios. This gave us enough confidence to continue
-              implementation on top of a live setup instead of only mock components.
-            </p>
-          </section>
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-7-8.html">Week 7–8</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2025 · Stabilization while still on the original server</p>
+                <p class="blog-week-card__summary">
+                  Once the first live runs worked, the focus shifted to making the setup repeatable,
+                  documenting it properly, and tightening the system behaviour around citations and
+                  specialist review.
+                </p>
+              </article>
 
-          <section class="blog-entry" id="week-7-8">
-            <span class="blog-entry__tag">Week 7–8</span>
-            <h2>Stabilization while still on the original server</h2>
-            <p>
-              We spent another two weeks improving robustness on the Gaudi 2 path and aligning
-              implementation details with the agreed requirements before a major environmental change.
-            </p>
-            <p>
-              After the first Med42 70B runs succeeded, we focused on making that setup repeatable and
-              less fragile. We cleaned up configuration steps, re-checked drivers after updates and
-              documented the server setup decisions so the team could reproduce the working state.
-            </p>
-            <p>
-              Most of our effort here went into consistency and safety: we tightened citation mapping,
-              refined specialist review behavior through feedback and documented deployment friction
-              points. Those notes became important later when we had to rethink infrastructure.
-            </p>
-          </section>
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-5-6.html">Week 5–6</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2025 · Original server setup and first integrations</p>
+                <p class="blog-week-card__summary">
+                  A large share of the work went into getting the original Gaudi 2 environment and
+                  Med42 70B setup running reliably, because infrastructure constraints directly shaped
+                  what the system could realistically deliver.
+                </p>
+              </article>
 
-          <section class="blog-entry" id="week-9-10">
-            <span class="blog-entry__tag">Week 9–10</span>
-            <h2>Server access lost — architecture pivot starts</h2>
-            <p>
-              Around one month into infrastructure work, access to the original server was lost.
-              This forced a planned rework: keep the clinical workflow intact while changing the
-              deployment strategy to local-first processing with controlled cloud fallback.
-            </p>
-            <p>
-              This was the biggest disruption in the project timeline. Instead of dropping features,
-              we reprioritized the order of work and redesigned provider routing so we could preserve
-              safety and review guarantees while migrating away from the original server dependency.
-            </p>
-          </section>
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-3-4.html">Week 3–4</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2025 · Requirement baseline and acceptance criteria</p>
+                <p class="blog-week-card__summary">
+                  Interview findings became explicit functional and non-functional requirements,
+                  prioritised with MoSCoW, alongside measurable acceptance criteria for latency,
+                  auditability, and reliability.
+                </p>
+              </article>
 
-          <section class="blog-entry" id="week-11-12">
-            <span class="blog-entry__tag">Week 11–12</span>
-            <h2>Local-first route operational</h2>
-            <p>
-              By this point, the team had a working local-first path and resumed steady feature work.
-              The key objective was to avoid user-facing workflow disruption despite backend routing
-              and environment changes.
-            </p>
-            <p>
-              We re-established stable inference and retrieval behavior, then validated fallback
-              behavior under failure scenarios. Importantly, we kept the consultation and specialist
-              review journey consistent so the infrastructure pivot did not create a different user
-              experience.
-            </p>
-          </section>
-
-          <section class="blog-entry" id="week-13-14">
-            <span class="blog-entry__tag">Week 13–14</span>
-            <h2>Workflow simplification and specialist gate hardening</h2>
-            <p>
-              Requirement refinement and prototype review led to a major product decision: merge
-              assistant-like interactions into one consultation-based journey where generation,
-              review and decision history stay connected.
-            </p>
-            <p>
-              This was an important simplification for us. We removed split interaction paths,
-              enforced the specialist gate before GP-visible completion and improved traceability so
-              review decisions were easier to follow and audit.
-            </p>
-          </section>
-
-          <section class="blog-entry" id="week-15-16">
-            <span class="blog-entry__tag">Week 15–16</span>
-            <h2>Platform breadth beyond core answering</h2>
-            <p>
-              We used this phase to complete the features that make the system operationally usable
-              rather than a narrow demo.
-            </p>
-            <p>
-              During these weeks, we added the surrounding platform capabilities that clinicians and
-              administrators would actually need in practice: structured submission, optional
-              attachments, notification handling and admin-level observability.
-            </p>
-          </section>
-
-          <section class="blog-entry" id="week-17-18">
-            <span class="blog-entry__tag">Week 17–18</span>
-            <h2>Integration hardening and defect burn-down</h2>
-            <p>
-              Before entering final testing, we focused on reducing integration risk between frontend,
-              backend and retrieval services.
-            </p>
-            <p>
-              We concentrated on edge cases in review-state transitions, reliability around retrieval
-              and fallback routing, and a repeatable container-based setup. The goal was to enter the
-              final testing stretch with fewer integration surprises.
-            </p>
-          </section>
-
-          <section class="blog-entry" id="week-19-20">
-            <span class="blog-entry__tag">Week 19–20</span>
-            <h2>Testing wave 1 — functional and integration</h2>
-            <p>
-              The final stretch deliberately prioritized testing as a major body of work. We started
-              with end-to-end functional checks and integration scenarios across role-based workflows.
-            </p>
-            <p>
-              We ran representative GP, specialist and admin scenarios end-to-end, including
-              low-confidence refusal paths and fallback behavior. The defects found in this wave fed
-              directly into an ongoing fix-and-retest loop.
-            </p>
-          </section>
-
-          <section class="blog-entry" id="week-21-22">
-            <span class="blog-entry__tag">Week 21–22</span>
-            <h2>Testing wave 2 — performance, reliability, usability</h2>
-            <p>
-              This period focused on non-functional validation and repeated bug-fix loops. Testing was
-              intentionally iterative so we could re-run critical scenarios after each fix batch.
-            </p>
-            <p>
-              We checked latency on routine cases, stress-tested failure and recovery paths, and
-              refined accessibility and workflow clarity in core screens. Each fix was followed by
-              another targeted run to confirm that we were improving without introducing regressions.
-            </p>
-          </section>
-
-          <section class="blog-entry" id="week-23-24">
-            <span class="blog-entry__tag">Week 23–24</span>
-            <h2>Testing wave 3, evidence packaging and handover readiness</h2>
-            <p>
-              Final weeks were dominated by validation evidence, final regressions and reporting
-              consistency across requirements, implementation and testing documentation.
-            </p>
-            <p>
-              We finished with a final regression pass on high-priority workflows, consolidated test
-              evidence for the report website and closed remaining defects. By the end of Week 24,
-              we had a cleaner handover story that matched what we actually built and tested.
-            </p>
+              <article class="blog-week-card">
+                <div class="blog-week-card__header">
+                  <h3 class="blog-week-card__title">
+                    <a class="blog-week-card__week-link" href="blog-week-1-2.html">Week 1–2</a>
+                  </h3>
+                </div>
+                <p class="blog-week-card__meta">2025 · Problem framing and first specialist interviews</p>
+                <p class="blog-week-card__summary">
+                  We began by mapping Advice and Guidance pain points with specialists and identifying
+                  the minimum conditions for a safe clinical support workflow: evidence visibility,
+                  specialist accountability, and a constrained domain.
+                </p>
+              </article>
+            </div>
           </section>
 
         </div>
@@ -280,6 +335,6 @@
     </main>
 
     <footer class="site-footer"></footer>
-    <script src="assets/site.js?v=20260325b"></script>
+    <script src="assets/site.js?v=20260325d"></script>
   </body>
 </html>
