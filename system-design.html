@@ -13,76 +13,60 @@
       <div class="report-page-header">
         <h1 class="report-page-title">System Design</h1>
         <p class="report-page-subtitle">Service boundaries, request flow, and review workflow</p>
-        <p class="report-page-summary">
-          Ambience-AI-1.5 is designed as a full-stack, multi-service application. The frontend,
-          backend, RAG service, and pgvector database each own a distinct part of the runtime. The
-          result is a system that can separate consultation state management from evidence retrieval
-          and model execution.
-        </p>
       </div>
       <div class="page-grid">
         <div class="content-stack">
-          <section class="section-card">
+          <section class="section-bare">
             <h2 id="topology">System Architecture</h2>
             <p>Ambience-AI is deployed as a containerised application across eight Docker services connected via a shared bridge network (<code>ambience_net</code>). In production, all inbound traffic enters through an Nginx reverse proxy on ports 80/443, which routes requests to either the Frontend (React/TypeScript, port 3000) or the Backend (FastAPI/Python, port 8000). In development, Vite's built-in dev server replaces Nginx entirely. The Backend communicates with the RAG Service (port 8001) for AI-related operations — answer generation, answer revision, and document ingestion — and with a RAG Worker for background retry processing of failed jobs. Persistent data is stored in PostgreSQL (port 5432) with the pgvector extension for vector embeddings, while Redis (port 6379) acts as both an application cache and the job queue that coordinates the RAG Worker. A Mailpit SMTP server (ports 1025/8025) handles email verification and password reset flows during development.</p>
             <p>Three core backend services underpin the system. The REST API backend (FastAPI, port 8000) handles authentication, routing, and business logic across three RBAC roles — GP, Specialist, and Admin — with JWT-based auth, chat lifecycle management, SSE streaming, Redis-backed caching, and full audit logging. The RAG service (port 8001) is a standalone FastAPI service that receives queries from the backend, retrieves relevant medical evidence from the vector database, and generates grounded responses using the Med42 LLM. A background retry worker processes failed RAG requests via Redis Queue with exponential backoff (base 10 s, 2× multiplier, max 3 retries), using SHA-256 hashing for idempotent deduplication.</p>
-            <div class="diagram-card">
-              <img src="assets/diagrams/system_architecture.svg" alt="System architecture diagram"/>
-            </div>
+            <img class="diagram-img" src="assets/diagrams/system_architecture.svg" alt="System architecture diagram"/>
           </section>
 
-          <section class="section-card">
+          <section class="section-bare">
             <h2 id="site-map">Site map</h2>
             <p>The frontend is a React Router v6 single-page application organised around three role-based portals. Unauthenticated users land on the root route (<code>/</code>) and can access authentication flows including login, registration, email verification, password reset, and resend-verification. Upon login, users are redirected to their role-specific portal: GP (<code>/gp/*</code>) for creating and managing clinical queries; Specialist (<code>/specialist/*</code>) for reviewing incoming queries, managing assigned cases, and submitting clinical reviews; and Admin (<code>/admin/*</code>) for user management, chat oversight, audit logs, and RAG queue monitoring. A shared <code>/profile</code> route is accessible across all roles. Unauthorised access attempts redirect to <code>/access-denied</code>, and any unmatched path is caught by a wildcard route.</p>
-            <div class="diagram-card">
-              <img src="assets/diagrams/site_map.svg" alt="Site map showing frontend route structure"/>
-            </div>
+            <img class="diagram-img" src="assets/diagrams/site_map.svg" alt="Site map showing frontend route structure"/>
           </section>
 
-          <section class="section-card">
+          <section class="section-bare">
             <h2 id="request-flow">Sequence diagram</h2>
             <p>The sequence diagram illustrates the end-to-end flow of a GP submitting a clinical query and receiving a streamed AI-generated response. The GP sends a message via the Frontend, which makes a REST call to the Backend. The Backend persists the message to PostgreSQL, enqueues an asynchronous RAG job in Redis, and immediately opens a Server-Sent Events (SSE) stream back to the Frontend. Concurrently, the RAG Worker picks up the job and calls the RAG Service, which retrieves relevant document embeddings from PostgreSQL's pgvector store and routes the query to the appropriate LLM — either a locally-hosted Ollama instance (running llama3-med42-8b) or a cloud-hosted Med42-70B model via RunPod, selected based on query complexity and clinical risk. Generated tokens are published back through the Backend's event bus and streamed token-by-token to the Frontend via SSE. Once generation completes, the final message is persisted and a notification is dispatched to any assigned specialist.</p>
             <p>Once generation completes, the consultation moves through a review state machine: a chat starts as open, is automatically submitted after the first GP message, then assigned when a specialist self-assigns the case, and transitions through reviewing before reaching an approved or rejected terminal state. Message-level review overlays this chat-level workflow — individual AI messages carry their own review metadata, allowing specialists to reject or replace a single answer while keeping the broader consultation in progress.</p>
-            <div class="diagram-card">
-              <img src="assets/diagrams/sequence_diagram.svg" alt="Sequence diagram — GP message to AI response"/>
-            </div>
+            <img class="diagram-img" src="assets/diagrams/sequence_diagram.svg" alt="Sequence diagram — GP message to AI response"/>
           </section>
 
-          <section class="section-card">
+          <section class="section-bare">
             <h2 id="data-model">ER diagram</h2>
             <p>The database schema centres on the <code>users</code> table, which stores credentials, role (GP, Specialist, Admin), email verification state (<code>email_verified</code>, <code>email_verified_at</code>), and a <code>session_version</code> integer used to instantly invalidate all active tokens for a user. Each chat belongs to a GP (<code>user_id</code>) and may optionally be assigned to a specialist (<code>specialist_id</code>); it carries patient context as a JSONB blob alongside status, severity, specialty, and specialist review fields (<code>assigned_at</code>, <code>reviewed_at</code>, <code>review_feedback</code>). Individual messages within a chat record the sender role, content, AI citations as JSONB, generation state, and per-message review metadata. File attachments are tracked in <code>file_attachments</code> with a reference to the uploading user, MIME type, and file size. Supporting tables include <code>audit_logs</code> (an immutable trail of user actions), <code>notifications</code> (per-user in-app alerts linked to chats), <code>email_verification_tokens</code>, and <code>password_reset_tokens</code>.</p>
-            <div class="diagram-card">
-              <img src="assets/diagrams/er_diagram.svg" alt="Entity relationship diagram"/>
-            </div>
+            <img class="diagram-img" src="assets/diagrams/er_diagram.svg" alt="Entity relationship diagram"/>
           </section>
 
-          <section class="section-card">
+          <section class="section-bare">
             <h2 id="rag-pipeline">RAG pipeline</h2>
-            <div class="timeline-card">
-              <div class="timeline">
-                <div class="timeline__item" data-step="1">
-                  <strong>Ingestion</strong>
-                  Clinical PDFs are chunked into 450-character segments with 100-character overlap, embedded using all-MiniLM-L6-v2 (384-dimensional vectors), and stored in pgvector with HNSW indexing.
-                </div>
-                <div class="timeline__item" data-step="2">
-                  <strong>Retrieval</strong>
-                  At query time the user's question is embedded and a cosine similarity search returns the top-k most relevant document chunks from the knowledge base.
-                </div>
-                <div class="timeline__item" data-step="3">
-                  <strong>Intelligent routing</strong>
-                  A composite score is computed across three dimensions — <em>complexity</em> (query length, sentence count, reasoning terms), <em>risk</em> (urgency flags, clinical keywords), and <em>ambiguity</em> (retrieval confidence and score gaps). Queries scoring above 0.65 route to the cloud model (Med42 70B on RunPod, 2× A100 GPUs); simpler queries use the local model (Med42 8B via Ollama). This hybrid approach optimises cost without sacrificing quality on high-stakes queries.
-                </div>
-                <div class="timeline__item" data-step="4">
-                  <strong>Generation</strong>
-                  Responses are grounded strictly in retrieved passages with bracketed citations [1], [2]. Both models expose an OpenAI-compatible <code>/v1/chat/completions</code> interface via vLLM, making the routing layer model-agnostic.
-                </div>
+            <div class="timeline">
+              <div class="timeline__item" data-step="1">
+                <strong>Ingestion</strong>
+                Clinical PDFs are chunked into 450-character segments with 100-character overlap, embedded using all-MiniLM-L6-v2 (384-dimensional vectors), and stored in pgvector with HNSW indexing.
+              </div>
+              <div class="timeline__item" data-step="2">
+                <strong>Retrieval</strong>
+                At query time the user's question is embedded and a cosine similarity search returns the top-k most relevant document chunks from the knowledge base.
+              </div>
+              <div class="timeline__item" data-step="3">
+                <strong>Intelligent routing</strong>
+                A composite score is computed across three dimensions — <em>complexity</em> (query length, sentence count, reasoning terms), <em>risk</em> (urgency flags, clinical keywords), and <em>ambiguity</em> (retrieval confidence and score gaps). Queries scoring above 0.65 route to the cloud model (Med42 70B on RunPod, 2× A100 GPUs); simpler queries use the local model (Med42 8B via Ollama).
+              </div>
+              <div class="timeline__item" data-step="4">
+                <strong>Generation</strong>
+                Responses are grounded strictly in retrieved passages with bracketed citations [1], [2]. Both models expose an OpenAI-compatible <code>/v1/chat/completions</code> interface via vLLM, making the routing layer model-agnostic.
               </div>
             </div>
           </section>
 
-          <section class="section-card">
+          <section class="section-bare">
             <h2 id="caching">Caching strategy</h2>
-            <div class="table-card">
+            <div>
               <table>
                 <thead>
                   <tr>
@@ -113,58 +97,30 @@
             <p>All cache keys are scoped per user ID to prevent cross-tenant data leakage. Pattern-based bulk invalidation ensures consistency on write operations. If Redis is unavailable the system falls back gracefully to direct database queries with no change in API behaviour.</p>
           </section>
 
-          <section class="section-card">
-            <h2 id="streaming">Real-time streaming</h2>
-            <p>
-              AI responses are streamed to the frontend using Server-Sent Events (SSE), removing the need for polling and improving perceived latency. A shared stream state machine prevents duplicate or missed events when concurrent streams are active on the same consultation.
-            </p>
-            <p>
-              Tokens are accepted as query parameters on SSE endpoints to work around a browser limitation: the <code>EventSource</code> API cannot set custom request headers, so the JWT cannot be passed in the standard <code>Authorization</code> header. The backend validates the token from the query string and immediately rejects unauthenticated connections.
-            </p>
-          </section>
-
-          <section class="section-card">
+          <section class="section-bare">
             <h2 id="security">Security</h2>
-            <div class="card-grid">
-              <div class="mini-card">
-                <strong>Password hashing</strong>
-                <p>All passwords are hashed with bcrypt before storage. Plain-text passwords are never written to the database or logs.</p>
+            <dl class="security-list">
+              <div class="security-list__item">
+                <dt>Password hashing</dt>
+                <dd>All passwords are hashed with bcrypt before storage. Plain-text passwords are never written to the database or logs.</dd>
               </div>
-              <div class="mini-card">
-                <strong>JWT authentication</strong>
-                <p>Tokens are validated on every protected request. 401 responses trigger automatic frontend logout. Tokens expire after 8 days.</p>
+              <div class="security-list__item">
+                <dt>JWT authentication</dt>
+                <dd>Tokens are validated on every protected request. 401 responses trigger automatic frontend logout. Tokens expire after 8 days.</dd>
               </div>
-              <div class="mini-card">
-                <strong>Resource-level isolation</strong>
-                <p>Users can only access their own chats unless they are the assigned specialist. The backend enforces ownership checks at the query layer, not just the route layer.</p>
+              <div class="security-list__item">
+                <dt>Resource-level isolation</dt>
+                <dd>Users can only access their own chats unless they are the assigned specialist. The backend enforces ownership checks at the query layer, not just the route layer.</dd>
               </div>
-              <div class="mini-card">
-                <strong>Scoped cache keys</strong>
-                <p>Redis keys are namespaced per user ID, preventing information leakage between accounts even if cache entries share the same logical object type.</p>
+              <div class="security-list__item">
+                <dt>Scoped cache keys</dt>
+                <dd>Redis keys are namespaced per user ID, preventing information leakage between accounts even if cache entries share the same logical object type.</dd>
               </div>
-              <div class="mini-card">
-                <strong>Immutable audit log</strong>
-                <p>All user actions are written to an <code>audit_logs</code> table. Rows are append-only — no update or delete paths exist in the application layer.</p>
+              <div class="security-list__item">
+                <dt>Immutable audit log</dt>
+                <dd>All user actions are written to an <code>audit_logs</code> table. Rows are append-only — no update or delete paths exist in the application layer.</dd>
               </div>
-            </div>
-          </section>
-
-          <section class="section-card">
-            <h2 id="api-surface">API responsibilities by service</h2>
-            <div class="card-grid">
-              <div class="mini-card">
-                <strong>Backend API</strong>
-                <p>Authentication, registration, profile, chats, specialist review, notifications, admin metrics, and audit visibility.</p>
-              </div>
-              <div class="mini-card">
-                <strong>RAG API</strong>
-                <p>Health checks, retrieval query endpoint, grounded answer endpoint, revision endpoint, and document-serving endpoint.</p>
-              </div>
-              <div class="mini-card">
-                <strong>Frontend router</strong>
-                <p>Client-side view composition for landing pages, auth pages, role-protected task flows, and dashboards.</p>
-              </div>
-            </div>
+            </dl>
           </section>
 
           <section class="section-card">
@@ -186,20 +142,6 @@
 
         <aside class="toc-panel">
           <div id="page-toc"></div>
-          <div class="callout callout--warning">
-            <h3>Architecture note</h3>
-            <p>
-              Backend startup currently relies on ORM <em>create_all</em> plus schema patch helpers,
-              which is practical for coursework iteration but weaker than a strictly migration-only
-              production workflow.
-            </p>
-          </div>
-          <div class="callout">
-            <h3>Hybrid model routing</h3>
-            <p>
-              The default routing threshold is <strong>0.65</strong>. Queries above this score use Med42 70B (cloud, 2× A100); queries below use Med42 8B (local, Ollama). The local model runs on the host machine and is accessed from containers via <code>host.docker.internal</code> to leverage GPU resources outside the container runtime.
-            </p>
-          </div>
         </aside>
       </div>
     </main>

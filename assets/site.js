@@ -6,6 +6,31 @@ function initializeHeader() {
   const toggle = document.querySelector('.nav-toggle');
   const githubBtn = document.querySelector('.site-header__github-btn');
 
+  // Inject icon + wordmark into brand
+  const brand = document.querySelector('.brand');
+  if (brand) {
+    brand.innerHTML = `
+      <span class="brand-icon" aria-hidden="true">
+        <svg viewBox="0 0 72 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00d4f5"/>
+              <stop offset="100%" stop-color="#0099cc"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="68" height="52" rx="11" fill="url(#bGrad)"/>
+          <rect x="2" y="2" width="68" height="52" rx="11" fill="none" stroke="rgba(180,245,255,0.5)" stroke-width="1.2"/>
+          <path d="M16 54 L10 66 L26 56" fill="url(#bGrad)"/>
+          <polyline points="8,28 16,28 20,17 24,39 28,28 32,21 36,33 40,28 50,28 64,28"
+            stroke="white" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </span>
+      <span class="brand-wordmark">
+        <span class="brand-wordmark__name">Ambience</span><span class="brand-wordmark__ai"> AI</span>
+      </span>
+    `;
+  }
+
   if (page && nav) {
     const activeLink = nav.querySelector(`[data-nav="${page}"]`);
     if (activeLink) {
