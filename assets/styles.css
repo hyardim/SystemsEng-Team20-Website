@@ -63,7 +63,7 @@ img {
 .site-header {
 	position: sticky;
 	top: 0;
-	z-index: 30;
+	z-index: 100;
 	font-family: var(--ui-font);
 	backdrop-filter: blur(6px);
 	background: rgba(255, 255, 255, 0.82);
@@ -2727,15 +2727,16 @@ tr:last-child td {
 }
 
 .diagram__row {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-	gap: 12px;
-	align-items: stretch;
+	display: flex;
+	align-items: center;
+	gap: 0;
+	flex-wrap: wrap;
 }
 
 .diagram__node,
 .flow-step {
 	position: relative;
+	flex: 1 1 140px;
 	padding: 16px;
 	border-radius: 18px;
 	border: 1px solid rgba(15, 98, 254, 0.14);
@@ -2750,10 +2751,27 @@ tr:last-child td {
 }
 
 .diagram__arrow {
-	text-align: center;
-	color: var(--brand);
-	font-size: 1.35rem;
-	font-weight: 700;
+	flex: 0 0 56px;
+	height: 2px;
+	background: var(--brand);
+	position: relative;
+	align-self: center;
+	font-size: 0;
+	color: transparent;
+	margin: 0 4px;
+}
+
+.diagram__arrow::after {
+	content: "";
+	position: absolute;
+	right: -9px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 0;
+	height: 0;
+	border-top: 7px solid transparent;
+	border-bottom: 7px solid transparent;
+	border-left: 10px solid var(--brand);
 }
 
 .timeline {
@@ -3988,7 +4006,7 @@ body[data-page="blog"] .blog-entry__tag {
 	background: rgba(0, 94, 184, 0.09);
 	color: var(--brand);
 	border-radius: 999px;
-	font-size: 0.75rem;
+	font-size: 1.1rem;
 	font-weight: 700;
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
@@ -4013,11 +4031,6 @@ body[data-page="blog"] .blog-entry p {
 
 body[data-page="blog"] .blog-entry p:last-child {
 	margin-bottom: 0;
-}
-
-body[data-page="blog"] .blog-entry--closing .blog-entry__tag {
-	background: rgba(11, 47, 111, 0.09);
-	color: #0b2f6f;
 }
 
 @media (max-width: 860px) {
