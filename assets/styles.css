@@ -1166,7 +1166,7 @@ img {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: 18px;
-	margin-top: 8px;
+	margin-top: 16px;
 }
 
 .partner-intro__card {
@@ -1297,8 +1297,13 @@ body[data-page="requirements"] .toc-panel {
 	max-width: 100%;
 	justify-self: start;
 	padding: 14px 14px;
+	background: rgba(255, 255, 255, 0.96);
+	-webkit-backdrop-filter: blur(8px);
+	backdrop-filter: blur(8px);
 	border: 1.5px solid rgba(0, 94, 184, 0.75);
-	box-shadow: none;
+	border-radius: 14px;
+	box-shadow: 0 8px 18px rgba(7, 23, 45, 0.1), 0 1px 3px rgba(7, 23, 45, 0.06);
+	z-index: 30;
 	max-height: calc(100vh - 108px);
 	overflow: auto;
 }
@@ -1359,6 +1364,38 @@ body[data-page="requirements"] .hero--requirements .hero--requirements__title {
 	line-height: 1.05;
 }
 
+body[data-page="requirements"] .content-stack {
+	gap: 0;
+}
+
+body[data-page="requirements"] .content-stack > section {
+	position: relative;
+	margin: 0;
+	padding: clamp(30px, 3vw, 37px) 0;
+	border: none !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	background: transparent !important;
+	z-index: 0;
+}
+
+body[data-page="requirements"] .content-stack > section::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: -100vw;
+	right: -100vw;
+	width: auto;
+	transform: none;
+	background: #ffffff;
+	z-index: -1;
+}
+
+body[data-page="requirements"] .content-stack > section:nth-of-type(even)::before {
+	background: #f4f4f5;
+}
+
 @media (max-width: 980px) {
 	body[data-page="requirements"] .page-grid {
 		grid-template-columns: 1fr;
@@ -1375,8 +1412,8 @@ body[data-page="requirements"] .section-card--requirement-gathering {
 	margin-left: 0;
 	margin-right: 0;
 	border-radius: 0;
-	padding: 32px 0;
-	background: #ffffff;
+	padding: clamp(30px, 3vw, 37px) 0;
+	background: transparent !important;
 }
 
 body[data-page="requirements"] .project-goals__inner,
