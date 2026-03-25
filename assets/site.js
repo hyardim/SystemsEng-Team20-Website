@@ -133,7 +133,7 @@ function renderFooter() {
           <a href="ui-design.html">UI Design</a>
           <a href="appendices.html">Appendices</a>
           <a href="system-design.html">System Design</a>
-          <a href="appendices.html#external-links">Blog</a>
+          <a href="blog.html">Blog</a>
           <a href="implementation.html">Implementation</a>
         </div>
       </section>
