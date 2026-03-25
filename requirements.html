@@ -33,6 +33,11 @@
       <section class="hero hero--requirements">
         <h1 class="hero--requirements__title">Requirements</h1>
         <p class="hero--requirements__detail">Project Requirements and Analysis</p>
+        <p>
+          This page outlines the partner context, project goals, requirement-gathering methods,
+          personas, use cases, and prioritised functional and non-functional requirements for
+          Ambience-AI-1.5.
+        </p>
       </section>
 
       <div class="page-grid">
@@ -51,7 +56,10 @@
                 </div>
                 <p>
                   Intel hardware planning influenced early deployment objectives and performance
-                  constraints for local inference and infrastructure-aware system design.
+                  constraints for local inference and infrastructure-aware system design. The
+                  original Intel-backed server access ended during the project, so infrastructure
+                  requirements were revised to support a local-first path with controlled
+                  cloud fallback.
                 </p>
               </article>
               <article class="partner-intro__card">
@@ -83,19 +91,70 @@
               <article class="project-bg__card">
                 <h3>The challenge</h3>
                 <p>
+                  The NHS Advice and Guidance process allows GPs to seek non-urgent specialist input
+                  before deciding whether a patient needs referral, further investigation, or a
+                  change in management.
+                </p>
+                <p>
                   GPs often need quick answers to routine Neurology and Rheumatology questions, yet
                   relevant NICE and BSR guidance is spread across long documents. We also had to
                   respect clinical safety: unsupported answers or missing citations were unacceptable,
                   and some early retrievals lacked the right section granularity.
                 </p>
+                <p>
+                  In the NHS Advice and Guidance process, GPs typically prepare requests manually and
+                  wait for specialist responses even when the underlying question is routine. This can
+                  delay clinical decision-making and lengthen patient waits for reassurance, treatment
+                  updates, referral decisions, or follow-up planning.
+                </p>
+                <p>
+                  The workload is also heavy for specialists, who repeatedly search long guidance
+                  documents, identify the relevant NICE/BSR sections, and draft citation-backed
+                  responses by hand. Many queries are repetitive but still require careful manual
+                  handling to maintain safety and accountability, which takes time away from more
+                  complex cases while keeping pressure high on both speed and safety.
+                </p>
+                <p>
+                  Overall, the existing workflow is slow for GPs, labour-intensive for specialists,
+                  and difficult to scale without compromising traceability, evidence quality, or
+                  clinical oversight.
+                </p>
+                <p>
+                  The impact is ultimately felt by patients, because slower advice and slower access
+                  to specialist input can delay the point at which the right next step is taken.
+                </p>
               </article>
               <article class="project-bg__card">
                 <h3>Our approach</h3>
+                <p>
+                  Our solution is to make the Advice and Guidance process more structured,
+                  transparent, and efficient for both GPs and specialists.
+                </p>
                 <p>
                   We built a retrieval-first workflow that prioritises guideline evidence, then
                   generates structured responses with citations and an escalation path. We iterated
                   chunking, retrieval thresholds, and response formatting based on review feedback to
                   reduce ambiguity and improve confidence alignment.
+                </p>
+                <p>
+                  At system level, this approach keeps answers grounded in retrieved guideline
+                  passages rather than unsupported generation. Requirements therefore emphasise
+                  structured submissions, evidence visibility, specialist review before GP-facing
+                  responses, and safe fallback behavior when confidence is low or scope is exceeded.
+                </p>
+                <p>
+                  A key mechanism is retrieval-augmented generation (RAG): the model first retrieves
+                  the most relevant guideline content, then uses that evidence to compose its answer.
+                </p>
+                <p>
+                  The drafted requirements therefore focus on reducing repetitive manual work,
+                  improving evidence visibility, and preserving human oversight while keeping safe
+                  fallback behavior for uncertain, high-risk, or out-of-scope cases.
+                </p>
+                <p>
+                  From a patient perspective, the intended outcome is faster access to a usable
+                  specialist-reviewed response for routine cases while preserving oversight for complex
+                  decisions.
                 </p>
               </article>
             </div>
@@ -118,10 +177,16 @@
                   <strong>Non-technical goals</strong>
                   <ul>
                     <li>Improve GP access to accurate, guideline-based answers for routine queries.</li>
-                    <li>Reduce repetitive specialist workload through safe automation and escalation.</li>
+                    <li>Reduce repetitive specialist workload through safe automation and more efficient review of routine cases.</li>
+                    <li>Reduce patient wait time by helping routine cases be handled faster and complex cases receive specialist attention sooner.</li>
                     <li>Maintain trust through visible citations and clear evidence linkage.</li>
                     <li>Ensure outputs remain clinically appropriate and easy to review.</li>
                   </ul>
+                  <p class="muted">
+                    Operational success measure: in representative routine-case walkthroughs, the
+                    system should reduce time to a usable specialist-reviewed response compared with
+                    manual guideline lookup alone.
+                  </p>
                 </div>
               </div>
             </div>
@@ -134,15 +199,25 @@
                 The final requirements below reflect the baseline agreed after iterative refinement
                 during the project. We gathered requirements through specialist interviews,
                 stakeholder check-ins, and a short validation survey, then refined them as
-                workflow, prototypes, and technical constraints became clearer.
+                workflow, prototypes, and technical constraints became clearer. This remained
+                interview-led collaboration with two client-side specialists and regular partner
+                check-ins throughout delivery.
               </p>
               <div class="requirement-methods">
                 <article class="mini-card requirement-methods__item">
                   <strong>How did we collect requirements?</strong>
                   <p>
                     We combined direct meetings with two client specialists (Rheumatology and
-                    Neurology), regular supervisor and partner checkpoints, and guideline-driven
-                    validation against NICE/BSR sources.
+                    Neurology), both highly experienced specialists in their fields, regular
+                    supervisor and partner checkpoints, and guideline-driven validation against
+                    NICE/BSR sources.
+                  </p>
+                </article>
+                <article class="mini-card requirement-methods__item">
+                  <strong>What evidence was used?</strong>
+                  <p>
+                    Requirement decisions were grounded in client meetings, internal scoping work,
+                    workflow and prototype reviews, and validation against the relevant guideline set.
                   </p>
                 </article>
                 <article class="mini-card requirement-methods__item">
@@ -193,25 +268,25 @@
                     <tr>
                       <td>Workflow simplification during development</td>
                       <td>A separate assistant-style route could exist alongside consultation review.</td>
-                      <td>Final workflow should keep generation and specialist review in one consultation flow.</td>
-                      <td>UC5, UC6 and current workflow diagram</td>
+                      <td>The final workflow should merge those AI paths into one consultation chat where generation, review, and checked response stay linked together.</td>
+                      <td>UC2, UC5, UC6 and current workflow diagram</td>
                     </tr>
                     <tr>
                       <td>Specialist feedback on safety and trust</td>
                       <td>Visible citations alone would make routine answers acceptable.</td>
-                      <td>No response should be returned to the GP without specialist review, approval, or revision.</td>
+                      <td>No response should be returned to the GP without manual specialist review, approval, or revision.</td>
                       <td>FR12, FR3, UC6</td>
                     </tr>
                     <tr>
                       <td>NHS governance and traceability needs</td>
                       <td>Cited guidance alone would be sufficient for accountability.</td>
-                      <td>System should preserve a complete paper trail of messages, reviews, approvals, and timestamps.</td>
-                      <td>FR6, FR11 and interview traceability findings</td>
+                      <td>System should preserve a complete paper trail of messages, reviews, timestamps, approvals, and admin-visible audit information.</td>
+                      <td>FR6, FR11 and Q5 interview findings</td>
                     </tr>
                     <tr>
                       <td>Prototype and survey validation</td>
-                      <td>A basic QA flow would be enough for first release.</td>
-                      <td>Structured submissions, optional attachments, and notifications should be baseline features.</td>
+                      <td>A basic question-and-answer flow would be enough for first release.</td>
+                      <td>Structured submissions, optional attachments, and notifications should be part of the platform baseline.</td>
                       <td>FR9, FR10, UC2, UC4, UC7</td>
                     </tr>
                   </tbody>
@@ -241,8 +316,9 @@
                   <div class="interview-item__body">
                     <p>
                       Trust depended on seeing where answers came from, how current guidance was,
-                      and whether a specialist review happened before return to the GP. This
-                      informed citation placement, source metadata, and review controls.
+                      and knowing there would be a human check before anything was submitted back
+                      to the GP. This informed citation placement, source metadata, and specialist
+                      review controls.
                     </p>
                   </div>
                 </details>
@@ -251,9 +327,9 @@
                   <summary>Q3. What should happen when evidence is weak, conflicting, or out of scope?</summary>
                   <div class="interview-item__body">
                     <p>
-                      Specialists preferred refusal and review over speculation. This directly
-                      supported low-confidence fallback behavior within the specialist-reviewed
-                      workflow.
+                      Specialists preferred refusal and specialist review over speculation. This
+                      directly supported low-confidence fallback behavior where uncertain cases stay
+                      in the specialist-reviewed workflow before any response is sent back.
                     </p>
                   </div>
                 </details>
@@ -388,25 +464,45 @@
           <section>
             <h2 id="use-cases">Use cases</h2>
             <p class="lede">
-              The matrix and workflow visuals below capture role involvement and end-to-end process
-              flow. Together with the detailed table they document the final consultation-based model.
+              The visuals in this section are intended to work together. The matrix gives a
+              high-level overview of which roles are involved in each major use case, while the
+              final workflow flowchart shows how those use cases combine in the delivered
+              consultation process. Earlier in the project, the workflow concept separated a more
+              general assistant-style route from the specialist-query route, but requirement
+              refinement merged those into the single consultation-based process shown below. The
+              detailed use case list then explains the main user goals and outcomes in a more
+              explicit way.
             </p>
             <div class="diagram-card">
               <h3>Use case overview matrix</h3>
               <p class="muted">
-                This chart shows how GP, Specialist, and Admin roles map to the major use cases in
-                the delivered platform.
+                The matrix below presents the final use cases as a clear actor-use-case overview.
+                It highlights platform requirements that became explicit during refinement, such as
+                list management, profile management, and RAG monitoring. Specialist draft review
+                remains specialist-only.
               </p>
               <img src="assets/diagrams/requirements_use_case_matrix_v2.svg" alt="Use case overview matrix showing GP, Specialist and Admin involvement in the main Ambience-AI-1.5 use cases" />
             </div>
             <div class="diagram-card">
               <h3>Final workflow after requirement refinement</h3>
               <p class="muted">
-                The flowchart reflects the revised workflow where generation, review, and final
-                approval remain linked in one consultation thread before any response is returned.
+                The flowchart below reflects the final workflow after requirements were revised
+                through specialist feedback, workflow review, and technical constraints. Guidance is
+                generated in the consultation chat and reviewed in that same flow before anything is
+                returned to the GP. After the GP submits a new consultation, the chat opens with
+                the submitted question already shown as the first message.
               </p>
               <img src="assets/diagrams/requirements_workflow_current.svg" alt="Flowchart showing landing and authentication, GP consultation creation, guidance generation within the consultation chat, specialist assignment and review, a request-changes loop and an approved response returned to the GP" />
             </div>
+            <p class="muted">
+              The final workflow above is the one used for the remainder of this Requirements page.
+              In the revised workflow, a GP submits a structured consultation, the system produces an
+              evidence-linked draft in the same chat, and a specialist reviews that draft from the
+              unassigned queue by opening the query, assigning it, then choosing whether to approve, approve with comment,
+              request changes, provide a manual response, or edit the message before any checked
+              response is returned to the GP. Optional file uploads support submission, while
+              notifications and admin monitoring support the wider platform workflow.
+            </p>
             <div class="diagram-card">
               <h3>Use case flow (high level)</h3>
               <div class="diagram">
@@ -430,17 +526,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>UC1</td><td>Authenticate / recover account access</td><td>Guest, GP, Specialist, Admin</td><td>Users sign in, recover credentials, and regain access to role-specific workflows.</td></tr>
-                  <tr><td>UC2</td><td>Submit consultation</td><td>GP</td><td>Structured clinical request is created for retrieval, generation, and review.</td></tr>
-                  <tr><td>UC3</td><td>Manage consultation lists</td><td>GP, Specialist, Admin</td><td>Search/filter/sort views support queue and case management.</td></tr>
-                  <tr><td>UC4</td><td>Upload chat attachments</td><td>GP, Specialist, Admin</td><td>Supporting files remain available throughout consultation review.</td></tr>
-                  <tr><td>UC5</td><td>View evidence-linked answer with citations</td><td>GP, Specialist</td><td>Users inspect grounded outputs with explicit source references.</td></tr>
-                  <tr><td>UC6</td><td>Review / revise draft response</td><td>Specialist</td><td>Specialist approves, requests changes, edits, or submits manual response before release.</td></tr>
-                  <tr><td>UC7</td><td>Receive and act on notifications</td><td>GP, Specialist, Admin</td><td>Users are alerted to assignments, responses, review changes, and events.</td></tr>
-                  <tr><td>UC8</td><td>Manage own profile</td><td>GP, Specialist, Admin</td><td>Users update profile and role-specific details securely.</td></tr>
-                  <tr><td>UC9</td><td>Upload guideline PDFs for ingestion</td><td>Admin</td><td>Guideline corpus can be updated for future retrieval runs.</td></tr>
-                  <tr><td>UC10</td><td>Monitor dashboard / users / chats / audit logs</td><td>Admin</td><td>Operational oversight supports governance and issue investigation.</td></tr>
-                  <tr><td>UC11</td><td>Inspect RAG pipeline status</td><td>Admin</td><td>Admin views indexing status, chunk counts, and ingestion health.</td></tr>
+                  <tr><td>UC1</td><td>Authenticate / recover account access</td><td>Guest, GP, Specialist, Admin</td><td>Users sign in, recover credentials, and regain access to their role-specific workflow.</td></tr>
+                  <tr><td>UC2</td><td>Submit consultation</td><td>GP</td><td>A new clinical request is created with structured context for grounded retrieval, draft generation, and review.</td></tr>
+                  <tr><td>UC3</td><td>Manage consultation lists</td><td>GP, Specialist, Admin</td><td>Role-specific list views support queue management, case discovery, and operational oversight through search, filtering, and sorting across consultations, chats, and admin records.</td></tr>
+                  <tr><td>UC4</td><td>Upload chat attachments</td><td>GP, Specialist, Admin</td><td>Consultation files can be attached by GPs, specialists during review, and admins where governance or support actions require it.</td></tr>
+                  <tr><td>UC5</td><td>View evidence-linked answer with citations</td><td>GP, Specialist</td><td>Specialists inspect the draft during review, while GPs see the approved response with the same evidence links once checked.</td></tr>
+                  <tr><td>UC6</td><td>Review / revise draft response</td><td>Specialist</td><td>The specialist opens a queued consultation, assigns it to themselves, then approves, approves with comment, requests changes, provides manual response, or edits the message before any checked response is released to the GP.</td></tr>
+                  <tr><td>UC7</td><td>Receive and act on notifications</td><td>GP, Specialist, Admin</td><td>Users are alerted to assignments, responses, review changes, and operational events.</td></tr>
+                  <tr><td>UC8</td><td>Manage own profile</td><td>GP, Specialist, Admin</td><td>Signed-in users can update name, password, and role-specific details such as specialty where relevant.</td></tr>
+                  <tr><td>UC9</td><td>Upload guideline PDFs for ingestion</td><td>Admin</td><td>Admin users can upload guideline PDF documents so the knowledge base and vector store can be updated with new source material.</td></tr>
+                  <tr><td>UC10</td><td>Monitor dashboard / users / chats / audit logs</td><td>Admin</td><td>Operational oversight supports governance, auditability, and issue investigation across the wider platform.</td></tr>
+                  <tr><td>UC11</td><td>Inspect RAG pipeline status</td><td>Admin</td><td>Admin users can inspect indexed documents, chunk counts, latest ingestion times, and job health for the RAG pipeline.</td></tr>
                 </tbody>
               </table>
             </div>
@@ -461,17 +557,17 @@
                 </thead>
                 <tbody>
                   <tr><td>FR1</td><td>Retrieve relevant NICE/BSR sections per query</td><td>Must</td><td>For representative prompts, retrieved context maps to verified guideline passages.</td><td>E2, E4</td></tr>
-                  <tr><td>FR2</td><td>Generate evidence-grounded draft answer with citation references</td><td>Must</td><td>Draft answers include source-linked citations and avoid clinically significant unsupported claims.</td><td>E2, E3</td></tr>
-                  <tr><td>FR3</td><td>Low-confidence refusal with safe review fallback</td><td>Must</td><td>Below-threshold queries return safe refusal/limited output and remain in specialist workflow.</td><td>E1, E2</td></tr>
-                  <tr><td>FR12</td><td>Require specialist approval before any response is returned to the GP</td><td>Must</td><td>No consultation response is marked complete until specialist approval, edit, or rejection.</td><td>E1, E2, E3</td></tr>
-                  <tr><td>FR4</td><td>Authenticated, role-based access control for GP/specialist/admin workflows</td><td>Must</td><td>Authentication and role permissions are enforced across UI routes and API paths.</td><td>E1, E2, E3</td></tr>
+                  <tr><td>FR2</td><td>Generate evidence-grounded draft answer with citation references</td><td>Must</td><td>AI-generated draft answers include source-linked citations and avoid clinically significant unsupported claims in golden-set checks.</td><td>E2, E3</td></tr>
+                  <tr><td>FR3</td><td>Low-confidence refusal with safe review fallback</td><td>Must</td><td>Below-threshold queries return a safe refusal or clearly limited output rather than unsupported advice, and the consultation remains in the specialist-reviewed workflow.</td><td>E1, E2</td></tr>
+                  <tr><td>FR12</td><td>Require specialist approval before any response is returned to the GP</td><td>Must</td><td>No consultation response is marked complete or shown to the GP until a specialist has approved, edited, or rejected the draft.</td><td>E1, E2, E3</td></tr>
+                  <tr><td>FR4</td><td>Authenticated, role-based access control for GP/specialist/admin workflows</td><td>Must</td><td>Authentication, account recovery, and role permissions are enforced consistently across UI routes and API paths.</td><td>E1, E2, E3</td></tr>
                   <tr><td>FR5</td><td>Display source version/effective date metadata</td><td>Should</td><td>Citations include guideline title and version/effective-date metadata when available.</td><td>E2, E4</td></tr>
-                  <tr><td>FR6</td><td>Consultation history and review audit trail</td><td>Should</td><td>Timelines record messages, specialist decisions, status changes, and timestamps.</td><td>E1, E3</td></tr>
-                  <tr><td>FR7</td><td>Configurable provider routing for local-first inference</td><td>Could</td><td>System can retain local processing while invoking controlled cloud fallback when required.</td><td>E2, E5</td></tr>
-                  <tr><td>FR8</td><td>Voice input for consultation queries</td><td>Won't</td><td>Voice input remains outside this release scope.</td><td>E2</td></tr>
-                  <tr><td>FR9</td><td>Support structured consultation submission with optional file uploads</td><td>Should</td><td>GP users can submit specialty, context, and optional files for later review stages.</td><td>E1, E3</td></tr>
-                  <tr><td>FR10</td><td>Provide notifications for assignment, review, and message events</td><td>Should</td><td>Users receive workflow notifications and can act on them from their role views.</td><td>E1, E3</td></tr>
-                  <tr><td>FR11</td><td>Provide admin observability for users, consultations, logs, and dashboard metrics</td><td>Could</td><td>Admin users can access protected monitoring pages and audit-oriented summaries.</td><td>E2, E3, E5</td></tr>
+                  <tr><td>FR6</td><td>Consultation history and review audit trail</td><td>Should</td><td>Consultation timelines record messages, specialist decisions, comments, status changes, and timestamps so users can see who said what and when.</td><td>E1, E3</td></tr>
+                  <tr><td>FR7</td><td>Configurable provider routing for local-first inference</td><td>Could</td><td>System can keep routine processing local while invoking controlled cloud fallback for suitable cases without changing user workflow.</td><td>E2, E5</td></tr>
+                  <tr><td>FR8</td><td>Voice input for consultation queries</td><td>Won't</td><td>Voice input remains outside this release scope and is not required for acceptance.</td><td>E2</td></tr>
+                  <tr><td>FR9</td><td>Support structured consultation submission with optional file uploads</td><td>Should</td><td>GP users can submit a consultation with specialty, concise case context, and optional supporting files that remain available during later review.</td><td>E1, E3</td></tr>
+                  <tr><td>FR10</td><td>Provide notifications for assignment, review, and message events</td><td>Should</td><td>Users receive clear notifications for consultation updates and can act on them from their workflow views.</td><td>E1, E3</td></tr>
+                  <tr><td>FR11</td><td>Provide admin observability for users, consultations, logs, and dashboard metrics</td><td>Could</td><td>Admin users can access protected monitoring pages covering user management, consultation audit trails, chat oversight, logs, and summary metrics.</td><td>E2, E3, E5</td></tr>
                 </tbody>
               </table>
             </div>
@@ -492,12 +588,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>NFR1</td><td>Interactive latency for routine GP interactions</td><td>Performance</td><td>Must</td><td>Representative tests show clinically usable draft-response latency and faster turnaround than manual lookup for routine cases.</td><td>E1, E2, E5</td></tr>
-                  <tr><td>NFR2</td><td>Local-first processing and controlled data transfer</td><td>Security/Privacy</td><td>Must</td><td>Default processing remains local; cloud routing follows explicit governance controls.</td><td>E1, E2, E5</td></tr>
-                  <tr><td>NFR3</td><td>Graceful fallback on retrieval/model failure</td><td>Reliability</td><td>Must</td><td>Failures return safe fallback messaging and preserve review workflow without crashing.</td><td>E1, E2, E5</td></tr>
-                  <tr><td>NFR4</td><td>Readable, accessible interface for clinical workflows</td><td>Usability</td><td>Should</td><td>Core views maintain clear contrast, keyboard navigation, and role clarity.</td><td>E1, E3, E6</td></tr>
-                  <tr><td>NFR5</td><td>Containerised deployment and modular codebase</td><td>Maintainability</td><td>Should</td><td>Main stack starts through documented container workflow with clear service boundaries.</td><td>E2, E5</td></tr>
-                  <tr><td>NFR6</td><td>Provider-agnostic architecture for future evolution</td><td>Extensibility</td><td>Could</td><td>Routing and threshold configuration can change provider selection without redesigning workflows.</td><td>E2, E5</td></tr>
+                  <tr><td>NFR1</td><td>Interactive latency for routine GP interactions</td><td>Performance</td><td>Must</td><td>Representative tests demonstrate clinically usable draft-response latency under normal load, and workflow walkthroughs show faster turnaround to a usable specialist-reviewed response than manual guideline lookup alone for routine cases.</td><td>E1, E2, E5</td></tr>
+                  <tr><td>NFR2</td><td>Local-first processing and controlled data transfer</td><td>Security/Privacy</td><td>Must</td><td>Default processing remains local; any cloud route follows explicit governance controls and does not expose unintended data.</td><td>E1, E2, E5</td></tr>
+                  <tr><td>NFR3</td><td>Graceful fallback on retrieval/model failure</td><td>Reliability</td><td>Must</td><td>Failures return safe fallback messaging and preserve the consultation review workflow without service crash.</td><td>E1, E2, E5</td></tr>
+                  <tr><td>NFR4</td><td>Readable, accessible interface for clinical workflows</td><td>Usability</td><td>Should</td><td>Interface supports clear contrast, keyboard navigation, and role clarity in core workflow views.</td><td>E1, E3, E6</td></tr>
+                  <tr><td>NFR5</td><td>Containerised deployment and modular codebase</td><td>Maintainability</td><td>Should</td><td>Main stack starts through documented container workflow with predictable service boundaries.</td><td>E2, E5</td></tr>
+                  <tr><td>NFR6</td><td>Provider-agnostic architecture for future evolution</td><td>Extensibility</td><td>Could</td><td>Routing threshold/config changes can alter provider selection without redesigning consultation workflow.</td><td>E2, E5</td></tr>
                   <tr><td>NFR7</td><td>Open-source release and full EHR integration</td><td>Scope</td><td>Won't</td><td>Both remain outside this coursework delivery scope.</td><td>E2</td></tr>
                 </tbody>
               </table>
@@ -523,7 +619,8 @@
               <p>
                 Admin workflows are required for governance and oversight. Authorised admins should
                 inspect users, consultation and chat histories, audit logs, status changes, and
-                timestamps so there is a clear operational paper trail across the platform.
+                timestamps so there is a clear operational paper trail across the platform, alongside
+                summary monitoring of failures and routing behavior.
               </p>
             </div>
           </section>
