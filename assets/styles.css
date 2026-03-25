@@ -3781,67 +3781,71 @@ body[data-page="blog"] .toc-panel {
 	z-index: 10;
 }
 
-body[data-page="blog"] .toc-panel > #page-toc h3 {
-	display: none;
+/* Blog sidebar nav */
+
+.blog-nav__title {
+	font-size: 1.15rem;
+	font-weight: 800;
+	color: var(--heading);
+	margin: 0 0 20px;
+	letter-spacing: -0.01em;
 }
 
-body[data-page="blog"] .toc-panel > #page-toc ul {
-	padding-left: 0 !important;
-	margin: 0 !important;
+.blog-nav__year-group {
+	margin-bottom: 20px;
+}
+
+.blog-nav__year {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 1.05rem;
+	font-weight: 800;
+	color: var(--heading);
+	margin: 0 0 10px;
+	letter-spacing: -0.01em;
+}
+
+.blog-nav__year::after {
+	content: "";
+	flex: 1;
+	height: 3px;
+	border-radius: 999px;
+	background: linear-gradient(90deg, #0b2f6f 0%, #005eb8 52%, #4aa3ff 100%);
+}
+
+.blog-nav__list {
 	list-style: none;
+	margin: 0;
+	padding: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
+	gap: 1px;
 }
 
-body[data-page="blog"] .toc-panel > #page-toc li {
-	margin: 0 !important;
+.blog-nav__list li {
+	margin: 0;
 }
 
-body[data-page="blog"] .toc-panel > #page-toc a {
+.blog-nav__list a {
 	display: block;
-	padding: 6px 10px;
-	font-size: 0.84rem;
-	line-height: 1.4;
-	color: var(--muted);
-	border-radius: 7px;
-	transition: background 0.15s, color 0.15s;
+	padding: 7px 10px;
+	font-size: 0.88rem;
+	color: var(--text);
+	border-radius: 6px;
 	text-decoration: none;
+	transition: background 0.14s, color 0.14s;
 }
 
-body[data-page="blog"] .toc-panel > #page-toc a:hover {
+.blog-nav__list a:hover {
 	background: rgba(0, 94, 184, 0.07);
 	color: var(--brand);
 }
 
-body[data-page="blog"] .toc-panel > #page-toc a.is-active {
+.blog-nav__list a.is-active {
 	background: rgba(0, 94, 184, 0.1);
 	color: var(--brand);
 	font-weight: 600;
-}
-
-body[data-page="blog"] .blog-callout {
-	margin-top: 16px;
-	padding: 12px 14px;
-	background: rgba(0, 94, 184, 0.05);
-	border-radius: 8px;
-	border-left: 3px solid rgba(0, 94, 184, 0.35);
-}
-
-body[data-page="blog"] .blog-callout h3 {
-	font-size: 0.78rem;
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.06em;
-	color: var(--brand);
-	margin: 0 0 6px;
-}
-
-body[data-page="blog"] .blog-callout p {
-	font-size: 0.82rem;
-	line-height: 1.55;
-	color: var(--muted);
-	margin: 0;
 }
 
 /* Blog entries */

@@ -329,6 +329,46 @@ function initializeProjectTabs() {
   });
 }
 
+function initBlogNav() {
+  const links = [...document.querySelectorAll('.blog-nav__list a')];
+  if (!links.length) return;
+
+  const sectionIds = links.map((a) => a.getAttribute('href').replace('#', '')).filter(Boolean);
+  const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
+  if (!sections.length) return;
+
+  const headerHeight = () => {
+    const h = document.querySelector('.site-header');
+    return h ? h.getBoundingClientRect().height : 0;
+  };
+
+  const getActiveId = () => {
+    const offset = headerHeight() + 40;
+    let active = sections[0].id;
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top - offset <= 0) active = section.id;
+      else break;
+    }
+    return active;
+  };
+
+  const update = () => {
+    const activeId = getActiveId();
+    links.forEach((a) => {
+      a.classList.toggle('is-active', a.getAttribute('href') === `#${activeId}`);
+    });
+  };
+
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+
+  if (window.location.hash) {
+    links.forEach((a) => {
+      a.classList.toggle('is-active', a.getAttribute('href') === window.location.hash);
+    });
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initializeHeader();
   renderToc();
@@ -337,4 +377,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initializePartnerLogos();
   initializeHeroStackCycle();
   initializeProjectTabs();
+  initBlogNav();
 });
