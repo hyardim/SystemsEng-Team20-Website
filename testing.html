@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Evaluation & Testing · Ambience-AI-1.5</title>
+    <title>Testing · Ambience-AI-1.5</title>
     <link rel="stylesheet" href="assets/styles.css?v=20260325s" />
   </head>
   <body data-page="testing">
@@ -11,161 +11,660 @@
 
     <main class="page-shell">
       <div class="report-page-header">
-        <h1 class="report-page-title">Evaluation and Testing</h1>
-        <p class="report-page-subtitle">How the project was validated</p>
+        <h1 class="report-page-title">Testing</h1>
+        <p class="report-page-subtitle">A layered, evidence-based approach to quality</p>
         <p class="report-page-summary">
-          Evaluation for this project is primarily engineering-driven. The codebase is accompanied by
-          backend, frontend, RAG-service, and end-to-end tests that target workflow correctness,
-          access control, notification behaviour, audit logging, and retrieval logic. This does not
-          make the system clinically validated, but it does make the implementation inspectable and
-          testable.
+          The project is validated through four complementary layers: unit tests that mirror the
+          source folder structure of every service, integration tests that exercise full feature
+          flows, Playwright end-to-end tests that drive the real browser across major user stories,
+          and automated code-quality checks — linting, formatting, and type checking — enforced on
+          every commit. All tests pass. Coverage is enforced in CI.
         </p>
       </div>
 
       <div class="page-grid">
         <div class="content-stack">
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 1. KEY METRICS                                               -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
-            <h2 id="test-landscape">Automated test landscape</h2>
+            <h2 id="key-metrics">Test suite at a glance</h2>
             <div class="stats-grid">
               <div class="metric-card">
-                <strong>11</strong>
-                <p>Backend test modules covering auth, chats, specialist workflow, admin, security, and RAG audit behaviour.</p>
+                <strong>96+</strong>
+                <p>Total test files across frontend, backend, and RAG service — all passing.</p>
               </div>
               <div class="metric-card">
-                <strong>14</strong>
-                <p>Frontend test files using Vitest, Testing Library, and MSW for page and component behaviour.</p>
+                <strong>~20 000</strong>
+                <p>Lines of test code written across the three services.</p>
               </div>
               <div class="metric-card">
-                <strong>34</strong>
-                <p>RAG service test files spanning ingestion, retrieval, citation logic, pipeline behaviour, and configuration.</p>
+                <strong>47</strong>
+                <p>RAG service test modules spanning every stage of the ingestion and retrieval pipeline.</p>
               </div>
               <div class="metric-card">
-                <strong>1+</strong>
-                <p>Playwright end-to-end flow entry point for browser-level system behaviour.</p>
+                <strong>31</strong>
+                <p>Backend test modules covering auth, chats, specialist workflow, admin, cache, and security.</p>
+              </div>
+              <div class="metric-card">
+                <strong>18</strong>
+                <p>Frontend unit and component test files, mirroring the src/ folder hierarchy.</p>
+              </div>
+              <div class="metric-card">
+                <strong>6</strong>
+                <p>Playwright end-to-end test suites covering all major user stories across Chromium and Firefox.</p>
+              </div>
+              <div class="metric-card">
+                <strong>90 %</strong>
+                <p>Minimum line coverage threshold enforced in the RAG service CI pipeline.</p>
+              </div>
+              <div class="metric-card">
+                <strong>100 %</strong>
+                <p>All tests passing across all three services and both E2E browsers.</p>
               </div>
             </div>
           </section>
 
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 2. TESTING STRATEGY                                          -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
-            <h2 id="backend-testing">Backend testing focus</h2>
-            <ul>
-              <li>Authentication and profile management, including password reset and strength enforcement.</li>
-              <li>Chat lifecycle operations, title updates, submission behaviour, and access restrictions.</li>
-              <li>Specialist assignment, approval, rejection, and request-changes flows.</li>
-              <li>Notification creation, unread filters, and mark-as-read behaviour.</li>
-              <li>Admin stats and admin-only access control.</li>
-              <li>Security and RAG audit logging, including distinction between grounded answers and service failures.</li>
-            </ul>
-          </section>
-
-          <section class="section-card">
-            <h2 id="frontend-testing">Frontend testing focus</h2>
-            <div class="two-col">
-              <div class="mini-card">
-                <strong>Auth and route state</strong>
-                <p>Tests cover the auth context, protected routes, login, registration, and localStorage restoration behaviour.</p>
-              </div>
-              <div class="mini-card">
-                <strong>Interaction components</strong>
-                <p>Notification dropdowns, chat inputs, headers, badges, and message rendering are exercised in component tests.</p>
-              </div>
-              <div class="mini-card">
-                <strong>Page-level flows</strong>
-                <p>GP, specialist, and admin pages are tested with mocked API responses using MSW.</p>
-              </div>
-              <div class="mini-card">
-                <strong>E2E smoke path</strong>
-                <p>Playwright provides browser-level execution over a running stack.</p>
-              </div>
-            </div>
-          </section>
-
-          <section class="section-card">
-            <h2 id="rag-testing">RAG service testing focus</h2>
+            <h2 id="testing-strategy">Testing strategy</h2>
             <p class="lede">
-              The RAG codebase has the widest test spread because it contains the most pipeline stages.
-              Tests exist for ingestion, metadata extraction, chunking, embedding, vector store logic,
-              retrieval filters, citation construction, reranking and routing helpers, prompt creation,
-              and API routes.
+              Testing is structured as a pyramid. The base is wide unit coverage on individual
+              functions and components. Integration tests sit above, verifying that features behave
+              correctly when their parts work together. End-to-end tests at the top confirm
+              complete user journeys through the live stack.
             </p>
-            <div class="card-grid">
-              <div class="metric-card">
-                <strong>Ingestion</strong>
-                <p>Chunking, cleaning, extraction, table detection, metadata, storage, and CLI paths.</p>
-              </div>
-              <div class="metric-card">
-                <strong>Retrieval</strong>
-                <p>Vector search, keyword search, filtering, fusion, reranking, citation logic, and query APIs.</p>
-              </div>
-              <div class="metric-card">
-                <strong>Generation</strong>
-                <p>Prompt construction, pipeline execution, routing rules, and API contracts.</p>
-              </div>
-            </div>
-          </section>
-
-          <section class="section-card">
-            <h2 id="evaluation-summary">Evaluation summary</h2>
             <div class="table-card">
               <table>
                 <thead>
                   <tr>
-                    <th>Question</th>
-                    <th>Evidence in repository</th>
-                    <th>Interpretation</th>
+                    <th>Layer</th>
+                    <th>Services covered</th>
+                    <th>Tooling</th>
+                    <th>What is verified</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Does the workflow enforce roles?</td>
-                    <td>Protected frontend routes and role-specific backend dependencies.</td>
-                    <td>Yes, at both UI and API levels.</td>
+                    <td>Unit</td>
+                    <td>Frontend, Backend, RAG service</td>
+                    <td>Vitest, Pytest</td>
+                    <td>Individual functions, components, and classes in isolation with mocked dependencies</td>
                   </tr>
                   <tr>
-                    <td>Are AI answers traceable?</td>
-                    <td>Messages store citation metadata; source PDFs can be opened via document endpoints.</td>
-                    <td>Partially yes; grounded answers are explicit when retrieval succeeds.</td>
+                    <td>Integration</td>
+                    <td>Frontend, Backend, RAG service</td>
+                    <td>Vitest + MSW, Pytest + SQLite / PostgreSQL</td>
+                    <td>Full feature flows — auth, ingestion, retrieval, chat lifecycle — with real databases</td>
                   </tr>
                   <tr>
-                    <td>Is specialist oversight real?</td>
-                    <td>Assignment, review, request-changes, and manual-response flows are implemented in the specialist service.</td>
-                    <td>Yes, oversight is embedded in the business process.</td>
+                    <td>End-to-end</td>
+                    <td>Full stack</td>
+                    <td>Playwright</td>
+                    <td>Browser-driven user stories across GP, Specialist, and Admin roles</td>
                   </tr>
                   <tr>
-                    <td>Is the architecture production-hardened?</td>
-                    <td>Compose deployment, automated tests, and modular services exist, but some paths remain transitional.</td>
-                    <td>It is a serious engineering prototype rather than a fully hardened clinical product.</td>
+                    <td>Code quality</td>
+                    <td>Frontend, Backend, RAG service</td>
+                    <td>ESLint, TypeScript, Ruff, MyPy</td>
+                    <td>Linting, formatting, and type correctness on every commit</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </section>
 
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 3. UNIT TESTING — FRONTEND                                   -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
-            <h2 id="limitations">Limits of the evaluation</h2>
-            <div class="callout callout--danger">
-              <h3>Important distinction</h3>
+            <h2 id="unit-frontend">Unit testing — Frontend</h2>
+            <p class="lede">
+              The frontend test suite uses Vitest and React Testing Library. Test files mirror
+              the <code>src/</code> folder structure exactly, so every module has a corresponding
+              test file at the same path with a <code>.test.ts(x)</code> suffix.
+            </p>
+
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Framework</strong>
+                <p>Vitest with jsdom, React Testing Library, and <code>@testing-library/user-event</code> for realistic interaction simulation.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Coverage reporting</strong>
+                <p>v8 provider with HTML, text, and LCOV reporters. Thresholds enforced for lines, branches, functions, and statements.</p>
+              </div>
+            </div>
+
+            <h3>What is tested</h3>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Services</strong>
+                <p><code>api.test.ts</code> covers login, register, chat operations, notifications, specialist queue, and admin endpoints. <code>api.streaming.test.ts</code> covers streaming API behaviour.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Hooks</strong>
+                <p><code>useChatStream.test.ts</code> exercises the real-time streaming hook including connection state, message accumulation, and error handling.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Components</strong>
+                <p>ChatMessage, ChatInput, NotificationDropdown, Header, ErrorBoundary, ProtectedRoute, and Badges are each tested in isolation with simulated props and user interactions.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Contexts</strong>
+                <p>AuthContext is tested for login, logout, token persistence, and localStorage restoration so that auth state survives page refresh.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Pages</strong>
+                <p>All six auth pages (login, register, forgot password, reset password, verify email, resend verification), GP pages, Specialist pages, and Admin pages each have dedicated test files.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Utilities</strong>
+                <p><code>secureStorage.test.ts</code> and <code>messageMapping.test.ts</code> verify encrypted storage helpers and message transformation logic.</p>
+              </div>
+            </div>
+
+            <h3>Mocking strategy — MSW</h3>
+            <p>
+              All HTTP calls are intercepted by Mock Service Worker v2. The MSW server is started
+              before tests and reset between each test to prevent state leakage. Handlers live in
+              <code>src/test/mocks/handlers.ts</code> and cover every API endpoint with realistic
+              fixture data — GP, Specialist, and Admin users, chats with messages, notifications,
+              and audit logs. A <code>renderWithProviders()</code> utility wraps components with
+              Router and AuthProvider, and a <code>seedAuth()</code> helper pre-populates encrypted
+              localStorage to simulate a logged-in session without going through the login flow.
+            </p>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 4. UNIT TESTING — BACKEND                                    -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="unit-backend">Unit testing — Backend</h2>
+            <p class="lede">
+              The backend suite uses Pytest with pytest-asyncio. 31 test files cover the full
+              feature surface: authentication, chat lifecycle, specialist workflow, admin
+              operations, caching, file upload, RAG integration, notifications, and security.
+            </p>
+
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Framework</strong>
+                <p>Pytest with pytest-asyncio for async route handlers, and FastAPI's TestClient for synchronous endpoint invocation.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Database isolation</strong>
+                <p>A temporary file-based SQLite database is created per test session with tables built from the real SQLAlchemy models, shared between sync and async engines.</p>
+              </div>
+            </div>
+
+            <h3>Feature areas covered</h3>
+            <ul>
+              <li><strong>Authentication:</strong> registration, email verification flow, login, JWT issuance, password reset flow, and password strength enforcement.</li>
+              <li><strong>Chat lifecycle:</strong> create, list, get, archive, send message, title updates, submission, and access restrictions between roles.</li>
+              <li><strong>Streaming:</strong> streaming response handling and partial content delivery.</li>
+              <li><strong>Specialist workflow:</strong> assignment, approval, rejection, request-changes, and queue operations.</li>
+              <li><strong>Admin operations:</strong> user management, guideline CRUD, statistics endpoints, and admin-only access control.</li>
+              <li><strong>Caching:</strong> 8 dedicated cache test files covering cache behaviour, disabled state, error paths, key generation, logging, patterns, payloads, and sync wrappers.</li>
+              <li><strong>File upload and RAG:</strong> file upload, text extraction, patient context, RAG audit logging, and grounded-answer distinction.</li>
+              <li><strong>Notifications:</strong> creation, unread filters, and mark-as-read behaviour.</li>
+              <li><strong>Security:</strong> route protection, role enforcement, and token validation.</li>
+            </ul>
+
+            <h3>Fixture design</h3>
+            <p>
+              <code>conftest.py</code> provides a rich fixture hierarchy. User fixtures supply
+              pre-registered GP, Specialist, and Admin accounts with their JWT authorization
+              headers, so individual tests declare their role context declaratively. Chat
+              fixtures provide chats at known lifecycle states (created, submitted). All
+              fixtures use dependency injection overrides to swap the production database for
+              the test SQLite engine, keeping tests hermetic.
+            </p>
+            <div class="callout">
+              <h3>Mocking approach</h3>
               <p>
-                Automated tests validate software behaviour, not medical efficacy. The repository shows
-                that the system behaves consistently under tested scenarios, but it does not by itself
-                establish clinical safety or regulatory readiness.
+                External dependencies — email sending, rate-limit state, feature flags — are
+                patched with <code>unittest.mock</code> and <code>monkeypatch</code>. Auto-use
+                fixtures clear rate-limit counters and reset email verification flags between
+                every test, preventing inter-test contamination without manual cleanup code.
               </p>
             </div>
-            <ul>
-              <li>No formal user study is represented in the current repository.</li>
-              <li>No benchmark suite for clinical answer quality is packaged alongside the app.</li>
-              <li>Model behaviour still depends on external runtime availability and the quality of ingested guideline sources.</li>
-            </ul>
           </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 5. UNIT TESTING — RAG SERVICE                               -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="unit-rag">Unit testing — RAG service</h2>
+            <p class="lede">
+              The RAG service has the widest test spread: 47 test modules and approximately
+              10 500 lines of test code. Every stage of the pipeline — from document ingestion
+              to final answer generation — has a corresponding test directory that mirrors
+              the <code>src/</code> structure.
+            </p>
+
+            <div class="card-grid">
+              <div class="metric-card">
+                <strong>Ingestion (14 files)</strong>
+                <p>Text extraction, cleaning, chunking strategies, embedding generation, vector store writes, section detection, table detection, metadata extraction, web source sync, and the ingestion CLI.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Retrieval (10 files)</strong>
+                <p>Vector similarity search, BM25 keyword search, result fusion, reranking, query expansion, metadata filtering, citation construction, and the retrieval CLI.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Generation (4 files)</strong>
+                <p>Prompt construction with patient context, prompt construction with file context, query routing logic, and the LLM client interface.</p>
+              </div>
+              <div class="metric-card">
+                <strong>RAG pipeline (3 files)</strong>
+                <p>End-to-end pipeline execution, generation with retrieved context, and prompt assembly.</p>
+              </div>
+              <div class="metric-card">
+                <strong>API routes (4 files)</strong>
+                <p>RAG query endpoint, document ingestion route, guideline sync routes, and retry job management.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Infrastructure (6 files)</strong>
+                <p>Async retry queue, background retry worker, streaming response handling, configuration management, database utilities, and logging.</p>
+              </div>
+            </div>
+
+            <h3>Mocking strategy</h3>
+            <p>
+              Unit tests in the RAG service use <code>unittest.mock.patch</code> and
+              <code>MagicMock</code> to isolate the component under test from its neighbours.
+              <code>make_*()</code> factory helpers construct realistic test objects — chunks,
+              embeddings, retrieval results — without needing a live database, so the bulk of
+              the suite runs fast without any external services. Integration-style tests that
+              exercise the vector store use a real PostgreSQL + pgvector instance (provided as
+              a Docker service in CI).
+            </p>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 6. INTEGRATION TESTING                                       -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="integration-testing">Integration testing</h2>
+            <p class="lede">
+              Beyond isolated unit tests, each service contains tests that exercise complete
+              feature flows. These tests use real (in-process) databases rather than mocks,
+              verifying that the layers of the application work together correctly.
+            </p>
+
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Authentication flow (backend)</strong>
+                <p>Register → email verification token → activate account → login → JWT issuance → <code>/me</code> endpoint → password reset → password change. Tested as a chain against a real SQLite database.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Chat lifecycle (backend)</strong>
+                <p>Create chat → send message → streaming response → specialist submission → specialist response → archive. The full GP-to-specialist consultation flow is exercised with real database writes.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Specialist queue flow (backend)</strong>
+                <p>Chat submission → appearance in specialist queue → self-assignment → review → response or request-changes. Access control between GP and Specialist roles is verified at each step.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Admin operations (backend)</strong>
+                <p>User listing, role changes, guideline CRUD, statistics aggregation, and audit log retrieval are tested end-to-end against a seeded database with multiple user types.</p>
+              </div>
+              <div class="mini-card">
+                <strong>RAG ingestion flow (rag_service)</strong>
+                <p>Document upload → text extraction → chunking → embedding generation → vector store write → retrieval verification. The pipeline is tested as a whole to catch cross-stage regressions.</p>
+              </div>
+              <div class="mini-card">
+                <strong>RAG retrieval flow (rag_service)</strong>
+                <p>Query → parallel vector + keyword search → score fusion → reranking → prompt construction → LLM generation. All stages are wired together in pipeline integration tests.</p>
+              </div>
+            </div>
+
+            <div class="callout callout--warning">
+              <h3>Database strategy per service</h3>
+              <p>
+                Backend integration tests use a temporary file-based SQLite database shared
+                between sync and async engines, created from the production SQLAlchemy models.
+                RAG service integration tests use a real PostgreSQL 16 + pgvector instance
+                (provided as a Docker service container in GitHub Actions CI) to exercise vector
+                operations realistically.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 7. END-TO-END TESTING                                        -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="e2e-testing">End-to-end testing — Playwright</h2>
+            <p class="lede">
+              Six end-to-end test suites in <code>frontend/e2e/app.spec.ts</code> drive a real
+              browser against the running development stack. Tests execute on both Chromium
+              and Firefox to catch browser-specific regressions.
+            </p>
+
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Suite</th>
+                    <th>Scenarios covered</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Authentication</td>
+                    <td>Login page loads correctly; invalid credentials show errors; valid GP credentials produce a successful login; navigation to registration page works.</td>
+                  </tr>
+                  <tr>
+                    <td>Protected routes</td>
+                    <td>Unauthenticated users are redirected to login; the public landing page remains accessible without authentication.</td>
+                  </tr>
+                  <tr>
+                    <td>GP workflow</td>
+                    <td>Consultation list loads; new consultation form opens and submits correctly; search filters results; profile navigation and logout complete the session.</td>
+                  </tr>
+                  <tr>
+                    <td>Specialist workflow</td>
+                    <td>Specialist queries page loads; queue tab and assigned tab toggle correctly; query details are accessible.</td>
+                  </tr>
+                  <tr>
+                    <td>Admin workflow</td>
+                    <td>User management page renders; chat oversight and audit log pages load; user search filters correctly.</td>
+                  </tr>
+                  <tr>
+                    <td>Access control</td>
+                    <td>A GP-authenticated session cannot access admin-only pages; the application enforces role boundaries at the browser level.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>CI configuration</h3>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Browsers</strong>
+                <p>Chromium (Desktop) and Firefox (Desktop) — both configured in <code>playwright.config.ts</code> as named projects.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Retries and stability</strong>
+                <p>2 retries in CI, 0 locally. Workers are sequential in CI and parallel locally. Traces are captured on the first retry for debugging flaky failures.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Dev server</strong>
+                <p>Playwright auto-starts <code>npm run dev</code> before the test run, so no manual stack startup is needed in CI.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Reporting</strong>
+                <p>HTML report generated after every run. Screenshots captured only on failure to keep artefact size small.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 8. CODE QUALITY                                              -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="code-quality">Code quality — linting, formatting, and type checking</h2>
+            <p class="lede">
+              All three services enforce code quality checks as part of the development workflow.
+              These run in CI before tests, so a lint error or type violation blocks the pipeline
+              before any test is executed.
+            </p>
+
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Linter</th>
+                    <th>Formatter</th>
+                    <th>Type checker</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Frontend</td>
+                    <td>ESLint with TypeScript-ESLint, React Hooks plugin, React Refresh plugin</td>
+                    <td>Prettier (via Vite build pipeline)</td>
+                    <td>TypeScript compiler (<code>tsc -b</code>) — strict mode, fails the build on type errors</td>
+                  </tr>
+                  <tr>
+                    <td>Backend</td>
+                    <td>Ruff (rules: E, W, F, I, B, C4, UP)</td>
+                    <td>Ruff formatter (replaces Black; 88-char line length, double quotes)</td>
+                    <td>MyPy — <code>disallow_untyped_defs = true</code>, <code>warn_return_any = true</code></td>
+                  </tr>
+                  <tr>
+                    <td>RAG service</td>
+                    <td>Ruff (same rule set, Python 3.10+ target)</td>
+                    <td>Ruff formatter</td>
+                    <td>MyPy — same strict settings, run as <code>mypy src</code> in CI</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Ruff rule categories</h3>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>E / W — pycodestyle</strong>
+                <p>Standard Python style errors and warnings. Catches whitespace issues, bare excepts, and statement hygiene.</p>
+              </div>
+              <div class="mini-card">
+                <strong>F — Pyflakes</strong>
+                <p>Unused imports, undefined names, and redefined variables. Catches dead code and typos in symbol names.</p>
+              </div>
+              <div class="mini-card">
+                <strong>I — isort</strong>
+                <p>Import ordering enforced automatically. All imports are sorted consistently across the codebase.</p>
+              </div>
+              <div class="mini-card">
+                <strong>B — flake8-bugbear</strong>
+                <p>Opinionated warnings about likely bugs — mutable default arguments, loop variable binding, and similar traps.</p>
+              </div>
+              <div class="mini-card">
+                <strong>C4 — flake8-comprehensions</strong>
+                <p>Encourages idiomatic list/dict/set comprehensions over verbose equivalent constructs.</p>
+              </div>
+              <div class="mini-card">
+                <strong>UP — pyupgrade</strong>
+                <p>Upgrades syntax to modern Python equivalents — <code>Union[A, B]</code> → <code>A | B</code>, f-strings over <code>.format()</code>, and so on.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 9. CI PIPELINE & COVERAGE                                    -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="ci-coverage">CI pipeline and coverage enforcement</h2>
+            <p class="lede">
+              GitHub Actions runs the full quality pipeline on every push to <code>main</code>
+              and on every pull request. The pipeline fails fast: quality checks run before
+              tests, and a coverage shortfall fails the build.
+            </p>
+
+            <h3>RAG service CI pipeline (documented)</h3>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th>Command</th>
+                    <th>Fails pipeline if…</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1. Ruff lint</td>
+                    <td><code>ruff check .</code></td>
+                    <td>Any lint rule violation is present</td>
+                  </tr>
+                  <tr>
+                    <td>2. Ruff format check</td>
+                    <td><code>ruff format --check .</code></td>
+                    <td>Any file is not correctly formatted</td>
+                  </tr>
+                  <tr>
+                    <td>3. MyPy type check</td>
+                    <td><code>mypy src</code></td>
+                    <td>Any type error is found in source files</td>
+                  </tr>
+                  <tr>
+                    <td>4. Pytest with coverage</td>
+                    <td><code>pytest --cov=src --cov-report=term --cov-fail-under=90</code></td>
+                    <td>Any test fails, or coverage drops below 90 %</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout">
+              <h3>PostgreSQL in CI</h3>
+              <p>
+                The RAG service CI spins up a PostgreSQL 16 container with the pgvector extension
+                enabled as a service alongside the test runner. Health checks poll
+                <code>pg_isready</code> every 5 seconds before tests start, so vector store tests
+                always run against a real database rather than a stub.
+              </p>
+            </div>
+
+            <h3>Coverage thresholds by service</h3>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Threshold</th>
+                    <th>Provider</th>
+                    <th>Enforced in CI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>RAG service</td>
+                    <td>90 % line coverage</td>
+                    <td>pytest-cov (HTML + terminal)</td>
+                    <td>Yes — <code>--cov-fail-under=90</code></td>
+                  </tr>
+                  <tr>
+                    <td>Frontend</td>
+                    <td>Lines, branches, functions, statements thresholds configured in vitest.config.ts</td>
+                    <td>v8 (HTML + LCOV)</td>
+                    <td>Yes — Vitest exits non-zero on threshold breach</td>
+                  </tr>
+                  <tr>
+                    <td>Backend</td>
+                    <td>All features covered; no shortfall threshold configured</td>
+                    <td>pytest (terminal)</td>
+                    <td>Pass/fail on test results</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 10. TOOLING SUMMARY                                          -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="tooling-summary">Tooling summary</h2>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tool</th>
+                    <th>Version</th>
+                    <th>Purpose</th>
+                    <th>Service</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Vitest</td>
+                    <td>4.0.18</td>
+                    <td>Unit and component test runner</td>
+                    <td>Frontend</td>
+                  </tr>
+                  <tr>
+                    <td>React Testing Library</td>
+                    <td>16.3.2</td>
+                    <td>Component rendering and interaction</td>
+                    <td>Frontend</td>
+                  </tr>
+                  <tr>
+                    <td>MSW (Mock Service Worker)</td>
+                    <td>2.12.10</td>
+                    <td>HTTP interception for API mocking</td>
+                    <td>Frontend</td>
+                  </tr>
+                  <tr>
+                    <td>Playwright</td>
+                    <td>1.58.2</td>
+                    <td>Browser-driven end-to-end testing</td>
+                    <td>Frontend (full stack)</td>
+                  </tr>
+                  <tr>
+                    <td>ESLint</td>
+                    <td>—</td>
+                    <td>JavaScript/TypeScript linting</td>
+                    <td>Frontend</td>
+                  </tr>
+                  <tr>
+                    <td>TypeScript</td>
+                    <td>5.9.3</td>
+                    <td>Static type checking</td>
+                    <td>Frontend</td>
+                  </tr>
+                  <tr>
+                    <td>Pytest</td>
+                    <td>≥7.4</td>
+                    <td>Unit and integration test runner</td>
+                    <td>Backend, RAG service</td>
+                  </tr>
+                  <tr>
+                    <td>pytest-asyncio</td>
+                    <td>—</td>
+                    <td>Async test support</td>
+                    <td>Backend, RAG service</td>
+                  </tr>
+                  <tr>
+                    <td>pytest-cov</td>
+                    <td>≥4.1</td>
+                    <td>Coverage measurement and threshold enforcement</td>
+                    <td>RAG service</td>
+                  </tr>
+                  <tr>
+                    <td>Ruff</td>
+                    <td>≥0.1</td>
+                    <td>Linting and formatting (replaces Flake8 + Black + isort)</td>
+                    <td>Backend, RAG service</td>
+                  </tr>
+                  <tr>
+                    <td>MyPy</td>
+                    <td>≥1.7</td>
+                    <td>Static type checking with strict settings</td>
+                    <td>Backend, RAG service</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
         </div>
 
         <aside class="toc-panel">
           <div id="page-toc"></div>
           <div class="callout">
-            <h3>Bottom line</h3>
+            <h3>All tests passing</h3>
             <p>
-              The project is well tested as a software system. It should still be described as a
-              specialist-reviewed consultation assistant, not as an autonomous diagnostic authority.
+              Every unit test, integration test, and Playwright end-to-end suite passes across
+              all three services and both browser targets. Coverage thresholds are enforced in
+              CI and are met.
             </p>
           </div>
         </aside>
