@@ -134,84 +134,144 @@
           <section class="blog-entry" id="week-23-24">
             <span class="blog-entry__tag">Weeks 23–24</span>
             <p>
-              We did a final round of testing, fixed the last bugs we found, and finished the report website so it matched what we actually built.
+              These last two weeks were about closing everything properly. We ran one more full testing pass,
+              fixed the final bugs we could find, and made sure no major issues were left open before handover.
+            </p>
+            <p>
+              We also spent a lot of time finishing the report website and checking that the write-up matched
+              the real system. It was mostly polish work, but it mattered because this was the final version.
             </p>
           </section>
 
           <section class="blog-entry" id="week-21-22">
             <span class="blog-entry__tag">Weeks 21–22</span>
             <p>
-              We tested performance and reliability, then fixed accessibility and UI problems that came up during retesting.
+              We focused on performance and reliability this fortnight. We tested how the system behaved under
+              heavier use, including response times, error handling, and fallback paths.
+            </p>
+            <p>
+              As expected, this found a few rough edges. We fixed those issues, reran tests, and also cleaned up
+              accessibility and UI problems that had been hanging around.
             </p>
           </section>
 
           <section class="blog-entry" id="week-19-20">
             <span class="blog-entry__tag">Weeks 19–20</span>
             <p>
-              We ran end-to-end tests for GP, specialist, and admin flows, logged the issues, and worked through fixes and retests.
+              This was when formal testing really started. We wrote and ran end-to-end scenarios across GP,
+              specialist, and admin flows, and logged every issue we found.
+            </p>
+            <p>
+              We then moved into a steady fix-and-retest routine. There were more bugs than we hoped for,
+              but nothing that blocked the project.
             </p>
           </section>
 
           <section class="blog-entry" id="week-17-18">
             <span class="blog-entry__tag">Weeks 17–18</span>
             <p>
-              We made the frontend, backend, and retrieval parts work together more reliably, fixed edge-case review issues, and cleaned up our container setup.
+              Before deeper testing, we needed the full stack to behave consistently. We spent these two weeks
+              fixing integration issues between frontend, backend, and retrieval.
+            </p>
+            <p>
+              We also fixed awkward edge cases in the specialist review flow and improved our container setup so
+              everyone could run the same environment more reliably.
             </p>
           </section>
 
           <section class="blog-entry" id="week-15-16">
             <span class="blog-entry__tag">Weeks 15–16</span>
             <p>
-              We added forms, file attachments, notifications, and admin tools so the consultation workflow was actually usable day to day.
+              With the core consultation path working, we focused on practical features. We added structured
+              forms, file attachments, notifications, and basic admin tooling.
+            </p>
+            <p>
+              This made a big difference to day-to-day usability. The system started to feel like a real product,
+              not just a demo flow.
             </p>
           </section>
 
           <section class="blog-entry" id="week-13-14">
             <span class="blog-entry__tag">Weeks 13–14</span>
             <p>
-              We simplified the interaction design by combining separate paths into one consultation flow and tightening the specialist review step.
+              We reviewed early prototypes and realized our interaction design was getting too complicated.
+              We had separate paths that were hard to maintain and not very clear.
+            </p>
+            <p>
+              We merged them into one cleaner consultation flow and tightened the specialist review step.
+              It was a lot of rework, but the result was easier to follow.
             </p>
           </section>
 
           <section class="blog-entry" id="week-11-12">
             <span class="blog-entry__tag">Weeks 11–12</span>
             <p>
-              We got a working local-first setup back, reconnected inference and retrieval, and checked fallback behavior without changing how users worked.
+              These weeks were about recovering after the server setback. We rebuilt a working local-first setup,
+              reconnected inference and retrieval, and checked that fallback behavior still worked.
+            </p>
+            <p>
+              We were careful to keep the GP and specialist experience the same while changing the infrastructure.
+              That helped us get back on track quickly.
             </p>
           </section>
 
           <section class="blog-entry" id="week-9-10">
             <span class="blog-entry__tag">Weeks 9–10</span>
             <p>
-              We lost access to the original Gaudi 2 server, so we switched to a local-first setup with cloud fallback when needed.
+              This was the hardest point in the project. We lost access to the original Gaudi 2 server we had been
+              building on, which forced us to rethink our deployment plan.
+            </p>
+            <p>
+              Instead of chasing another identical setup, we switched to a local-first approach with cloud fallback.
+              It was a stressful pivot, but it kept the project moving.
             </p>
           </section>
 
           <section class="blog-entry" id="week-7-8">
             <span class="blog-entry__tag">Weeks 7–8</span>
             <p>
-              We made the server setup more stable, improved repeatable setup steps, cleaned up citation mapping, and improved the specialist review flow.
+              We used these two weeks to stabilize what we had on the server. Early runs worked, but setup was still
+              fragile and hard to repeat across the team.
+            </p>
+            <p>
+              We documented the setup properly, improved reproducibility, cleaned up citation mapping, and refined
+              the specialist review flow based on early feedback.
             </p>
           </section>
 
           <section class="blog-entry" id="week-5-6">
             <span class="blog-entry__tag">Weeks 5–6</span>
             <p>
-              We finished the Gaudi 2 environment setup, fixed compatibility issues, and got Med42 with early retrieval running reliably.
+              Most of this period was setup work. We configured the Gaudi 2 environment, fixed driver/runtime
+              compatibility issues, and worked through repeated failures.
+            </p>
+            <p>
+              By the end of week 6, we had Med42 running reliably with early retrieval connected.
+              That gave us a stable base to build on.
             </p>
           </section>
 
           <section class="blog-entry" id="week-3-4">
             <span class="blog-entry__tag">Weeks 3–4</span>
             <p>
-              We turned interview notes into MoSCoW requirements and set key priorities: grounded retrieval, specialist approval, and safe fallback behavior.
+              We turned interview findings into clear project requirements and prioritized them using MoSCoW.
+              This helped us decide what had to be delivered first.
+            </p>
+            <p>
+              The top priorities were grounded retrieval, specialist approval, and safe fallback behavior.
+              We also confirmed Gaudi 2 as the deployment direction at that point.
             </p>
           </section>
 
           <section class="blog-entry" id="week-1-2">
             <span class="blog-entry__tag">Weeks 1–2</span>
             <p>
-              We gathered specialist input, defined the GP-to-specialist workflow scope, and set the first direction for model choice and evidence sources.
+              We started by speaking to specialists in rheumatology and neurology to understand the real Advice and
+              Guidance workflow and what they actually needed from the system.
+            </p>
+            <p>
+              From those conversations, we set the initial scope around a GP-to-specialist process, early model
+              direction, and a focused evidence base for the first version.
             </p>
           </section>
 
