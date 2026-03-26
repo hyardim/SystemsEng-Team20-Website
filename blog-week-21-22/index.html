@@ -79,11 +79,11 @@
             <a class="blog-entry__back" href="blog/">← Back to timeline overview</a>
             <h2>Testing wave 2: performance, reliability, and usability</h2>
             <p>
-              This period focused on non-functional validation and repeated bug-fix loops. Testing was intentionally iterative so we could re-run critical scenarios after each fix batch.
+              These two weeks focused on reliability and performance, particularly around retrieval and model routing. We measured typical end-to-end latency, looked for bottlenecks in ingestion and search, and tuned defaults so the system stayed responsive on local hardware.
             </p>
 
             <p>
-              We checked latency on routine cases, stress-tested failure and recovery paths, and refined accessibility and workflow clarity in core screens. Each fix was followed by another targeted run to confirm that we were improving without introducing regressions.
+              We also hardened failure behaviour so the user experience stayed consistent even when external services were unavailable. This included better timeouts and clearer error states, and a repeatable way to fall back to the cloud model path when the local route was not sufficient.
             </p>
           </section>
 

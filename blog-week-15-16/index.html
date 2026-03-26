@@ -79,11 +79,11 @@
             <a class="blog-entry__back" href="blog/">← Back to timeline overview</a>
             <h2>Platform breadth beyond core answering</h2>
             <p>
-              We used this phase to complete the features that make the system operationally usable rather than a narrow demo.
+              After lots of extensive with local models, we settled on the same Med42 model, however a less powerful and more lightweight version (8B parameters, compared to the previous 70B) that is able to run locally - in our case on our laptops. The model has also been quantized to 8 bits to reduce hardware requirements further making this run very reasonably locally, with model queries on average returning in under 10 seconds.
             </p>
 
             <p>
-              During these weeks, we added the surrounding platform capabilities that clinicians and administrators would actually need in practice: structured submission, optional attachments, notification handling and admin-level observability.
+              For cloud deployment, we currently chose to host via RunPod due to its relatively low cost and ability to avoid charges when the model is not actively running. However, the system was designed with a non-provider-specific endpoint, making it easy to switch between compatible cloud hosting solutions in future if requirements or infrastructure change.
             </p>
           </section>
 

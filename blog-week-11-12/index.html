@@ -79,11 +79,15 @@
             <a class="blog-entry__back" href="blog/">← Back to timeline overview</a>
             <h2>Local-first route operational</h2>
             <p>
-              By this point, the team had a working local-first path and resumed steady feature work. The key objective was to avoid user-facing workflow disruption despite backend routing and environment changes.
+              Requirement refinement with our clients and prototype review led to a major product decision: we decided to merge the initially planned GP query system and separate chatbot into one,where generation, review and chat history stay connected.
             </p>
 
             <p>
-              We re-established stable inference and retrieval behavior, then validated fallback behavior under failure scenarios. Importantly, we kept the consultation and specialist review journey consistent so the infrastructure pivot did not create a different user experience.
+              This was an important simplification for us and the end user. We removed the split system from the frontend and also improved traceability so review decisions were easier to follow and audit.
+            </p>
+
+            <p>
+              Work continued steadily on the backend RAG system, with our ingestion and chunking stage complete and the frontend design was also slightly tweaked in line with client feedback.
             </p>
           </section>
 

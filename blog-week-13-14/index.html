@@ -79,11 +79,11 @@
             <a class="blog-entry__back" href="blog/">← Back to timeline overview</a>
             <h2>Workflow simplification and specialist gate hardening</h2>
             <p>
-              Requirement refinement and prototype review led to a major product decision: merge assistant-like interactions into one consultation-based journey where generation, review and decision history stay connected.
+              This week, Intel informed us that unfortunately in a few weeks time they would need to reclaim the server we were using as the Gaudi's contract was expiring. This made us rethink our strategy for the backend to run the model, and we concluded that we wouldn't be able to use the Med42 70B parameter version as it was much too demanding to run locally, and other cloud solutions for the uptime we were expecting were expensive. We finalised a plan to implement an intelligent routing layer that would allow us to run a more lightweight model locally, and for more demanding queries, we would outsource to a cloud server that would run the 70B parameter version.
             </p>
 
             <p>
-              This was an important simplification for us. We removed split interaction paths, enforced the specialist gate before GP-visible completion and improved traceability so review decisions were easier to follow and audit.
+              We have also got the RAG fully working, though in need of much testing and optimisation. Improvements to performance will likely come after lots of trial and error in this field.
             </p>
           </section>
 

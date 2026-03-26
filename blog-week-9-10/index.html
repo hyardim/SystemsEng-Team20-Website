@@ -79,7 +79,15 @@
             <a class="blog-entry__back" href="blog/">← Back to timeline overview</a>
             <h2>Server access lost and the architecture pivot begins</h2>
             <p>
-              This week, Intel informed us that in a few weeks time they would need to reclaim the server we were using as the Gaudi's contract was expiring. This made us replan our strategy for the backend to run the model, and we concluded that we wouldn't be able to use the Med42 70B paramater version as it was much too demanding to run locally, and other cloud solutions for the uptime we were expecting were expensive. We finalised a plan to implement an intelligent routing layer that would allow us to run a more lightweight model locally, and for more demanding queries, we would outsource to a cloud server that would run the 70B parameter version.
+              This week we begin working on the software after finishing planning, and making early design decisions. Up to now, most of our progress has been about understanding the workflow, reducing risk, and deciding what needs to be built first.
+            </p>
+
+            <p>
+              The most important part of our software for answer generation is the RAG system, so we focused on that first, starting with the ingestion phase which splits up the guideline documents into chunks to be referenced later. We tried different strategies, and in the end settled chunks being created primarily by document section/headings, then split into sentence-based chunks. We also started to set up the database schema and vector DB.
+            </p>
+
+            <p>
+              There was also significant work on the frontend, with a prototype being created to show the specialists our first draft UI.
             </p>
           </section>
 
