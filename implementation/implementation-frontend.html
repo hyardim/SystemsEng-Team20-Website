@@ -135,21 +135,7 @@ async function refreshSessionRequest(): Promise&lt;boolean&gt; {
 
           <section class="section-bare" id="page-component-structure">
             <h2>Page &amp; Component Structure</h2>
-            <div class="diagram" role="img" aria-label="Frontend source structure and module relationships">
-              <div class="diagram__row">
-                <div class="diagram__node"><strong>pages/</strong>Role-based route screens and top-level page logic.</div>
-                <div class="diagram__arrow">→</div>
-                <div class="diagram__node"><strong>components/</strong>Reusable UI elements shared across pages.</div>
-                <div class="diagram__arrow">→</div>
-                <div class="diagram__node"><strong>contexts/ + hooks/</strong>Global state and streaming lifecycle logic.</div>
-              </div>
-              <div class="diagram__row">
-                <div class="diagram__node"><strong>services/</strong>HTTP clients and API integration layer.</div>
-                <div class="diagram__arrow">→</div>
-                <div class="diagram__node"><strong>utils/</strong>Cross-cutting helpers for storage, mapping, and parsing.</div>
-              </div>
-            </div>
-            <table class="impl-table"><thead><tr><th>Folder</th><th>Key content</th></tr></thead><tbody><tr><td><code>pages/auth</code></td><td>Login, registration, email verification, password reset, and resend verification views.</td></tr><tr><td><code>pages/gp</code></td><td>GP consultation list, create query flow, and detail page with streaming responses.</td></tr><tr><td><code>pages/specialist</code></td><td>Specialist queue/detail pages, consultation-level action panel, and review modal set (<code>Approve</code>, <code>RequestChanges</code>, <code>ManualResponse</code>, <code>EditResponse</code>, etc.).</td></tr><tr><td><code>pages/admin</code></td><td>Dashboard, users, chats, logs, guideline management, and RAG monitoring pages.</td></tr><tr><td><code>components</code></td><td><code>ChatInput</code>, <code>ChatMessage</code>, <code>NotificationDropdown</code>, <code>ProtectedRoute</code>, <code>AdminLayout</code>, <code>PasswordStrengthMeter</code>, and other shared widgets.</td></tr><tr><td><code>contexts</code> / <code>hooks</code></td><td><code>AuthContext</code> for global identity + role state, and <code>useChatStream</code> for SSE lifecycle handling.</td></tr><tr><td><code>services</code> / <code>utils</code></td><td>Shared fetch API client, secure storage wrapper, SSE parser, API error normalization, and message mapping helpers.</td></tr></tbody></table>
+<table class="impl-table"><thead><tr><th>Folder</th><th>Key content</th></tr></thead><tbody><tr><td><code>pages/auth</code></td><td>Login, registration, email verification, password reset, and resend verification views.</td></tr><tr><td><code>pages/gp</code></td><td>GP consultation list, create query flow, and detail page with streaming responses.</td></tr><tr><td><code>pages/specialist</code></td><td>Specialist queue/detail pages, consultation-level action panel, and review modal set (<code>Approve</code>, <code>RequestChanges</code>, <code>ManualResponse</code>, <code>EditResponse</code>, etc.).</td></tr><tr><td><code>pages/admin</code></td><td>Dashboard, users, chats, logs, guideline management, and RAG monitoring pages.</td></tr><tr><td><code>components</code></td><td><code>ChatInput</code>, <code>ChatMessage</code>, <code>NotificationDropdown</code>, <code>ProtectedRoute</code>, <code>AdminLayout</code>, <code>PasswordStrengthMeter</code>, and other shared widgets.</td></tr><tr><td><code>contexts</code> / <code>hooks</code></td><td><code>AuthContext</code> for global identity + role state, and <code>useChatStream</code> for SSE lifecycle handling.</td></tr><tr><td><code>services</code> / <code>utils</code></td><td>Shared fetch API client, secure storage wrapper, SSE parser, API error normalization, and message mapping helpers.</td></tr></tbody></table>
           </section>
 
           <section class="section-bare" id="usechatstream-hook">

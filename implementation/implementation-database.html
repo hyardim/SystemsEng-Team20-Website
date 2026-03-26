@@ -246,7 +246,7 @@ ALTER TABLE rag_chunks
 CREATE INDEX IF NOT EXISTS idx_rag_chunks_text_search
     ON rag_chunks USING GIN (text_search_vector);</code></pre>
             <p><code>GENERATED ALWAYS AS ... STORED</code> is a PostgreSQL 12+ feature — the column is automatically recomputed by the database engine whenever <code>text</code> changes with no application code required.</p>
-            <h3>Legacy database detection</h3>
+            <h3>Legacy Database Detection</h3>
             <p><code>bootstrap.py</code> inspects the existing schema and detects unstamped databases — where backend tables already exist but no <code>alembic_version</code> row is present. Instead of crashing mid-migration it fails early with a clear recovery message:</p>
             <pre><code># backend/src/db/bootstrap.py
 MANAGED_BACKEND_TABLES = frozenset({
