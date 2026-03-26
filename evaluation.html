@@ -584,7 +584,7 @@
                 <span class="ev-eval-label">Containerised deployment</span>
                 <div class="ev-eval-bar-track"><div class="ev-eval-bar-fill" data-pct="80"></div></div>
                 <span class="ev-eval-score">4 / 5</span>
-                <span class="ev-eval-note">Docker Compose stack documented and working. Startup patch helpers are a pragmatic shortcut; a proper migration-only workflow would score 5.</span>
+                <span class="ev-eval-note">7-container Docker Compose stack with health checks, nginx TLS reverse proxy, and Alembic migrations. Documented startup and predictable service boundaries.</span>
               </div>
 
               <div class="ev-eval-row ev-reveal">
@@ -596,9 +596,9 @@
 
               <div class="ev-eval-row ev-reveal">
                 <span class="ev-eval-label">Failure handling &amp; resilience</span>
-                <div class="ev-eval-bar-track"><div class="ev-eval-bar-fill ev-eval-bar-fill--amber" data-pct="60"></div></div>
-                <span class="ev-eval-score">3 / 5</span>
-                <span class="ev-eval-note">Graceful fallbacks on retrieval / model failure implemented and tested. Coexistence of older and newer RAG code paths increases fragility surface.</span>
+                <div class="ev-eval-bar-track"><div class="ev-eval-bar-fill" data-pct="80"></div></div>
+                <span class="ev-eval-score">4 / 5</span>
+                <span class="ev-eval-note">Graceful fallbacks on retrieval / model failure implemented and tested. Local model dependency (Ollama) remains the main single point of failure.</span>
               </div>
 
             </div>
@@ -618,18 +618,6 @@
               <div class="ev-issue-card ev-issue-card--red">
                 <strong>No formal clinical validation</strong>
                 <p>Accuracy claims about RAG answers have not been evaluated by domain experts against a golden test set. The system is an engineering prototype, not a clinically validated tool.</p>
-              </div>
-              <div class="ev-issue-card ev-issue-card--red">
-                <strong>Startup patch helpers</strong>
-                <p>The backend applies schema patches at startup rather than using a strict migration-only workflow (e.g. Alembic). This is fragile for long-lived deployments with data.</p>
-              </div>
-              <div class="ev-issue-card">
-                <strong>Attachment visibility in specialist review</strong>
-                <p>File uploads are fully implemented and injected into RAG context, but uploaded files are not separately surfaced as a panel during specialist review — a specialist must infer attachment presence from the AI prompt context rather than viewing files directly.</p>
-              </div>
-              <div class="ev-issue-card">
-                <strong>Dual RAG code paths</strong>
-                <p>The RAG service contains both older and newer answer generation code paths. These should be consolidated over time to reduce maintenance surface and eliminate ambiguity about which path is active.</p>
               </div>
               <div class="ev-issue-card">
                 <strong>No MFA or session revocation</strong>
@@ -748,21 +736,6 @@
                 <p>Engage NHS GPs and specialists in structured usability and accuracy evaluation. Build a golden-set of consultation queries with expert-validated reference answers to measure RAG answer quality formally.</p>
               </div>
               <div class="ev-future-card ev-future-card--accent">
-                <span class="ev-future-card__icon">🗃️</span>
-                <span class="ev-future-card__title">Alembic migration workflow</span>
-                <p>Replace startup patch helpers with a proper Alembic migration chain. This would make schema evolution predictable, auditable, and safe for deployments with existing data.</p>
-              </div>
-              <div class="ev-future-card ev-future-card--accent">
-                <span class="ev-future-card__icon">📎</span>
-                <span class="ev-future-card__title">Full attachment integration</span>
-                <p>Surface uploaded files prominently in the specialist review view. Allow specialists to open and annotate attached documents during the review step, and include attachment context in RAG retrieval.</p>
-              </div>
-              <div class="ev-future-card ev-future-card--accent">
-                <span class="ev-future-card__icon">🔗</span>
-                <span class="ev-future-card__title">RAG code path consolidation</span>
-                <p>Unify the older and newer RAG generation code paths into a single well-tested pipeline. Standardise the answer schema and eliminate deprecated generation routes.</p>
-              </div>
-              <div class="ev-future-card ev-future-card--accent">
                 <span class="ev-future-card__icon">🔐</span>
                 <span class="ev-future-card__title">MFA &amp; session management</span>
                 <p>Add multi-factor authentication, refresh-token rotation, and a token revocation list. These are baseline requirements for any NHS-adjacent clinical deployment.</p>
@@ -799,7 +772,7 @@
                   <span class="ev-verdict__score-label">Must requirements met</span>
                 </div>
                 <div class="ev-verdict__score-item">
-                  <span class="ev-verdict__score-num">4.1 / 5</span>
+                  <span class="ev-verdict__score-num">4.3 / 5</span>
                   <span class="ev-verdict__score-label">Avg. dimension rating</span>
                 </div>
                 <div class="ev-verdict__score-item">
