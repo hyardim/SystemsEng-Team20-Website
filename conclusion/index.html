@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="../" />
+    <title>Conclusion · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css?v=20260325ag" />
+  </head>
+  <body data-page="conclusion">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="/" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="/" data-nav="home">Home</a><a href="requirements/" data-nav="requirements">Requirements</a><a href="research/" data-nav="research">Research</a><a href="ui-design/" data-nav="ui-design">UI Design</a><a href="system-design/" data-nav="system-design">System Design</a><a href="implementation/" data-nav="implementation">Implementation</a><a href="testing/" data-nav="testing">Testing</a><a href="testing/" data-nav="evaluation">Evaluation</a><a href="appendices/" data-nav="appendices">Appendices</a><a href="blog/" data-nav="blog">Blog</a></nav><a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Conclusion</h1>
+        <p class="report-page-subtitle">What the project achieved and what remains open</p>
+        <p class="report-page-summary">
+          Ambience-AI-1.5 demonstrates a technically credible pattern for building an evidence-aware,
+          specialist-reviewed clinical consultation platform. The project goes beyond a chatbot demo by
+          combining application engineering, vector retrieval, explicit citation handling, and
+          human-in-the-loop governance in one deployable stack.
+        </p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card">
+            <h2 id="achievements">Main achievements</h2>
+            <div class="card-grid">
+              <div class="metric-card">
+                <strong>End-to-end delivery</strong>
+                <p>A frontend, backend, RAG service, and vector-aware database were integrated into a single deployable environment.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Workflow realism</strong>
+                <p>The consultation lifecycle and specialist review flow are explicit domain workflows, not superficial UI labels.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Grounded answer path</strong>
+                <p>The RAG service returns answer text with citation structures and source-document access paths.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Operational transparency</strong>
+                <p>Audit logging, notifications, admin metrics, and automated tests improve inspectability.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="what-worked-well">What worked well technically</h2>
+            <ul>
+              <li>Separating application logic from retrieval/generation logic created a cleaner service boundary.</li>
+              <li>The use of pgvector allowed the project to keep vector retrieval close to the wider PostgreSQL data model.</li>
+              <li>Specialist review was designed into the main state machine rather than added as an afterthought.</li>
+              <li>The testing footprint across frontend, backend, and RAG code demonstrates systematic engineering effort.</li>
+            </ul>
+          </section>
+
+          <section class="section-card">
+            <h2 id="remaining-gaps">Remaining gaps and future work</h2>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Migration discipline</strong>
+                <p>A stricter migration-only database workflow would be preferable to startup patch helpers.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Attachment integration</strong>
+                <p>FileAttachment exists in the data model but the dominant consultation flow remains mainly text-centric.</p>
+              </div>
+              <div class="mini-card">
+                <strong>RAG consolidation</strong>
+                <p>The coexistence of older and newer RAG code paths should be unified over time.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Clinical validation</strong>
+                <p>Formal evaluation with domain experts would be needed before making stronger claims about real-world clinical utility.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="final-position">Final position</h2>
+            <div class="quote-card">
+              <h3>Overall assessment</h3>
+              <blockquote>
+                Ambience-AI-1.5 is best understood as a full-stack engineering prototype for
+                guideline-grounded consultation support. Its strongest contribution is the integration
+                of RAG with accountable human review, not the promise of replacing clinicians.
+              </blockquote>
+            </div>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout">
+            <h3>Next step</h3>
+            <p>
+              The most valuable next iteration would be to consolidate the evolving architecture and
+              deepen real evaluation with clinical stakeholders.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation/">Frontend, backend, and RAG implementation</a><a href="system-design/">Architecture, flows, and data model</a><a href="testing/">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices/#user-manual">User manual</a><a href="appendices/#deployment-manual">Deployment manual</a><a href="appendices/#privacy">GDPR and privacy</a><a href="blog/">External blog and monthly video</a></div></section></div></footer>
+    <script src="assets/site.js?v=20260322f"></script>
+  </body>
+</html>

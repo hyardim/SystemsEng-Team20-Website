@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="../" />
+    <title>Research · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css?v=20260325ag" />
+  </head>
+  <body data-page="research">
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="/" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="/" data-nav="home">Home</a><a href="requirements/" data-nav="requirements">Requirements</a><a href="research/" data-nav="research">Research</a><a href="ui-design/" data-nav="ui-design">UI Design</a><a href="system-design/" data-nav="system-design">System Design</a><a href="implementation/" data-nav="implementation">Implementation</a><a href="testing/" data-nav="testing">Testing</a><a href="testing/" data-nav="evaluation">Evaluation</a><a href="appendices/" data-nav="appendices">Appendices</a><a href="blog/" data-nav="blog">Blog</a>
+        </nav>
+        <button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Research</h1>
+        <p class="report-page-subtitle">Related systems, evidence, and technical choices</p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card">
+            <h2 id="related-projects-review">Related Projects Review</h2>
+            <p class="lede">
+              We reviewed existing medical AI systems to understand what strong clinical assistants
+              already do well. The most useful patterns were consistent: evidence grounding,
+              structured reasoning, and clear signalling that the system supports clinicians rather
+              than replacing them.
+            </p>
+            <div class="related-project-tabs" data-project-tabs>
+              <div class="related-project-tabs__tablist" role="tablist" aria-label="Comparable systems">
+                <button class="related-project-tabs__tab is-active" type="button" role="tab" id="related-tab-openevidence" aria-selected="true" aria-controls="related-panel-openevidence" data-tab-target="openevidence">OpenEvidence</button>
+                <button class="related-project-tabs__tab" type="button" role="tab" id="related-tab-glass-health" aria-selected="false" aria-controls="related-panel-glass-health" data-tab-target="glass-health" tabindex="-1">Glass Health</button>
+                <button class="related-project-tabs__tab" type="button" role="tab" id="related-tab-med-palm" aria-selected="false" aria-controls="related-panel-med-palm" data-tab-target="med-palm" tabindex="-1">Med-PaLM 2</button>
+              </div>
+
+              <div class="related-project-tabs__panels">
+                <article class="related-project-tabs__panel is-active" role="tabpanel" id="related-panel-openevidence" aria-labelledby="related-tab-openevidence" data-tab-panel="openevidence">
+                  <h3 class="related-project-tabs__title">OpenEvidence</h3>
+                  <p>
+                    OpenEvidence is a clinician-facing medical search and synthesis product built
+                    around evidence visibility rather than free-form chatbot fluency
+                    <a class="citation" href="#ref-1">[1]</a><a class="citation" href="#ref-2">[2]</a>.
+                    It is a useful comparison because it treats trustworthy retrieval as the core of
+                    the product experience: the system is valuable not simply because it generates
+                    text, but because it helps clinicians move from a question to supporting evidence
+                    quickly. For Ambience, the most useful lesson was that trust comes from keeping
+                    sources in the main answer flow instead of treating references as an optional
+                    extra.
+                  </p>
+
+                  <div class="related-project-tabs__grid">
+                    <div class="related-project-tabs__block">
+                      <h4>Main features</h4>
+                      <ul>
+                        <li>Clinician-focused search over medical evidence and guidance rather than open-ended conversation for the general public.</li>
+                        <li>Source attribution remains attached to the answer itself, which helps the user judge where the system's claim is coming from.</li>
+                        <li>The product positions itself as a professional decision-support tool, not as an autonomous medical advisor.</li>
+                        <li>Its "why this source was cited" style of explanation is especially relevant because it makes the retrieval step visible instead of hiding it behind the final answer.</li>
+                      </ul>
+                    </div>
+                    <div class="related-project-tabs__block">
+                      <h4>What Ambience learned</h4>
+                      <ul>
+                        <li>Citations should be visible at the same level as the answer text.</li>
+                        <li>The retrieved evidence should feel like part of the product, not a hidden backend step that the user never sees.</li>
+                        <li>A narrow clinician-facing scope makes the system easier to justify and evaluate than a broad "AI doctor" framing.</li>
+                        <li>Evidence transparency is not just a UI detail; it directly shapes whether a clinician can trust or challenge the answer.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="related-project-tabs__references">
+                    <h4>References</h4>
+                    <ul class="related-project-tabs__reference-links">
+                      <li><a href="#ref-1">[1] OpenEvidence, "About."</a></li>
+                      <li><a href="#ref-2">[2] OpenEvidence, "New Feature: Why Was This Source Cited?"</a></li>
+                    </ul>
+                  </div>
+                </article>
+
+                <article class="related-project-tabs__panel" role="tabpanel" id="related-panel-glass-health" aria-labelledby="related-tab-glass-health" data-tab-panel="glass-health" hidden>
+                  <h3 class="related-project-tabs__title">Glass Health</h3>
+                  <p>
+                    Glass Health is a stronger comparison on output structure. Its clinical Q&amp;A,
+                    differential diagnosis, and plan-generation workflows show how medical AI becomes
+                    more usable when responses are explicitly organised for scanning and review
+                    <a class="citation" href="#ref-3">[3]</a>. This matters for Ambience because the
+                    project is not only about retrieving good evidence; it is also about presenting
+                    that evidence in a way that supports fast GP-specialist collaboration rather than
+                    leaving users with one long, undifferentiated answer.
+                  </p>
+
+                  <div class="related-project-tabs__grid">
+                    <div class="related-project-tabs__block">
+                      <h4>Main features</h4>
+                      <ul>
+                        <li>Structured differential diagnosis and assessment-and-plan generation instead of only free-text responses.</li>
+                        <li>Evidence-backed answers with inline numbered citations, which gives the user a clearer reading path through the output.</li>
+                        <li>Clinical workflow emphasis rather than a single plain chat box, so the product feels organised around medical tasks.</li>
+                        <li>Output structure is part of the value proposition: the system helps users scan, compare, and review information rather than only read it.</li>
+                      </ul>
+                    </div>
+                    <div class="related-project-tabs__block">
+                      <h4>What Ambience learned</h4>
+                      <ul>
+                        <li>Structured outputs reduce scanning effort for busy clinicians.</li>
+                        <li>Reasoning should be grouped into meaningful sections rather than one long paragraph that is harder to review.</li>
+                        <li>The UI should make escalation and review feel normal, not exceptional or bolted on afterwards.</li>
+                        <li>Clinical support systems benefit from turning model output into a workflow object that can be checked, discussed, and revised.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="related-project-tabs__references">
+                    <h4>References</h4>
+                    <ul class="related-project-tabs__reference-links">
+                      <li><a href="#ref-3">[3] Glass Health, "Features."</a></li>
+                    </ul>
+                  </div>
+                </article>
+
+                <article class="related-project-tabs__panel" role="tabpanel" id="related-panel-med-palm" aria-labelledby="related-tab-med-palm" data-tab-panel="med-palm" hidden>
+                  <h3 class="related-project-tabs__title">Med-PaLM 2</h3>
+                  <p>
+                    Med-PaLM 2 is not a directly comparable deployed product, but it is an important
+                    research reference because it frames medical LLM quality in terms of safety,
+                    helpfulness, and clinician preference rather than raw model fluency alone
+                    <a class="citation" href="#ref-4">[4]</a><a class="citation" href="#ref-5">[5]</a>.
+                    It is relevant to Ambience because it shows both the promise and the limits of
+                    strong medical language models: high benchmark quality is useful, but it does not
+                    remove the need for grounding, oversight, and clear deployment boundaries.
+                  </p>
+
+                  <div class="related-project-tabs__grid">
+                    <div class="related-project-tabs__block">
+                      <h4>Main features</h4>
+                      <ul>
+                        <li>Medical question-answering research with formal human evaluation rather than only automated benchmark scoring.</li>
+                        <li>Measures quality across long-form answers, safety, medical consensus, and physician preference.</li>
+                        <li>Treats deployment readiness as a separate question from benchmark strength, which is especially important in clinical contexts.</li>
+                        <li>Acts as a research reference point for what advanced medical LLM performance can look like under controlled evaluation.</li>
+                      </ul>
+                    </div>
+                    <div class="related-project-tabs__block">
+                      <h4>What Ambience learned</h4>
+                      <ul>
+                        <li>High-quality answers still need explicit safety boundaries before real use.</li>
+                        <li>Capability research should not be confused with autonomous clinical readiness.</li>
+                        <li>Model strength alone is not enough; grounding and workflow design still matter for safe use.</li>
+                        <li>Human specialist oversight remains the clearest safety layer in our final design, especially when the model output may influence real care decisions.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="related-project-tabs__references">
+                    <h4>References</h4>
+                    <ul class="related-project-tabs__reference-links">
+                      <li><a href="#ref-4">[4] Google Research, "Med-PaLM."</a></li>
+                      <li><a href="#ref-5">[5] K. Singhal et al., "Toward expert-level medical question answering with large language models."</a></li>
+                    </ul>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="callout related-project-tabs__takeaway">
+              <h3>Cross-project takeaway</h3>
+              <p>
+                Across all three examples, the strongest pattern was the same: good clinical AI does
+                not just answer questions, it grounds them in evidence, structures them for quick
+                review, and leaves the final judgement with human clinicians.
+              </p>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="technology-review">Technology Review</h2>
+            <p class="lede">
+              The final implementation in the sibling Ambience repository uses three services
+              (<code>frontend</code>, <code>backend</code>, and <code>rag_service</code>) plus
+              PostgreSQL, Redis, and optional nginx.
+              The research question was not simply which tools were popular, but which combination
+              created the most grounded, testable, and clinically defensible workflow.
+            </p>
+
+            <div class="related-project-tabs technology-review-tabs" data-project-tabs>
+              <div class="related-project-tabs__tablist" role="tablist" aria-label="Technology review sections">
+                <button class="related-project-tabs__tab is-active" type="button" role="tab" id="technology-tab-architecture" aria-selected="true" aria-controls="technology-panel-architecture" data-tab-target="technology-architecture">Architecture</button>
+                <button class="related-project-tabs__tab" type="button" role="tab" id="technology-tab-deployment" aria-selected="false" aria-controls="technology-panel-deployment" data-tab-target="technology-deployment" tabindex="-1">Deployment</button>
+                <button class="related-project-tabs__tab" type="button" role="tab" id="technology-tab-algorithms" aria-selected="false" aria-controls="technology-panel-algorithms" data-tab-target="technology-algorithms" tabindex="-1">Algorithms</button>
+                <button class="related-project-tabs__tab" type="button" role="tab" id="technology-tab-stack" aria-selected="false" aria-controls="technology-panel-stack" data-tab-target="technology-stack" tabindex="-1">Languages &amp; Frameworks</button>
+              </div>
+
+              <div class="related-project-tabs__panels">
+                <article class="related-project-tabs__panel is-active" role="tabpanel" id="technology-panel-architecture" aria-labelledby="technology-tab-architecture" data-tab-panel="technology-architecture">
+                  <h3 class="related-project-tabs__title">Architecture Choice</h3>
+                  <p>
+                    The first major design decision was architectural: should Ambience-AI-1.5 behave
+                    like a plain medical chatbot, a single monolithic web service, or a system with
+                    a dedicated retrieval and generation layer? We chose the third option. In the
+                    implemented system, the main backend handles application workflows such as
+                    authentication, chats, and review state, while a separate RAG service handles
+                    ingestion, retrieval, routing, and grounded answer generation
+                    <a class="citation" href="#ref-6">[6]</a>.
+                  </p>
+
+                  <div class="related-project-tabs__grid">
+                    <div class="related-project-tabs__block">
+                      <h4>Options reviewed</h4>
+                      <ul>
+                        <li><strong>Plain LLM chatbot:</strong> fastest to prototype, but weak on provenance, updateability, and clinical traceability.</li>
+                        <li><strong>Single monolithic backend:</strong> simpler at first, but it would tightly couple authentication, chat workflows, ingestion, retrieval, and model logic in one service.</li>
+                        <li><strong>Dedicated RAG service:</strong> adds some operational complexity, but keeps the evidence pipeline separate from the rest of the application.</li>
+                      </ul>
+                    </div>
+                    <div class="related-project-tabs__block">
+                      <h4>Final decision</h4>
+                      <ul>
+                        <li><strong>Chosen:</strong> a separate RAG service behind the main application backend.</li>
+                        <li>This was the strongest fit for the project because grounded retrieval is central to trust, safety, and citation quality.</li>
+                        <li>It keeps clinical evidence processing separate from account and workflow APIs, which makes the overall system easier to reason about.</li>
+                        <li>It also makes ingestion, chunking, retrieval, reranking, and provider routing easier to test and evolve without destabilising the whole application.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="related-project-tabs__references">
+                    <h4>References</h4>
+                    <ul class="related-project-tabs__reference-links">
+                      <li><a href="#ref-6">[6] P. Lewis et al., "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks."</a></li>
+                    </ul>
+                  </div>
+                </article>
+
+                <article class="related-project-tabs__panel" role="tabpanel" id="technology-panel-deployment" aria-labelledby="technology-tab-deployment" data-tab-panel="technology-deployment" hidden>
+                  <h3 class="related-project-tabs__title">Deployment and Inference Path</h3>
+                  <p>
+                    Ambience-AI-1.5 is a browser-based system, so the relevant deployment comparison
+                    was not really mobile versus desktop hardware. The more important question was
+                    where inference should happen: only on a local model, only on a cloud-hosted
+                    model, or through a hybrid setup that can use both depending on the request. This
+                    decision mattered because it affects cost, latency, privacy, and the system's
+                    ability to handle more demanding clinical prompts.
+                  </p>
+
+                  <div class="related-project-tabs__grid">
+                    <div class="related-project-tabs__block">
+                      <h4>Options reviewed</h4>
+                      <ul>
+                        <li><strong>Local-only inference:</strong> cheapest and easiest for development, with better control over where data is processed, but local hardware limits throughput and model size <a class="citation" href="#ref-7">[7]</a><a class="citation" href="#ref-8">[8]</a>.</li>
+                        <li><strong>Cloud-only inference:</strong> better for large or complex prompts, but introduces ongoing cost, an external dependency, and stronger governance concerns around sending data off-machine.</li>
+                        <li><strong>Hybrid local/cloud inference:</strong> more complex to implement, but allows the system to keep routine requests local while escalating harder cases when needed.</li>
+                      </ul>
+                    </div>
+                    <div class="related-project-tabs__block">
+                      <h4>Final decision</h4>
+                      <ul>
+                        <li><strong>Chosen:</strong> hybrid routed inference.</li>
+                        <li>This was the most balanced option because it avoids paying cloud cost for every query while still keeping a path for more demanding requests.</li>
+                        <li>It also fits the project's safety goals better than a single fixed deployment path, because clinically riskier or more ambiguous prompts can be treated differently from routine ones.</li>
+                        <li>In the implemented system, the router considers factors such as complexity, prompt size, clinical risk, and retrieval ambiguity before choosing whether to keep inference local or escalate it.</li>
+                        <li>That makes the deployment decision part of the system's reasoning strategy, not just an infrastructure detail.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="related-project-tabs__references">
+                    <h4>References</h4>
+                    <ul class="related-project-tabs__reference-links">
+                      <li><a href="#ref-7">[7] M42 Health, "Llama3-Med42-70B."</a></li>
+                      <li><a href="#ref-8">[8] Ollama, "OpenAI compatibility."</a></li>
+                    </ul>
+                  </div>
+                </article>
+
+                <article class="related-project-tabs__panel" role="tabpanel" id="technology-panel-algorithms" aria-labelledby="technology-tab-algorithms" data-tab-panel="technology-algorithms" hidden>
+                  <h3 class="related-project-tabs__title">Retrieval and Ranking Algorithms</h3>
+                  <p>
+                    The core algorithmic question was how to retrieve clinically relevant evidence
+                    reliably enough for grounded answer generation. In this project, a weak retrieval
+                    decision would directly reduce citation quality, because the answer can only be as
+                    good as the evidence it receives. For that reason, the final system does not rely
+                    on one algorithm alone; it combines chunking, retrieval, fusion, filtering, and
+                    reranking into one explicit pipeline.
+                  </p>
+
+                  <div class="related-project-tabs__grid">
+                    <div class="related-project-tabs__block">
+                      <h4>Options reviewed</h4>
+                      <ul>
+                        <li><strong>Keyword-only retrieval:</strong> useful for exact medical terms, abbreviations, and source-specific phrasing, but too brittle when the user words a question differently from the source document.</li>
+                        <li><strong>Vector-only semantic retrieval:</strong> better at paraphrase and conceptual similarity through embeddings, but it can surface passages that are semantically related without being the best grounding evidence <a class="citation" href="#ref-9">[9]</a><a class="citation" href="#ref-12">[12]</a>.</li>
+                        <li><strong>Hybrid retrieval with ranking stages:</strong> more complex, but stronger overall because lexical and semantic evidence can complement each other before a final reranking step <a class="citation" href="#ref-10">[10]</a><a class="citation" href="#ref-11">[11]</a>.</li>
+                      </ul>
+                    </div>
+                    <div class="related-project-tabs__block">
+                      <h4>Final decision</h4>
+                      <ul>
+                        <li><strong>Chosen:</strong> sentence-aware chunking, vector search, keyword search, reciprocal rank fusion, filtering, cross-encoder reranking, deduplication, and citation assembly.</li>
+                        <li>This was the best fit because it improves recall without giving up precision, which is important for clinical support where irrelevant evidence is almost as problematic as missing evidence.</li>
+                        <li>The implemented retrieval pipeline is explicit and inspectable, with clear stages for processing, fusion, reranking, and final citation shaping rather than one opaque search step.</li>
+                        <li>That makes the algorithmic choice easier to justify on the website as well: the system is not just "using AI", it is using a layered retrieval strategy designed to improve grounding quality.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="related-project-tabs__references">
+                    <h4>References</h4>
+                    <ul class="related-project-tabs__reference-links">
+                      <li><a href="#ref-9">[9] N. Reimers and I. Gurevych, "Sentence-BERT."</a></li>
+                      <li><a href="#ref-10">[10] G. V. Cormack et al., "Reciprocal rank fusion outperforms condorcet and individual rank learning methods."</a></li>
+                      <li><a href="#ref-11">[11] R. Nogueira and K. Cho, "Passage Re-ranking with BERT."</a></li>
+                      <li><a href="#ref-12">[12] pgvector contributors, "pgvector."</a></li>
+                    </ul>
+                  </div>
+                </article>
+
+                <article class="related-project-tabs__panel" role="tabpanel" id="technology-panel-stack" aria-labelledby="technology-tab-stack" data-tab-panel="technology-stack" hidden>
+                  <h3 class="related-project-tabs__title">Languages, Frameworks, and APIs</h3>
+                  <p>
+                    Once the architecture was fixed, the remaining technology review focused on which
+                    languages and frameworks best supported a typed frontend, a testable Python API
+                    layer, a retrieval-aware database, and provider-flexible inference. The goal was
+                    not to assemble the most fashionable stack, but to choose technologies that fit
+                    the actual work of the project: role-based dashboards, FastAPI services, vector
+                    retrieval, and medical-document processing.
+                  </p>
+
+                  <div class="related-project-tabs__grid">
+                    <div class="related-project-tabs__block">
+                      <h4>Options reviewed</h4>
+                      <ul>
+                        <li><strong>Frontend stack:</strong> React SPA with Vite versus heavier SSR-first approaches. For this project, most pages are application screens rather than public SEO pages, so a typed single-page frontend was a better fit <a class="citation" href="#ref-13">[13]</a><a class="citation" href="#ref-14">[14]</a>.</li>
+                        <li><strong>Backend framework:</strong> FastAPI versus larger full-stack Python frameworks. FastAPI aligned better with service-style APIs, validation, and async request handling <a class="citation" href="#ref-15">[15]</a>.</li>
+                        <li><strong>Data and retrieval layer:</strong> PostgreSQL with pgvector versus a separate specialist vector database. Keeping relational and vector concerns in one database family simplified the deployment model <a class="citation" href="#ref-12">[12]</a>.</li>
+                        <li><strong>Inference interface:</strong> provider-specific clients versus OpenAI-compatible local/cloud endpoints. A compatible API layer reduces switching cost between local and cloud inference paths <a class="citation" href="#ref-8">[8]</a>.</li>
+                      </ul>
+                    </div>
+                    <div class="related-project-tabs__block">
+                      <h4>Final decision</h4>
+                      <ul>
+                        <li><strong>Chosen frontend:</strong> React 19, TypeScript, and Vite for a dashboard-style SPA with strong typing and fast local iteration.</li>
+                        <li><strong>Chosen backend:</strong> FastAPI because the project is API-heavy and benefits from explicit schemas, validation, and service-oriented routing.</li>
+                        <li><strong>Chosen data layer:</strong> PostgreSQL plus pgvector so user data, workflow data, and retrieval data remain in one coherent operational stack.</li>
+                        <li><strong>Chosen inference interface:</strong> OpenAI-compatible local/cloud endpoints so model providers can be changed with less application-level churn.</li>
+                        <li>Together, these choices support the main priorities of the project: typed user interfaces, modular Python services, grounded retrieval, and flexible deployment rather than one tightly locked stack.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="related-project-tabs__references">
+                    <h4>References</h4>
+                    <ul class="related-project-tabs__reference-links">
+                      <li><a href="#ref-8">[8] Ollama, "OpenAI compatibility."</a></li>
+                      <li><a href="#ref-12">[12] pgvector contributors, "pgvector."</a></li>
+                      <li><a href="#ref-13">[13] React, "Quick Start."</a></li>
+                      <li><a href="#ref-14">[14] Vite, "Why Vite."</a></li>
+                      <li><a href="#ref-15">[15] FastAPI, "Features."</a></li>
+                    </ul>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="callout related-project-tabs__takeaway">
+              <h3>Technology takeaway</h3>
+              <p>
+                The chosen stack is not the most minimal possible one, but it is the one that best
+                supports grounded answers, modular testing, and explicit safety boundaries for a
+                clinical support system.
+              </p>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="summary-of-technical-decisions">Summary of Technical Decisions</h2>
+            <p class="lede">
+              The final research outcome was a deliberately constrained clinical support system rather
+              than an unrestricted medical assistant. The technical decisions below are the ones that
+              most strongly shape the final implementation.
+            </p>
+            <p>
+              Taken together, these decisions show that Ambience-AI-1.5 was designed around
+              grounding, inspectability, and specialist oversight rather than maximum automation. The
+              main architectural and technology choices were not made independently: the separate RAG
+              service, hybrid inference path, layered retrieval pipeline, and visible citations all
+              support the same goal of producing answers that are easier to trace, review, and
+              challenge in a clinical workflow.
+            </p>
+            <p>
+              For that reason, the most important decisions are not just which tools were used, but
+              how those tools were combined into a coherent system. The summary cards below highlight
+              the design choices that most directly shaped the final behaviour of the product.
+            </p>
+
+            <div class="card-grid">
+              <div class="metric-card">
+                <strong>Grounding first</strong>
+                <p>Answers are produced from retrieved guideline material and returned with explicit citations, so the system is anchored to evidence rather than unsupported model free text.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Separate RAG service</strong>
+                <p>Ingestion, retrieval, reranking, routing, and generation live outside the main backend so that the evidence pipeline can be tested and evolved without destabilising the rest of the application.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Hybrid inference path</strong>
+                <p>Local Med42 is viable for routine development and lower-cost requests, while harder, longer, or riskier prompts can be escalated to a stronger cloud path when necessary.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Hybrid retrieval pipeline</strong>
+                <p>Keyword search and vector search are fused, reranked, deduplicated, and converted into citation objects before the answer is shown to the user, improving both recall and final evidence quality.</p>
+              </div>
+            </div>
+
+            <p>
+              These four points capture the highest-level design stance of the project. The remaining
+              technology choices then support that stance at implementation level, turning the system
+              into a role-aware clinical support platform rather than a generic LLM interface.
+            </p>
+
+            <ul>
+              <li>The frontend uses React, TypeScript, and Vite because the product is primarily a role-based application with dashboards, queues, and typed interaction flows rather than a content site.</li>
+              <li>The backend uses FastAPI and SQLAlchemy because the project is API-heavy and benefits from explicit validation, clear schema handling, and close alignment with the wider Python retrieval stack.</li>
+              <li>PostgreSQL with pgvector was chosen so operational data and vector retrieval data could remain in one coherent deployment model instead of being split across unrelated systems.</li>
+              <li>The RAG service uses sentence-transformers, cross-encoder reranking, and Redis-backed retry handling because evidence quality and robustness matter more here than keeping the pipeline minimal.</li>
+              <li>OpenAI-compatible local and cloud providers were chosen to keep deployment flexible, making it possible to balance capability, cost, and infrastructure control.</li>
+              <li>Most importantly, specialist review remains part of the normal workflow, which makes the system a clinical support tool with human accountability rather than an autonomous decision-maker.</li>
+            </ul>
+          </section>
+
+          <section class="section-card">
+            <h2 id="references">References</h2>
+            <p class="lede">
+              References are listed in numbered order and cited inline throughout the page in the
+              style shown in the report brief.
+            </p>
+            <ol class="reference-list">
+              <li id="ref-1">
+                OpenEvidence, "About." [Online]. Available:
+                <a href="https://www.openevidence.com/about" target="_blank" rel="noreferrer">https://www.openevidence.com/about</a>.
+              </li>
+              <li id="ref-2">
+                OpenEvidence, "New Feature: Why Was This Source Cited?," Aug. 17, 2023. [Online]. Available:
+                <a href="https://www.openevidence.com/announcements/new-feature-why-was-this-source-cited" target="_blank" rel="noreferrer">https://www.openevidence.com/announcements/new-feature-why-was-this-source-cited</a>.
+              </li>
+              <li id="ref-3">
+                Glass Health, "Features." [Online]. Available:
+                <a href="https://glass.health/features" target="_blank" rel="noreferrer">https://glass.health/features</a>.
+              </li>
+              <li id="ref-4">
+                Google Research, "Med-PaLM." [Online]. Available:
+                <a href="https://sites.research.google/gr/med-palm/" target="_blank" rel="noreferrer">https://sites.research.google/gr/med-palm/</a>.
+              </li>
+              <li id="ref-5">
+                K. Singhal <em>et al.</em>, "Toward expert-level medical question answering with large language models," <em>Nature Medicine</em>, vol. 31, no. 3, pp. 943-950, Mar. 2025. [Online]. Available:
+                <a href="https://pubmed.ncbi.nlm.nih.gov/39779926/" target="_blank" rel="noreferrer">https://pubmed.ncbi.nlm.nih.gov/39779926/</a>.
+              </li>
+              <li id="ref-6">
+                P. Lewis <em>et al.</em>, "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks," arXiv:2005.11401, 2021. [Online]. Available:
+                <a href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noreferrer">https://arxiv.org/abs/2005.11401</a>.
+              </li>
+              <li id="ref-7">
+                M42 Health, "Llama3-Med42-70B," Hugging Face model card, 2024. [Online]. Available:
+                <a href="https://huggingface.co/m42-health/Llama3-Med42-70B" target="_blank" rel="noreferrer">https://huggingface.co/m42-health/Llama3-Med42-70B</a>.
+              </li>
+              <li id="ref-8">
+                Ollama, "OpenAI compatibility." [Online]. Available:
+                <a href="https://docs.ollama.com/api/openai-compatibility" target="_blank" rel="noreferrer">https://docs.ollama.com/api/openai-compatibility</a>.
+              </li>
+              <li id="ref-9">
+                N. Reimers and I. Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks," in <em>Proc. EMNLP-IJCNLP</em>, 2019, pp. 3982-3992. [Online]. Available:
+                <a href="https://aclanthology.org/D19-1410/" target="_blank" rel="noreferrer">https://aclanthology.org/D19-1410/</a>.
+              </li>
+              <li id="ref-10">
+                G. V. Cormack, C. L. A. Clarke, and S. B&uuml;ttcher, "Reciprocal rank fusion outperforms condorcet and individual rank learning methods," in <em>Proc. SIGIR</em>, 2009, pp. 758-759. [Online]. Available:
+                <a href="https://ir.webis.de/anthology/2009.sigirconf_conference-2009.146/" target="_blank" rel="noreferrer">https://ir.webis.de/anthology/2009.sigirconf_conference-2009.146/</a>.
+              </li>
+              <li id="ref-11">
+                R. Nogueira and K. Cho, "Passage Re-ranking with BERT," arXiv:1901.04085, 2020. [Online]. Available:
+                <a href="https://arxiv.org/abs/1901.04085" target="_blank" rel="noreferrer">https://arxiv.org/abs/1901.04085</a>.
+              </li>
+              <li id="ref-12">
+                pgvector contributors, "pgvector: Open-source vector similarity search for Postgres." [Online]. Available:
+                <a href="https://github.com/pgvector/pgvector" target="_blank" rel="noreferrer">https://github.com/pgvector/pgvector</a>.
+              </li>
+              <li id="ref-13">
+                React, "Quick Start." [Online]. Available:
+                <a href="https://react.dev/learn" target="_blank" rel="noreferrer">https://react.dev/learn</a>.
+              </li>
+              <li id="ref-14">
+                Vite, "Why Vite." [Online]. Available:
+                <a href="https://vite.dev/guide/comparisons/" target="_blank" rel="noreferrer">https://vite.dev/guide/comparisons/</a>.
+              </li>
+              <li id="ref-15">
+                FastAPI, "Features." [Online]. Available:
+                <a href="https://fastapi.tiangolo.com/features/" target="_blank" rel="noreferrer">https://fastapi.tiangolo.com/features/</a>.
+              </li>
+            </ol>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation/">Frontend, backend, and RAG implementation</a><a href="system-design/">Architecture, flows, and data model</a><a href="testing/">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices/#user-manual">User manual</a><a href="appendices/#deployment-manual">Deployment manual</a><a href="appendices/#privacy">GDPR and privacy</a><a href="appendices/#external-links">External blog and monthly video</a></div></section></div></footer>
+    <script src="assets/site.js?v=20260325ad"></script>
+  </body>
+</html>

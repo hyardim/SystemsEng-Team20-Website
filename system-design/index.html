@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="../" />
+    <title>System Design · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css?v=20260325ag" />
+  </head>
+  <body data-page="system-design">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="/" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="/" data-nav="home">Home</a><a href="requirements/" data-nav="requirements">Requirements</a><a href="research/" data-nav="research">Research</a><a href="ui-design/" data-nav="ui-design">UI Design</a><a href="system-design/" data-nav="system-design">System Design</a><a href="implementation/" data-nav="implementation">Implementation</a><a href="testing/" data-nav="testing">Testing</a><a href="testing/" data-nav="evaluation">Evaluation</a><a href="appendices/" data-nav="appendices">Appendices</a><a href="blog/" data-nav="blog">Blog</a></nav><a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">System Design</h1>
+        <p class="report-page-subtitle">Service boundaries, request flow, and review workflow</p>
+      </div>
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-bare">
+            <h2 id="topology">System Architecture</h2>
+            <p>Ambience-AI is deployed as a containerised application across eight Docker services connected via a shared bridge network (<code>ambience_net</code>). In production, all inbound traffic enters through an Nginx reverse proxy on ports 80/443, which routes requests to either the Frontend (React/TypeScript, port 3000) or the Backend (FastAPI/Python, port 8000). In development, Vite's built-in dev server replaces Nginx entirely. The Backend communicates with the RAG Service (port 8001) for AI-related operations — answer generation, answer revision, and document ingestion — and with a RAG Worker for background retry processing of failed jobs. Persistent data is stored in PostgreSQL (port 5432) with the pgvector extension for vector embeddings, while Redis (port 6379) acts as both an application cache and the job queue that coordinates the RAG Worker. A Mailpit SMTP server (ports 1025/8025) handles email verification and password reset flows during development.</p>
+            <p>Three core backend services underpin the system. The REST API backend (FastAPI, port 8000) handles authentication, routing, and business logic across three RBAC roles — GP, Specialist, and Admin — with JWT-based auth, chat lifecycle management, SSE streaming, Redis-backed caching, and full audit logging. The RAG service (port 8001) is a standalone FastAPI service that receives queries from the backend, retrieves relevant medical evidence from the vector database, and generates grounded responses using the Med42 LLM. A background retry worker processes failed RAG requests via Redis Queue with exponential backoff (base 10 s, 2× multiplier, max 3 retries), using SHA-256 hashing for idempotent deduplication.</p>
+            <img class="diagram-img" src="assets/diagrams/system_architecture.svg" alt="System architecture diagram"/>
+          </section>
+
+          <section class="section-bare">
+            <h2 id="site-map">Site map</h2>
+            <p>The frontend is a React Router v6 single-page application organised around three role-based portals. Unauthenticated users land on the root route (<code>/</code>) and can access authentication flows including login, registration, email verification, password reset, and resend-verification. Upon login, users are redirected to their role-specific portal: GP (<code>/gp/*</code>) for creating and managing clinical queries; Specialist (<code>/specialist/*</code>) for reviewing incoming queries, managing assigned cases, and submitting clinical reviews; and Admin (<code>/admin/*</code>) for user management, chat oversight, audit logs, and RAG queue monitoring. A shared <code>/profile</code> route is accessible across all roles. Unauthorised access attempts redirect to <code>/access-denied</code>, and any unmatched path is caught by a wildcard route.</p>
+            <img class="diagram-img" src="assets/diagrams/site_map.svg" alt="Site map showing frontend route structure"/>
+          </section>
+
+          <section class="section-bare">
+            <h2 id="request-flow">Sequence diagram</h2>
+            <p>The sequence diagram illustrates the end-to-end flow of a GP submitting a clinical query and receiving a streamed AI-generated response. The GP sends a message via the Frontend, which makes a REST call to the Backend. The Backend persists the message to PostgreSQL, enqueues an asynchronous RAG job in Redis, and immediately opens a Server-Sent Events (SSE) stream back to the Frontend. Concurrently, the RAG Worker picks up the job and calls the RAG Service, which retrieves relevant document embeddings from PostgreSQL's pgvector store and routes the query to the appropriate LLM — either a locally-hosted Ollama instance (running llama3-med42-8b) or a cloud-hosted Med42-70B model via RunPod, selected based on query complexity and clinical risk. Generated tokens are published back through the Backend's event bus and streamed token-by-token to the Frontend via SSE. Once generation completes, the final message is persisted and a notification is dispatched to any assigned specialist.</p>
+            <p>Once generation completes, the consultation moves through a review state machine: a chat starts as open, is automatically submitted after the first GP message, then assigned when a specialist self-assigns the case, and transitions through reviewing before reaching an approved or rejected terminal state. Message-level review overlays this chat-level workflow — individual AI messages carry their own review metadata, allowing specialists to reject or replace a single answer while keeping the broader consultation in progress.</p>
+            <img class="diagram-img" src="assets/diagrams/sequence_diagram.svg" alt="Sequence diagram — GP message to AI response"/>
+          </section>
+
+          <section class="section-bare">
+            <h2 id="data-model">ER diagram</h2>
+            <p>The database schema centres on the <code>users</code> table, which stores credentials, role (GP, Specialist, Admin), email verification state (<code>email_verified</code>, <code>email_verified_at</code>), and a <code>session_version</code> integer used to instantly invalidate all active tokens for a user. Each chat belongs to a GP (<code>user_id</code>) and may optionally be assigned to a specialist (<code>specialist_id</code>); it carries patient context as a JSONB blob alongside status, severity, specialty, and specialist review fields (<code>assigned_at</code>, <code>reviewed_at</code>, <code>review_feedback</code>). Individual messages within a chat record the sender role, content, AI citations as JSONB, generation state, and per-message review metadata. File attachments are tracked in <code>file_attachments</code> with a reference to the uploading user, MIME type, and file size. Supporting tables include <code>audit_logs</code> (an immutable trail of user actions), <code>notifications</code> (per-user in-app alerts linked to chats), <code>email_verification_tokens</code>, and <code>password_reset_tokens</code>.</p>
+            <img class="diagram-img" src="assets/diagrams/er_diagram.svg" alt="Entity relationship diagram"/>
+          </section>
+
+          <section class="section-bare">
+            <h2 id="rag-pipeline">RAG pipeline</h2>
+            <div class="timeline">
+              <div class="timeline__item" data-step="1">
+                <strong>Ingestion</strong>
+                Clinical PDFs are chunked into 450-character segments with 100-character overlap, embedded using all-MiniLM-L6-v2 (384-dimensional vectors), and stored in pgvector with HNSW indexing.
+              </div>
+              <div class="timeline__item" data-step="2">
+                <strong>Retrieval</strong>
+                At query time the user's question is embedded and a cosine similarity search returns the top-k most relevant document chunks from the knowledge base.
+              </div>
+              <div class="timeline__item" data-step="3">
+                <strong>Intelligent routing</strong>
+                A composite score is computed across three dimensions — <em>complexity</em> (query length, sentence count, reasoning terms), <em>risk</em> (urgency flags, clinical keywords), and <em>ambiguity</em> (retrieval confidence and score gaps). Queries scoring above 0.65 route to the cloud model (Med42 70B on RunPod, 2× A100 GPUs); simpler queries use the local model (Med42 8B via Ollama).
+              </div>
+              <div class="timeline__item" data-step="4">
+                <strong>Generation</strong>
+                Responses are grounded strictly in retrieved passages with bracketed citations [1], [2]. Both models expose an OpenAI-compatible <code>/v1/chat/completions</code> interface via vLLM, making the routing layer model-agnostic.
+              </div>
+            </div>
+          </section>
+
+          <section class="section-bare">
+            <h2 id="caching">Caching strategy</h2>
+            <div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cache target</th>
+                    <th>TTL</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Chat list</td>
+                    <td>30 s</td>
+                    <td>Invalidated on any write to the user's chats.</td>
+                  </tr>
+                  <tr>
+                    <td>Chat detail</td>
+                    <td>60 s</td>
+                    <td>Invalidated on message add or status change.</td>
+                  </tr>
+                  <tr>
+                    <td>User profile</td>
+                    <td>300 s</td>
+                    <td>Invalidated on profile update.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>All cache keys are scoped per user ID to prevent cross-tenant data leakage. Pattern-based bulk invalidation ensures consistency on write operations. If Redis is unavailable the system falls back gracefully to direct database queries with no change in API behaviour.</p>
+          </section>
+
+          <section class="section-bare">
+            <h2 id="security">Security</h2>
+            <dl class="security-list">
+              <div class="security-list__item">
+                <dt>Password hashing</dt>
+                <dd>All passwords are hashed with bcrypt before storage. Plain-text passwords are never written to the database or logs.</dd>
+              </div>
+              <div class="security-list__item">
+                <dt>JWT authentication</dt>
+                <dd>Tokens are validated on every protected request. 401 responses trigger automatic frontend logout. Tokens expire after 8 days.</dd>
+              </div>
+              <div class="security-list__item">
+                <dt>Resource-level isolation</dt>
+                <dd>Users can only access their own chats unless they are the assigned specialist. The backend enforces ownership checks at the query layer, not just the route layer.</dd>
+              </div>
+              <div class="security-list__item">
+                <dt>Scoped cache keys</dt>
+                <dd>Redis keys are namespaced per user ID, preventing information leakage between accounts even if cache entries share the same logical object type.</dd>
+              </div>
+              <div class="security-list__item">
+                <dt>Immutable audit log</dt>
+                <dd>All user actions are written to an <code>audit_logs</code> table. Rows are append-only — no update or delete paths exist in the application layer.</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="section-card">
+            <h2 id="design-patterns">Design patterns</h2>
+            <p>Ambience-AI applies nine design patterns distributed across its three service layers. On the Backend, the repository pattern abstracts all database access behind a consistent CRUD interface with one repository class per entity; the service layer encapsulates business logic between API routes and repositories; and dependency injection via FastAPI's <code>Depends()</code> mechanism injects database sessions and role-verified user objects into every route handler, enforcing GP, Specialist, and Admin access controls. An observer/event bus (<code>_ChatEventBus</code> in <code>sse.py</code>) implements async pub/sub token streaming with a replay buffer so late-joining subscribers receive in-flight tokens. In the RAG Service, a strategy pattern in <code>router.py</code> selects between the local Ollama model and the cloud LLM by scoring query complexity and clinical risk, while a pipeline pattern in <code>pipeline.py</code> processes document ingestion through eight sequential, fail-fast stages (EXTRACT → CLEAN → SECTION → TABLE → METADATA → CHUNK → EMBED → STORE). Shared singleton instances of <code>Settings</code> and <code>RedisCache</code> ensure consistent configuration and cache state. On the Frontend, React Context combined with custom hooks (<code>AuthContext</code>, <code>useChatStream</code>) manages global JWT auth state and the full SSE stream lifecycle, while a protected route higher-order component enforces role-based access and redirects unauthorised users.</p>
+            <div class="diagram-card">
+              <img src="assets/diagrams/design_patterns.svg" alt="Design patterns used in Ambience AI" />
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="packages-apis">Packages and APIs</h2>
+            <p>The backend is built on FastAPI with SQLAlchemy for ORM, Alembic for schema migrations, Pydantic for request/response validation, PyJWT for token signing, httpx for async HTTP calls, redis-py for caching and job queuing, and bcrypt for password hashing. The RAG service relies on sentence-transformers for generating embeddings, PyTorch as the ML runtime, pgvector for vector similarity search, PyMuPDF for PDF extraction, langchain-text-splitters for document chunking, rq for the Redis-backed job queue, and httpx for LLM API calls. The frontend is built with React 19, React Router 7 for client-side routing, Axios with auth interceptors for API communication, Tailwind CSS 4 for styling, Recharts for admin dashboard visualisations, and crypto-js for AES-GCM encryption of localStorage tokens. Testing is covered by Vitest and Testing Library for unit tests, Playwright for end-to-end tests, and MSW for API mocking. The REST API is grouped by role: auth endpoints handle registration, login, email verification, and password reset; GP endpoints manage chat lifecycle and SSE streaming; specialist endpoints cover queue management, case assignment, and clinical review submission; and admin endpoints provide user management, audit log access, and RAG queue monitoring.</p>
+            <div class="diagram-card">
+              <img src="assets/diagrams/packages_and_apis.svg" alt="Packages and APIs overview" />
+            </div>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation/">Frontend, backend, and RAG implementation</a><a href="system-design/">Architecture, flows, and data model</a><a href="testing/">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices/#user-manual">User manual</a><a href="appendices/#deployment-manual">Deployment manual</a><a href="appendices/#privacy">GDPR and privacy</a><a href="blog/">External blog and monthly video</a></div></section></div></footer>
+    <script src="assets/site.js?v=20260322f"></script>
+  </body>
+</html>

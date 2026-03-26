@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="../" />
+    <title>Evaluation & Testing · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css?v=20260325ag" />
+  </head>
+  <body data-page="testing">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="/" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="/" data-nav="home">Home</a><a href="requirements/" data-nav="requirements">Requirements</a><a href="research/" data-nav="research">Research</a><a href="ui-design/" data-nav="ui-design">UI Design</a><a href="system-design/" data-nav="system-design">System Design</a><a href="implementation/" data-nav="implementation">Implementation</a><a href="testing/" data-nav="testing">Testing</a><a href="testing/" data-nav="evaluation">Evaluation</a><a href="appendices/" data-nav="appendices">Appendices</a><a href="blog/" data-nav="blog">Blog</a></nav><a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Evaluation and Testing</h1>
+        <p class="report-page-subtitle">How the project was validated</p>
+        <p class="report-page-summary">
+          Evaluation for this project is primarily engineering-driven. The codebase is accompanied by
+          backend, frontend, RAG-service, and end-to-end tests that target workflow correctness,
+          access control, notification behaviour, audit logging, and retrieval logic. This does not
+          make the system clinically validated, but it does make the implementation inspectable and
+          testable.
+        </p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card">
+            <h2 id="test-landscape">Automated test landscape</h2>
+            <div class="stats-grid">
+              <div class="metric-card">
+                <strong>11</strong>
+                <p>Backend test modules covering auth, chats, specialist workflow, admin, security, and RAG audit behaviour.</p>
+              </div>
+              <div class="metric-card">
+                <strong>14</strong>
+                <p>Frontend test files using Vitest, Testing Library, and MSW for page and component behaviour.</p>
+              </div>
+              <div class="metric-card">
+                <strong>34</strong>
+                <p>RAG service test files spanning ingestion, retrieval, citation logic, pipeline behaviour, and configuration.</p>
+              </div>
+              <div class="metric-card">
+                <strong>1+</strong>
+                <p>Playwright end-to-end flow entry point for browser-level system behaviour.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="backend-testing">Backend testing focus</h2>
+            <ul>
+              <li>Authentication and profile management, including password reset and strength enforcement.</li>
+              <li>Chat lifecycle operations, title updates, submission behaviour, and access restrictions.</li>
+              <li>Specialist assignment, approval, rejection, and request-changes flows.</li>
+              <li>Notification creation, unread filters, and mark-as-read behaviour.</li>
+              <li>Admin stats and admin-only access control.</li>
+              <li>Security and RAG audit logging, including distinction between grounded answers and service failures.</li>
+            </ul>
+          </section>
+
+          <section class="section-card">
+            <h2 id="frontend-testing">Frontend testing focus</h2>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Auth and route state</strong>
+                <p>Tests cover the auth context, protected routes, login, registration, and localStorage restoration behaviour.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Interaction components</strong>
+                <p>Notification dropdowns, chat inputs, headers, badges, and message rendering are exercised in component tests.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Page-level flows</strong>
+                <p>GP, specialist, and admin pages are tested with mocked API responses using MSW.</p>
+              </div>
+              <div class="mini-card">
+                <strong>E2E smoke path</strong>
+                <p>Playwright provides browser-level execution over a running stack.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="rag-testing">RAG service testing focus</h2>
+            <p class="lede">
+              The RAG codebase has the widest test spread because it contains the most pipeline stages.
+              Tests exist for ingestion, metadata extraction, chunking, embedding, vector store logic,
+              retrieval filters, citation construction, reranking and routing helpers, prompt creation,
+              and API routes.
+            </p>
+            <div class="card-grid">
+              <div class="metric-card">
+                <strong>Ingestion</strong>
+                <p>Chunking, cleaning, extraction, table detection, metadata, storage, and CLI paths.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Retrieval</strong>
+                <p>Vector search, keyword search, filtering, fusion, reranking, citation logic, and query APIs.</p>
+              </div>
+              <div class="metric-card">
+                <strong>Generation</strong>
+                <p>Prompt construction, pipeline execution, routing rules, and API contracts.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="evaluation-summary">Evaluation summary</h2>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Question</th>
+                    <th>Evidence in repository</th>
+                    <th>Interpretation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Does the workflow enforce roles?</td>
+                    <td>Protected frontend routes and role-specific backend dependencies.</td>
+                    <td>Yes, at both UI and API levels.</td>
+                  </tr>
+                  <tr>
+                    <td>Are AI answers traceable?</td>
+                    <td>Messages store citation metadata; source PDFs can be opened via document endpoints.</td>
+                    <td>Partially yes; grounded answers are explicit when retrieval succeeds.</td>
+                  </tr>
+                  <tr>
+                    <td>Is specialist oversight real?</td>
+                    <td>Assignment, review, request-changes, and manual-response flows are implemented in the specialist service.</td>
+                    <td>Yes, oversight is embedded in the business process.</td>
+                  </tr>
+                  <tr>
+                    <td>Is the architecture production-hardened?</td>
+                    <td>Compose deployment, automated tests, and modular services exist, but some paths remain transitional.</td>
+                    <td>It is a serious engineering prototype rather than a fully hardened clinical product.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="limitations">Limits of the evaluation</h2>
+            <div class="callout callout--danger">
+              <h3>Important distinction</h3>
+              <p>
+                Automated tests validate software behaviour, not medical efficacy. The repository shows
+                that the system behaves consistently under tested scenarios, but it does not by itself
+                establish clinical safety or regulatory readiness.
+              </p>
+            </div>
+            <ul>
+              <li>No formal user study is represented in the current repository.</li>
+              <li>No benchmark suite for clinical answer quality is packaged alongside the app.</li>
+              <li>Model behaviour still depends on external runtime availability and the quality of ingested guideline sources.</li>
+            </ul>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout">
+            <h3>Bottom line</h3>
+            <p>
+              The project is well tested as a software system. It should still be described as a
+              specialist-reviewed consultation assistant, not as an autonomous diagnostic authority.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation/">Frontend, backend, and RAG implementation</a><a href="system-design/">Architecture, flows, and data model</a><a href="testing/">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices/#user-manual">User manual</a><a href="appendices/#deployment-manual">Deployment manual</a><a href="appendices/#privacy">GDPR and privacy</a><a href="blog/">External blog and monthly video</a></div></section></div></footer>
+    <script src="assets/site.js?v=20260322f"></script>
+  </body>
+</html>
