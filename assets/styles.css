@@ -4136,8 +4136,12 @@ body[data-page="blog"] .toc-panel {
 	border-color: transparent;
 }
 
-.blog-nav__list a.is-active .blog-nav__week,
 .blog-nav__list a:hover .blog-nav__week {
+	color: #005eb8;
+	font-weight: 600;
+}
+
+.blog-nav__list a.is-active .blog-nav__week {
 	color: #005eb8;
 	font-weight: 600;
 }
