@@ -304,7 +304,7 @@
           <!-- 3. UNIT TESTING — FRONTEND                                   -->
           <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
-            <h2 id="unit-frontend">Unit testing — Frontend</h2>
+            <h2 id="unit-frontend">Unit testing — Frontend<span class="ts-pass-badge">All passing</span></h2>
             <p class="lede">
               The frontend test suite uses Vitest and React Testing Library. Test files mirror
               the <code>src/</code> folder structure exactly, so every module has a corresponding
@@ -369,7 +369,7 @@
           <!-- 4. UNIT TESTING — BACKEND                                    -->
           <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
-            <h2 id="unit-backend">Unit testing — Backend</h2>
+            <h2 id="unit-backend">Unit testing — Backend<span class="ts-pass-badge">All passing</span></h2>
             <p class="lede">
               The backend suite uses Pytest with pytest-asyncio. Test files cover the full
               feature surface: authentication, chat lifecycle, specialist workflow, admin
@@ -450,7 +450,7 @@
           <!-- 5. UNIT TESTING — RAG SERVICE                               -->
           <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
-            <h2 id="unit-rag">Unit testing — RAG service</h2>
+            <h2 id="unit-rag">Unit testing — RAG service<span class="ts-pass-badge">All passing</span></h2>
             <p class="lede">
               The RAG service has the widest test spread, with the most pipeline stages to cover.
               Every stage of the pipeline — from document ingestion to final answer generation —
@@ -650,7 +650,7 @@
           <!-- 8. END-TO-END TESTING                                        -->
           <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
-            <h2 id="e2e-testing">End-to-end testing — Playwright</h2>
+            <h2 id="e2e-testing">End-to-end testing — Playwright<span class="ts-pass-badge">All passing</span></h2>
             <p class="lede">
               Six end-to-end test suites in <code>frontend/e2e/app.spec.ts</code> drive a real
               browser against the running development stack. Tests execute on both Chromium
@@ -791,6 +791,149 @@
           <!-- ═══════════════════════════════════════════════════════════ -->
           <!-- 10. CI PIPELINE & COVERAGE                                   -->
           <!-- ═══════════════════════════════════════════════════════════ -->
+          <style>
+            /* ── Pass badge ── */
+            .ts-pass-badge {
+              display: inline-flex;
+              align-items: center;
+              gap: 4px;
+              background: #ecfdf5;
+              color: #059669;
+              border: 1px solid #a7f3d0;
+              border-radius: 100px;
+              font-size: 0.7rem;
+              font-weight: 700;
+              padding: 3px 9px;
+              vertical-align: middle;
+              margin-left: 10px;
+              white-space: nowrap;
+              letter-spacing: 0.02em;
+            }
+            .ts-pass-badge::before { content: '✓ '; }
+
+            /* ── CI pipeline diagram ── */
+            .ci-pipeline {
+              display: flex;
+              align-items: flex-start;
+              overflow-x: auto;
+              scrollbar-width: none;
+              padding: 28px 0 8px;
+              -webkit-mask-image: linear-gradient(to right, black 92%, transparent 100%);
+              mask-image: linear-gradient(to right, black 92%, transparent 100%);
+            }
+            .ci-pipeline::-webkit-scrollbar { display: none; }
+            .ci-node {
+              flex-shrink: 0;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 7px;
+              width: 84px;
+              opacity: 0;
+              transform: translateY(10px);
+              transition: opacity 0.35s ease, transform 0.35s ease;
+            }
+            .ci-node.ci-visible { opacity: 1; transform: translateY(0); }
+            .ci-node__icon {
+              width: 52px;
+              height: 52px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 1.35rem;
+              flex-shrink: 0;
+              border: 2px solid transparent;
+              transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+            .ci-node:hover .ci-node__icon {
+              transform: scale(1.1);
+              box-shadow: 0 4px 16px rgba(0,94,184,0.18);
+            }
+            .ci-node__label {
+              font-size: 0.72rem;
+              font-weight: 700;
+              color: #07172d;
+              text-align: center;
+              line-height: 1.3;
+            }
+            .ci-node__sub {
+              font-size: 0.62rem;
+              color: #5b6c7d;
+              text-align: center;
+              line-height: 1.3;
+            }
+            .ci-conn {
+              flex-shrink: 0;
+              width: 28px;
+              margin-top: 26px;
+              height: 2px;
+              background: linear-gradient(to right, #b8d0ee, #005eb8);
+              position: relative;
+            }
+            .ci-conn::after {
+              content: '';
+              position: absolute;
+              right: -1px;
+              top: -4px;
+              border-left: 7px solid #005eb8;
+              border-top: 5px solid transparent;
+              border-bottom: 5px solid transparent;
+            }
+            .ci-node--push    .ci-node__icon { background: #f0f0ff; border-color: #c4b5fd; }
+            .ci-node--quality .ci-node__icon { background: #fff7ed; border-color: #fed7aa; }
+            .ci-node--unit    .ci-node__icon { background: #eff6ff; border-color: #bfdbfe; }
+            .ci-node--integ   .ci-node__icon { background: #f0fdf4; border-color: #bbf7d0; }
+            .ci-node--cov     .ci-node__icon { background: #faf5ff; border-color: #e9d5ff; }
+            .ci-node--e2e     .ci-node__icon { background: #fff1f2; border-color: #fecdd3; }
+            .ci-node--deploy  .ci-node__icon { background: #ecfdf5; border-color: #6ee7b7; }
+
+            /* ── Coverage bars ── */
+            .ts-cov-bars { display: flex; flex-direction: column; gap: 14px; margin: 20px 0 28px; }
+            .ts-cov-item {
+              display: grid;
+              grid-template-columns: 108px 1fr 52px;
+              align-items: center;
+              gap: 14px;
+            }
+            .ts-cov-item__label { font-size: 0.875rem; font-weight: 600; color: #07172d; }
+            .ts-cov-track {
+              height: 10px;
+              background: #e8eef6;
+              border-radius: 100px;
+              overflow: hidden;
+            }
+            .ts-cov-fill {
+              height: 100%;
+              width: 0%;
+              background: linear-gradient(to right, #003087, #005eb8, #0072ce);
+              border-radius: 100px;
+              transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
+            }
+            .ts-cov-item__pct { font-size: 0.875rem; font-weight: 700; color: #005eb8; text-align: right; }
+
+            /* ── Tool badges ── */
+            .ts-tool-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+            .ts-tool-badge {
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+              padding: 5px 13px;
+              border-radius: 100px;
+              font-size: 0.78rem;
+              font-weight: 600;
+              border: 1.5px solid;
+              letter-spacing: 0.01em;
+            }
+            .ts-tool-badge--fe   { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+            .ts-tool-badge--be   { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
+            .ts-tool-badge--e2e  { background: #fff7ed; border-color: #fed7aa; color: #c2410c; }
+            .ts-tool-badge--qual { background: #fff1f2; border-color: #fecdd3; color: #be123c; }
+
+            /* ── Scroll reveal ── */
+            .sc-reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
+            .sc-reveal.sc-in { opacity: 1; transform: translateY(0); }
+          </style>
           <section class="section-card">
             <h2 id="ci-coverage">CI pipeline and coverage enforcement</h2>
             <p class="lede">
@@ -798,6 +941,50 @@
               and on every pull request. The pipeline fails fast: quality checks run before
               tests, and a coverage shortfall fails the build.
             </p>
+
+            <div class="ci-pipeline" id="ciPipeline">
+              <div class="ci-node ci-node--push">
+                <div class="ci-node__icon">📦</div>
+                <div class="ci-node__label">Push / PR</div>
+                <div class="ci-node__sub">triggers CI</div>
+              </div>
+              <div class="ci-conn"></div>
+              <div class="ci-node ci-node--quality">
+                <div class="ci-node__icon">🔍</div>
+                <div class="ci-node__label">Lint &amp; Types</div>
+                <div class="ci-node__sub">ESLint · Ruff · MyPy · tsc</div>
+              </div>
+              <div class="ci-conn"></div>
+              <div class="ci-node ci-node--unit">
+                <div class="ci-node__icon">🧪</div>
+                <div class="ci-node__label">Unit Tests</div>
+                <div class="ci-node__sub">Vitest · Pytest</div>
+              </div>
+              <div class="ci-conn"></div>
+              <div class="ci-node ci-node--integ">
+                <div class="ci-node__icon">🔗</div>
+                <div class="ci-node__label">Integration</div>
+                <div class="ci-node__sub">MSW · SQLite · PG</div>
+              </div>
+              <div class="ci-conn"></div>
+              <div class="ci-node ci-node--cov">
+                <div class="ci-node__icon">📊</div>
+                <div class="ci-node__label">Coverage Gate</div>
+                <div class="ci-node__sub">≥ 90 % enforced</div>
+              </div>
+              <div class="ci-conn"></div>
+              <div class="ci-node ci-node--e2e">
+                <div class="ci-node__icon">🌐</div>
+                <div class="ci-node__label">E2E Tests</div>
+                <div class="ci-node__sub">Playwright · 2 browsers</div>
+              </div>
+              <div class="ci-conn"></div>
+              <div class="ci-node ci-node--deploy">
+                <div class="ci-node__icon">✅</div>
+                <div class="ci-node__label">Pass</div>
+                <div class="ci-node__sub">merge allowed</div>
+              </div>
+            </div>
 
             <h3>RAG service CI pipeline (documented)</h3>
             <div class="table-card">
@@ -845,6 +1032,23 @@
             </div>
 
             <h3>Coverage thresholds by service</h3>
+            <div class="ts-cov-bars" id="covBars">
+              <div class="ts-cov-item" data-target="90">
+                <div class="ts-cov-item__label">Frontend</div>
+                <div class="ts-cov-track"><div class="ts-cov-fill"></div></div>
+                <div class="ts-cov-item__pct">90%+</div>
+              </div>
+              <div class="ts-cov-item" data-target="90">
+                <div class="ts-cov-item__label">Backend</div>
+                <div class="ts-cov-track"><div class="ts-cov-fill"></div></div>
+                <div class="ts-cov-item__pct">90%+</div>
+              </div>
+              <div class="ts-cov-item" data-target="90">
+                <div class="ts-cov-item__label">RAG Service</div>
+                <div class="ts-cov-track"><div class="ts-cov-fill"></div></div>
+                <div class="ts-cov-item__pct">90%+</div>
+              </div>
+            </div>
             <div class="table-card">
               <table>
                 <thead>
@@ -884,6 +1088,19 @@
           <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
             <h2 id="tooling-summary">Tooling summary</h2>
+            <div class="ts-tool-badges">
+              <span class="ts-tool-badge ts-tool-badge--fe">Vitest</span>
+              <span class="ts-tool-badge ts-tool-badge--fe">React Testing Library</span>
+              <span class="ts-tool-badge ts-tool-badge--fe">MSW v2</span>
+              <span class="ts-tool-badge ts-tool-badge--e2e">Playwright</span>
+              <span class="ts-tool-badge ts-tool-badge--fe">TypeScript</span>
+              <span class="ts-tool-badge ts-tool-badge--be">Pytest</span>
+              <span class="ts-tool-badge ts-tool-badge--be">pytest-asyncio</span>
+              <span class="ts-tool-badge ts-tool-badge--be">pytest-cov</span>
+              <span class="ts-tool-badge ts-tool-badge--qual">ESLint</span>
+              <span class="ts-tool-badge ts-tool-badge--qual">Ruff</span>
+              <span class="ts-tool-badge ts-tool-badge--qual">MyPy</span>
+            </div>
             <div class="table-card">
               <table>
                 <thead>
@@ -1051,6 +1268,48 @@
             });
           }, { threshold: 0.15 });
           observer.observe(grid);
+        }
+
+        /* ── Scroll reveal for section cards ── */
+        document.querySelectorAll('.section-card').forEach(function(card) {
+          card.classList.add('sc-reveal');
+        });
+        var scObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('sc-in');
+              scObs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+        document.querySelectorAll('.sc-reveal').forEach(function(el) { scObs.observe(el); });
+
+        /* ── CI pipeline diagram ── */
+        var ciPipeline = document.getElementById('ciPipeline');
+        if (ciPipeline) {
+          var ciObs = new IntersectionObserver(function(entries) {
+            if (!entries[0].isIntersecting) return;
+            ciPipeline.querySelectorAll('.ci-node').forEach(function(node, i) {
+              setTimeout(function() { node.classList.add('ci-visible'); }, i * 120);
+            });
+            ciObs.disconnect();
+          }, { threshold: 0.2 });
+          ciObs.observe(ciPipeline);
+        }
+
+        /* ── Coverage bars ── */
+        var covBars = document.getElementById('covBars');
+        if (covBars) {
+          var covObs = new IntersectionObserver(function(entries) {
+            if (!entries[0].isIntersecting) return;
+            covBars.querySelectorAll('.ts-cov-item').forEach(function(item, i) {
+              var target = parseInt(item.dataset.target, 10);
+              var fill = item.querySelector('.ts-cov-fill');
+              setTimeout(function() { fill.style.width = target + '%'; }, i * 180);
+            });
+            covObs.disconnect();
+          }, { threshold: 0.3 });
+          covObs.observe(covBars);
         }
 
         /* ── Chip tabs ── */
