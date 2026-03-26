@@ -115,7 +115,7 @@
       /* Team contributions */
       .ev-team-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 16px;
         margin-top: 8px;
       }
@@ -648,8 +648,9 @@
           <section class="section-card">
             <h2 id="team-contributions">Team contributions</h2>
             <p>
-              The project was delivered by a team of five. Each member contributed equally across the
-              project lifecycle. Contribution percentages are equal at 20% each.
+              The project was delivered by a team of five, each with a distinct ownership area.
+              Contributions are verified from 89 merged pull requests across Dec 2025 – Mar 2026.
+              Percentages are equal at 20% each.
             </p>
 
             <div class="ev-team-grid ev-reveal">
@@ -657,60 +658,77 @@
               <div class="ev-team-card">
                 <div class="ev-team-card__avatar">K</div>
                 <span class="ev-team-card__name">Kavin</span>
-                <span class="ev-team-card__role">RAG Retrieval · Testing · CI/DevOps</span>
+                <span class="ev-team-card__role">RAG Ingestion · Retrieval · QA</span>
                 <span class="ev-team-card__pct">20%</span>
                 <div class="ev-team-card__tasks">
-                  Vector &amp; keyword search pipeline,<br>
-                  reranking, deduplication &amp; citation assembly,<br>
-                  retrieval test suite &amp; CI setup
+                  Full ingestion pipeline: extraction, cleaning, chunking,<br>
+                  section/table detection, embedding &amp; vector storage<br>
+                  (PRs 27–36)<br>
+                  Full retrieval pipeline: vector search, keyword search,<br>
+                  hybrid fusion, reranking, metadata filtering, citations<br>
+                  (PRs 52–62, 94)<br>
+                  CORS fixes, JWT refresh tokens,<br>
+                  E2E &amp; integration tests, Docker seeding (rag_chunks)
                 </div>
               </div>
 
               <div class="ev-team-card">
                 <div class="ev-team-card__avatar">H</div>
                 <span class="ev-team-card__name">Hakan</span>
-                <span class="ev-team-card__role">Security · File Uploads · Patient Context</span>
+                <span class="ev-team-card__role">Backend Core · Security · DevOps</span>
                 <span class="ev-team-card__pct">20%</span>
                 <div class="ev-team-card__tasks">
-                  AES-GCM localStorage encryption,<br>
-                  file upload pipeline (pypdf, RAG injection),<br>
-                  patient context, Alembic migrations, Docker secrets
+                  Majority of backend: specialist workflow, auth / authz,<br>
+                  input validation, Alembic migrations (PRs 47, 49, 50)<br>
+                  RAG service API connection &amp; patient context injection<br>
+                  AES-GCM encryption, secrets management,<br>
+                  nginx TLS reverse proxy, pre-handover hardening (PR 91)<br>
+                  File uploads, admin dashboard, guideline PDF upload
                 </div>
               </div>
 
               <div class="ev-team-card">
                 <div class="ev-team-card__avatar">D</div>
                 <span class="ev-team-card__name">Daniel</span>
-                <span class="ev-team-card__role">Auth Flows · Guideline Sync · Caching</span>
+                <span class="ev-team-card__role">Additional Features · Infrastructure</span>
                 <span class="ev-team-card__pct">20%</span>
                 <div class="ev-team-card__tasks">
-                  Email verification &amp; password reset flows,<br>
-                  guideline web-crawl &amp; auto-sync scheduler,<br>
-                  Redis caching layer for chats &amp; profiles
+                  Email verification &amp; password reset (PRs 85, 86)<br>
+                  Automated NICE guideline web-crawl &amp; sync scheduler (PR 90)<br>
+                  Redis caching layer &amp; invalidation (PR 83)<br>
+                  Retry queue for failed RAG generation (PR 82)<br>
+                  RunPod cloud routing &amp; provider fallback (PR 80)
                 </div>
               </div>
 
               <div class="ev-team-card">
                 <div class="ev-team-card__avatar">W</div>
                 <span class="ev-team-card__name">William</span>
-                <span class="ev-team-card__role">RAG Generation · Citations · Fallback</span>
+                <span class="ev-team-card__role">RAG Generation · System Architecture · Prompts</span>
                 <span class="ev-team-card__pct">20%</span>
                 <div class="ev-team-card__tasks">
-                  RAG ask pipeline with Med42 / Ollama,<br>
-                  citation metadata &amp; source labelling,<br>
-                  low-confidence fallback &amp; no-context prompt
+                  RAG answer pipeline with Med42 / Ollama (PR 28)<br>
+                  Citation system: source alignment, format cleanup,<br>
+                  recommendation number stripping (PRs 95–98)<br>
+                  Prompt engineering: grounding strictness, citation honesty,<br>
+                  referral regex, no-context fallback<br>
+                  System architecture, Gaudi server setup,<br>
+                  Docker container structure, retrieval bug-fixing
                 </div>
               </div>
 
               <div class="ev-team-card">
                 <div class="ev-team-card__avatar">I</div>
                 <span class="ev-team-card__name">Ivan</span>
-                <span class="ev-team-card__role">Streaming · Async · Specialist Workflow</span>
+                <span class="ev-team-card__role">Frontend · Streaming · Specialist Workflow</span>
                 <span class="ev-team-card__pct">20%</span>
                 <div class="ev-team-card__tasks">
-                  SSE real-time AI response streaming,<br>
-                  asyncio + asyncpg architecture conversion,<br>
-                  per-message specialist review &amp; chat policy
+                  Majority of frontend development &amp; all UI changes<br>
+                  (PRs 23, 48, 51, 56)<br>
+                  SSE end-to-end chat streaming with polling fallback (PR 84)<br>
+                  Per-message specialist review &amp; auto-approval (PR 65)<br>
+                  RAG revision workflow with specialist override (PR 69)<br>
+                  Notifications UI, chat access policy, async architecture
                 </div>
               </div>
 
