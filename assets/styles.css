@@ -4043,7 +4043,9 @@ body[data-page="blog"] .toc-panel {
 	border-radius: 0;
 	box-shadow: none !important;
 	max-height: calc(100vh - 128px);
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+	scrollbar-gutter: auto;
 	z-index: 10;
 }
 
