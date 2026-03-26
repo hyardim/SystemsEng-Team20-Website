@@ -226,52 +226,30 @@
           <section class="blog-entry" id="week-11-12">
             <span class="blog-entry__tag">Weeks 11–12</span>
             <p>
-                          By this point, the team had a working local-first path and resumed steady feature work.
-                          The key objective was to avoid user-facing workflow disruption despite backend routing
-                          and environment changes.
-                        </p>
-
+              By this point, the team had a working local-first path and resumed steady feature work.
+              The key objective was to avoid user-facing workflow disruption despite backend routing
+              and environment changes.
+            </p>
             <p>
-                          We re-established stable inference and retrieval behavior, then validated fallback
-                          behavior under failure scenarios. Importantly, we kept the consultation and specialist
-                          review journey consistent so the infrastructure pivot did not create a different user
-                          experience.
-                        </p>
+              We re-established stable inference and retrieval behavior, then validated fallback
+              behavior under failure scenarios. Importantly, we kept the consultation and specialist
+              review journey consistent so the infrastructure pivot did not create a different user
+              experience.
+            </p>
           </section>
 
           <section class="blog-entry" id="week-9-10">
             <span class="blog-entry__tag">Weeks 9–10</span>
             <p>
-                          Around one month into infrastructure work, access to the original server was lost.
-                          This forced a planned rework: keep the clinical workflow intact while changing the
-                          deployment strategy to local-first processing with controlled cloud fallback.
-                        </p>
-
+              Around one month into infrastructure work, access to the original server was lost.
+              This forced a planned rework: keep the clinical workflow intact while changing the
+              deployment strategy to local-first processing with controlled cloud fallback.
+            </p>
             <p>
-                          This was the biggest disruption in the project timeline. Instead of dropping features,
-                          we reprioritized the order of work and redesigned provider routing so we could preserve
-                          safety and review guarantees while migrating away from the original server dependency.
-                        </p>
-          </section>
-
-          <section class="blog-entry" id="week-7-8">
-            <span class="blog-entry__tag">Weeks 7–8</span>
-            <p>
-                          We spent another two weeks improving robustness on the Gaudi 2 path and aligning
-                          implementation details with the agreed requirements before a major environmental change.
-                        </p>
-
-            <p>
-                          After the first Med42 70B runs succeeded, we focused on making that setup repeatable and
-                          less fragile. We cleaned up configuration steps, re-checked drivers after updates and
-                          documented the server setup decisions so the team could reproduce the working state.
-                        </p>
-
-            <p>
-                          Most of our effort here went into consistency and safety: we tightened citation mapping,
-                          refined specialist review behavior through feedback and documented deployment friction
-                          points. Those notes became important later when we had to rethink infrastructure.
-                        </p>
+              This was the biggest disruption in the project timeline. Instead of dropping features,
+              we reprioritized the order of work and redesigned provider routing so we could preserve
+              safety and review guarantees while migrating away from the original server dependency.
+            </p>
           </section>
 
           <section class="blog-entry" id="week-5-6">
@@ -322,13 +300,13 @@
             </p>
             <p>
               From those conversations, we narrowed scope to neurology and rheumatology guidance so retrieval could
-              be grounded in a realistic, manageable evidence base. We also agreed that evidence needed to stay
-              visible so the specialist could review and trust the response.
+              be grounded in a realistic evidence base. We also agreed that evidence needed to stay visible so the
+              specialist could review the response before anything was officially submitted to a GP.
             </p>
             <p>
               That gave us the first version of the requirements baseline: keep answers grounded in guideline
-              evidence, preserve specialist oversight and make the response easy to review before anything reached a
-              GP.
+              evidence and preserve specialist oversight, with the response easy to review before anything was
+              officially submitted to a GP.
             </p>
           </section>
 
