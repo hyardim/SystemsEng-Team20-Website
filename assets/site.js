@@ -1,3 +1,4 @@
+
 function initializeHeader() {
   const page = document.body.dataset.page;
   const header = document.querySelector('.site-header');
@@ -196,6 +197,22 @@ function renderFooter() {
   const footer = document.querySelector('.site-footer');
   if (!footer) return;
 
+  // Compute relative path prefix to site root.
+  // site.js is always at <root>/assets/site.js, so one level up = root.
+  const _root = (() => {
+    try {
+      const el = document.querySelector('script[src*="site.js"]');
+      if (!el?.src) return '';
+      const rootUrl = new URL('../', el.src).href;
+      const pageDir = window.location.href.replace(/[^/]*$/, '');
+      if (pageDir === rootUrl) return '';
+      if (pageDir.startsWith(rootUrl)) {
+        return '../'.repeat(pageDir.slice(rootUrl.length).split('/').filter(Boolean).length);
+      }
+    } catch {}
+    return '';
+  })();
+
   footer.innerHTML = `
     <div class="site-footer__inner site-footer__inner--custom">
       <section class="site-footer__brand">
@@ -207,15 +224,15 @@ function renderFooter() {
         <p class="site-footer__about-text">Clinical guidance + AI insights for specialist-supported consultation workflows.</p>
         <div class="site-footer__links site-footer__social">
           <a href="#" data-placeholder-link="github" aria-label="GitHub">
-            <img src="assets/icons/github.svg" alt="" aria-hidden="true" />
+            <img src="${_root}assets/icons/github.svg" alt="" aria-hidden="true" />
             <span>GitHub</span>
           </a>
           <a href="#" data-placeholder-link="youtube" aria-label="YouTube">
-            <img src="assets/icons/youtube.svg" alt="" aria-hidden="true" />
+            <img src="${_root}assets/icons/youtube.svg" alt="" aria-hidden="true" />
             <span>YouTube</span>
           </a>
           <a href="mailto:daniel.rotariu.24@ucl.ac.uk" aria-label="Contact us">
-            <img src="assets/icons/contact.svg" alt="" aria-hidden="true" />
+            <img src="${_root}assets/icons/contact.svg" alt="" aria-hidden="true" />
             <span>Contact Us</span>
           </a>
         </div>
@@ -224,15 +241,15 @@ function renderFooter() {
       <section class="site-footer__docs">
         <h4 class="site-footer__heading">Documentation</h4>
         <div class="site-footer__docs-grid">
-          <a href="requirements/">Requirements</a>
-          <a href="testing/">Testing</a>
-          <a href="research/">Research</a>
-          <a href="testing/">Evaluation</a>
-          <a href="ui-design/">UI Design</a>
-          <a href="appendices/">Appendices</a>
-          <a href="system-design/">System Design</a>
-          <a href="blog/">Blog</a>
-          <a href="implementation/">Implementation</a>
+          <a href="${_root}requirements.html">Requirements</a>
+          <a href="${_root}testing.html">Testing</a>
+          <a href="${_root}research.html">Research</a>
+          <a href="${_root}evaluation.html">Evaluation</a>
+          <a href="${_root}ui-design.html">UI Design</a>
+          <a href="${_root}appendices.html">Appendices</a>
+          <a href="${_root}system-design.html">System Design</a>
+          <a href="${_root}blog/blog.html">Blog</a>
+          <a href="${_root}implementation/implementation.html">Implementation</a>
         </div>
       </section>
 
@@ -240,13 +257,13 @@ function renderFooter() {
         <h4 class="site-footer__heading">Project Partners</h4>
         <div class="site-footer__partners-list">
           <a class="partner-link" href="https://www.nhs.uk" target="_blank" rel="noreferrer" aria-label="NHS website">
-            <img class="partner-logo-image" src="assets/partners/nhs-logo.png" alt="NHS" data-label="NHS" />
+            <img class="partner-logo-image" src="${_root}assets/partners/nhs-logo.png" alt="NHS" data-label="NHS" />
           </a>
           <a class="partner-link" href="https://www.intel.com" target="_blank" rel="noreferrer" aria-label="Intel website">
-            <img class="partner-logo-image" src="assets/partners/intel-logo.png" alt="Intel" data-label="Intel" />
+            <img class="partner-logo-image" src="${_root}assets/partners/intel-logo.png" alt="Intel" data-label="Intel" />
           </a>
           <a class="partner-link" href="https://www.ucl.ac.uk" target="_blank" rel="noreferrer" aria-label="UCL website">
-            <img class="partner-logo-image" src="assets/partners/ucl-logo.png" alt="UCL" data-label="UCL" />
+            <img class="partner-logo-image" src="${_root}assets/partners/ucl-logo.png" alt="UCL" data-label="UCL" />
           </a>
         </div>
       </section>
