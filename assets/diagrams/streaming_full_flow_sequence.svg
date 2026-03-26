@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="980" viewBox="0 0 1500 980" role="img" aria-labelledby="title desc">
+  <title id="title">Sequence Diagram - Full Streaming Flow</title>
+  <desc id="desc">Sequence diagram for full streaming flow across GP browser, backend API, RAG service, and Ollama model runtime.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f6f9ff" />
+      <stop offset="100%" stop-color="#edf3ff" />
+    </linearGradient>
+
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#2a5ca5" />
+    </marker>
+
+    <style>
+      .title { font: 700 34px Arial, sans-serif; fill: #083a80; }
+      .subtitle { font: 400 18px Arial, sans-serif; fill: #355885; }
+      .lane-header { rx: 12; stroke-width: 2; }
+      .lane-title { font: 700 18px Arial, sans-serif; fill: #ffffff; text-anchor: middle; dominant-baseline: middle; }
+      .lane-line { stroke: #7b99c0; stroke-width: 2.2; stroke-dasharray: 8 7; }
+      .msg { stroke: #2a5ca5; stroke-width: 3; marker-end: url(#arrow); fill: none; }
+      .msg-reply { stroke: #456f9f; stroke-width: 2.4; marker-end: url(#arrow); fill: none; stroke-dasharray: 7 6; }
+      .msg-stream { stroke: #1f7a4e; stroke-width: 3; marker-end: url(#arrow); fill: none; }
+      .step { font: 700 14px Arial, sans-serif; fill: #17457f; }
+      .label { font: 600 14px Arial, sans-serif; fill: #1a3f74; }
+      .label-stream { font: 600 14px Arial, sans-serif; fill: #1b6f49; }
+      .note-box { rx: 10; fill: #eef4ff; stroke: #8aa8cf; stroke-width: 1.5; }
+      .note { font: 500 13px Arial, sans-serif; fill: #355885; }
+      .legend { font: 500 14px Arial, sans-serif; fill: #2f4c73; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1500" height="980" fill="url(#bg)" />
+
+  <text x="750" y="58" class="title" text-anchor="middle">Sequence Diagram - Full Streaming Flow</text>
+  <text x="750" y="90" class="subtitle" text-anchor="middle">Consultation creation, async generation, and token-by-token SSE delivery</text>
+
+  <!-- Lane headers -->
+  <rect class="lane-header" x="60" y="120" width="270" height="62" fill="#1856a5" stroke="#1856a5" />
+  <text class="lane-title" x="195" y="151">GP Browser</text>
+
+  <rect class="lane-header" x="390" y="120" width="270" height="62" fill="#005eb8" stroke="#005eb8" />
+  <text class="lane-title" x="525" y="151">Backend API</text>
+
+  <rect class="lane-header" x="720" y="120" width="270" height="62" fill="#2b6cb0" stroke="#2b6cb0" />
+  <text class="lane-title" x="855" y="151">RAG Service</text>
+
+  <rect class="lane-header" x="1050" y="120" width="270" height="62" fill="#2f855a" stroke="#2f855a" />
+  <text class="lane-title" x="1185" y="151">Ollama Runtime</text>
+
+  <!-- Lifelines -->
+  <line class="lane-line" x1="195" y1="182" x2="195" y2="900" />
+  <line class="lane-line" x1="525" y1="182" x2="525" y2="900" />
+  <line class="lane-line" x1="855" y1="182" x2="855" y2="900" />
+  <line class="lane-line" x1="1185" y1="182" x2="1185" y2="900" />
+
+  <!-- 1 -->
+  <line class="msg" x1="205" y1="238" x2="515" y2="238" />
+  <text class="step" x="213" y="227">1</text>
+  <text class="label" x="286" y="227">POST /chats (new consultation)</text>
+
+  <!-- 2 -->
+  <line class="msg-reply" x1="515" y1="292" x2="205" y2="292" />
+  <text class="step" x="468" y="281">2</text>
+  <text class="label" x="292" y="281">200 {chat}</text>
+
+  <!-- backend note -->
+  <rect class="note-box" x="420" y="318" width="210" height="72" />
+  <text class="note" x="525" y="344" text-anchor="middle">start async generation task</text>
+  <text class="note" x="525" y="366" text-anchor="middle">create AI placeholder message</text>
+
+  <!-- 3 -->
+  <line class="msg" x1="205" y1="420" x2="515" y2="420" />
+  <text class="step" x="213" y="409">3</text>
+  <text class="label" x="262" y="409">GET /chats/{id}/stream (SSE)</text>
+
+  <!-- 4 -->
+  <line class="msg" x1="535" y1="474" x2="845" y2="474" />
+  <text class="step" x="543" y="463">4</text>
+  <text class="label" x="608" y="463">POST /answer (stream=true)</text>
+
+  <!-- 5 -->
+  <line class="msg" x1="865" y1="528" x2="1175" y2="528" />
+  <text class="step" x="873" y="517">5</text>
+  <text class="label" x="946" y="517">/v1/chat/completions stream request</text>
+
+  <!-- 6 -->
+  <line class="msg-stream" x1="1175" y1="592" x2="865" y2="592" />
+  <text class="step" x="1126" y="581">6</text>
+  <text class="label-stream" x="958" y="581">token chunks (many)</text>
+
+  <!-- 7 -->
+  <line class="msg-stream" x1="845" y1="648" x2="535" y2="648" />
+  <text class="step" x="798" y="637">7</text>
+  <text class="label-stream" x="620" y="637">streamed deltas to backend</text>
+
+  <!-- 8 -->
+  <line class="msg-stream" x1="515" y1="706" x2="205" y2="706" />
+  <text class="step" x="468" y="695">8</text>
+  <text class="label-stream" x="298" y="695">event: stream_start</text>
+
+  <!-- 9 -->
+  <line class="msg-stream" x1="515" y1="762" x2="205" y2="762" />
+  <text class="step" x="468" y="751">9</text>
+  <text class="label-stream" x="304" y="751">event: content (cumulative, repeated)</text>
+
+  <!-- 10 -->
+  <line class="msg-stream" x1="515" y1="822" x2="205" y2="822" />
+  <text class="step" x="462" y="811">10</text>
+  <text class="label-stream" x="288" y="811">event: complete, close stream</text>
+
+  <!-- Legend -->
+  <line x1="270" y1="940" x2="360" y2="940" stroke="#2a5ca5" stroke-width="3" marker-end="url(#arrow)" />
+  <text class="legend" x="375" y="945">Request / control path</text>
+
+  <line x1="700" y1="940" x2="790" y2="940" stroke="#456f9f" stroke-width="2.4" stroke-dasharray="7 6" marker-end="url(#arrow)" />
+  <text class="legend" x="805" y="945">Response path</text>
+
+  <line x1="1070" y1="940" x2="1160" y2="940" stroke="#1f7a4e" stroke-width="3" marker-end="url(#arrow)" />
+  <text class="legend" x="1175" y="945">Streaming token/event path</text>
+</svg>

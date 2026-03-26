@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real-Time Streaming · Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="../assets/styles.css?v=20260326" />
+  </head>
+  <body data-page="implementation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="../index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="../assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="../index.html" data-nav="home">Home</a><a href="../requirements.html" data-nav="requirements">Requirements</a><a href="../research.html" data-nav="research">Research</a><a href="../ui-design.html" data-nav="ui-design">UI Design</a><a href="../system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="../testing.html" data-nav="testing">Testing</a><a href="../evaluation.html" data-nav="evaluation">Evaluation</a><a href="../appendices.html" data-nav="appendices">Appendices</a><a href="../blog/blog.html" data-nav="blog">Blog</a></nav><button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Real-Time Streaming</h1>
+        <p class="report-page-subtitle">Section 5 of 11 · <a href="implementation.html">Back to Implementation</a></p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+
+          <section class="section-bare" id="libraries-used">
+            <h2>Libraries Used</h2>
+            <table class="impl-table"><thead><tr><th>Library</th><th>Purpose</th></tr></thead><tbody><tr><td><code>asyncio</code></td><td>Async event loop, queues, and locks</td></tr><tr><td><code>FastAPI StreamingResponse</code></td><td>HTTP streaming response</td></tr><tr><td><code>EventSource</code> (browser API)</td><td>Frontend SSE subscription</td></tr><tr><td><code>httpx</code> (async)</td><td>Streaming HTTP client to RAG service</td></tr></tbody></table>
+            <p>Server-Sent Events (SSE) deliver AI-generated tokens to the browser in real time without polling. The architecture uses an in-process event bus keyed by <code>chat_id</code>.</p>
+          </section>
+
+          <section class="section-bare" id="how-and-why">
+            <h2>Overview</h2>
+            <p>The backend publishes generation events to a per-chat event bus, and the frontend subscribes over SSE to progressively render tokens as they arrive. Stream lifecycle states and replay buffers keep clients synchronized even if they connect slightly late. Keep-alive comments and cleanup paths prevent idle disconnects and queue leaks during long responses.</p>
+            <p>SSE is used because it is lightweight, proxy-friendly, and allows incremental rendering without the overhead of polling. A polling fallback handles environments where SSE is blocked or unstable, so conversations remain usable instead of freezing on a spinner.</p>
+          </section>
+
+          <section class="section-bare" id="backend-event-bus">
+            <h2>Backend: Event Bus</h2>
+            <p>The <code>_ChatEventBus</code> class is a module-level singleton (<code>chat_event_bus</code>) that routes events from the background AI generation task to any HTTP SSE connections watching the same chat:</p>
+            <pre><code># backend/src/utils/sse.py
+@dataclass
+class SSEEvent:
+    event: str          # &quot;stream_start&quot; | &quot;content&quot; | &quot;complete&quot; | &quot;error&quot;
+    data:  dict[str, Any]
+    created_at: float = field(default_factory=time.monotonic)
+
+    def encode(self) -&gt; str:
+        &quot;&quot;&quot;Format as an SSE text frame for HTTP transport.&quot;&quot;&quot;
+        return f&quot;event: {self.event}\ndata: {json.dumps(self.data)}\n\n&quot;
+
+class _ChatEventBus:
+    def __init__(self):
+        self._subscribers: dict[int, list[asyncio.Queue]] = {}
+        self._stream_start: dict[int, SSEEvent] = {}  # replay buffer
+        self._last_content: dict[int, SSEEvent] = {}
+        self._active_streams: set[int] = set()
+        self._loop: asyncio.AbstractEventLoop | None = None
+        self._thread_lock = threading.Lock()         # for thread-safe publish path
+
+    async def subscribe(self, chat_id: int) -&gt; asyncio.Queue:
+        &quot;&quot;&quot;Register a new SSE client. Replay buffered events if streaming is active.&quot;&quot;&quot;
+        async with self._lock:
+            q = asyncio.Queue(maxsize=256)
+            self._subscribers.setdefault(chat_id, []).append(q)
+            # Late-connecting clients catch up by replaying stream_start + last_content
+            if chat_id in self._active_streams:
+                if start := self._stream_start.get(chat_id):
+                    q.put_nowait(start)
+                if last := self._last_content.get(chat_id):
+                    q.put_nowait(last)
+            return q
+
+    async def publish(self, chat_id: int, event: SSEEvent) -&gt; None:
+        &quot;&quot;&quot;Deliver event to all subscribers (called from async coroutines).&quot;&quot;&quot;
+        async with self._lock:
+            self._update_buffer(chat_id, event)
+            subs = list(self._subscribers.get(chat_id, []))
+        for q in subs:
+            try:
+                q.put_nowait(event)
+            except asyncio.QueueFull:
+                logger.warning(&quot;Dropping SSE event — subscriber queue full&quot;)
+
+    def publish_threadsafe(self, chat_id: int, event: SSEEvent) -&gt; None:
+        &quot;&quot;&quot;Deliver event from a background thread using call_soon_threadsafe.&quot;&quot;&quot;
+        with self._thread_lock:
+            self._update_buffer(chat_id, event)
+        if self._loop and self._loop.is_running():
+            self._loop.call_soon_threadsafe(self._sync_put, chat_id, event)
+
+    async def close_chat(self, chat_id: int) -&gt; None:
+        &quot;&quot;&quot;Send None sentinel to all subscribers — signals end of stream.&quot;&quot;&quot;
+        async with self._lock:
+            subs = list(self._subscribers.get(chat_id, []))
+            self._clear_buffer(chat_id)
+        for q in subs:
+            q.put_nowait(None)   # None = stream ended</code></pre>
+            <p>The two publish paths are intentional: async generation uses <code>publish</code>, while thread-originating callers use <code>publish_threadsafe</code>. Both paths update the same replay buffer so late subscribers observe consistent state regardless of publish source.</p>
+          </section>
+
+          <section class="section-bare" id="backend-sse-endpoint">
+            <h2>Backend: SSE Endpoint</h2>
+            <pre><code># backend/src/api/endpoints/chats.py
+@router.get(&quot;/{chat_id}/stream&quot;)
+async def stream_chat(
+    chat_id: int,
+    user: User = Depends(get_current_user_from_cookie_or_header),
+):
+    # Validate user has access to this chat
+    _assert_chat_stream_access(chat_id, user)
+
+    return StreamingResponse(
+        sse_event_generator(chat_id),    # async generator from sse.py
+        media_type=&quot;text/event-stream&quot;,
+        headers={
+            &quot;Cache-Control&quot;: &quot;no-cache&quot;,
+            &quot;X-Accel-Buffering&quot;: &quot;no&quot;,   # prevent nginx from buffering the stream
+        },
+    )</code></pre>
+            <pre><code># backend/src/utils/sse.py
+async def sse_event_generator(chat_id: int) -&gt; AsyncGenerator[str, None]:
+    &quot;&quot;&quot;Yields SSE-formatted strings. Includes keep-alive and idle timeout.&quot;&quot;&quot;
+    q = await chat_event_bus.subscribe(chat_id)
+    try:
+        while True:
+            try:
+                event = await asyncio.wait_for(q.get(), timeout=300)  # 5-min idle timeout
+            except asyncio.TimeoutError:
+                yield &quot;: keep-alive\n\n&quot;    # SSE comment keeps connection alive
+                continue
+            if event is None:   # sentinel — generation finished
+                break
+            yield event.encode()
+    finally:
+        await chat_event_bus.unsubscribe(chat_id, q)</code></pre>
+            <p>The generator has three reliability responsibilities: emitting keep-alive comments to prevent idle timeout drops, respecting explicit stream termination sentinels, and always unsubscribing in <code>finally</code> to avoid queue leaks on disconnects.</p>
+          </section>
+
+          <section class="section-bare" id="backend-publishing-events-during-generation">
+            <h2>Backend: Publishing Events During Generation</h2>
+            <pre><code># backend/src/services/chat_service.py (simplified)
+async def _async_generate_ai_response(chat_id: int, user_id: int, content: str) -&gt; None:
+    async with AsyncSessionLocal() as db:
+        # Concurrency guard — skip if another generation is running for this chat
+        existing = await db.execute(
+            select(Message).where(Message.chat_id == chat_id,
+                                   Message.is_generating == True)
+        )
+        if existing.scalars().first():
+            return
+
+        # Create placeholder (is_generating=True tells the frontend to show spinner)
+        placeholder = await message_repository.async_create(
+            db, chat_id=chat_id, content=&quot;&quot;, sender=&quot;ai&quot;, is_generating=True
+        )
+
+        # Signal stream start — browser inserts placeholder message bubble
+        await chat_event_bus.publish(chat_id, SSEEvent(
+            event=&quot;stream_start&quot;,
+            data={&quot;chat_id&quot;: chat_id, &quot;message_id&quot;: placeholder.id},
+        ))
+
+        # Stream from RAG service, publish each token incrementally
+        async with httpx.AsyncClient(timeout=RAG_REQUEST_TIMEOUT_SECONDS) as client:
+            async with client.stream(&quot;POST&quot;, f&quot;{RAG_SERVICE_URL}/answer&quot;,
+                                      json=rag_payload) as rag_response:
+                async for line in rag_response.aiter_lines():
+                    chunk = json.loads(line)
+                    if chunk.get(&quot;type&quot;) == &quot;chunk&quot;:
+                        ai_content += chunk.get(&quot;delta&quot;, &quot;&quot;)
+                        await chat_event_bus.publish(chat_id, SSEEvent(
+                            event=&quot;content&quot;,
+                            data={&quot;message_id&quot;: placeholder.id, &quot;content&quot;: ai_content},
+                        ))
+                    elif chunk.get(&quot;type&quot;) == &quot;done&quot;:
+                        ai_content = chunk.get(&quot;answer&quot;, ai_content)
+                        citations  = _select_rag_citations(chunk)
+
+        # Persist finalised message
+        await message_repository.async_update(
+            db, placeholder, content=ai_content,
+            citations=citations, is_generating=False
+        )
+
+        # Signal completion — browser replaces spinner with final content + citations
+        await chat_event_bus.publish(chat_id, SSEEvent(
+            event=&quot;complete&quot;,
+            data={
+                &quot;message_id&quot;: placeholder.id,
+                &quot;content&quot;: ai_content,
+                &quot;citations&quot;: citations,
+                &quot;file_context_truncated&quot;: file_context_result.was_truncated,
+            },
+        ))</code></pre>
+            <p>This sequence is what keeps UI and backend state synchronized: create placeholder, emit <code>stream_start</code>, push cumulative <code>content</code>, persist final message, then emit <code>complete</code> with citations and truncation flags. If this ordering changes, the frontend can display stale spinners or miss metadata.</p>
+          </section>
+
+          <section class="section-bare" id="frontend-sse-subscription">
+            <h2>Frontend: SSE Subscription</h2>
+            <pre><code>// frontend/src/services/api.ts
+export function subscribeToChatStream(
+  chatId: number,
+  handlers: {
+    onStreamStart?: (messageId: number) =&gt; void;
+    onContent?:     (messageId: number, content: string) =&gt; void;
+    onComplete?:    (messageId: number, content: string, citations: unknown[]) =&gt; void;
+    onFileContextTruncated?: () =&gt; void;
+    onError?:       (messageId: number, errorMessage: string) =&gt; void;
+    onConnectionError?: () =&gt; void;
+  },
+): () =&gt; void {    // returns a cleanup function
+
+  const source = new EventSource(
+    `${API_BASE}/chats/${chatId}/stream`,
+    { withCredentials: true }   // send auth cookies
+  );
+  let closed = false;
+  let retryCount = 0;
+
+  source.addEventListener(&quot;stream_start&quot;, (e) =&gt; {
+    const { message_id } = JSON.parse(e.data);
+    handlers.onStreamStart?.(message_id);
+  });
+
+  source.addEventListener(&quot;content&quot;, (e) =&gt; {
+    const { message_id, content } = JSON.parse(e.data);
+    handlers.onContent?.(message_id, content);
+  });
+
+  source.addEventListener(&quot;complete&quot;, (e) =&gt; {
+    const { message_id, content, citations, file_context_truncated } = JSON.parse(e.data);
+    if (file_context_truncated) handlers.onFileContextTruncated?.();
+    handlers.onComplete?.(message_id, content, citations ?? []);
+    source.close();
+  });
+
+  // onerror fires on native connection drops — track retries
+  source.onerror = () =&gt; {
+    if (retryCount++ &gt;= 5) {
+      handlers.onConnectionError?.();
+      source.close();
+    }
+    // EventSource auto-reconnects natively; retryCount guards against infinite loops
+  };
+
+  return () =&gt; { if (!closed) { closed = true; source.close(); } };
+}</code></pre>
+          </section>
+
+          <section class="section-bare" id="frontend-message-state-management">
+            <h2>Frontend: Message State Management</h2>
+            <p>The page component uses the SSE subscription to update the messages list in real time:</p>
+            <pre><code>// Pattern used in GPQueryDetailPage.tsx / SpecialistQueryDetailPage.tsx
+useEffect(() =&gt; {
+  const cleanup = subscribeToChatStream(chatId, {
+    onStreamStart: (msgId) =&gt; {
+      // Insert placeholder bubble immediately
+      setMessages(prev =&gt; [...prev, {
+        id: msgId, senderId: &quot;ai&quot;, content: &quot;&quot;, isGenerating: true, citations: [],
+      }]);
+    },
+    onContent: (msgId, cumulativeContent) =&gt; {
+      // Replace placeholder content with latest cumulative token string
+      setMessages(prev =&gt; prev.map(m =&gt;
+        m.id === msgId ? { ...m, content: cumulativeContent } : m
+      ));
+    },
+    onComplete: (msgId, fullContent, citations) =&gt; {
+      setMessages(prev =&gt; prev.map(m =&gt;
+        m.id === msgId
+          ? { ...m, content: fullContent, citations, isGenerating: false }
+          : m
+      ));
+    },
+    onFileContextTruncated: () =&gt; setShowTruncatedWarning(true),
+  });
+  return cleanup;
+}, [chatId]);</code></pre>
+          </section>
+
+          <section class="section-bare" id="sse-polling-fallback">
+            <h2>SSE Polling Fallback</h2>
+            <p>The <code>useChatStream</code> hook implements a full state machine with a polling fallback for environments where SSE connections drop or are blocked. Phases:</p>
+            <div class="diagram" role="img" aria-label="SSE state machine with fallback polling branch">
+              <div class="diagram__row">
+                <div class="diagram__node"><strong>idle</strong>Waiting for stream request.</div>
+                <div class="diagram__arrow">→</div>
+                <div class="diagram__node"><strong>connecting</strong>Opening EventSource connection.</div>
+                <div class="diagram__arrow">→</div>
+                <div class="diagram__node"><strong>streaming</strong>Receiving token events.</div>
+                <div class="diagram__arrow">→</div>
+                <div class="diagram__node"><strong>complete</strong>Final response received.</div>
+              </div>
+              <div class="diagram__row">
+                <div class="diagram__node"><strong>timeout/error</strong>No start event or connection failure.</div>
+                <div class="diagram__arrow">→</div>
+                <div class="diagram__node"><strong>fallback_polling</strong>Switch to periodic <code>GET /chats/{id}</code>.</div>
+                <div class="diagram__arrow">→</div>
+                <div class="diagram__node"><strong>complete</strong>Exit once final message appears.</div>
+              </div>
+            </div>
+            <p>If the SSE connection does not deliver a <code>stream_start</code> event within 500 ms, or if <code>EventSource</code> fires an error, the hook transitions to <code>fallback_polling</code> and switches to interval-based <code>GET /chats/{id}</code> requests. The polling interval uses exponential backoff:</p>
+            <pre><code>// frontend/src/hooks/useChatStream.ts
+const POLL_BASE_MS     = 2_000;
+const POLL_MULTIPLIER  = 1.5;
+const POLL_MAX_MS      = 30_000;
+
+// interval = min(base × multiplier^attempts, max)</code></pre>
+            <p>This ensures that a transient SSE failure (e.g. load balancer timeout, network blip) degrades gracefully rather than leaving the user with a frozen &quot;generating…&quot; spinner.</p>
+          </section>
+
+          <section class="section-bare" id="sequence-diagram-full-streaming-flow">
+            <h2>Sequence Diagram — Full Streaming Flow</h2>
+            <img class="diagram-img" src="../assets/diagrams/streaming_full_flow_sequence.svg" alt="Sequence diagram showing full streaming flow from GP browser through backend API and RAG service to Ollama, then SSE events back to the browser." />
+          </section>
+
+          <section class="section-bare" id="sse-replay-buffer-memory-management">
+            <h2>SSE Replay Buffer &amp; Memory Management</h2>
+            <p>The event bus maintains a per-chat replay buffer so late subscribers can recover stream context. It stores the latest <code>stream_start</code> and latest cumulative <code>content</code> event for active chats.</p>
+            <p>When a subscriber connects after streaming has already started, the bus immediately enqueues buffered events before live events. Because <code>content</code> payloads are cumulative rather than delta-only, a single replayed content event can reconstruct all emitted text up to that point.</p>
+            <p><strong>Why only <code>stream_start</code> and latest <code>content</code>?</strong> Storing every content event would grow memory proportionally to token count. Cumulative content events make full-history replay unnecessary because the latest event already contains complete text-so-far.</p>
+            <p>This design keeps memory growth bounded while preserving correctness for late SSE connections.</p>
+            <table class="impl-table">
+              <thead><tr><th>Protection</th><th>Mechanism</th><th>Why it matters</th></tr></thead>
+              <tbody>
+                <tr><td>Replay TTL eviction</td><td>Clears inactive buffers older than 10 minutes.</td><td>Prevents unbounded growth on long-running servers.</td></tr>
+                <tr><td>Replay max-size eviction</td><td>Evicts oldest inactive entries when over capacity.</td><td>Caps memory use under burst traffic.</td></tr>
+                <tr><td>Per-subscriber queue cap</td><td><code>asyncio.Queue(maxsize=256)</code> with drop-and-log on overflow.</td><td>Isolates slow consumers from generation path.</td></tr>
+                <tr><td>Thread-safe publish path</td><td><code>call_soon_threadsafe</code> for sync-to-async handoff.</td><td>Keeps specialist revision flows safe across thread boundaries.</td></tr>
+              </tbody>
+            </table>
+            <pre><code># backend/src/utils/sse.py
+_REPLAY_BUFFER_TTL_SECONDS = 600
+_REPLAY_BUFFER_MAX_SIZE = 1000
+SUBSCRIBER_QUEUE_MAXSIZE = 256</code></pre>
+            <p>Per-subscriber bounded queues ensure a single slow browser tab cannot back-pressure AI generation or other subscribers. Overflow events are dropped with warning logs instead of blocking producer tasks.</p>
+            <p>The specialist revision path may publish from synchronous contexts, so thread-safe publish helpers hand off queue operations onto the main event loop via <code>loop.call_soon_threadsafe()</code>.</p>
+          </section>
+
+        </div>
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="../assets/site.js?v=20260326"></script>
+  </body>
+</html>

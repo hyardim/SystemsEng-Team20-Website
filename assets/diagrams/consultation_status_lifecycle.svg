@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Consultation Status Lifecycle</title>
+  <desc id="desc">State diagram for consultation flow: OPEN to SUBMITTED to ASSIGNED to REVIEWING, then APPROVED or REJECTED, with ARCHIVED after approval and optional CLOSED and FLAGGED states.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f6f9ff" />
+      <stop offset="100%" stop-color="#edf3ff" />
+    </linearGradient>
+
+    <linearGradient id="nodeFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f9fbff" />
+    </linearGradient>
+
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#285ea8" />
+    </marker>
+
+    <style>
+      .title { font: 700 34px Arial, sans-serif; fill: #083a80; }
+      .subtitle { font: 400 18px Arial, sans-serif; fill: #355885; }
+      .node { fill: url(#nodeFill); stroke: #2e6bc1; stroke-width: 2.5; rx: 14; }
+      .node-strong { fill: #0d4fa5; stroke: #0d4fa5; }
+      .node-optional { fill: #f8fbff; stroke: #7d9fcb; stroke-width: 2; stroke-dasharray: 8 6; }
+      .label { font: 700 20px Arial, sans-serif; fill: #0b376f; text-anchor: middle; dominant-baseline: middle; }
+      .label-strong { fill: #ffffff; }
+      .edge { stroke: #285ea8; stroke-width: 3.4; fill: none; marker-end: url(#arrow); }
+      .edge-soft { stroke: #5e7ea8; stroke-width: 2.6; stroke-dasharray: 8 7; fill: none; marker-end: url(#arrow); }
+      .edge-label { font: 600 15px Arial, sans-serif; fill: #1f4f91; }
+      .legend { font: 500 14px Arial, sans-serif; fill: #2f4c73; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="760" fill="url(#bg)" />
+
+  <text x="700" y="62" class="title" text-anchor="middle">Consultation Status Lifecycle</text>
+  <text x="700" y="94" class="subtitle" text-anchor="middle">Service-layer state transitions for GP and specialist workflow</text>
+
+  <!-- Main workflow row -->
+  <rect class="node" x="90" y="170" width="180" height="82" />
+  <text class="label" x="180" y="211">OPEN</text>
+
+  <rect class="node" x="330" y="170" width="180" height="82" />
+  <text class="label" x="420" y="211">SUBMITTED</text>
+
+  <rect class="node" x="570" y="170" width="180" height="82" />
+  <text class="label" x="660" y="211">ASSIGNED</text>
+
+  <rect class="node node-strong" x="810" y="170" width="180" height="82" />
+  <text class="label label-strong" x="900" y="211">REVIEWING</text>
+
+  <!-- Review outcomes -->
+  <rect class="node node-strong" x="720" y="360" width="180" height="82" />
+  <text class="label label-strong" x="810" y="401">APPROVED</text>
+
+  <rect class="node" x="980" y="360" width="180" height="82" />
+  <text class="label" x="1070" y="401">REJECTED</text>
+
+  <rect class="node" x="720" y="552" width="180" height="82" />
+  <text class="label" x="810" y="593">ARCHIVED</text>
+
+  <!-- Additional statuses -->
+  <rect class="node node-optional" x="90" y="552" width="180" height="82" />
+  <text class="label" x="180" y="593">CLOSED</text>
+
+  <rect class="node node-optional" x="980" y="552" width="180" height="82" />
+  <text class="label" x="1070" y="593">FLAGGED</text>
+
+  <!-- Main edges -->
+  <line class="edge" x1="270" y1="211" x2="330" y2="211" />
+  <line class="edge" x1="510" y1="211" x2="570" y2="211" />
+  <line class="edge" x1="750" y1="211" x2="810" y2="211" />
+
+  <line class="edge" x1="900" y1="252" x2="810" y2="360" />
+  <line class="edge" x1="920" y1="252" x2="1040" y2="360" />
+  <line class="edge" x1="810" y1="442" x2="810" y2="552" />
+
+  <!-- Optional / exception edges -->
+  <path class="edge" d="M660 168 C660 72,180 72,180 168" />
+  <text class="edge-label" x="420" y="64" text-anchor="middle">unassign</text>
+
+  <line class="edge-soft" x1="180" y1="252" x2="180" y2="552" />
+  <text class="edge-label" x="196" y="415">close by GP</text>
+
+  <line class="edge-soft" x1="1070" y1="442" x2="1070" y2="552" />
+  <text class="edge-label" x="1088" y="503">admin moderation</text>
+
+  <!-- Legend -->
+  <line x1="330" y1="694" x2="430" y2="694" stroke="#285ea8" stroke-width="3.4" marker-end="url(#arrow)" />
+  <text class="legend" x="445" y="699">Primary workflow transition</text>
+
+  <line x1="740" y1="694" x2="840" y2="694" stroke="#5e7ea8" stroke-width="2.6" stroke-dasharray="8 7" marker-end="url(#arrow)" />
+  <text class="legend" x="855" y="699">Optional or exception transition</text>
+</svg>

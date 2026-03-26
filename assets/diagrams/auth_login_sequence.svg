@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-labelledby="title desc">
+  <title id="title">Sequence Diagram - Login Flow</title>
+  <desc id="desc">Sequence diagram showing login request, credential validation, token issuance, and response across browser, backend API, and database.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f6f9ff" />
+      <stop offset="100%" stop-color="#edf3ff" />
+    </linearGradient>
+
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#2a5ca5" />
+    </marker>
+
+    <style>
+      .title { font: 700 32px Arial, sans-serif; fill: #083a80; }
+      .subtitle { font: 400 18px Arial, sans-serif; fill: #355885; }
+      .lane-header { rx: 12; stroke-width: 2; }
+      .lane-title { font: 700 18px Arial, sans-serif; fill: #ffffff; text-anchor: middle; dominant-baseline: middle; }
+      .lane-line { stroke: #7b99c0; stroke-width: 2.2; stroke-dasharray: 8 7; }
+      .msg { stroke: #2a5ca5; stroke-width: 3; marker-end: url(#arrow); fill: none; }
+      .msg-reply { stroke: #456f9f; stroke-width: 2.4; marker-end: url(#arrow); fill: none; stroke-dasharray: 7 6; }
+      .msg-db { stroke: #2b6cb0; stroke-width: 3; marker-end: url(#arrow); fill: none; }
+      .step { font: 700 14px Arial, sans-serif; fill: #17457f; }
+      .label { font: 600 14px Arial, sans-serif; fill: #1a3f74; }
+      .note-box { rx: 10; fill: #eef4ff; stroke: #8aa8cf; stroke-width: 1.5; }
+      .note { font: 500 13px Arial, sans-serif; fill: #355885; }
+      .legend { font: 500 14px Arial, sans-serif; fill: #2f4c73; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="760" fill="url(#bg)" />
+
+  <text x="640" y="58" class="title" text-anchor="middle">Sequence Diagram - Login Flow</text>
+  <text x="640" y="90" class="subtitle" text-anchor="middle">Browser authentication, token generation, and audit write</text>
+
+  <!-- Lane headers -->
+  <rect class="lane-header" x="80" y="120" width="260" height="62" fill="#1856a5" stroke="#1856a5" />
+  <text class="lane-title" x="210" y="151">Browser</text>
+
+  <rect class="lane-header" x="410" y="120" width="260" height="62" fill="#005eb8" stroke="#005eb8" />
+  <text class="lane-title" x="540" y="151">Backend API</text>
+
+  <rect class="lane-header" x="740" y="120" width="260" height="62" fill="#2b6cb0" stroke="#2b6cb0" />
+  <text class="lane-title" x="870" y="151">Database</text>
+
+  <!-- Lifelines -->
+  <line class="lane-line" x1="210" y1="182" x2="210" y2="675" />
+  <line class="lane-line" x1="540" y1="182" x2="540" y2="675" />
+  <line class="lane-line" x1="870" y1="182" x2="870" y2="675" />
+
+  <!-- Step 1 -->
+  <line class="msg" x1="220" y1="232" x2="530" y2="232" />
+  <text class="step" x="228" y="221">1</text>
+  <text class="label" x="278" y="221">POST /auth/login {email, password}</text>
+
+  <!-- Step 2 -->
+  <line class="msg-db" x1="550" y1="292" x2="860" y2="292" />
+  <text class="step" x="558" y="281">2</text>
+  <text class="label" x="624" y="281">SELECT user WHERE email = ?</text>
+
+  <!-- Step 3 -->
+  <line class="msg-reply" x1="860" y1="348" x2="550" y2="348" />
+  <text class="step" x="810" y="337">3</text>
+  <text class="label" x="650" y="337">User row returned</text>
+
+  <!-- Internal note -->
+  <rect class="note-box" x="432" y="380" width="216" height="82" />
+  <text class="note" x="540" y="408" text-anchor="middle">bcrypt.verify(password)</text>
+  <text class="note" x="540" y="430" text-anchor="middle">create access + refresh JWT</text>
+  <text class="note" x="540" y="452" text-anchor="middle">prepare session cookies</text>
+
+  <!-- Step 4 -->
+  <line class="msg-db" x1="550" y1="496" x2="860" y2="496" />
+  <text class="step" x="558" y="485">4</text>
+  <text class="label" x="640" y="485">INSERT audit_logs (LOGIN)</text>
+
+  <!-- Step 5 -->
+  <line class="msg-reply" x1="860" y1="552" x2="550" y2="552" />
+  <text class="step" x="812" y="541">5</text>
+  <text class="label" x="674" y="541">Commit OK</text>
+
+  <!-- Step 6 -->
+  <line class="msg-reply" x1="530" y1="618" x2="220" y2="618" />
+  <text class="step" x="484" y="607">6</text>
+  <text class="label" x="252" y="607">200 OK + access token + refresh cookie</text>
+
+  <!-- Legend -->
+  <line x1="300" y1="708" x2="390" y2="708" stroke="#2a5ca5" stroke-width="3" marker-end="url(#arrow)" />
+  <text class="legend" x="405" y="713">Request / command path</text>
+
+  <line x1="700" y1="708" x2="790" y2="708" stroke="#456f9f" stroke-width="2.4" stroke-dasharray="7 6" marker-end="url(#arrow)" />
+  <text class="legend" x="805" y="713">Response / acknowledgement path</text>
+</svg>

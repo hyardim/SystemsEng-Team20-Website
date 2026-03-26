@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Frontend Architecture · Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="../assets/styles.css?v=20260326" />
+  </head>
+  <body data-page="implementation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="../index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="../assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="../index.html" data-nav="home">Home</a><a href="../requirements.html" data-nav="requirements">Requirements</a><a href="../research.html" data-nav="research">Research</a><a href="../ui-design.html" data-nav="ui-design">UI Design</a><a href="../system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="../testing.html" data-nav="testing">Testing</a><a href="../evaluation.html" data-nav="evaluation">Evaluation</a><a href="../appendices.html" data-nav="appendices">Appendices</a><a href="../blog/blog.html" data-nav="blog">Blog</a></nav><button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Frontend Architecture</h1>
+        <p class="report-page-subtitle">Section 11 of 11 · <a href="implementation.html">Back to Implementation</a></p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+
+          <section class="section-bare" id="libraries-used">
+            <h2>Libraries Used</h2>
+            <table class="impl-table"><thead><tr><th>Library</th><th>Purpose</th></tr></thead><tbody><tr><td><code>React 18</code></td><td>UI framework with concurrent rendering</td></tr><tr><td><code>TypeScript</code></td><td>Static typing across all components and API calls</td></tr><tr><td><code>Vite</code></td><td>Build tool and dev server with HMR</td></tr><tr><td><code>React Router v6</code></td><td>Client-side routing with lazy-loaded pages</td></tr><tr><td><code>fetch</code> (wrapped in <code>api.ts</code>)</td><td>Centralized HTTP client with auth header injection and coordinated token refresh</td></tr><tr><td><code>TailwindCSS</code></td><td>Utility-first CSS</td></tr><tr><td><code>shadcn/ui</code></td><td>Pre-built accessible component primitives</td></tr><tr><td><code>Lucide React</code></td><td>Icon library</td></tr></tbody></table>
+          </section>
+
+          <section class="section-bare" id="how-and-why">
+            <h2>Overview</h2>
+            <p>The frontend is organized around role-aware routing, a centralized auth context, a shared API client, and reusable feature components. This keeps data flow consistent from login through consultation creation, streaming, specialist review, and admin operations. SSE hooks and secure storage keep real-time updates and session state consistent across reloads.</p>
+            <p>That structure matters because product complexity grows quickly in multi-role clinical workflows. A clear architecture lowers regression risk, speeds onboarding for new contributors, and makes behavior easier to reason about when debugging production issues.</p>
+          </section>
+
+          <section class="section-bare" id="application-routing">
+            <h2>Application Routing</h2>
+            <p><code>App.tsx</code> defines 22 routes split across four role-based areas. All non-public routes are wrapped in <code>ProtectedRoute</code> which reads the current user&#x27;s role from <code>AuthContext</code> and redirects to <code>/access-denied</code> if the role does not match:</p>
+            <pre><code>// frontend/src/App.tsx (simplified)
+&lt;Routes&gt;
+  {/* Public */}
+  &lt;Route path=&quot;/&quot; element={&lt;LandingPage /&gt;} /&gt;
+  &lt;Route path=&quot;/login&quot; element={&lt;LoginPage /&gt;} /&gt;
+  &lt;Route path=&quot;/register&quot; element={&lt;RegisterPage /&gt;} /&gt;
+  &lt;Route path=&quot;/forgot-password&quot; element={&lt;ForgotPasswordPage /&gt;} /&gt;
+  &lt;Route path=&quot;/reset-password&quot; element={&lt;ResetPasswordPage /&gt;} /&gt;
+  &lt;Route path=&quot;/verify-email&quot; element={&lt;VerifyEmailPage /&gt;} /&gt;
+  &lt;Route path=&quot;/resend-verification&quot; element={&lt;ResendVerificationPage /&gt;} /&gt;
+
+  {/* GP — role guard: &quot;gp&quot; */}
+  &lt;Route element={&lt;ProtectedRoute allowedRoles={[&quot;gp&quot;]} /&gt;}&gt;
+    &lt;Route path=&quot;/queries&quot; element={&lt;GPQueriesPage /&gt;} /&gt;
+    &lt;Route path=&quot;/queries/new&quot; element={&lt;GPNewQueryPage /&gt;} /&gt;
+    &lt;Route path=&quot;/queries/:id&quot; element={&lt;GPQueryDetailPage /&gt;} /&gt;
+  &lt;/Route&gt;
+
+  {/* Specialist — role guard: &quot;specialist&quot; */}
+  &lt;Route element={&lt;ProtectedRoute allowedRoles={[&quot;specialist&quot;]} /&gt;}&gt;
+    &lt;Route path=&quot;/specialist/queue&quot; element={&lt;SpecialistQueriesPage /&gt;} /&gt;
+    &lt;Route path=&quot;/specialist/queries/:id&quot; element={&lt;SpecialistQueryDetailPage /&gt;} /&gt;
+  &lt;/Route&gt;
+
+  {/* Admin — role guard: &quot;admin&quot; */}
+  &lt;Route element={&lt;ProtectedRoute allowedRoles={[&quot;admin&quot;]} /&gt;}&gt;
+    &lt;Route path=&quot;/admin&quot; element={&lt;AdminDashboardPage /&gt;} /&gt;
+    &lt;Route path=&quot;/admin/users&quot; element={&lt;AdminUsersPage /&gt;} /&gt;
+    &lt;Route path=&quot;/admin/chats&quot; element={&lt;AdminChatsPage /&gt;} /&gt;
+    &lt;Route path=&quot;/admin/logs&quot; element={&lt;AdminLogsPage /&gt;} /&gt;
+    &lt;Route path=&quot;/admin/guidelines&quot; element={&lt;AdminGuidelinesPage /&gt;} /&gt;
+    &lt;Route path=&quot;/admin/rag&quot; element={&lt;AdminRagPage /&gt;} /&gt;
+  &lt;/Route&gt;
+&lt;/Routes&gt;</code></pre>
+            <p>All page components are lazy-loaded via <code>React.lazy()</code> so only the code for the current route is downloaded on first navigation.</p>
+          </section>
+
+          <section class="section-bare" id="secure-storage">
+            <h2>Secure Storage</h2>
+            <p><code>secureStorage.ts</code> wraps <code>localStorage</code> with AES encryption so that user data and tokens stored client-side are not readable in plaintext via browser devtools or XSS. The encryption key is derived from a build-time env var (<code>VITE_STORAGE_KEY</code>). All <code>AuthContext</code> reads and writes go through this wrapper.</p>
+          </section>
+
+          <section class="section-bare" id="auth-state-authcontext">
+            <h2>Auth State (AuthContext)</h2>
+            <p>Global authentication state is managed via React Context. <code>AuthContext</code> holds the current user object and exposes <code>login</code> / <code>logout</code> helpers. State is persisted to <code>secureStorage</code> so the user remains logged in across page refreshes:</p>
+            <pre><code>// frontend/src/contexts/AuthContext.tsx (simplified)
+interface AuthContextValue {
+  user: User | null;
+  login: (credentials: LoginPayload) =&gt; Promise&lt;void&gt;;
+  logout: () =&gt; void;
+}
+
+export const AuthProvider = ({ children }) =&gt; {
+  const [user, setUser] = useState&lt;User | null&gt;(
+    secureStorage.get(&quot;user&quot;)   // rehydrate from encrypted localStorage
+  );
+
+  const login = async (credentials) =&gt; {
+    const { user } = await api.post(&quot;/auth/login&quot;, credentials);
+    secureStorage.set(&quot;user&quot;, user);
+    setUser(user);
+  };
+
+  const logout = () =&gt; {
+    secureStorage.remove(&quot;user&quot;);
+    setUser(null);
+    navigate(&quot;/login&quot;);
+  };
+
+  return &lt;AuthContext.Provider value={{ user, login, logout }}&gt;{children}&lt;/AuthContext.Provider&gt;;
+};</code></pre>
+            <p>The <code>useAuth()</code> hook is the single point of access to auth state across all components — no prop drilling.</p>
+          </section>
+
+          <section class="section-bare" id="api-client-token-refresh-singleton">
+            <h2>API Client &amp; Token Refresh Singleton</h2>
+            <p>The frontend uses one shared API module for auth header injection, 401 refresh handling, and response/error normalization. Token headers are computed at call time so newly issued access tokens are always used on retry.</p>
+            <p>A module-level <code>refreshInFlight</code> promise coordinates concurrent 401 failures. When one request triggers refresh, all other failing requests await the same promise rather than issuing competing refresh calls.</p>
+            <pre><code>// frontend/src/services/api.ts
+let refreshInFlight: Promise&lt;boolean&gt; | null = null;
+
+async function refreshSessionRequest(): Promise&lt;boolean&gt; {
+  if (!refreshInFlight) {
+    refreshInFlight = (async () =&gt; {
+      const res = await fetch(apiUrl('/auth/refresh'), {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (res.ok) persistSession(await res.json());
+      return res.ok;
+    })().finally(() =&gt; { refreshInFlight = null; });
+  }
+  return refreshInFlight;
+}</code></pre>
+            <p>The key detail in this snippet is the <code>finally</code> reset. Without resetting <code>refreshInFlight</code> after resolve/reject, the client could become permanently stuck awaiting an old promise and never attempt refresh again.</p>
+            <p>After refresh completion, the singleton is reset so the next expiry cycle can start cleanly. Login and registration calls explicitly skip auth-refresh retries because 401 there means invalid credentials, not expired sessions.</p>
+            <p>The response handler also normalizes FastAPI 422 validation payloads (array-form <code>detail</code>) and plain string errors into display-ready messages, preventing raw object output in forms.</p>
+          </section>
+
+          <section class="section-bare" id="page-component-structure">
+            <h2>Page &amp; Component Structure</h2>
+            <div class="diagram" role="img" aria-label="Frontend source structure and module relationships">
+              <div class="diagram__row">
+                <div class="diagram__node"><strong>pages/</strong>Role-based route screens and top-level page logic.</div>
+                <div class="diagram__arrow">→</div>
+                <div class="diagram__node"><strong>components/</strong>Reusable UI elements shared across pages.</div>
+                <div class="diagram__arrow">→</div>
+                <div class="diagram__node"><strong>contexts/ + hooks/</strong>Global state and streaming lifecycle logic.</div>
+              </div>
+              <div class="diagram__row">
+                <div class="diagram__node"><strong>services/</strong>HTTP clients and API integration layer.</div>
+                <div class="diagram__arrow">→</div>
+                <div class="diagram__node"><strong>utils/</strong>Cross-cutting helpers for storage, mapping, and parsing.</div>
+              </div>
+            </div>
+            <table class="impl-table"><thead><tr><th>Folder</th><th>Key content</th></tr></thead><tbody><tr><td><code>pages/auth</code></td><td>Login, registration, email verification, password reset, and resend verification views.</td></tr><tr><td><code>pages/gp</code></td><td>GP consultation list, create query flow, and detail page with streaming responses.</td></tr><tr><td><code>pages/specialist</code></td><td>Specialist queue/detail pages, consultation-level action panel, and review modal set (<code>Approve</code>, <code>RequestChanges</code>, <code>ManualResponse</code>, <code>EditResponse</code>, etc.).</td></tr><tr><td><code>pages/admin</code></td><td>Dashboard, users, chats, logs, guideline management, and RAG monitoring pages.</td></tr><tr><td><code>components</code></td><td><code>ChatInput</code>, <code>ChatMessage</code>, <code>NotificationDropdown</code>, <code>ProtectedRoute</code>, <code>AdminLayout</code>, <code>PasswordStrengthMeter</code>, and other shared widgets.</td></tr><tr><td><code>contexts</code> / <code>hooks</code></td><td><code>AuthContext</code> for global identity + role state, and <code>useChatStream</code> for SSE lifecycle handling.</td></tr><tr><td><code>services</code> / <code>utils</code></td><td>Shared fetch API client, secure storage wrapper, SSE parser, API error normalization, and message mapping helpers.</td></tr></tbody></table>
+          </section>
+
+          <section class="section-bare" id="usechatstream-hook">
+            <h2>useChatStream Hook</h2>
+            <p><code>useChatStream</code> encapsulates the full SSE lifecycle for a single chat. Components mount it to start receiving tokens and unmount to clean up:</p>
+            <pre><code>// frontend/src/hooks/useChatStream.ts (simplified)
+export function useChatStream(chatId: number) {
+  const [streamingContent, setStreamingContent] = useState(&quot;&quot;);
+  const [isStreaming, setIsStreaming] = useState(false);
+
+  useEffect(() =&gt; {
+    const cleanup = subscribeToChatStream(chatId, {
+      onStreamStart: () =&gt; setIsStreaming(true),
+      onContent:     (content) =&gt; setStreamingContent(content),  // cumulative
+      onComplete:    () =&gt; setIsStreaming(false),
+      onError:       () =&gt; setIsStreaming(false),
+    });
+    return cleanup;   // closes EventSource on unmount
+  }, [chatId]);
+
+  return { streamingContent, isStreaming };
+}</code></pre>
+            <p>Using cumulative content updates keeps rendering idempotent: each incoming event represents full text-so-far, so dropped intermediate events do not corrupt local message state.</p>
+            <p><code>GPQueryDetailPage</code> and <code>SpecialistQueryDetailPage</code> both consume this hook. The <code>onContent</code> callback receives cumulative content, so message text can be replaced directly without client-side token concatenation drift.</p>
+            <p>The production implementation runs a five-phase state machine: <code>idle → connecting → streaming → completed</code> with <code>fallback_polling</code> as the error/timeout branch. Polling backoff starts from a short interval and grows to a capped maximum to avoid aggressive request loops during degraded SSE conditions.</p>
+            <p>Connection cleanup is centralized through a cleanup ref so reconnections do not create duplicate subscriptions. Route changes (<code>chatId</code> dependency changes) trigger explicit teardown and reset to <code>idle</code>, preventing stream leakage between consultations.</p>
+            <p>The hook accepts a <code>setMessages</code> updater from the page rather than owning message state itself. This keeps page-level data ownership explicit and avoids stale-closure update bugs by always using functional state updates.</p>
+          </section>
+
+          <section class="section-bare" id="frontend-input-validation-errors">
+            <h2>Frontend Input Validation &amp; Error Messages</h2>
+            <p>Forms apply fast client-side validation before requests, while backend Pydantic validation remains the source-of-truth fallback. Field errors are collected per input so users see all issues in one pass rather than one-at-a-time failure loops.</p>
+            <table class="impl-table">
+              <thead><tr><th>Validation area</th><th>Rule</th><th>User feedback</th></tr></thead>
+              <tbody>
+                <tr><td>Email</td><td>Trim/normalize and regex format check.</td><td>Inline error under email field.</td></tr>
+                <tr><td>Password</td><td>Min length + upper/lower/digit/special requirements.</td><td>Inline error plus strength meter guidance.</td></tr>
+                <tr><td>Confirm password</td><td>Must match password exactly.</td><td>Specific mismatch message.</td></tr>
+                <tr><td>Specialist profile fields</td><td>Conditionally required for specialist role.</td><td>Role-aware inline validation.</td></tr>
+              </tbody>
+            </table>
+            <p>Validation errors are cleared per field on change so stale messages disappear as the user fixes input. This avoids the common UX issue where corrected fields still display outdated errors.</p>
+            <p>Inline <code>fieldErrors</code> and top-level <code>error</code> banners serve different failure classes: field-specific issues appear under controls, while non-field API failures are surfaced in a global alert region.</p>
+            <p>FastAPI 422 payloads are normalized into readable strings to avoid surfacing raw object structures in the UI.</p>
+          </section>
+
+          <section class="section-bare" id="form-data-error-state-management">
+            <h2>Form, Data, and Error State Management</h2>
+            <p>Pages follow a consistent three-tier state model: <code>loading</code> for initial page fetch lifecycle, data state for rendered resources, and <code>actionLoading</code> for mutations. This separation prevents double-submits and keeps refresh behavior predictable under slow network conditions.</p>
+            <p>Data state uses explicit nullable defaults and guarded rendering paths, so missing entities render deterministic fallbacks rather than undefined-access failures. After most mutations, pages reconcile via refetch rather than broad optimistic patching to avoid drift from server truth.</p>
+            <p>Error state is cleared at action start and set from normalized API responses on failure, so stale errors do not persist across attempts. Abort-controller cleanup prevents setState-on-unmounted warnings when route changes interrupt in-flight requests.</p>
+            <p>*Implementation documentation for Ambience-AI-1.5 — branch <code>main</code> — March 2026*</p>
+          </section>
+
+        </div>
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="../assets/site.js?v=20260326"></script>
+  </body>
+</html>

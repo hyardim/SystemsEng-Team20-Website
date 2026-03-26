@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Caching Layer · Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="../assets/styles.css?v=20260326" />
+  </head>
+  <body data-page="implementation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="../index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="../assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="../index.html" data-nav="home">Home</a><a href="../requirements.html" data-nav="requirements">Requirements</a><a href="../research.html" data-nav="research">Research</a><a href="../ui-design.html" data-nav="ui-design">UI Design</a><a href="../system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="../testing.html" data-nav="testing">Testing</a><a href="../evaluation.html" data-nav="evaluation">Evaluation</a><a href="../appendices.html" data-nav="appendices">Appendices</a><a href="../blog/blog.html" data-nav="blog">Blog</a></nav><button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Caching Layer</h1>
+        <p class="report-page-subtitle">Section 9 of 11 · <a href="implementation.html">Back to Implementation</a></p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+
+          <section class="section-bare" id="libraries-used">
+            <h2>Libraries Used</h2>
+            <table class="impl-table"><thead><tr><th>Library</th><th>Purpose</th></tr></thead><tbody><tr><td><code>redis-py</code></td><td>Redis client for sync and async cache operations</td></tr><tr><td><code>pickle</code></td><td>Serialises Python objects for Redis storage</td></tr></tbody></table>
+          </section>
+
+          <section class="section-bare" id="how-and-why">
+            <h2>Overview</h2>
+            <p>The cache layer uses scoped keys and cache-aside reads so hot query results can be served from Redis instead of repeatedly hitting the database. Writes trigger targeted invalidation across GP, specialist, and admin views, while a bounded in-process fallback keeps the application functional if Redis is unavailable. This keeps cache behavior predictable even during partial outages.</p>
+            <p>This matters for both performance and correctness: users get faster page loads, backend query pressure stays lower, and explicit invalidation rules reduce stale-data surprises after writes. The user-scoped key strategy also prevents cross-tenant leakage.</p>
+          </section>
+
+          <section class="section-bare" id="architecture">
+            <h2>Architecture</h2>
+            <p>The cache layer uses Redis as primary storage with an in-process Python dict as a fallback when Redis is unavailable. All cache keys are scoped by <code>user_id</code> and <code>resource</code> type to prevent cross-user data leakage:</p>
+            <pre><code># backend/src/utils/cache.py (simplified)
+class Cache:
+    def _scoped_key(self, key: str, user_id: int, resource: str) -&gt; str:
+        return f&quot;{resource}:{user_id}:{key}&quot;
+
+    def get_sync(self, key, user_id, resource) -&gt; Any | None:
+        scoped = self._scoped_key(key, user_id, resource)
+        try:
+            raw = self._redis.get(scoped)
+            return pickle.loads(raw) if raw else None
+        except RedisError:
+            entry = self._local.get(scoped)
+            if entry and entry[1] &gt; time.time():   # check TTL
+                return entry[0]
+            return None
+
+    def set_sync(self, key, value, ttl, user_id, resource) -&gt; None:
+        scoped = self._scoped_key(key, user_id, resource)
+        try:
+            self._redis.setex(scoped, ttl, pickle.dumps(value))
+        except RedisError:
+            self._local[scoped] = (value, time.time() + ttl)
+
+    def delete_pattern_sync(self, pattern, user_id, resource) -&gt; None:
+        full_pattern = f&quot;{resource}:{user_id}:{pattern}*&quot;
+        try:
+            keys = self._redis.keys(full_pattern)
+            if keys:
+                self._redis.delete(*keys)
+        except RedisError:
+            prefix = f&quot;{resource}:{user_id}:&quot;
+            self._local = {k: v for k, v in self._local.items()
+                           if not k.startswith(prefix)}
+
+cache = Cache()</code></pre>
+            <p>Read/write methods share the same scoped-key format, which makes cache invalidation predictable. The fallback dictionary is intentionally best-effort: it preserves service continuity during Redis outages, but long-term coherence still depends on Redis availability.</p>
+          </section>
+
+          <section class="section-bare" id="cache-aside-pattern">
+            <h2>Cache-Aside Pattern</h2>
+            <p>The standard read path is: check cache → miss → query DB → store result:</p>
+            <pre><code># backend/src/services/chat_service.py
+def get_chat_list(db, user, skip, limit, status_filter) -&gt; ChatListResponse:
+    cache_key = f&quot;list:{skip}:{limit}:{status_filter}&quot;
+
+    cached = cache.get_sync(cache_key, user_id=user.id, resource=&quot;chat_list&quot;)
+    if cached:
+        return cached
+
+    chats  = chat_repository.list_for_user(db, user.id, skip=skip, limit=limit,
+                                            status=status_filter)
+    result = ChatListResponse(chats=[chat_to_response(c) for c in chats])
+
+    cache.set_sync(cache_key, result, ttl=300,   # 5-minute TTL
+                   user_id=user.id, resource=&quot;chat_list&quot;)
+    return result</code></pre>
+            <p>Cache-aside keeps write paths simple because only read paths interact with cache population. The tradeoff is bounded staleness up to TTL, which is why mutation handlers pair this pattern with explicit invalidation calls.</p>
+          </section>
+
+          <section class="section-bare" id="cache-invalidation">
+            <h2>Cache Invalidation</h2>
+            <p>After any mutation, all affected cache entries are invalidated by pattern. For example, after a specialist submits a review:</p>
+            <pre><code># backend/src/services/specialist_review.py
+def _invalidate_chat_views(chat: Chat, specialist_id: int | None) -&gt; None:
+    # Invalidate GP&#x27;s view of this chat and their chat list
+    cache.delete_pattern_sync(cache_keys.chat_detail_pattern(chat.id),
+                               user_id=chat.user_id, resource=&quot;chat_detail&quot;)
+    cache.delete_pattern_sync(cache_keys.chat_list_pattern(chat.user_id),
+                               user_id=chat.user_id, resource=&quot;chat_list&quot;)
+    # Invalidate specialist&#x27;s queue/assigned views
+    if specialist_id:
+        cache.delete_pattern_sync(cache_keys.specialist_queue_pattern(chat.specialty),
+                                   user_id=specialist_id, resource=&quot;specialist_queue&quot;)
+    # Invalidate admin caches
+    _invalidate_admin_chat_caches(chat.id)
+    _invalidate_admin_stats_cache()</code></pre>
+            <p>The invalidation list mirrors the user roles that can observe the same entity. That fan-out is critical: if only GP caches were cleared, specialist/admin views could continue showing stale status after review actions.</p>
+          </section>
+
+          <section class="section-bare" id="async-sync-redis-bridge">
+            <h2>Async-to-Sync Redis Bridge</h2>
+            <p>The underlying Redis implementation is async, while much of the backend service layer uses synchronous handlers. Calling <code>await</code> is not possible in those sync functions, and naive <code>asyncio.run()</code> usage is unsafe when a request loop is already active.</p>
+            <p>The cache layer resolves this using a dedicated daemon-thread event loop. Sync wrappers submit coroutines to that loop with <code>asyncio.run_coroutine_threadsafe()</code> and block on bounded futures.</p>
+            <pre><code># backend/src/utils/cache.py
+def _run_sync(coro):
+    loop = _get_sync_loop()
+    future = asyncio.run_coroutine_threadsafe(coro, loop)
+    return future.result(timeout=5)  # timeout guards request handlers from hanging</code></pre>
+            <p>The background loop is lazily created on first use and reused for process lifetime. A clean shutdown hook stops the loop on exit so the daemon thread does not leak resources during controlled termination.</p>
+            <p>This pattern keeps sync service code ergonomic while preserving async Redis I/O behavior and bounded failure handling.</p>
+          </section>
+
+          <section class="section-bare" id="cachekeys-namespace-design">
+            <h2>CacheKeys Namespace Design</h2>
+            <p>Cache keys follow a structured namespace containing application prefix, resource domain, and user scoping where relevant. The goal is both isolation and precise invalidation.</p>
+            <p>User-scoped keys enforce cross-tenant safety; wildcard patterns can then target only one user or intentionally fan out across users for shared resources such as a specific chat viewed by GP, specialist, and admin roles.</p>
+            <table class="impl-table">
+              <thead><tr><th>Design goal</th><th>Key strategy</th><th>Operational benefit</th></tr></thead>
+              <tbody>
+                <tr><td>Cross-tenant isolation</td><td>Embed <code>user:{id}</code> in user-scoped keys.</td><td>Pattern deletes cannot leak across users.</td></tr>
+                <tr><td>Targeted fan-out invalidation</td><td>Use wildcard middle segments for entity views (e.g. one chat across roles).</td><td>Clears all affected role caches with one operation.</td></tr>
+                <tr><td>Production-safe scanning</td><td>Use Redis <code>SCAN</code>/<code>scan_iter</code> patterns.</td><td>Avoids blocking-keyspace operations under load.</td></tr>
+              </tbody>
+            </table>
+            <p>The invalidation path uses scan-based iteration instead of blocking <code>KEYS</code> sweeps, making wildcard cache maintenance safe under production load.</p>
+          </section>
+
+        </div>
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="../assets/site.js?v=20260326"></script>
+  </body>
+</html>

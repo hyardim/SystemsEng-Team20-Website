@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Database &amp; ORM · Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="../assets/styles.css?v=20260326" />
+  </head>
+  <body data-page="implementation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="../index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="../assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="../index.html" data-nav="home">Home</a><a href="../requirements.html" data-nav="requirements">Requirements</a><a href="../research.html" data-nav="research">Research</a><a href="../ui-design.html" data-nav="ui-design">UI Design</a><a href="../system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="../testing.html" data-nav="testing">Testing</a><a href="../evaluation.html" data-nav="evaluation">Evaluation</a><a href="../appendices.html" data-nav="appendices">Appendices</a><a href="../blog/blog.html" data-nav="blog">Blog</a></nav><button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Database &amp; ORM</h1>
+        <p class="report-page-subtitle">Section 2 of 11 · <a href="implementation.html">Back to Implementation</a></p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+
+          <section class="section-bare" id="libraries">
+            <h2>Libraries Used</h2>
+            <table class="impl-table">
+              <thead><tr><th>Library</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>SQLAlchemy 2.0</code></td><td>ORM with declarative typed mapping</td></tr>
+                <tr><td><code>alembic</code></td><td>Schema migration management</td></tr>
+                <tr><td><code>psycopg2-binary</code></td><td>Synchronous PostgreSQL driver</td></tr>
+                <tr><td><code>asyncpg</code></td><td>Asynchronous PostgreSQL driver (used for the AI generation path)</td></tr>
+                <tr><td><code>PostgreSQL JSONB</code></td><td>Native JSON column type for flexible structured data</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="section-bare" id="how-and-why">
+            <h2>Overview</h2>
+            <p>The backend maps domain entities (<code>User</code>, <code>Chat</code>, <code>Message</code>, etc.) into typed SQLAlchemy models and then leverages PostgreSQL features like <code>ENUM</code>, <code>JSONB</code>, and targeted indexes to enforce structure and speed up common queries. A sync session serves normal API requests, while a separate async session supports AI generation workloads without blocking the event loop. Alembic tracks schema changes so migrations are repeatable and safe across environments.</p>
+            <p>This layout keeps data correct under heavy concurrency, makes GP and specialist workflows reliable, and avoids ad-hoc database edits that can drift between deployments. It also ensures performance-critical queries have matching indexes so response times stay stable as data volume grows.</p>
+          </section>
+
+          <section class="section-bare" id="dual-session">
+            <h2>Dual-Mode Session Configuration</h2>
+            <p>The application uses two database sessions — synchronous for regular API routes, and asynchronous for the AI generation background task (which must not block the event loop):</p>
+            <pre><code># backend/src/db/session.py
+from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+
+# ── Synchronous engine — all standard API endpoints ──────────────────────────
+engine = create_engine(
+    DATABASE_URL,
+    pool_size=20,        # keep 20 connections warm
+    max_overflow=30,     # allow up to 30 extra connections under load
+    pool_timeout=30,
+    pool_recycle=1800,   # recycle connections every 30 min to avoid stale TCP
+    pool_pre_ping=True,  # check liveness before handing connection to a request
+)
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+
+def get_db() -&gt; Iterator[Session]:
+    db = SessionLocal()
+    try:
+        yield db          # FastAPI injects this via Depends(get_db)
+    except Exception:
+        db.rollback()     # auto-rollback on unhandled exception
+        raise
+    finally:
+        db.close()
+
+# ── Async engine — AI generation background task ──────────────────────────────
+ASYNC_DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+
+async_engine = create_async_engine(ASYNC_DATABASE_URL, pool_size=20, max_overflow=30,
+                                    pool_pre_ping=True)
+AsyncSessionLocal = async_sessionmaker(bind=async_engine, expire_on_commit=False)
+
+async def get_async_db() -&gt; AsyncIterator[AsyncSession]:
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+        except Exception:
+            await session.rollback()
+            raise</code></pre>
+            <p>The sync and async engines intentionally use similar pool settings so behavior under load is predictable across API and generation paths. <code>pool_pre_ping</code> and <code>pool_recycle</code> reduce stale-connection errors after idle periods or network interruptions.</p>
+            <p>Rollback-on-exception in both dependencies ensures failed requests do not leave partially applied writes in transaction scope. This is especially important when service methods compose multiple repository operations.</p>
+            <p><code>expire_on_commit=False</code> on async sessions prevents objects used immediately after commit from triggering lazy reloads during event-loop-sensitive generation flows.</p>
+          </section>
+
+          <section class="section-bare" id="declarative-base">
+            <h2>Declarative Base</h2>
+            <p>All ORM models inherit from one shared SQLAlchemy <code>Base</code> class. This gives Alembic a single metadata graph to inspect when auto-generating migrations.</p>
+            <pre><code># backend/src/db/base.py
+from sqlalchemy.orm import DeclarativeBase
+
+class Base(DeclarativeBase):
+    pass</code></pre>
+            <p>Using one declarative base also keeps table naming, relationship metadata, and migration autogeneration coherent. Splitting models across different base classes is a common source of missing-table migration bugs.</p>
+          </section>
+
+          <section class="section-bare" id="user-model">
+            <h2>User Model</h2>
+            <p>The <code>User</code> model is the identity anchor for the whole platform. It stores authentication state, role-based access control attributes, and profile metadata used by routing and permission checks across GP, specialist, and admin workflows.</p>
+            <p>Indexing <code>email</code>, <code>role</code>, and <code>specialty</code> keeps common lookups fast (login, role filtering, specialist matching), while fields like <code>session_version</code> and <code>email_verified</code> support secure token invalidation and account verification policies.</p>
+            <pre><code># backend/src/db/models/user.py
+class UserRole(str, enum.Enum):
+    GP         = "gp"
+    SPECIALIST = "specialist"
+    ADMIN      = "admin"
+
+class User(Base):
+    __tablename__ = "users"
+    __table_args__ = (
+        Index("ix_users_email",    "email"),
+        Index("ix_users_role",     "role"),
+        Index("ix_users_specialty","specialty"),
+    )
+
+    id:                  Mapped[int]             = mapped_column(Integer, primary_key=True)
+    email:               Mapped[str]             = mapped_column(String, unique=True, nullable=False)
+    hashed_password:     Mapped[str]             = mapped_column(String, nullable=False)
+    full_name:           Mapped[str | None]      = mapped_column(String, nullable=True)
+    role:                Mapped[UserRole]        = mapped_column(SQLEnum(UserRole), default=UserRole.GP)
+    specialty:           Mapped[str | None]      = mapped_column(String, nullable=True)
+    is_active:           Mapped[bool]            = mapped_column(Boolean, default=True)
+    email_verified:      Mapped[bool]            = mapped_column(Boolean, default=False)
+    session_version:     Mapped[int]             = mapped_column(Integer, default=0)
+    created_at:          Mapped[datetime]        = mapped_column(DateTime, default=utc_now)
+
+    chats:          Mapped[list["Chat"]]         = relationship("Chat", foreign_keys="Chat.user_id")
+    assigned_chats: Mapped[list["Chat"]]         = relationship("Chat", foreign_keys="Chat.specialist_id")
+    notifications:  Mapped[list["Notification"]] = relationship("Notification", back_populates="user")</code></pre>
+          </section>
+
+          <section class="section-bare" id="chat-model">
+            <h2>Chat Model</h2>
+            <p>The <code>Chat</code> model drives the entire consultation lifecycle. <code>status</code> is a PostgreSQL <code>ENUM</code> preventing invalid values at the database level. <code>patient_context</code> uses <code>JSONB</code> for flexible metadata without extra columns or migrations. Multiple composite indexes support the most common query patterns.</p>
+            <pre><code># backend/src/db/models/chat.py
+class ChatStatus(str, enum.Enum):
+    OPEN      = "open"
+    SUBMITTED = "submitted"
+    ASSIGNED  = "assigned"
+    REVIEWING = "reviewing"
+    APPROVED  = "approved"
+    REJECTED  = "rejected"
+    CLOSED    = "closed"
+    FLAGGED   = "flagged"
+    ARCHIVED  = "archived"
+
+class Chat(Base):
+    __tablename__ = "chats"
+    __table_args__ = (
+        Index("ix_chats_user_id",               "user_id"),
+        Index("ix_chats_specialist_id",          "specialist_id"),
+        Index("ix_chats_status",                 "status"),
+        Index("ix_chats_user_archived_created_at","user_id","is_archived","created_at"),
+        Index("ix_chats_status_specialty_created_at","status","specialty","created_at"),
+        Index("ix_chats_specialist_status_assigned_at",
+              "specialist_id","status","assigned_at"),
+    )
+
+    id:              Mapped[int]             = mapped_column(Integer, primary_key=True)
+    title:           Mapped[str]             = mapped_column(String, default="New Chat")
+    status:          Mapped[ChatStatus]      = mapped_column(SQLEnum(ChatStatus), default=ChatStatus.OPEN)
+    specialty:       Mapped[str | None]      = mapped_column(String, nullable=True)
+    patient_context: Mapped[dict | None]     = mapped_column(JSONB, nullable=True)
+    specialist_id:   Mapped[int | None]      = mapped_column(ForeignKey("users.id", ondelete="SET NULL"))
+    assigned_at:     Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    review_feedback: Mapped[str | None]      = mapped_column(Text, nullable=True)
+    is_archived:     Mapped[bool]            = mapped_column(Boolean, default=False)
+    user_id:         Mapped[int]             = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+
+    owner:     Mapped["User | None"]         = relationship("User", foreign_keys=[user_id])
+    specialist: Mapped["User | None"]        = relationship("User", foreign_keys=[specialist_id])
+    messages:  Mapped[list["Message"]]       = relationship("Message", cascade="all, delete-orphan")
+    files:     Mapped[list["FileAttachment"]] = relationship("FileAttachment", cascade="all, delete-orphan")</code></pre>
+            <p>The <code>ondelete</code> and relationship choices are intentional safety policies: deleting a GP cascades owned chats, deleting a specialist does not delete consultations (<code>SET NULL</code>), and child message/file rows are controlled through chat ownership lifecycle.</p>
+            <p>This combination avoids accidental data loss in specialist-account changes while keeping orphaned child rows from accumulating when consultations are removed.</p>
+          </section>
+
+          <section class="section-bare" id="message-model">
+            <h2>Message Model</h2>
+            <p><code>citations</code> is stored as <code>JSONB</code> — each element contains document title, source name, section path, and page numbers, avoiding a separate citations table. <code>is_error</code> messages are excluded from conversation history so failed generation attempts don't pollute the LLM's context.</p>
+            <pre><code># backend/src/db/models/message.py
+class Message(Base):
+    __tablename__ = "messages"
+    __table_args__ = (
+        Index("ix_messages_chat_id",                       "chat_id"),
+        Index("ix_messages_chat_created_at",               "chat_id","created_at"),
+        Index("ix_messages_chat_sender_review_created_at", "chat_id","sender","review_status","created_at"),
+    )
+
+    id:              Mapped[int]          = mapped_column(Integer, primary_key=True)
+    content:         Mapped[str | None]   = mapped_column(Text)
+    sender:          Mapped[str]          = mapped_column(String)   # "user" | "ai" | "specialist"
+    created_at:      Mapped[datetime]     = mapped_column(DateTime, default=utc_now)
+    citations:       Mapped[list | None]  = mapped_column(JSONB(none_as_null=True), nullable=True)
+    is_generating:   Mapped[bool]         = mapped_column(Boolean, default=False)
+    is_error:        Mapped[bool]         = mapped_column(Boolean, default=False)
+    review_status:   Mapped[str | None]   = mapped_column(String, nullable=True)
+    review_feedback: Mapped[str | None]   = mapped_column(Text, nullable=True)
+    chat_id:         Mapped[int]          = mapped_column(ForeignKey("chats.id"), nullable=False)</code></pre>
+            <p>Message flags (<code>is_generating</code>, <code>is_error</code>, <code>review_status</code>) are not cosmetic metadata; they drive specialist action guards, streaming placeholders, and conversation-history inclusion rules.</p>
+            <p>The composite chat/sender/review index supports “latest unreviewed AI message” access patterns without scanning entire message timelines.</p>
+          </section>
+
+          <section class="section-bare" id="notification-model">
+            <h2>Notification Model</h2>
+            <p>The notification table stores per-user workflow events with unread/read state and optional chat linkage. Composite indexes optimize badge count polling and dropdown list rendering.</p>
+            <pre><code># backend/src/db/models/notification.py
+class NotificationType(str, enum.Enum):
+    CHAT_ASSIGNED  = "chat_assigned"
+    SPECIALIST_MSG = "specialist_msg"
+    CHAT_APPROVED  = "chat_approved"
+    CHAT_REJECTED  = "chat_rejected"
+    CHAT_REVISION  = "chat_revision"
+
+class Notification(Base):
+    __tablename__ = "notifications"
+    __table_args__ = (
+        Index("ix_notifications_user_id", "user_id"),
+        Index("ix_notifications_is_read", "is_read"),
+        Index("ix_notifications_user_created_at", "user_id", "created_at"),
+        Index("ix_notifications_user_read_created_at", "user_id", "is_read", "created_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    type: Mapped[NotificationType] = mapped_column(SQLEnum(NotificationType))
+    title: Mapped[str] = mapped_column(String, nullable=False)
+    is_read: Mapped[bool] = mapped_column(Boolean, default=False)</code></pre>
+          </section>
+
+          <section class="section-bare" id="migrations">
+            <h2>Database Migrations (Alembic)</h2>
+            <p>Schema changes are applied via Alembic migration scripts. Some require raw SQL that cannot be auto-detected — for example, adding the full-text search vector column:</p>
+            <pre><code># Auto-detect model changes and create a migration
+alembic revision --autogenerate -m "add is_archived to chats"
+
+# Apply all pending migrations
+alembic upgrade head</code></pre>
+            <pre><code>-- migrations/003_add_text_search_vector.sql
+ALTER TABLE rag_chunks
+    ADD COLUMN IF NOT EXISTS text_search_vector tsvector
+    GENERATED ALWAYS AS (to_tsvector('english', text)) STORED;
+
+CREATE INDEX IF NOT EXISTS idx_rag_chunks_text_search
+    ON rag_chunks USING GIN (text_search_vector);</code></pre>
+            <p><code>GENERATED ALWAYS AS ... STORED</code> is a PostgreSQL 12+ feature — the column is automatically recomputed by the database engine whenever <code>text</code> changes with no application code required.</p>
+            <h3>Legacy database detection</h3>
+            <p><code>bootstrap.py</code> inspects the existing schema and detects unstamped databases — where backend tables already exist but no <code>alembic_version</code> row is present. Instead of crashing mid-migration it fails early with a clear recovery message:</p>
+            <pre><code># backend/src/db/bootstrap.py
+MANAGED_BACKEND_TABLES = frozenset({
+    "audit_logs", "chats", "email_verification_tokens",
+    "file_attachments", "messages", "notifications",
+    "password_reset_tokens", "users",
+})
+
+def _ensure_supported_migration_state() -&gt; None:
+    existing = _existing_public_tables()
+    managed_present = existing &amp; MANAGED_BACKEND_TABLES
+    if managed_present and "alembic_version" not in existing:
+        raise RuntimeError(
+            "Legacy unstamped database detected. "
+            "Run: alembic stamp head  then  alembic upgrade head"
+        )</code></pre>
+            <p>Fail-fast legacy detection prevents a dangerous partial-migration state where some DDL runs before Alembic discovers version mismatches. Operators get an explicit recovery command sequence instead of ambiguous migration stack traces.</p>
+          </section>
+
+          <section class="section-bare" id="indexes-constraints-normalisation">
+            <h2>SQL Indexes, Unique Constraints &amp; Database Normalisation</h2>
+            <p>Critical uniqueness is enforced at the database layer, not just in API validation. For example, <code>users.email</code> is unique, and <code>rag_chunks</code> uses a composite uniqueness rule on <code>(doc_id, doc_version, chunk_id)</code> to guarantee deterministic upserts.</p>
+            <p>The schema follows 3NF: users, chats, messages, notifications, and file attachments are separate tables linked by foreign keys, while consultation-specific context remains in JSONB on chats.</p>
+            <p>Index rollout was staged across migrations: baseline identity/auth indexes, then workload-driven single-column indexes, then composite production-path indexes tuned for specialist queues, GP timeline reads, notification badge counts, and admin audit filtering.</p>
+            <table class="impl-table">
+              <thead><tr><th>Index</th><th>Columns</th><th>Query path optimized</th></tr></thead>
+              <tbody>
+                <tr><td><code>ix_chats_user_archived_created_at</code></td><td><code>user_id, is_archived, created_at</code></td><td>GP consultation list (active-first, newest-first).</td></tr>
+                <tr><td><code>ix_chats_status_specialty_created_at</code></td><td><code>status, specialty, created_at</code></td><td>Specialist queue by specialty and recency.</td></tr>
+                <tr><td><code>ix_messages_chat_sender_review_created_at</code></td><td><code>chat_id, sender, review_status, created_at</code></td><td>Unreviewed AI message lookups for specialist review.</td></tr>
+                <tr><td><code>ix_notifications_user_read_created_at</code></td><td><code>user_id, is_read, created_at</code></td><td>Unread badge count and notification dropdown.</td></tr>
+                <tr><td><code>ix_audit_logs_action_timestamp</code></td><td><code>action, timestamp</code></td><td>Admin audit filtering by action and time.</td></tr>
+              </tbody>
+            </table>
+            <p>Composite indexes with concurrent creation in PostgreSQL were used for larger deployments to reduce locking risk during migration.</p>
+          </section>
+
+        </div>
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="../assets/site.js?v=20260326"></script>
+  </body>
+</html>

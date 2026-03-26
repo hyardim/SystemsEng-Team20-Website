@@ -1,5 +1,4 @@
 function initializeHeader() {
-  const repoUrl = 'https://github.com/hyardim/Ambience-AI-1.5';
   const page = document.body.dataset.page;
   const header = document.querySelector('.site-header');
   const nav = document.querySelector('.site-nav');
@@ -43,15 +42,9 @@ function initializeHeader() {
   }
 
   if (githubBtn) {
-    if (githubBtn.tagName === 'A') {
-      githubBtn.href = repoUrl;
-      githubBtn.target = '_blank';
-      githubBtn.rel = 'noopener noreferrer';
-    } else {
-      githubBtn.addEventListener('click', () => {
-        window.open(repoUrl, '_blank', 'noopener,noreferrer');
-      });
-    }
+    githubBtn.addEventListener('click', () => {
+      // Placeholder: add repo URL later.
+    });
   }
 
   const fallbackLogoSvg = `
@@ -91,31 +84,11 @@ function initializeHeader() {
   }
 }
 
-function scrollElementToViewportCenter(targetElement) {
-  if (!targetElement) return;
-
-  const headerEl = document.querySelector('.site-header');
-  const headerHeight = headerEl ? headerEl.getBoundingClientRect().height : 0;
-  const targetTop = window.scrollY + targetElement.getBoundingClientRect().top;
-  const availableViewportHeight = Math.max(window.innerHeight - headerHeight, 0);
-  const adjustedTop =
-    targetTop
-    - headerHeight
-    - Math.max((availableViewportHeight - targetElement.offsetHeight) / 2, 0);
-  const prefersReducedMotion =
-    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  window.scrollTo({
-    top: Math.max(0, adjustedTop),
-    behavior: prefersReducedMotion ? 'auto' : 'smooth',
-  });
-}
-
 function renderToc() {
   const host = document.getElementById('page-toc');
   if (!host) return;
 
-  const headings = [...document.querySelectorAll('main h2')]
+  const headingEntries = [...document.querySelectorAll('main h2')]
     .map((heading) => {
       if (!heading.id) {
         const parentSection = heading.closest('section[id]');
@@ -125,8 +98,22 @@ function renderToc() {
       }
       return heading;
     })
-    .filter((heading) => heading.id);
-  if (!headings.length) {
+    .filter((heading) => heading.id)
+    .map((heading) => ({
+      id: heading.id,
+      label: heading.textContent,
+      element: heading,
+    }));
+
+  const tocEntries = headingEntries.length
+    ? headingEntries
+    : [...document.querySelectorAll('main section[id][data-toc-title]')].map((section) => ({
+        id: section.id,
+        label: section.getAttribute('data-toc-title') || '',
+        element: section,
+      })).filter((entry) => entry.id && entry.label);
+
+  if (!tocEntries.length) {
     host.innerHTML = '<p class="muted">No page outline available.</p>';
     return;
   }
@@ -134,7 +121,7 @@ function renderToc() {
   host.innerHTML = `
     <h3>On this page</h3>
     <ul>
-      ${headings.map((heading) => `<li><a href="#${heading.id}" data-toc-link="${heading.id}">${heading.textContent}</a></li>`).join('')}
+      ${tocEntries.map((heading) => `<li><a href="#${heading.id}" data-toc-link="${heading.id}">${heading.label}</a></li>`).join('')}
     </ul>
   `;
 
@@ -151,10 +138,10 @@ function renderToc() {
     const headerEl = document.querySelector('.site-header');
     const headerHeight = headerEl ? headerEl.getBoundingClientRect().height : 0;
     const scrollOffset = headerHeight + ((window.innerHeight / 2) - headerHeight) * 0.5;
-    let currentId = headings[0].id;
+    let currentId = tocEntries[0].id;
 
-    for (const heading of headings) {
-      if (heading.getBoundingClientRect().top - scrollOffset <= 0) {
+    for (const heading of tocEntries) {
+      if (heading.element.getBoundingClientRect().top - scrollOffset <= 0) {
         currentId = heading.id;
       } else {
         break;
@@ -173,7 +160,7 @@ function renderToc() {
   links.forEach((link) => {
     link.addEventListener('click', (event) => {
       const targetId = link.dataset.tocLink;
-      const targetHeading = headings.find((heading) => heading.id === targetId);
+      const targetHeading = tocEntries.find((heading) => heading.id === targetId)?.element;
       if (!targetHeading) return;
 
       event.preventDefault();
@@ -512,33 +499,41 @@ function initBlogNav() {
   window.addEventListener('resize', update);
 }
 
-function initializeReferenceLinks() {
-  const referenceLinks = [...document.querySelectorAll('a[href^="#ref-"]')];
-  if (!referenceLinks.length) return;
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
 
-  referenceLinks.forEach((link) => {
-    const targetSelector = link.getAttribute('href');
-    if (!targetSelector) return;
+function initCodeBlocks() {
+  document.querySelectorAll('pre code').forEach((block) => {
+    const raw = block.textContent;
+    const lines = raw.split('\n');
+    if (lines[lines.length - 1] === '') lines.pop();
 
-    link.addEventListener('click', (event) => {
-      if (event.defaultPrevented || event.button !== 0) return;
-      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    block.innerHTML = lines
+      .map((line, idx) => `<span class="code-line"><span class="code-ln">${idx + 1}</span>${escapeHtml(line)}</span>`)
+      .join('');
 
-      const target = document.querySelector(targetSelector);
-      if (!target) return;
-
-      event.preventDefault();
-      scrollElementToViewportCenter(target);
-      history.replaceState(null, '', targetSelector);
+    const pre = block.parentElement;
+    const btn = document.createElement('button');
+    btn.className = 'code-copy-btn';
+    btn.textContent = 'Copy';
+    btn.setAttribute('aria-label', 'Copy code to clipboard');
+    btn.addEventListener('click', () => {
+      navigator.clipboard.writeText(lines.join('\n')).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('is-copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('is-copied');
+        }, 2000);
+      });
     });
+    pre.appendChild(btn);
   });
-
-  if (window.location.hash.startsWith('#ref-')) {
-    const target = document.querySelector(window.location.hash);
-    if (target) {
-      requestAnimationFrame(() => scrollElementToViewportCenter(target));
-    }
-  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -549,6 +544,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initializePartnerLogos();
   initializeHeroStackCycle();
   initializeProjectTabs();
-  initBlogNav();
-  initializeReferenceLinks();
+  initCodeBlocks();
 });

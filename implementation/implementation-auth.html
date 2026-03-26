@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authentication &amp; Security · Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="../assets/styles.css?v=20260326" />
+  </head>
+  <body data-page="implementation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="../index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="../assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="../index.html" data-nav="home">Home</a><a href="../requirements.html" data-nav="requirements">Requirements</a><a href="../research.html" data-nav="research">Research</a><a href="../ui-design.html" data-nav="ui-design">UI Design</a><a href="../system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="../testing.html" data-nav="testing">Testing</a><a href="../evaluation.html" data-nav="evaluation">Evaluation</a><a href="../appendices.html" data-nav="appendices">Appendices</a><a href="../blog/blog.html" data-nav="blog">Blog</a></nav><button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Authentication &amp; Security</h1>
+        <p class="report-page-subtitle">Section 1 of 11 · <a href="implementation.html">Back to Implementation</a></p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+
+          <section class="section-bare" id="libraries">
+            <h2>Libraries Used</h2>
+            <table class="impl-table">
+              <thead><tr><th>Library</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>python-jose</code> / <code>PyJWT</code></td><td>JWT encoding, decoding, and verification</td></tr>
+                <tr><td><code>passlib[bcrypt]</code></td><td>Password hashing and verification using bcrypt</td></tr>
+                <tr><td><code>fastapi.security.OAuth2PasswordBearer</code></td><td>Extracts Bearer token from <code>Authorization</code> header</td></tr>
+                <tr><td><code>python-multipart</code></td><td>Parses OAuth2 form data</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="section-bare" id="how-and-why">
+            <h2>Overview</h2>
+            <p>Authentication is layered across hashing, token issuance, and request-time validation. Passwords are hashed with bcrypt via shared helpers, access tokens are short-lived, and refresh tokens live in HttpOnly cookies so sessions can renew without exposing secrets to JavaScript. Each request resolves a user from the token and checks <code>session_version</code> and account status so revocations take effect immediately.</p>
+            <p>The HTTP boundary adds rate limiting, security headers, and strict CORS rules to reduce brute-force and browser-side risk while keeping login and refresh practical for clinicians. This layered design minimizes replay and CSRF exposure and avoids policy drift across endpoints by enforcing one consistent security path.</p>
+          </section>
+
+          <section class="section-bare" id="password-hashing">
+            <h2>Password Hashing</h2>
+            <p>Passwords are never stored in plain text. <code>passlib</code> uses bcrypt with an automatically managed cost factor. Password strength is validated before hashing — minimum 8 characters, must contain uppercase, lowercase, digit, and special character.</p>
+            <p>Registration and password-change flows call shared helper functions that delegate hashing and verification to one <code>CryptContext</code> instance, enforcing one consistent algorithm and policy across all auth paths instead of risking weaker, duplicated implementations.</p>
+            <pre><code># backend/src/core/security.py
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def get_password_hash(password: str) -&gt; str:
+    return pwd_context.hash(password)
+
+def verify_password(plain_password: str, hashed_password: str) -&gt; bool:
+    return pwd_context.verify(plain_password, hashed_password)</code></pre>
+          </section>
+
+          <section class="section-bare" id="jwt-tokens">
+            <h2>JWT Token Creation</h2>
+            <p>The system issues two tokens: an <strong>access token</strong> (short-lived, used on every API call) and a <strong>refresh token</strong> (long-lived, stored in an HttpOnly cookie). Both embed <code>sub</code>, <code>role</code>, <code>sv</code> (session version), and <code>exp</code>.</p>
+            <p>The <code>session_version</code> field allows immediate token revocation — incrementing it in the database invalidates all previously issued tokens without a blocklist.</p>
+            <p>Token builders pull only essential claims from the current user row and sign the payload with configured expiry windows, keeping tokens small while still supporting RBAC checks and instant logout invalidation.</p>
+            <pre><code># backend/src/core/security.py
+def create_access_token_for_user(user: User) -&gt; str:
+    return create_access_token({
+        "sub": user.email,
+        "role": user.role.value,
+        "sv": user.session_version,    # session version for forced logout
+    })
+</code></pre>
+            <p>This snippet is intentionally minimal but important: <code>sub</code> identifies the account, <code>role</code> lets the API enforce role-aware access without an extra lookup for every guard, and <code>sv</code> makes mass token revocation possible through one database field increment.</p>
+          </section>
+
+          <section class="section-bare" id="token-decoding">
+            <h2>Token Decoding &amp; Verification</h2>
+            <p>Incoming access tokens are decoded and then validated against live account state. Verification checks user existence, active status, and session version so stale tokens are rejected even before expiry.</p>
+            <p>The resolver decodes the JWT, validates payload structure/type, and then performs a live user lookup before authorizing the request, combining cryptographic checks with database state to block access for deactivated users and revoked sessions even when token signatures remain valid.</p>
+            <pre><code># backend/src/core/security.py
+
+def _resolve_user_from_token(db: Session, token: str, *, expected_type: str) -&gt; User:
+    """Decode JWT, look up user, verify active status and session version."""
+    try:
+        payload = _decode_token_payload(token)
+        email, session_version = _validate_payload(payload, expected_type=expected_type)
+    except JWTError as exc:
+        raise _credentials_exception() from exc
+
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise _credentials_exception()
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="Account deactivated")
+    # Reject token if session version has been incremented (forced logout)
+    if session_version is not None and user.session_version != session_version:
+        raise _credentials_exception()
+    return user</code></pre>
+            <p>The critical behavior here is "JWT + live database state" validation. Even a cryptographically valid token is rejected if the account is deactivated or if session version drift indicates forced logout.</p>
+          </section>
+
+          <section class="section-bare" id="dependency-injection">
+            <h2>FastAPI Dependency Injection</h2>
+            <p>FastAPI's <code>Depends</code> mechanism injects the authenticated user into any protected route. Role guards are built on top:</p>
+            <p>A single dependency function resolves credentials from header/cookie and returns a validated <code>User</code> object for downstream handlers, avoiding copy-pasted auth logic and ensuring every protected endpoint follows the same trust rules.</p>
+            <pre><code># backend/src/core/security.py
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
+
+def get_current_user_from_cookie_or_header(
+    request: Request,
+    db: Session = Depends(get_db),
+    bearer_token: str | None = Depends(oauth2_scheme),
+) -&gt; User:
+    # Enforce Bearer header for mutation requests (CSRF mitigation)
+    _enforce_bearer_header_for_unsafe_cookie_auth(request, bearer_token)
+    token = bearer_token or request.cookies.get(settings.ACCESS_COOKIE_NAME)
+    if not token:
+        raise _credentials_exception()
+    return _resolve_user_from_token(db, token, expected_type="access")</code></pre>
+            <p>Header-first resolution is deliberate. For unsafe HTTP methods, the guard requires a Bearer header even when cookies exist, reducing CSRF risk for cookie-authenticated browser traffic.</p>
+          </section>
+
+          <section class="section-bare" id="cookies">
+            <h2>Auth Cookies</h2>
+            <p>On login, both tokens are sent — access token in the JSON body and refresh token as an HttpOnly cookie:</p>
+            <p>Cookie attributes are assembled once and reused for both access and refresh cookies in the same helper, preventing attribute drift (for example missing <code>HttpOnly</code> or wrong <code>SameSite</code>) that can either break refresh behavior or weaken browser-side protections.</p>
+            <pre><code>def set_auth_cookies(response: Response, *, access_token: str, refresh_token: str) -&gt; None:
+    cookie_common: dict[str, Any] = {
+        "httponly": True,
+        "secure": settings.COOKIE_SECURE,
+        "samesite": settings.COOKIE_SAMESITE,
+        "path": "/",
+    }
+    response.set_cookie(
+        key=settings.ACCESS_COOKIE_NAME,
+        value=access_token,
+        max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        **cookie_common,
+    )
+    response.set_cookie(
+        key=settings.REFRESH_COOKIE_NAME,
+        value=refresh_token,
+        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
+        **cookie_common,
+    )</code></pre>
+            <p><code>HttpOnly</code> blocks JavaScript token reads, <code>secure</code> restricts transmission to HTTPS, and <code>samesite</code> controls cross-site send behavior. Access tokens use a shorter lifetime than refresh tokens to reduce replay window if interception ever occurs.</p>
+          </section>
+
+          <section class="section-bare" id="login-sequence">
+            <h2>Sequence Diagram — Login Flow</h2>
+            <img class="diagram-img" src="../assets/diagrams/auth_login_sequence.svg" alt="Sequence diagram showing login flow between browser, backend API, and database with credential checks, token issuance, and audit logging." />
+          </section>
+
+          <section class="section-bare" id="rate-limiting">
+            <h2>Rate Limiting</h2>
+            <p>Auth endpoints are rate-limited with a dual-layer approach — Redis as primary, with an in-process <code>defaultdict</code> fallback when Redis is unavailable. This protects reset and verification endpoints from abuse without depending on Redis uptime for core availability.</p>
+            <p>Each request checks a scoped key against Redis counters first, then falls back to a local sliding window list when Redis is down, keeping brute-force protections active during infrastructure incidents instead of silently failing open.</p>
+            <pre><code># backend/src/services/auth_service.py
+def _is_rate_limited(redis_key, attempts_store, *, window_seconds, max_attempts) -&gt; bool:
+    redis_limited = _redis_rate_limited(redis_key, window_seconds, max_attempts)
+    if redis_limited:
+        return True
+    now = datetime.now(timezone.utc)
+    cutoff = now - timedelta(seconds=window_seconds)
+    attempts_store[redis_key] = [t for t in attempts_store[redis_key] if t &gt; cutoff]
+    if len(attempts_store[redis_key]) &gt;= max_attempts:
+        return True
+    attempts_store[redis_key].append(now)
+    return False</code></pre>
+            <table class="impl-table">
+              <thead><tr><th>Endpoint</th><th>Window</th><th>Max Attempts</th></tr></thead>
+              <tbody>
+                <tr><td><code>POST /auth/forgot-password</code></td><td>900 s (15 min)</td><td>5</td></tr>
+                <tr><td><code>POST /auth/resend-verification</code></td><td>900 s (15 min)</td><td>5</td></tr>
+              </tbody>
+            </table>
+            <p>General API rate limiting also uses scoped buckets. Keys include endpoint scope, subject identity (hashed token/email or anonymous marker), and client IP. That separation means heavy traffic on one scope (for example login attempts) does not throttle unrelated scopes such as authenticated chat requests from the same network.</p>
+            <p>When limits are exceeded, endpoints return <code>429 Too Many Requests</code> with cooldown guidance, without revealing account existence.</p>
+          </section>
+
+          <section class="section-bare" id="email-verification-reset">
+            <h2>Email Verification &amp; Password Reset Flows</h2>
+            <p>Email verification and password reset are implemented as one-time token workflows. On registration, accounts are created active but with <code>email_verified=false</code>, and a verification token is issued. Verification state is stored for audit and policy use.</p>
+            <p>The forgot-password endpoint is enumeration-safe: registered and unregistered emails receive the same HTTP 200 response shape and generic message. Attackers cannot infer account existence from response differences.</p>
+            <p>Both token types are secure random values, stored as SHA-256 hashes (not plaintext, not JWT), and compared using constant-time digest checks.</p>
+            <p>The server generates high-entropy tokens, hashes them with a server-side pepper, and verifies with constant-time comparison on redemption, so plaintext reset links are not recoverable even if token rows leak and timing side-channel exposure is reduced.</p>
+            <pre><code>def generate_secure_token() -&gt; str:
+    return secrets.token_urlsafe(32)   # 256 bits of randomness
+
+def _hash_token(token: str, pepper: str) -&gt; str:
+    payload = f"{pepper}:{token}".encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+def verify_password_reset_token(token: str, token_hash: str) -&gt; bool:
+    # Uses hmac.compare_digest to prevent timing attacks
+    return hmac.compare_digest(
+        _hash_token(token, settings.PASSWORD_RESET_TOKEN_PEPPER),
+        token_hash,
+    )</code></pre>
+          </section>
+
+          <section class="section-bare" id="profile-management">
+            <h2>Profile Management</h2>
+            <p>Users can update profile fields via <code>PATCH /auth/profile</code>, including secure password changes. When a password is changed, the current password must be supplied and the new value must pass the same strength policy used during registration.</p>
+            <p>A partial-update schema makes fields optional but keeps password-change inputs explicit in the same contract, letting safe profile edits stay flexible while preventing accidental or unauthorized password mutation without current-credential proof.</p>
+            <pre><code># backend/src/schemas/auth.py
+class ProfileUpdate(BaseModel):
+    full_name: str | None = None
+    specialty: str | None = None          # specialists only
+    new_password: str | None = None
+    current_password: str | None = None   # required when changing password</code></pre>
+          </section>
+
+          <section class="section-bare" id="nginx">
+            <h2>Nginx Reverse Proxy</h2>
+            <p>Nginx handles TLS termination, HTTP→HTTPS redirection, and request proxying. It is the only container with a public-facing port.</p>
+            <p>Stream routes and standard API routes are separated so SSE-specific proxy behavior can be applied only where required, preserving real-time token delivery while leaving normal API traffic on safer default buffering behavior.</p>
+            <pre><code># nginx/nginx.conf
+
+# SSE requires buffering disabled — otherwise Nginx holds chunks until buffer fills
+location /api/chats/ {
+    proxy_pass         http://backend:8000;
+    proxy_buffering    off;
+    proxy_read_timeout 300s;
+    proxy_set_header   X-Real-IP $remote_addr;
+}
+
+location /api/ {
+    proxy_pass http://backend:8000;
+}
+
+# Frontend SPA — serve index.html for all unmatched routes (client-side routing)
+location / {
+    proxy_pass http://frontend:3000;
+    try_files $uri $uri/ /index.html;
+}</code></pre>
+          </section>
+
+          <section class="section-bare" id="security-headers">
+            <h2>HTTP Security Headers Middleware</h2>
+            <p>A custom Starlette middleware class applies security headers to every response. This runs before any route handler and cannot be bypassed by individual endpoints:</p>
+            <p>The middleware mutates response headers in one central place on the outbound path of every request, which guarantees baseline browser hardening across the whole API and avoids per-endpoint omissions.</p>
+            <pre><code># backend/src/middleware/security.py
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; script-src 'self' 'unsafe-inline'; "
+            "style-src 'self' 'unsafe-inline'; img-src 'self' data:; "
+            "connect-src 'self'"
+        )
+        return response</code></pre>
+          </section>
+
+          <section class="section-bare" id="file-upload-validation">
+            <h2>File Upload Validation</h2>
+            <p>File uploads pass a multi-layer validation pipeline before bytes are committed. Each layer blocks a different class of risk rather than relying on extension checks alone.</p>
+            <table class="impl-table">
+              <thead><tr><th>Validation layer</th><th>Risk addressed</th></tr></thead>
+              <tbody>
+                <tr><td>Extension allow-list</td><td>Rejects unsupported file classes early.</td></tr>
+                <tr><td>Magic-byte signature check</td><td>Blocks content-type confusion (e.g., script renamed as <code>.pdf</code>).</td></tr>
+                <tr><td>Binary-content heuristic</td><td>Prevents non-text payloads masquerading as text uploads.</td></tr>
+                <tr><td>Filename sanitization</td><td>Prevents path traversal and unsafe filesystem names.</td></tr>
+                <tr><td>Streamed size cap</td><td>Stops oversized payloads and deletes partial files.</td></tr>
+              </tbody>
+            </table>
+            <p>Signature checks inspect the first bytes of the payload (for example <code>%PDF-</code> for PDFs and <code>PK\x03\x04</code> for DOCX) to confirm the declared extension matches content. Text formats also use a binary-byte ratio heuristic to reject likely binary masquerades.</p>
+          </section>
+
+          <section class="section-bare" id="startup-maintenance">
+            <h2>Application Startup Maintenance</h2>
+            <p>During FastAPI lifespan startup, the backend runs maintenance before accepting requests. Two tasks are critical.</p>
+            <p>First, expired email-verification and password-reset tokens are purged (older than retention policy) to reduce table growth and stale-token surface area.</p>
+            <p>Second, stale <code>messages.is_generating=true</code> rows from unclean shutdowns are reset to a recoverable state with an interruption message. This prevents permanent UI spinners and specialist-review deadlocks after restarts.</p>
+            <p>Both tasks are wrapped defensively so maintenance failures do not hard-block service boot.</p>
+          </section>
+
+          <section class="section-bare" id="cors-configuration">
+            <h2>CORS Configuration</h2>
+            <p>CORS is configured with explicit origin allow-lists and <code>allow_credentials=True</code> so browsers can send HttpOnly refresh-token cookies for session refresh operations.</p>
+          <p>The application wires CORS middleware with settings-driven origins, methods, and headers during startup, avoiding hardcoded policies and keeping browser auth behavior predictable between local and deployed setups.</p>
+            <pre><code># backend/src/app/main.py
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=settings.CORS_ALLOW_METHODS,
+    allow_headers=settings.CORS_ALLOW_HEADERS,
+)</code></pre>
+          <p>Allowed origins and headers are defined explicitly in config and loaded once into runtime settings, because credentialed cookie flows require explicit origin matching and clear allow-lists are both a security control and an operational requirement.</p>
+            <pre><code># backend/src/core/config.py
+ALLOWED_ORIGINS = ["http://localhost:5173", "http://localhost:3000"]
+CORS_ALLOW_METHODS = ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
+CORS_ALLOW_HEADERS = ["Authorization", "Content-Type", "Idempotency-Key"]</code></pre>
+            <p>Wildcard origins are intentionally disallowed: browser CORS rules prohibit <code>Access-Control-Allow-Origin: *</code> when credentials are included. Explicit origins are therefore mandatory for cookie-based auth to work reliably.</p>
+          </section>
+
+        </div>
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="../assets/site.js?v=20260326"></script>
+  </body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GP Workflow · Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="../assets/styles.css?v=20260326" />
+  </head>
+  <body data-page="implementation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="../index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="../assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="../index.html" data-nav="home">Home</a><a href="../requirements.html" data-nav="requirements">Requirements</a><a href="../research.html" data-nav="research">Research</a><a href="../ui-design.html" data-nav="ui-design">UI Design</a><a href="../system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="../testing.html" data-nav="testing">Testing</a><a href="../evaluation.html" data-nav="evaluation">Evaluation</a><a href="../appendices.html" data-nav="appendices">Appendices</a><a href="../blog/blog.html" data-nav="blog">Blog</a></nav><button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">GP Workflow</h1>
+        <p class="report-page-subtitle">Section 3 of 11 · <a href="implementation.html">Back to Implementation</a></p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+
+          <section class="section-bare" id="libraries">
+            <h2>Libraries Used</h2>
+            <table class="impl-table">
+              <thead><tr><th>Library</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>FastAPI</code></td><td>Route definition, request body parsing, background tasks</td></tr>
+                <tr><td><code>Pydantic v2</code></td><td>Request/response schema validation with automatic error messages</td></tr>
+                <tr><td><code>SQLAlchemy</code></td><td>ORM query building</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="section-bare" id="how-and-why">
+            <h2>Overview</h2>
+            <p>A GP submits a validated <code>ChatCreate</code> payload, the service writes consultation and first-message records in one controlled path, then triggers AI generation asynchronously. Status changes are enforced by explicit rules so transitions remain consistent across GP and specialist actions. Every write is paired with audit logging so each consultation has a traceable origin even if generation later fails.</p>
+            <p>This keeps the UI responsive during long model calls while maintaining a reliable workflow state model. It prevents ambiguous consultation states and makes downstream review, notification, and auditing behavior predictable for clinical teams.</p>
+          </section>
+
+          <section class="section-bare" id="creating-consultation">
+            <h2>Creating a Consultation</h2>
+            <p>A GP creates a consultation by sending a <code>ChatCreate</code> payload. FastAPI validates it via Pydantic before the handler runs. The service creates the chat row, the first message row, and schedules AI generation as a <code>BackgroundTask</code> so the HTTP response returns immediately:</p>
+            <pre><code># backend/src/schemas/chat.py
+class ChatCreate(BaseModel):
+    title:           str       = Field(..., min_length=1, max_length=200)
+    specialty:       str | None = None
+    severity:        str | None = None
+    patient_context: dict | None = None    # {age, gender, notes}
+    message:         str       = Field(..., min_length=1, max_length=10_000)</code></pre>
+            <pre><code># backend/src/services/chat_service.py
+def create_chat(db: Session, user: User, data: ChatCreate) -&gt; ChatResponse:
+    chat = chat_repository.create(
+        db,
+        user_id=user.id,
+        title=data.title,
+        specialty=data.specialty,
+        severity=data.severity,
+        patient_context=data.patient_context,
+        status=ChatStatus.SUBMITTED,
+    )
+    message_repository.create(
+        db,
+        chat_id=chat.id,
+        content=data.message,
+        sender="user",
+    )
+    audit_repository.log(
+        db, user_id=user.id, action="CREATE_CHAT",
+        details=f"Chat {chat.id} created",
+    )
+    # AI generation runs in the background — does not block this response
+    asyncio.ensure_future(
+        _async_generate_ai_response(chat.id, user.id, data.message)
+    )
+    return chat_to_response(chat)</code></pre>
+            <p>The synchronous write path finishes chat + first-message persistence before launching generation. This guarantees every generation task has a stable consultation context and audit anchor even if generation later fails.</p>
+            <p>Returning immediately after task scheduling keeps GP interactions responsive; the user does not wait on retrieval/model latency to continue working.</p>
+          </section>
+
+          <section class="section-bare" id="status-lifecycle">
+            <h2>Consultation Status Lifecycle</h2>
+            <p>Status transitions are enforced at the service layer. The full state machine:</p>
+            <img class="diagram-img" src="../assets/diagrams/consultation_status_lifecycle.svg" alt="Consultation status lifecycle diagram showing transitions from open to submitted, assigned, reviewing, approved, rejected, and archived with unassign and optional transitions." />
+            <p>The solid transitions represent the normal workflow path during consultation processing. Dashed transitions represent optional or exception paths that appear in specific operational contexts.</p>
+            <p>Additional status values:</p>
+            <ul>
+              <li><code>CLOSED</code> — consultations closed by the GP before specialist review</li>
+              <li><code>FLAGGED</code> — reserved for admin moderation use cases</li>
+              <li><code>ARCHIVED</code> — soft-deleted; hidden from normal queries but retained for audit purposes</li>
+            </ul>
+          </section>
+
+          <section class="section-bare" id="auto-submit-async-generation">
+            <h2>Auto-Submit &amp; Async Background Generation</h2>
+            <p>When a GP sends the first message in an <code>OPEN</code> consultation, the backend automatically transitions the chat to <code>SUBMITTED</code> and starts AI generation asynchronously. This removes a dedicated “submit” step from the normal GP flow while preserving explicit status transitions in audit logs.</p>
+            <pre><code># backend/src/services/chat_service.py
+if chat.status == ChatStatus.OPEN:
+    await chat_repository.async_update(db, chat, status=ChatStatus.SUBMITTED)
+    await audit_repository.async_log(
+        db, user_id=user.id, action="AUTO_SUBMIT_FOR_REVIEW",
+        details=f"Chat {chat_id} auto-submitted after first GP message",
+    )
+
+task = asyncio.create_task(
+    _async_generate_ai_response(chat.id, user.id, content),
+    name=f"ai-gen-chat-{chat.id}",
+)
+task.add_done_callback(_on_generation_task_done)</code></pre>
+            <p>The manual submit endpoint still exists for explicit workflows, but the auto-submit path is the primary path in normal operation.</p>
+            <p>The background task callback logs any unhandled task exception so failures are visible in server logs even though the HTTP request has already returned.</p>
+            <p>A concurrency guard checks whether a generating message already exists for the same chat before starting generation. This prevents duplicate AI responses when clients retry a message request after a transport-level failure.</p>
+            <p>In test environments, an <code>INLINE_AI_TASKS</code> mode runs generation inline in the request cycle, making deterministic assertions possible without waiting for background task completion.</p>
+          </section>
+
+        </div>
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="../assets/site.js?v=20260326"></script>
+  </body>
+</html>

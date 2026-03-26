@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="../assets/styles.css?v=20260325ag" />
+  </head>
+  <body data-page="implementation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="../index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="../assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="../index.html" data-nav="home">Home</a><a href="../requirements.html" data-nav="requirements">Requirements</a><a href="../research.html" data-nav="research">Research</a><a href="../ui-design.html" data-nav="ui-design">UI Design</a><a href="../system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="../testing.html" data-nav="testing">Testing</a><a href="../evaluation.html" data-nav="evaluation">Evaluation</a><a href="../appendices.html" data-nav="appendices">Appendices</a><a href="../blog/blog.html" data-nav="blog">Blog</a></nav><button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Implementation</h1>
+        <p class="report-page-subtitle">How the application is built in code</p>
+        <p class="report-page-summary">
+          The implementation spans three major codebases: the React frontend, the FastAPI backend,
+          and the FastAPI RAG service. Docker Compose ties those pieces to a shared PostgreSQL/pgvector
+          runtime. Select a section below to explore the implementation details.
+        </p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <div class="impl-index-grid">
+            <section class="impl-index-item" id="authentication-security" data-toc-title="Authentication &amp; Security">
+              <h2>Authentication &amp; Security</h2>
+              <a class="impl-index-card" href="implementation-auth.html">
+                <span class="impl-index-card__number">Section 1</span>
+                <p class="impl-index-card__title">Authentication &amp; Security</p>
+                <p class="impl-index-card__desc">JWT sessions, secure cookies, reset/verification flows, rate limiting, and HTTP boundary hardening.</p>
+              </a>
+            </section>
+
+            <section class="impl-index-item" id="database-orm" data-toc-title="Database &amp; ORM">
+              <h2>Database &amp; ORM</h2>
+              <a class="impl-index-card" href="implementation-database.html">
+                <span class="impl-index-card__number">Section 2</span>
+                <p class="impl-index-card__title">Database &amp; ORM</p>
+                <p class="impl-index-card__desc">SQLAlchemy models, sync/async sessions, Alembic migrations, and index/constraint design.</p>
+              </a>
+            </section>
+
+            <section class="impl-index-item" id="gp-workflow" data-toc-title="GP Workflow">
+              <h2>GP Workflow</h2>
+              <a class="impl-index-card" href="implementation-gp.html">
+                <span class="impl-index-card__number">Section 3</span>
+                <p class="impl-index-card__title">GP Workflow</p>
+                <p class="impl-index-card__desc">Consultation creation, Pydantic validation, background AI task scheduling, and status lifecycle.</p>
+              </a>
+            </section>
+
+            <section class="impl-index-item" id="ai-rag-pipeline" data-toc-title="AI &amp; RAG Pipeline">
+              <h2>AI &amp; RAG Pipeline</h2>
+              <a class="impl-index-card" href="implementation-rag.html">
+                <span class="impl-index-card__number">Section 4</span>
+                <p class="impl-index-card__title">AI &amp; RAG Pipeline</p>
+                <p class="impl-index-card__desc">8-stage ingestion pipeline, vector + keyword retrieval, RRF fusion, reranking, and LLM routing.</p>
+              </a>
+            </section>
+
+            <section class="impl-index-item" id="real-time-streaming" data-toc-title="Real-Time Streaming">
+              <h2>Real-Time Streaming</h2>
+              <a class="impl-index-card" href="implementation-streaming.html">
+                <span class="impl-index-card__number">Section 5</span>
+                <p class="impl-index-card__title">Real-Time Streaming</p>
+                <p class="impl-index-card__desc">SSE event bus, StreamingResponse endpoint, frontend EventSource subscription, and polling fallback.</p>
+              </a>
+            </section>
+
+            <section class="impl-index-item" id="file-attachments" data-toc-title="File Attachments">
+              <h2>File Attachments</h2>
+              <a class="impl-index-card" href="implementation-files.html">
+                <span class="impl-index-card__number">Section 6</span>
+                <p class="impl-index-card__title">File Attachments</p>
+                <p class="impl-index-card__desc">Upload validation, safe filename handling, PDF text extraction, and RAG context injection.</p>
+              </a>
+            </section>
+
+            <section class="impl-index-item" id="specialist-review" data-toc-title="Specialist Review">
+              <h2>Specialist Review</h2>
+              <a class="impl-index-card" href="implementation-specialist.html">
+                <span class="impl-index-card__number">Section 7</span>
+                <p class="impl-index-card__title">Specialist Review</p>
+                <p class="impl-index-card__desc">Assignment, review actions, AI revision, per-message review, and the review dispatcher.</p>
+              </a>
+            </section>
+
+            <section class="impl-index-item" id="notification-system" data-toc-title="Notification System">
+              <h2>Notification System</h2>
+              <a class="impl-index-card" href="implementation-notifications.html">
+                <span class="impl-index-card__number">Section 8</span>
+                <p class="impl-index-card__title">Notification System</p>
+                <p class="impl-index-card__desc">Repository pattern, notification types, unread badge polling, and frontend state management.</p>
+              </a>
+            </section>
+
+            <section class="impl-index-item" id="caching-layer" data-toc-title="Caching Layer">
+              <h2>Caching Layer</h2>
+              <a class="impl-index-card" href="implementation-caching.html">
+                <span class="impl-index-card__number">Section 9</span>
+                <p class="impl-index-card__title">Caching Layer</p>
+                <p class="impl-index-card__desc">Redis-backed cache with in-process fallback, cache-aside pattern, and targeted invalidation.</p>
+              </a>
+            </section>
+
+            <section class="impl-index-item" id="admin-panel" data-toc-title="Admin Panel">
+              <h2>Admin Panel</h2>
+              <a class="impl-index-card" href="implementation-admin.html">
+                <span class="impl-index-card__number">Section 10</span>
+                <p class="impl-index-card__title">Admin Panel</p>
+                <p class="impl-index-card__desc">Dashboard stats, user management, consultation oversight, audit log viewing, and RAG operations.</p>
+              </a>
+            </section>
+
+            <section class="impl-index-item" id="frontend-architecture" data-toc-title="Frontend Architecture">
+              <h2>Frontend Architecture</h2>
+              <a class="impl-index-card" href="implementation-frontend.html">
+                <span class="impl-index-card__number">Section 11</span>
+                <p class="impl-index-card__title">Frontend Architecture</p>
+                <p class="impl-index-card__desc">React 18 routing, AuthContext, centralized API client, SSE hooks, secure storage, and component structure.</p>
+              </a>
+            </section>
+          </div>
+        </div>
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation.html">Frontend, backend, and RAG implementation</a><a href="../system-design.html">Architecture, flows, and data model</a><a href="../testing.html">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="../appendices.html#user-manual">User manual</a><a href="../appendices.html#deployment-manual">Deployment manual</a><a href="../appendices.html#privacy">GDPR and privacy</a><a href="../blog/blog.html">External blog and monthly video</a></div></section></div></footer>
+    <script src="../assets/site.js?v=20260322f"></script>
+  </body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Specialist Review · Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="../assets/styles.css?v=20260326" />
+  </head>
+  <body data-page="implementation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="../index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="../assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="../index.html" data-nav="home">Home</a><a href="../requirements.html" data-nav="requirements">Requirements</a><a href="../research.html" data-nav="research">Research</a><a href="../ui-design.html" data-nav="ui-design">UI Design</a><a href="../system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="../testing.html" data-nav="testing">Testing</a><a href="../evaluation.html" data-nav="evaluation">Evaluation</a><a href="../appendices.html" data-nav="appendices">Appendices</a><a href="../blog/blog.html" data-nav="blog">Blog</a></nav><button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Specialist Review</h1>
+        <p class="report-page-subtitle">Section 7 of 11 · <a href="implementation.html">Back to Implementation</a></p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+
+          <section class="section-bare" id="libraries-used">
+            <h2>Libraries Used</h2>
+            <table class="impl-table"><thead><tr><th>Library</th><th>Purpose</th></tr></thead><tbody><tr><td><code>FastAPI</code></td><td>HTTP endpoint</td></tr><tr><td><code>Pydantic v2</code></td><td>Request validation using <code>Literal</code> type for the action field</td></tr><tr><td><code>SQLAlchemy</code></td><td>Database updates within a transaction</td></tr></tbody></table>
+          </section>
+
+          <section class="section-bare" id="how-and-why">
+            <h2>Overview</h2>
+            <p>Specialist review is implemented as a guarded action dispatcher. Typed request schemas constrain allowed actions, service guards verify ownership and valid status, and each action updates chat/message state with corresponding notification and audit side effects. Message-level edits allow corrections without discarding the entire consultation thread, while status transitions keep chat state aligned with review outcomes.</p>
+            <p>This enforces clinical oversight before answers are finalized and provides a clear accountability trail for every decision. It also prevents unsafe actions during active generation, avoiding conflicting outputs and broken state for GPs waiting on results.</p>
+          </section>
+
+          <section class="section-bare" id="assigning-a-consultation">
+            <h2>Assigning a Consultation</h2>
+            <p>A specialist assigns themselves to a consultation by calling the assign endpoint. Status must be <code>SUBMITTED</code> — the service layer enforces this and notifies the GP on success:</p>
+            <pre><code># backend/src/services/specialist_queries.py
+def assign_chat(db: Session, specialist: User, chat_id: int) -&gt; ChatDetailResponse:
+    chat = chat_repository.get(db, chat_id)
+    if not chat:
+        raise HTTPException(404, &quot;Chat not found&quot;)
+    if chat.status != ChatStatus.SUBMITTED:
+        raise HTTPException(409, f&quot;Chat is not submittable (status: {chat.status.value})&quot;)
+    chat = chat_repository.update(
+        db, chat,
+        status=ChatStatus.ASSIGNED,
+        specialist_id=specialist.id,
+        assigned_at=datetime.now(timezone.utc),
+    )
+    notification_repository.create(
+        db, user_id=chat.user_id,
+        type=NotificationType.CHAT_ASSIGNED,
+        title=&quot;Specialist assigned to your consultation&quot;,
+        chat_id=chat.id,
+    )
+    return chat_to_response(chat)</code></pre>
+          </section>
+
+          <section class="section-bare" id="review-action-schema">
+            <h2>Review Action Schema</h2>
+            <p>The <code>action</code> field uses a <code>Literal</code> type — Pydantic rejects any value outside the defined set at the validation layer, before reaching application code:</p>
+            <pre><code># backend/src/schemas/chat.py
+ReviewAction = Literal[
+    &quot;approve&quot;,
+    &quot;reject&quot;,
+    &quot;request_changes&quot;,
+    &quot;manual_response&quot;,
+    &quot;send_comment&quot;,
+    &quot;unassign&quot;,
+]
+
+class ReviewRequest(BaseModel):
+    action:              ReviewAction
+    feedback:            str | None = None
+    replacement_content: str | None = None    # for manual_response
+    replacement_sources: list[str] | None = None
+    edited_content:      str | None = None    # for per-message edit_response</code></pre>
+          </section>
+
+          <section class="section-bare" id="consultation-level-review-dispatcher">
+            <h2>Consultation-Level Review Dispatcher</h2>
+            <p>All five consultation-level actions are handled inside a single <code>review()</code> function. Key guards are checked first before dispatching:</p>
+            <pre><code># backend/src/services/specialist_review.py
+def review(db: Session, specialist: User, chat_id: int, body: ReviewRequest) -&gt; ChatResponse:
+
+    chat = (db.query(Chat)
+              .filter(Chat.id == chat_id, Chat.specialist_id == specialist.id)
+              .first())
+    if not chat:
+        raise HTTPException(404, &quot;Chat not found or not assigned to you&quot;)
+
+    # Guard 1: Chat must be in a reviewable state
+    if chat.status not in (ChatStatus.ASSIGNED, ChatStatus.REVIEWING):
+        raise HTTPException(400, f&quot;Chat must be ASSIGNED or REVIEWING (current: {chat.status.value})&quot;)
+
+    # Guard 2: Cannot approve/reject/unassign while AI is generating
+    if body.action in (&quot;approve&quot;, &quot;reject&quot;, &quot;manual_response&quot;, &quot;unassign&quot;):
+        generating = (db.query(Message)
+                        .filter(Message.chat_id == chat_id,
+                                Message.sender == &quot;ai&quot;,
+                                Message.is_generating == True)
+                        .first())
+        if generating:
+            raise HTTPException(400, &quot;Cannot act while AI response is generating&quot;)
+
+    # ── Action: Send Comment ─────────────────────────────────────────────────
+    if body.action == &quot;send_comment&quot;:
+        message_repository.create(db, chat_id=chat.id,
+                                   content=body.feedback.strip(), sender=&quot;specialist&quot;)
+        notification_repository.create(db, user_id=chat.user_id,
+                                        type=NotificationType.SPECIALIST_MSG,
+                                        title=&quot;New comment from specialist&quot;,
+                                        chat_id=chat.id)
+        audit_repository.log(db, user_id=specialist.id, action=&quot;SPECIALIST_COMMENT&quot;)
+        _invalidate_chat_views(chat, specialist.id)
+        return chat_to_response(chat)   # status unchanged
+
+    # ── Action: Unassign ─────────────────────────────────────────────────────
+    if body.action == &quot;unassign&quot;:
+        old_specialist_id = chat.specialist_id
+        chat = chat_repository.update(db, chat, status=ChatStatus.SUBMITTED,
+                                       specialist_id=None, assigned_at=None)
+        audit_repository.log(db, user_id=specialist.id, action=&quot;SPECIALIST_UNASSIGN&quot;)
+        _invalidate_chat_views(chat, old_specialist_id)
+        return chat_to_response(chat)
+
+    # ── Action: Manual Response ───────────────────────────────────────────────
+    if body.action == &quot;manual_response&quot;:
+        if not body.replacement_content or not body.replacement_content.strip():
+            raise HTTPException(400, &quot;replacement_content is required&quot;)
+        _mark_last_ai_message(db, chat.id, body)   # mark AI message as replaced
+        message_repository.create(db, chat_id=chat.id,
+                                   content=body.replacement_content.strip(),
+                                   sender=&quot;specialist&quot;,
+                                   citations=_build_manual_citations(body.replacement_sources))
+        chat = chat_repository.update(db, chat, status=ChatStatus.APPROVED,
+                                       reviewed_at=datetime.now(timezone.utc))
+        notification_repository.create(db, user_id=chat.user_id,
+                                        type=NotificationType.CHAT_APPROVED,
+                                        title=&quot;Specialist provided a response&quot;,
+                                        chat_id=chat.id)
+        _invalidate_chat_views(chat, specialist.id)
+        return chat_to_response(chat)
+
+    # ── Action: Request Changes (AI Revision) ────────────────────────────────
+    _mark_last_ai_message(db, chat.id, body)
+    if body.action == &quot;request_changes&quot;:
+        _regenerate_ai_response(db, chat, body.feedback)   # triggers new RAG generation
+        chat = chat_repository.update(db, chat, status=ChatStatus.REVIEWING,
+                                       review_feedback=body.feedback)
+        notification_repository.create(db, user_id=chat.user_id,
+                                        type=NotificationType.CHAT_REVISION,
+                                        title=&quot;AI response is being revised&quot;,
+                                        chat_id=chat.id)
+
+    # ── Action: Approve / Reject ──────────────────────────────────────────────
+    else:
+        new_status = ChatStatus.APPROVED if body.action == &quot;approve&quot; else ChatStatus.REJECTED
+        chat = chat_repository.update(db, chat, status=new_status,
+                                       reviewed_at=datetime.now(timezone.utc),
+                                       review_feedback=body.feedback)
+        notification_type = (NotificationType.CHAT_APPROVED if body.action == &quot;approve&quot;
+                             else NotificationType.CHAT_REJECTED)
+        notification_repository.create(db, user_id=chat.user_id,
+                                        type=notification_type,
+                                        title=f&quot;Consultation {body.action}d&quot;,
+                                        chat_id=chat.id)
+
+    _invalidate_chat_views(chat, specialist.id)
+    return chat_to_response(chat)</code></pre>
+            <p>This dispatcher centralizes validation, state transition, side-effects, and cache invalidation in one transactional path. That prevents branch drift where one action updates status but forgets notifications or audit logging.</p>
+            <p>Guard ordering also matters: ownership and status checks run before action logic, and generation-state checks prevent approve/reject decisions against incomplete AI output.</p>
+          </section>
+
+          <section class="section-bare" id="ai-revision-request-changes-flow">
+            <h2>AI Revision (Request Changes Flow)</h2>
+            <p>When a specialist requests changes, the system re-runs RAG with the original question, the previous AI answer, and the specialist&#x27;s feedback all included in the prompt:</p>
+            <pre><code># backend/src/services/specialist_review.py
+def _regenerate_ai_response(db: Session, chat: Chat, feedback: str | None) -&gt; Message:
+    messages     = message_repository.list_for_chat(db, chat.id)
+    user_msgs    = [m for m in messages if m.sender == &quot;user&quot;]
+    ai_msgs      = [m for m in messages if m.sender == &quot;ai&quot;]
+    original_query  = user_msgs[-1].content if user_msgs else &quot;&quot;
+    previous_answer = ai_msgs[-1].content  if ai_msgs   else &quot;&quot;
+    patient_context = _build_patient_context(chat, messages)
+    file_context    = _build_file_context(chat)
+
+    # Create new placeholder message
+    placeholder = message_repository.create(
+        db, chat_id=chat.id,
+        content=&quot;Revising response based on specialist feedback…&quot;,
+        sender=&quot;ai&quot;, is_generating=True,
+    )
+
+    # POST to /revise endpoint with full context
+    _do_revise(db, placeholder, original_query, previous_answer,
+               feedback or &quot;&quot;, chat.specialty, chat.severity,
+               patient_context, file_context)
+    return placeholder</code></pre>
+            <p>The snippet explicitly carries three context layers into revision generation: original question, previous answer, and specialist feedback. That combination guides targeted correction instead of generic regeneration.</p>
+            <p>The <code>/revise</code> RAG endpoint uses <code>build_revision_prompt()</code> which includes all three inputs — original question, previous answer, and specialist feedback — allowing the model to address specific concerns while remaining grounded in the same clinical guidelines.</p>
+          </section>
+
+          <section class="section-bare" id="per-message-review">
+            <h2>Per-Message Review</h2>
+            <p>In addition to consultation-level actions, specialists can review individual AI messages. This is exposed as a separate endpoint: <code>POST /specialist/chats/{chat_id}/messages/{message_id}/review</code>.</p>
+            <p>Per-message actions and their effect on <code>message.review_status</code>:</p>
+            <table class="impl-table"><thead><tr><th>Action</th><th><code>review_status</code></th><th>Chat status change</th></tr></thead><tbody><tr><td><code>approve</code></td><td><code>&quot;approved&quot;</code></td><td>→ <code>REVIEWING</code> (if not already)</td></tr><tr><td><code>reject</code></td><td><code>&quot;rejected&quot;</code></td><td>→ <code>REVIEWING</code></td></tr><tr><td><code>edit_response</code></td><td><code>&quot;edited&quot;</code></td><td>→ <code>REVIEWING</code></td></tr><tr><td><code>manual_response</code></td><td><code>&quot;replaced&quot;</code></td><td>→ <code>REVIEWING</code></td></tr><tr><td><code>request_changes</code></td><td>unchanged</td><td>→ <code>REVIEWING</code>, triggers regeneration</td></tr></tbody></table>
+            <p>The specialist can only close the consultation (approve/reject the whole chat) once <strong>all AI messages</strong> have a <code>review_status</code> value. The frontend tracks this with:</p>
+            <pre><code>// frontend/src/pages/specialist/SpecialistQueryDetailPage.tsx
+const unreviewedAIIds = new Set(
+  messages.filter(m =&gt; m.senderType === &#x27;ai&#x27; &amp;&amp; !m.reviewStatus &amp;&amp; !m.isGenerating).map(m =&gt; m.id)
+);
+const allAIReviewed = aiMessages.length &gt; 0 &amp;&amp; unreviewedAIIds.size === 0 &amp;&amp; !anyGenerating;</code></pre>
+            <p>The &quot;Close &amp; Approve Consultation&quot; button is only enabled when <code>allAIReviewed === true</code>.</p>
+          </section>
+
+          <section class="section-bare" id="sequence-diagram-manual-response-action">
+            <h2>Sequence Diagram — Manual Response Action</h2>
+            <img class="diagram-img" src="../assets/diagrams/specialist_manual_response_sequence.svg" alt="Sequence diagram showing specialist manual response flow from upload and review action through database updates and GP notification delivery." />
+            <p>The diagram shows both the specialist-facing API roundtrip and the downstream GP notification path, making it clear how a manual response propagates through backend state updates and user-visible alerts.</p>
+          </section>
+
+        </div>
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="../assets/site.js?v=20260326"></script>
+  </body>
+</html>

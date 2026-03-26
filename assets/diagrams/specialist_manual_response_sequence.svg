@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="920" viewBox="0 0 1400 920" role="img" aria-labelledby="title desc">
+  <title id="title">Specialist Manual Response Sequence</title>
+  <desc id="desc">Sequence diagram for specialist manual response flow across specialist browser, backend API, database, and GP browser.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f6f9ff" />
+      <stop offset="100%" stop-color="#edf3ff" />
+    </linearGradient>
+
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#2a5ca5" />
+    </marker>
+
+    <style>
+      .title { font: 700 34px Arial, sans-serif; fill: #083a80; }
+      .subtitle { font: 400 18px Arial, sans-serif; fill: #355885; }
+      .lane-header { rx: 12; stroke-width: 2; }
+      .lane-title { font: 700 18px Arial, sans-serif; fill: #ffffff; text-anchor: middle; dominant-baseline: middle; }
+      .lane-line { stroke: #7b99c0; stroke-width: 2.3; stroke-dasharray: 8 7; }
+      .msg { stroke: #2a5ca5; stroke-width: 3; marker-end: url(#arrow); fill: none; }
+      .msg-reply { stroke: #456f9f; stroke-width: 2.5; marker-end: url(#arrow); fill: none; stroke-dasharray: 7 6; }
+      .msg-gp { stroke: #1f7a4e; stroke-width: 3; marker-end: url(#arrow); fill: none; }
+      .label { font: 600 14px Arial, sans-serif; fill: #1a3f74; }
+      .label-gp { font: 600 14px Arial, sans-serif; fill: #1b6f49; }
+      .step { font: 700 14px Arial, sans-serif; fill: #17457f; }
+      .legend { font: 500 14px Arial, sans-serif; fill: #2f4c73; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="920" fill="url(#bg)" />
+
+  <text x="700" y="62" class="title" text-anchor="middle">Sequence Diagram — Manual Response Action</text>
+  <text x="700" y="94" class="subtitle" text-anchor="middle">Specialist workflow from file upload through GP notification</text>
+
+  <!-- Lane headers -->
+  <rect class="lane-header" x="90" y="126" width="230" height="62" fill="#1856a5" stroke="#1856a5" />
+  <text class="lane-title" x="205" y="157">Specialist Browser</text>
+
+  <rect class="lane-header" x="420" y="126" width="230" height="62" fill="#005eb8" stroke="#005eb8" />
+  <text class="lane-title" x="535" y="157">Backend API</text>
+
+  <rect class="lane-header" x="750" y="126" width="230" height="62" fill="#2b6cb0" stroke="#2b6cb0" />
+  <text class="lane-title" x="865" y="157">Database</text>
+
+  <rect class="lane-header" x="1080" y="126" width="230" height="62" fill="#2f855a" stroke="#2f855a" />
+  <text class="lane-title" x="1195" y="157">GP Browser</text>
+
+  <!-- Lifelines -->
+  <line class="lane-line" x1="205" y1="188" x2="205" y2="840" />
+  <line class="lane-line" x1="535" y1="188" x2="535" y2="840" />
+  <line class="lane-line" x1="865" y1="188" x2="865" y2="840" />
+  <line class="lane-line" x1="1195" y1="188" x2="1195" y2="840" />
+
+  <!-- 1 -->
+  <line class="msg" x1="215" y1="238" x2="525" y2="238" />
+  <text class="step" x="223" y="227">1</text>
+  <text class="label" x="265" y="227">Upload file + POST /files</text>
+
+  <!-- 2 -->
+  <line class="msg" x1="545" y1="294" x2="855" y2="294" />
+  <text class="step" x="553" y="283">2</text>
+  <text class="label" x="610" y="283">Store file metadata/content</text>
+
+  <!-- 3 -->
+  <line class="msg" x1="215" y1="356" x2="525" y2="356" />
+  <text class="step" x="223" y="345">3</text>
+  <text class="label" x="278" y="345">POST /review (manual_response)</text>
+
+  <!-- 4 -->
+  <line class="msg" x1="545" y1="418" x2="855" y2="418" />
+  <text class="step" x="553" y="407">4</text>
+  <text class="label" x="609" y="407">Mark AI message as replaced</text>
+
+  <!-- 5 -->
+  <line class="msg" x1="545" y1="474" x2="855" y2="474" />
+  <text class="step" x="553" y="463">5</text>
+  <text class="label" x="610" y="463">Create specialist replacement message</text>
+
+  <!-- 6 -->
+  <line class="msg" x1="545" y1="536" x2="855" y2="536" />
+  <text class="step" x="553" y="525">6</text>
+  <text class="label" x="612" y="525">Set consultation state (approval path)</text>
+
+  <!-- 7 -->
+  <line class="msg" x1="545" y1="592" x2="855" y2="592" />
+  <text class="step" x="553" y="581">7</text>
+  <text class="label" x="607" y="581">Create CHAT_APPROVED notification</text>
+
+  <!-- 8 -->
+  <line class="msg-reply" x1="525" y1="654" x2="215" y2="654" />
+  <text class="step" x="478" y="643">8</text>
+  <text class="label" x="284" y="643">200 {updated chat} + cache invalidation</text>
+
+  <!-- 9 -->
+  <line class="msg-gp" x1="1185" y1="726" x2="545" y2="726" />
+  <text class="step" x="1110" y="715">9</text>
+  <text class="label-gp" x="895" y="715">GP polls GET /notifications</text>
+
+  <!-- 10 -->
+  <line class="msg-gp" x1="545" y1="786" x2="1185" y2="786" />
+  <text class="step" x="556" y="775">10</text>
+  <text class="label-gp" x="802" y="775">Notification payload returned; GP sees update</text>
+
+  <!-- Legend -->
+  <line x1="330" y1="872" x2="420" y2="872" stroke="#2a5ca5" stroke-width="3" marker-end="url(#arrow)" />
+  <text class="legend" x="435" y="877">Primary request/update path</text>
+
+  <line x1="760" y1="872" x2="850" y2="872" stroke="#456f9f" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#arrow)" />
+  <text class="legend" x="865" y="877">Response path</text>
+</svg>

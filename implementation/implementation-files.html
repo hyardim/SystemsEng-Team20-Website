@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Attachments · Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="../assets/styles.css?v=20260326" />
+  </head>
+  <body data-page="implementation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="../index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="../assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="../index.html" data-nav="home">Home</a><a href="../requirements.html" data-nav="requirements">Requirements</a><a href="../research.html" data-nav="research">Research</a><a href="../ui-design.html" data-nav="ui-design">UI Design</a><a href="../system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="../testing.html" data-nav="testing">Testing</a><a href="../evaluation.html" data-nav="evaluation">Evaluation</a><a href="../appendices.html" data-nav="appendices">Appendices</a><a href="../blog/blog.html" data-nav="blog">Blog</a></nav><button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">File Attachments</h1>
+        <p class="report-page-subtitle">Section 6 of 11 · <a href="implementation.html">Back to Implementation</a></p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+
+          <section class="section-bare" id="libraries-used">
+            <h2>Libraries Used</h2>
+            <table class="impl-table"><thead><tr><th>Library</th><th>Purpose</th></tr></thead><tbody><tr><td><code>python-multipart</code></td><td>Parses <code>multipart/form-data</code> upload requests</td></tr><tr><td><code>pdfplumber</code></td><td>Extracts text content from PDF files for RAG context</td></tr><tr><td><code>aiofiles</code> / <code>Path.write_bytes</code></td><td>Saves uploaded files to disk</td></tr></tbody></table>
+          </section>
+
+          <section class="section-bare" id="how-and-why">
+            <h2>Overview</h2>
+            <p>File handling is treated as a controlled ingestion path: uploads are validated for policy and size, filenames are sanitized, storage locations are scoped by chat, and metadata is persisted for traceability. Text extraction then feeds relevant file content into RAG context construction with explicit size caps so documents cannot overwhelm the prompt budget. Each step is ordered to block unsafe files before any disk write and to keep database pointers consistent with storage state.</p>
+            <p>This is important because attachments can improve answer quality, but they also introduce security and reliability risks. Structured validation and bounded extraction reduce those risks while still letting clinicians include supporting material and keep evidence context visible in the final response.</p>
+          </section>
+
+          <section class="section-bare" id="upload-endpoint">
+            <h2>Upload Endpoint</h2>
+            <pre><code># backend/src/api/endpoints/chats.py
+@router.post(&quot;/{chat_id}/files&quot;, response_model=FileAttachmentResponse)
+async def upload_file(
+    chat_id: int,
+    file:    UploadFile = File(...),
+    user:    User       = Depends(get_current_user_from_cookie_or_header),
+    db:      Session    = Depends(get_db),
+):
+    return await chat_service.upload_file(db, user, chat_id, file)</code></pre>
+            <p>The endpoint itself stays thin by design: auth/context checks and file policies live in the service layer so all upload entry points share the same validation logic and auditing behavior.</p>
+          </section>
+
+          <section class="section-bare" id="file-validation-and-storage">
+            <h2>File Validation and Storage</h2>
+            <pre><code># backend/src/services/chat_uploads.py (simplified)
+ALLOWED_EXTENSIONS = {&quot;.pdf&quot;, &quot;.txt&quot;, &quot;.md&quot;, &quot;.rtf&quot;, &quot;.doc&quot;, &quot;.docx&quot;,
+                      &quot;.csv&quot;, &quot;.json&quot;, &quot;.xml&quot;}
+MAX_FILE_SIZE_BYTES = 3 * 1024 * 1024   # 3 MB
+
+async def upload_chat_file(db, user, chat_id, upload_file) -&gt; FileAttachment:
+    # 1. Policy check — is this user allowed to upload to this chat?
+    chat = _assert_can_upload(db, chat_id, user)
+
+    # 2. Validate file extension
+    ext = Path(upload_file.filename).suffix.lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(400, f&quot;File type &#x27;{ext}&#x27; is not allowed&quot;)
+
+    # 3. Read and check file size
+    data = await upload_file.read()
+    if len(data) &gt; MAX_FILE_SIZE_BYTES:
+        raise HTTPException(413, &quot;File exceeds 3 MB limit&quot;)
+
+    # 4. Sanitise filename — strip non-ASCII and dangerous characters
+    safe_name = sanitise_filename(upload_file.filename)
+
+    # 5. Write to disk (organised by chat_id subdirectory)
+    dest = UPLOAD_DIR / str(chat_id) / safe_name
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(data)
+
+    # 6. Persist metadata to database
+    attachment = FileAttachment(
+        chat_id=chat_id,
+        filename=safe_name,
+        file_path=str(dest),
+        file_type=ext,
+        file_size=len(data),
+        uploaded_by=user.id,
+    )
+    db.add(attachment)
+    db.commit()
+    db.refresh(attachment)
+    return attachment</code></pre>
+            <p>Validation order is intentional: authorization first, then format/size checks, then filesystem write, then metadata commit. This avoids writing disk artifacts for requests that would fail policy checks.</p>
+            <p>Persisting file metadata after successful write ensures database pointers never reference files that failed to save.</p>
+          </section>
+
+          <section class="section-bare" id="file-content-in-rag-context">
+            <h2>File Content in RAG Context</h2>
+            <p>When generating an AI response, uploaded files are extracted and injected into the prompt as an &quot;UPLOADED DOCUMENTS&quot; section:</p>
+            <pre><code># backend/src/services/rag_context.py (simplified)
+def extract_text(file_path: str, file_type: str) -&gt; str | None:
+    if file_type == &quot;.pdf&quot;:
+        try:
+            import pdfplumber
+            with pdfplumber.open(file_path) as pdf:
+                return &quot;\n&quot;.join(page.extract_text() or &quot;&quot; for page in pdf.pages)
+        except Exception:
+            return None   # gracefully handle corrupted or password-protected PDFs
+    elif file_type in (&quot;.txt&quot;, &quot;.md&quot;, &quot;.csv&quot;):
+        return Path(file_path).read_text(errors=&quot;replace&quot;)
+    return None
+
+def build_file_context(chat: Chat, extract_text_fn) -&gt; str | None:
+    texts = []
+    for f in (chat.files or []):
+        text = extract_text_fn(f.file_path, f.file_type)
+        if text and text.strip():
+            texts.append(f&quot;[{f.filename}]\n{text.strip()}&quot;)
+    return &quot;\n\n---\n\n&quot;.join(texts) if texts else None</code></pre>
+            <p>The extracted text is capped and passed to the RAG prompt builder. If it exceeds the token budget, a <code>was_truncated=True</code> flag is set and a warning banner is shown to the user.</p>
+          </section>
+
+          <section class="section-bare" id="file-context-truncation-propagation">
+            <h2>File Context Truncation &amp; Propagation</h2>
+            <p>When extracted text exceeds <code>FILE_CONTEXT_CHAR_LIMIT</code>, truncation is sentence-aware rather than a blunt character cut. The builder tries to trim at the last sentence boundary inside the budget; if none exists, it falls back to the last word boundary.</p>
+            <p>A visible truncation marker is appended so downstream prompt construction makes truncation explicit to the model rather than silently clipping content.</p>
+            <p>The result object includes both final <code>file_context</code> and <code>was_truncated</code>. That flag is propagated end-to-end so the user is warned when only part of a document was used during answer generation.</p>
+            <div class="timeline" role="img" aria-label="File truncation propagation flow from backend context builder to frontend warning banner">
+              <div class="timeline__item" data-step="1">
+                <strong>Context build</strong>
+                <code>build_file_context_result()</code> returns content plus <code>was_truncated</code>.
+              </div>
+              <div class="timeline__item" data-step="2">
+                <strong>Generation payload</strong>
+                Backend forwards <code>file_context_truncated=true</code> to generation path.
+              </div>
+              <div class="timeline__item" data-step="3">
+                <strong>SSE completion event</strong>
+                <code>complete</code> event includes truncation flag.
+              </div>
+              <div class="timeline__item" data-step="4">
+                <strong>Frontend reaction</strong>
+                <code>onFileContextTruncated()</code> toggles warning banner in query detail view.
+              </div>
+            </div>
+            <p>PDF extraction also has a fallback path: if extraction returns minimal text (for example image-only or protected PDFs), the service emits a warning string instead of silently passing empty context, e.g. <code>⚠️ This PDF appears to be empty, password-protected, or contains only images.</code>.</p>
+          </section>
+
+        </div>
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="../assets/site.js?v=20260326"></script>
+  </body>
+</html>
