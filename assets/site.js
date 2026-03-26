@@ -378,40 +378,65 @@ function initBlogNav() {
   const links = [...document.querySelectorAll('.blog-nav__list a')];
   if (!links.length) return;
 
-  const sectionIds = links.map((a) => a.getAttribute('href').replace('#', '')).filter(Boolean);
-  const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
-  if (!sections.length) return;
+  const getFilename = (href) => {
+    if (!href) return '';
+    try {
+      return new URL(href, window.location.href).pathname.split('/').pop() || '';
+    } catch {
+      return href;
+    }
+  };
+
+  const setActiveByFilename = (filename) => {
+    links.forEach((link) => {
+      const isActive = getFilename(link.getAttribute('href')) === filename;
+      link.classList.toggle('is-active', isActive);
+      if (isActive) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+  };
+
+  const currentWeek = document.body.dataset.blogWeek;
+  if (currentWeek) {
+    setActiveByFilename(`blog-${currentWeek}.html`);
+    return;
+  }
+
+  const weekCards = [...document.querySelectorAll('.blog-week-card')]
+    .map((card) => {
+      const link = card.querySelector('.blog-week-card__week-link, .blog-week-card__link');
+      const filename = getFilename(link?.getAttribute('href'));
+      return filename ? { card, filename } : null;
+    })
+    .filter(Boolean);
+
+  if (!weekCards.length) {
+    setActiveByFilename(getFilename(window.location.pathname));
+    return;
+  }
 
   const headerHeight = () => {
     const h = document.querySelector('.site-header');
     return h ? h.getBoundingClientRect().height : 0;
   };
 
-  const getActiveId = () => {
-    const offset = headerHeight() + 40;
-    let active = sections[0].id;
-    for (const section of sections) {
-      if (section.getBoundingClientRect().top - offset <= 0) active = section.id;
+  const getActiveFilename = () => {
+    const offset = headerHeight() + Math.max((window.innerHeight - headerHeight()) * 0.32, 120);
+    let active = 'blog.html';
+    for (const { card, filename } of weekCards) {
+      if (card.getBoundingClientRect().top - offset <= 0) active = filename;
       else break;
     }
     return active;
   };
 
   const update = () => {
-    const activeId = getActiveId();
-    links.forEach((a) => {
-      a.classList.toggle('is-active', a.getAttribute('href') === `#${activeId}`);
-    });
+    setActiveByFilename(getActiveFilename());
   };
 
   update();
   window.addEventListener('scroll', update, { passive: true });
-
-  if (window.location.hash) {
-    links.forEach((a) => {
-      a.classList.toggle('is-active', a.getAttribute('href') === window.location.hash);
-    });
-  }
+  window.addEventListener('resize', update);
 }
 
 function initializeReferenceLinks() {

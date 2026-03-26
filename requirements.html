@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Requirements · Ambience-AI-1.5</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20260325s" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260325ag" />
   </head>
   <body data-page="requirements">
     <header class="site-header">
@@ -434,7 +434,7 @@
                 <p>Needs operational oversight, audit logs, and user-role governance.</p>
               </div>
             </div>
-            <div class="two-col">
+            <div class="two-col personas-gallery">
               <div class="diagram-card">
                 <h3>GP persona</h3>
                 <img src="assets/diagrams/persona-gp-hci.png" alt="Persona board for Dr. Emma Patel, a general practitioner who needs fast, reliable guidance for routine Advice and Guidance queries" />
@@ -458,7 +458,7 @@
               detailed use case list then explains the main user goals and outcomes in a more
               explicit way.
             </p>
-            <div class="diagram-card">
+            <div class="diagram-card diagram-card--matrix">
               <h3>Use case overview matrix</h3>
               <p class="muted">
                 The matrix below presents the final use cases as a clear actor-use-case overview.
@@ -468,7 +468,7 @@
               </p>
               <img src="assets/diagrams/requirements_use_case_matrix_v2.svg" alt="Use case overview matrix showing GP, Specialist and Admin involvement in the main Ambience-AI-1.5 use cases" />
             </div>
-            <div class="diagram-card">
+            <div class="diagram-card diagram-card--workflow">
               <h3>Final workflow after requirement refinement</h3>
               <p class="muted">
                 The flowchart below reflects the final workflow after requirements were revised
@@ -478,16 +478,16 @@
                 the submitted question already shown as the first message.
               </p>
               <img src="assets/diagrams/requirements_workflow_current.svg" alt="Flowchart showing landing and authentication, GP consultation creation, guidance generation within the consultation chat, specialist assignment and review, a request-changes loop and an approved response returned to the GP" />
+              <p class="muted use-cases__workflow-note">
+                The final workflow above is the one used for the remainder of this Requirements page.
+                In the revised workflow, a GP submits a structured consultation, the system produces an
+                evidence-linked draft in the same chat, and a specialist reviews that draft from the
+                unassigned queue by opening the query, assigning it, then choosing whether to approve, approve with comment,
+                request changes, provide a manual response, or edit the message before any checked
+                response is returned to the GP. Optional file uploads support submission, while
+                notifications and admin monitoring support the wider platform workflow.
+              </p>
             </div>
-            <p class="muted">
-              The final workflow above is the one used for the remainder of this Requirements page.
-              In the revised workflow, a GP submits a structured consultation, the system produces an
-              evidence-linked draft in the same chat, and a specialist reviews that draft from the
-              unassigned queue by opening the query, assigning it, then choosing whether to approve, approve with comment,
-              request changes, provide a manual response, or edit the message before any checked
-              response is returned to the GP. Optional file uploads support submission, while
-              notifications and admin monitoring support the wider platform workflow.
-            </p>
             <div class="diagram-card">
               <h3>Use case flow (high level)</h3>
               <div class="diagram">
@@ -618,7 +618,7 @@
               <li>Polling is used for updates instead of websockets, which simplifies deployment but trades off push responsiveness.</li>
               <li>Cloud-assisted inference is available only as controlled fallback while local-first processing remains the default.</li>
             </ul>
-            <div class="callout callout--warning">
+            <div class="callout callout--warning callout--constraint-summary">
               <h3>Constraint summary</h3>
               <p>
                 A coursework project must show end-to-end engineering depth, so the system balances a
