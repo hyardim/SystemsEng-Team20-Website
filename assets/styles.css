@@ -4026,7 +4026,7 @@ body[data-page="blog"] .report-page-header {
 }
 
 body[data-page="blog"] .report-page-summary {
-	max-width: 68ch;
+	max-width: 100%;
 	margin-top: 12px;
 }
 
@@ -4153,6 +4153,7 @@ body[data-page="blog"] .content-stack {
 	gap: 0;
 	width: 100%;
 	max-width: 780px;
+	--blog-text-max-width: 100%;
 }
 
 body[data-page="blog"] .blog-entry,
@@ -4219,6 +4220,7 @@ body[data-page="blog"] .blog-week-card p {
 	color: var(--text);
 	line-height: 1.75;
 	margin: 0 0 14px;
+	max-width: var(--blog-text-max-width);
 }
 
 body[data-page="blog"] .blog-entry p:last-child,
@@ -4313,7 +4315,7 @@ body[data-page="blog"] .blog-week-card {
 .blog-week-card__summary {
 	margin: 0;
 	max-width: 62ch;
-	font-size: clamp(1.12rem, 1.5vw, 1.3rem);
+	max-width: var(--blog-text-max-width);
 	line-height: 1.82;
 	color: var(--text);
 }
@@ -4377,6 +4379,7 @@ body[data-page="blog"] .blog-week-card {
 	}
 
 	.blog-week-card__header {
+		max-width: var(--blog-text-max-width);
 		display: block;
 		margin-bottom: 18px;
 	}
