@@ -241,20 +241,20 @@
               complete user journeys through the live stack.
             </p>
 
-            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;margin:4px 0 24px;">
-              <div style="width:28%;min-width:180px;background:#0072ce;color:#fff;border-radius:10px 10px 0 0;padding:14px 20px;text-align:center;">
+            <div id="tsPyramid" style="display:flex;flex-direction:column;align-items:center;gap:3px;margin:4px 0 24px;">
+              <div class="ts-pyr-tier" style="width:28%;min-width:180px;background:#0072ce;color:#fff;border-radius:10px 10px 0 0;padding:14px 20px;text-align:center;">
                 <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.85;margin-bottom:4px;">End-to-end</div>
                 <div style="font-size:0.9rem;font-weight:600;line-height:1.4;">Playwright · Chromium &amp; Firefox</div>
               </div>
-              <div style="width:56%;min-width:260px;background:#005eb8;color:#fff;padding:14px 20px;text-align:center;">
+              <div class="ts-pyr-tier" style="width:56%;min-width:260px;background:#005eb8;color:#fff;padding:14px 20px;text-align:center;">
                 <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.85;margin-bottom:4px;">Integration</div>
                 <div style="font-size:0.9rem;font-weight:600;line-height:1.4;">Feature flows · real databases · full pipelines</div>
               </div>
-              <div style="width:84%;min-width:320px;background:#003d7a;color:#fff;padding:14px 20px;text-align:center;">
+              <div class="ts-pyr-tier" style="width:84%;min-width:320px;background:#003d7a;color:#fff;padding:14px 20px;text-align:center;">
                 <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.85;margin-bottom:4px;">Unit</div>
                 <div style="font-size:0.9rem;font-weight:600;line-height:1.4;">Vitest &amp; Pytest · MSW · pytest fixtures</div>
               </div>
-              <div style="width:100%;background:#003087;color:#fff;border-radius:0 0 10px 10px;padding:14px 20px;text-align:center;">
+              <div class="ts-pyr-tier" style="width:100%;background:#003087;color:#fff;border-radius:0 0 10px 10px;padding:14px 20px;text-align:center;">
                 <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.85;margin-bottom:4px;">Code quality</div>
                 <div style="font-size:0.9rem;font-weight:600;line-height:1.4;">ESLint · TypeScript · Ruff · MyPy — enforced on every commit</div>
               </div>
@@ -353,16 +353,18 @@
               </div>
             </div>
 
-            <h3 style="margin-top:36px">Mocking strategy — MSW</h3>
-            <p>
-              All HTTP calls are intercepted by Mock Service Worker v2. The MSW server is started
-              before tests and reset between each test to prevent state leakage. Handlers live in
-              <code>src/test/mocks/handlers.ts</code> and cover every API endpoint with realistic
-              fixture data — GP, Specialist, and Admin users, chats with messages, notifications,
-              and audit logs. A <code>renderWithProviders()</code> utility wraps components with
-              Router and AuthProvider, and a <code>seedAuth()</code> helper pre-populates encrypted
-              localStorage to simulate a logged-in session without going through the login flow.
-            </p>
+            <div class="callout" style="margin-top:28px">
+              <h3>Mocking strategy — MSW</h3>
+              <p>
+                All HTTP calls are intercepted by Mock Service Worker v2. The MSW server is started
+                before tests and reset between each test to prevent state leakage. Handlers live in
+                <code>src/test/mocks/handlers.ts</code> and cover every API endpoint with realistic
+                fixture data — GP, Specialist, and Admin users, chats with messages, notifications,
+                and audit logs. A <code>renderWithProviders()</code> utility wraps components with
+                Router and AuthProvider, and a <code>seedAuth()</code> helper pre-populates encrypted
+                localStorage to simulate a logged-in session without going through the login flow.
+              </p>
+            </div>
           </section>
 
           <!-- ═══════════════════════════════════════════════════════════ -->
@@ -426,15 +428,17 @@
               </div>
             </div>
 
-            <h3>Fixture design</h3>
-            <p>
-              <code>conftest.py</code> provides a rich fixture hierarchy. User fixtures supply
-              pre-registered GP, Specialist, and Admin accounts with their JWT authorization
-              headers, so individual tests declare their role context declaratively. Chat
-              fixtures provide chats at known lifecycle states (created, submitted). All
-              fixtures use dependency injection overrides to swap the production database for
-              the test SQLite engine, keeping tests hermetic.
-            </p>
+            <div class="callout">
+              <h3>Fixture design</h3>
+              <p>
+                <code>conftest.py</code> provides a rich fixture hierarchy. User fixtures supply
+                pre-registered GP, Specialist, and Admin accounts with their JWT authorization
+                headers, so individual tests declare their role context declaratively. Chat
+                fixtures provide chats at known lifecycle states (created, submitted). All
+                fixtures use dependency injection overrides to swap the production database for
+                the test SQLite engine, keeping tests hermetic.
+              </p>
+            </div>
             <div class="callout">
               <h3>Mocking approach</h3>
               <p>
@@ -488,16 +492,18 @@
               </div>
             </div>
 
-            <h3 style="margin-top:36px">Mocking strategy</h3>
-            <p>
-              Unit tests in the RAG service use <code>unittest.mock.patch</code> and
-              <code>MagicMock</code> to isolate the component under test from its neighbours.
-              <code>make_*()</code> factory helpers construct realistic test objects — chunks,
-              embeddings, retrieval results — without needing a live database, so the bulk of
-              the suite runs fast without any external services. Integration-style tests that
-              exercise the vector store use a real PostgreSQL + pgvector instance (provided as
-              a Docker service in CI).
-            </p>
+            <div class="callout" style="margin-top:28px">
+              <h3>Mocking strategy</h3>
+              <p>
+                Unit tests in the RAG service use <code>unittest.mock.patch</code> and
+                <code>MagicMock</code> to isolate the component under test from its neighbours.
+                <code>make_*()</code> factory helpers construct realistic test objects — chunks,
+                embeddings, retrieval results — without needing a live database, so the bulk of
+                the suite runs fast without any external services. Integration-style tests that
+                exercise the vector store use a real PostgreSQL + pgvector instance (provided as
+                a Docker service in CI).
+              </p>
+            </div>
           </section>
 
           <!-- ═══════════════════════════════════════════════════════════ -->
@@ -601,16 +607,18 @@
               </table>
             </div>
 
-            <h3>RAG audit logging</h3>
-            <p>
-              RAG events are logged with enough detail to distinguish a grounded answer from a
-              service failure. A <code>RAG_ANSWER</code> record stores the query length, number
-              of top-k chunks requested, and how many chunks were actually used. A
-              <code>RAG_ERROR</code> record stores the query length and the exception type. The
-              <code>rag_grounded_responses</code> statistic only increments when citations are
-              present, keeping grounded and fallback responses separately countable.
-              <code>test_rag_audit.py</code> verifies all of this behaviour.
-            </p>
+            <div class="callout">
+              <h3>RAG audit logging</h3>
+              <p>
+                RAG events are logged with enough detail to distinguish a grounded answer from a
+                service failure. A <code>RAG_ANSWER</code> record stores the query length, number
+                of top-k chunks requested, and how many chunks were actually used. A
+                <code>RAG_ERROR</code> record stores the query length and the exception type. The
+                <code>rag_grounded_responses</code> statistic only increments when citations are
+                present, keeping grounded and fallback responses separately countable.
+                <code>test_rag_audit.py</code> verifies all of this behaviour.
+              </p>
+            </div>
 
             <h3>Structured cache logging (backend)</h3>
             <div class="two-col">
@@ -624,16 +632,18 @@
               </div>
             </div>
 
-            <h3>RAG service file and console logging</h3>
-            <p>
-              The RAG service configures a logger per module using a shared
-              <code>get_logger()</code> utility. Each logger gets two handlers: a console
-              handler at the configured log level (default INFO) and a file handler writing
-              to <code>logs/rag.log</code> always at DEBUG level. Both the log level and log
-              file path are configurable via environment variables. <code>test_logger.py</code>
-              verifies handler setup, logger naming, and that repeated calls to
-              <code>get_logger()</code> do not register duplicate handlers.
-            </p>
+            <div class="callout">
+              <h3>RAG service file and console logging</h3>
+              <p>
+                The RAG service configures a logger per module using a shared
+                <code>get_logger()</code> utility. Each logger gets two handlers: a console
+                handler at the configured log level (default INFO) and a file handler writing
+                to <code>logs/rag.log</code> always at DEBUG level. Both the log level and log
+                file path are configurable via environment variables. <code>test_logger.py</code>
+                verifies handler setup, logger naming, and that repeated calls to
+                <code>get_logger()</code> do not register duplicate handlers.
+              </p>
+            </div>
 
             <div class="callout">
               <h3>Frontend component logging</h3>
@@ -929,6 +939,17 @@
             .ts-tool-badge--be   { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
             .ts-tool-badge--e2e  { background: #fff7ed; border-color: #fed7aa; color: #c2410c; }
             .ts-tool-badge--qual { background: #fff1f2; border-color: #fecdd3; color: #be123c; }
+
+            /* ── Pyramid animation ── */
+            .ts-pyr-tier {
+              opacity: 0;
+              transform: translateY(14px) scaleX(0.96);
+              transition: opacity 0.5s ease, transform 0.5s ease;
+            }
+            .ts-pyr-tier.ts-pyr-in {
+              opacity: 1;
+              transform: translateY(0) scaleX(1);
+            }
 
             /* ── Scroll reveal ── */
             .sc-reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
@@ -1283,6 +1304,19 @@
           });
         }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
         document.querySelectorAll('.sc-reveal').forEach(function(el) { scObs.observe(el); });
+
+        /* ── Pyramid animation ── */
+        var tsPyramid = document.getElementById('tsPyramid');
+        if (tsPyramid) {
+          var pyrObs = new IntersectionObserver(function(entries) {
+            if (!entries[0].isIntersecting) return;
+            tsPyramid.querySelectorAll('.ts-pyr-tier').forEach(function(tier, i) {
+              setTimeout(function() { tier.classList.add('ts-pyr-in'); }, i * 130);
+            });
+            pyrObs.disconnect();
+          }, { threshold: 0.3 });
+          pyrObs.observe(tsPyramid);
+        }
 
         /* ── CI pipeline diagram ── */
         var ciPipeline = document.getElementById('ciPipeline');
