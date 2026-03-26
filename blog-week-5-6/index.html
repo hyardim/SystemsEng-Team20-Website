@@ -79,12 +79,20 @@
             <a class="blog-entry__back" href="blog/">← Back to timeline overview</a>
             <h2>Original server setup and first integrations</h2>
             <p>
-              Our main focus for these two weeks was setup work. We configured the Gaudi 2 environment, fixed driver/runtime
-              compatibility issues and worked through repeated failures.
+              A significant part of this period was spent setting up and validating the original
+              Gaudi 2 server environment. We treated this as core engineering work, not overhead,
+              because model runtime behavior and infrastructure constraints directly affected design.
             </p>
             <p>
-              By the end of week 6, we had Med42 running reliably with early retrieval connected. That gave us a
-              stable base to build on.
+              A major milestone in this phase was installing the Med42 70B model on the server and
+              getting a stable first run. That process took longer than expected because we had to work
+              through low-level setup tasks first, including driver updates, runtime compatibility
+              checks and environment configuration before inference would run reliably.
+            </p>
+            <p>
+              By the end of Week 6, we had environment checks, early retrieval and first-generation
+              flow running in controlled scenarios. This gave us enough confidence to continue
+              implementation on top of a live setup instead of only mock components.
             </p>
           </section>
 

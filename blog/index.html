@@ -134,153 +134,191 @@
           <section class="blog-entry" id="week-23-24">
             <span class="blog-entry__tag">Weeks 23–24</span>
             <p>
-              Most of these two weeks were spent wrapping things up. We ran a final testing pass, fixed the last
-              bugs we could find, and made sure nothing major was left before handover.
-            </p>
+                          Final weeks were dominated by validation evidence, final regressions and reporting
+                          consistency across requirements, implementation and testing documentation.
+                        </p>
+
             <p>
-              We also finished off the report website and double-checked that what we wrote matched what we built.
-              It was mostly polishing and final checks, but it made the final hand-in feel complete.
-            </p>
+                          We finished with a final regression pass on high-priority workflows, consolidated test
+                          evidence for the report website and closed remaining defects. By the end of Week 24,
+                          we had a cleaner handover story that matched what we actually built and tested.
+                        </p>
           </section>
 
           <section class="blog-entry" id="week-21-22">
             <span class="blog-entry__tag">Weeks 21–22</span>
             <p>
-              Our main focus for these two weeks was performance and reliability. We tested how the system behaved
-              under heavier use, including response times, error handling and fallback paths.
-            </p>
+                          This period focused on non-functional validation and repeated bug-fix loops. Testing was
+                          intentionally iterative so we could re-run critical scenarios after each fix batch.
+                        </p>
+
             <p>
-              This surfaced a few rough edges, so we fixed them and reran the tests. We also cleaned up some UI
-              and accessibility issues that had been hanging around.
-            </p>
+                          We checked latency on routine cases, stress-tested failure and recovery paths, and
+                          refined accessibility and workflow clarity in core screens. Each fix was followed by
+                          another targeted run to confirm that we were improving without introducing regressions.
+                        </p>
           </section>
 
           <section class="blog-entry" id="week-19-20">
             <span class="blog-entry__tag">Weeks 19–20</span>
             <p>
-              This is when we properly started end-to-end testing. We wrote and ran scenarios across GP,
-              specialist and admin flows and logged every issue we found.
-            </p>
+                          The final stretch deliberately prioritized testing as a major body of work. We started
+                          with end-to-end functional checks and integration scenarios across role-based workflows.
+                        </p>
+
             <p>
-              After that, it was mostly fix and retest. There were more bugs than we hoped for, but nothing that
-              completely blocked progress.
-            </p>
+                          We ran representative GP, specialist and admin scenarios end-to-end, including
+                          low-confidence refusal paths and fallback behavior. The defects found in this wave fed
+                          directly into an ongoing fix-and-retest loop.
+                        </p>
           </section>
 
           <section class="blog-entry" id="week-17-18">
             <span class="blog-entry__tag">Weeks 17–18</span>
             <p>
-              Before doing more testing, we spent time making the full stack behave consistently. We fixed
-              integration issues between the frontend, backend and retrieval.
-            </p>
+                          Before entering final testing, we focused on reducing integration risk between frontend,
+                          backend and retrieval services.
+                        </p>
+
             <p>
-              We also fixed edge cases in the specialist review flow and improved our container setup so everyone
-              could run the same environment more reliably.
-            </p>
+                          We concentrated on edge cases in review-state transitions, reliability around retrieval
+                          and fallback routing, and a repeatable container-based setup. The goal was to enter the
+                          final testing stretch with fewer integration surprises.
+                        </p>
           </section>
 
           <section class="blog-entry" id="week-15-16">
             <span class="blog-entry__tag">Weeks 15–16</span>
             <p>
-              Once the core consultation path was working, we focused on practical features. We added structured
-              forms, file attachments, notifications and basic admin tooling.
-            </p>
+                          We used this phase to complete the features that make the system operationally usable
+                          rather than a narrow demo.
+                        </p>
+
             <p>
-              These changes made the system much easier to use day to day. It started to feel like something you
-              could actually run with, not just a demo.
-            </p>
+                          During these weeks, we added the surrounding platform capabilities that clinicians and
+                          administrators would actually need in practice: structured submission, optional
+                          attachments, notification handling and admin-level observability.
+                        </p>
           </section>
 
           <section class="blog-entry" id="week-13-14">
             <span class="blog-entry__tag">Weeks 13–14</span>
             <p>
-              This week we reviewed early prototypes and realised the interaction design was getting too
-              complicated. We had separate paths that were hard to maintain and not very clear.
-            </p>
+                          Requirement refinement and prototype review led to a major product decision: merge
+                          assistant-like interactions into one consultation-based journey where generation,
+                          review and decision history stay connected.
+                        </p>
+
             <p>
-              We merged them into one cleaner consultation flow and tightened the specialist review step. It was a
-              decent amount of rework, but it made the flow easier to follow.
-            </p>
+                          This was an important simplification for us. We removed split interaction paths,
+                          enforced the specialist gate before GP-visible completion and improved traceability so
+                          review decisions were easier to follow and audit.
+                        </p>
           </section>
 
           <section class="blog-entry" id="week-11-12">
             <span class="blog-entry__tag">Weeks 11–12</span>
             <p>
-              After the server setback, we spent these two weeks getting things working again. We rebuilt a
-              local-first setup, reconnected inference and retrieval, and checked that fallback behaviour still worked.
-            </p>
+                          By this point, the team had a working local-first path and resumed steady feature work.
+                          The key objective was to avoid user-facing workflow disruption despite backend routing
+                          and environment changes.
+                        </p>
+
             <p>
-              We tried hard to keep the GP and specialist experience the same while changing the infrastructure.
-              That helped us get back on track without breaking the workflow.
-            </p>
+                          We re-established stable inference and retrieval behavior, then validated fallback
+                          behavior under failure scenarios. Importantly, we kept the consultation and specialist
+                          review journey consistent so the infrastructure pivot did not create a different user
+                          experience.
+                        </p>
           </section>
 
           <section class="blog-entry" id="week-9-10">
             <span class="blog-entry__tag">Weeks 9–10</span>
             <p>
-              This was the hardest point in the project. We lost access to the original Gaudi 2 server we had been
-              building on, which forced us to rethink our deployment plan.
-            </p>
+                          Around one month into infrastructure work, access to the original server was lost.
+                          This forced a planned rework: keep the clinical workflow intact while changing the
+                          deployment strategy to local-first processing with controlled cloud fallback.
+                        </p>
+
             <p>
-              Instead of chasing another identical setup, we switched to a local-first approach with cloud fallback.
-              It was a stressful pivot, but it kept the project moving and stopped us getting stuck.
-            </p>
+                          This was the biggest disruption in the project timeline. Instead of dropping features,
+                          we reprioritized the order of work and redesigned provider routing so we could preserve
+                          safety and review guarantees while migrating away from the original server dependency.
+                        </p>
           </section>
 
           <section class="blog-entry" id="week-7-8">
             <span class="blog-entry__tag">Weeks 7–8</span>
             <p>
-              Most of these two weeks were spent stabilising what we had on the server. Early runs worked, but setup was still
-              fragile and hard to repeat across the team.
-            </p>
+                          We spent another two weeks improving robustness on the Gaudi 2 path and aligning
+                          implementation details with the agreed requirements before a major environmental change.
+                        </p>
+
             <p>
-              We documented the setup properly, improved reproducibility, cleaned up citation mapping, and refined
-              the specialist review flow based on early feedback.
-            </p>
+                          After the first Med42 70B runs succeeded, we focused on making that setup repeatable and
+                          less fragile. We cleaned up configuration steps, re-checked drivers after updates and
+                          documented the server setup decisions so the team could reproduce the working state.
+                        </p>
+
+            <p>
+                          Most of our effort here went into consistency and safety: we tightened citation mapping,
+                          refined specialist review behavior through feedback and documented deployment friction
+                          points. Those notes became important later when we had to rethink infrastructure.
+                        </p>
           </section>
 
           <section class="blog-entry" id="week-5-6">
             <span class="blog-entry__tag">Weeks 5–6</span>
             <p>
-              A significant part of this period was spent setting up and validating the original
-              Gaudi 2 server environment. We treated this as core engineering work, not overhead,
-              because model runtime behavior and infrastructure constraints directly affected design.
-            </p>
+                          A significant part of this period was spent setting up and validating the original
+                          Gaudi 2 server environment. We treated this as core engineering work, not overhead,
+                          because model runtime behavior and infrastructure constraints directly affected design.
+                        </p>
+
             <p>
-              A major milestone in this phase was installing the Med42 70B model on the server and
-              getting a stable first run. That process took longer than expected because we had to work
-              through low-level setup tasks first, including driver updates, runtime compatibility
-              checks and environment configuration before inference would run reliably.
-            </p>
+                          A major milestone in this phase was installing the Med42 70B model on the server and
+                          getting a stable first run. That process took longer than expected because we had to work
+                          through low-level setup tasks first, including driver updates, runtime compatibility
+                          checks and environment configuration before inference would run reliably.
+                        </p>
+
             <p>
-              By the end of Week 6, we had environment checks, early retrieval and first-generation
-              flow running in controlled scenarios. This gave us enough confidence to continue
-              implementation on top of a live setup instead of only mock components.
-            </p>
+                          By the end of Week 6, we had environment checks, early retrieval and first-generation
+                          flow running in controlled scenarios. This gave us enough confidence to continue
+                          implementation on top of a live setup instead of only mock components.
+                        </p>
           </section>
 
           <section class="blog-entry" id="week-3-4">
             <span class="blog-entry__tag">Weeks 3–4</span>
             <p>
-              This week we turned interview findings into clear project requirements and prioritised them using
-              MoSCoW. This helped us decide what had to be delivered first.
-            </p>
+                          We converted interview findings into explicit functional and non-functional requirements,
+                          then prioritized them with MoSCoW. At this stage, we also identified key risk areas:
+                          uncertain model outputs, deployment uncertainty, and governance expectations.
+                        </p>
+
             <p>
-              The top priorities were grounded retrieval, specialist approval and safe fallback behaviour. We also
-              confirmed Gaudi 2 as the deployment direction at that point.
-            </p>
+                          We used this period to lock the must-have baseline around grounded retrieval, specialist
+                          approval and safe fallback behavior. In parallel, we drafted measurable acceptance
+                          criteria for latency, auditability and reliability, and planned the initial deployment
+                          path around Intel's Gaudi 2 server environment available at that time.
+                        </p>
           </section>
 
           <section class="blog-entry" id="week-1-2">
             <span class="blog-entry__tag">Weeks 1–2</span>
             <p>
-              In the first two weeks, we spoke to specialists in rheumatology and neurology to understand the real
-              Advice and Guidance workflow and what they actually needed from the system.
-            </p>
+                          We started by mapping the Advice and Guidance pain points with specialist input from
+                          Rheumatology and Neurology. The shared message was clear: faster responses are useful
+                          only when evidence is visible and clinical accountability is preserved.
+                        </p>
+
             <p>
-              From those conversations, we set the initial scope around a GP-to-specialist process, early model
-              direction, and a focused evidence base for the first version.
-            </p>
+                          During these first two weeks, we agreed that our target workflow should be a structured
+                          GP request that leads to a specialist-checked response rather than an unreviewed AI
+                          output. We also narrowed scope to neurology and rheumatology guidance so retrieval could
+                          be grounded in a realistic, manageable evidence base.
+                        </p>
           </section>
 
         </div>
