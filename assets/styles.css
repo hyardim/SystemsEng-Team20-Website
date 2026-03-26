@@ -1962,6 +1962,14 @@ body[data-page="research"]:not([data-page="home"]):not([data-page="requirements"
 	background: #ffffff;
 }
 
+body[data-page="evaluation"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section::before {
+	background: #f4f4f5;
+}
+
+body[data-page="evaluation"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even)::before {
+	background: #ffffff;
+}
+
 body[data-page="research"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .content-stack > section:last-child {
 	padding-bottom: 22px;
 }
