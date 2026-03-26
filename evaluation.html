@@ -305,6 +305,8 @@
         opacity: 1;
         transform: none;
       }
+      /* toc-panel makes all <a> display:block — override for prose links */
+      .toc-panel .callout p a { display: inline; padding: 0; }
       /* h3 spacing — specificity 0-5-2 beats styles.css 0-4-3 */
       body[data-page="evaluation"] .content-stack .section-card.section-card > h3 {
         margin-bottom: 14px !important;
@@ -696,7 +698,9 @@
                   Automated NICE guideline web-crawl &amp; sync scheduler<br>
                   Redis caching layer &amp; invalidation<br>
                   Retry queue for failed RAG generation<br>
-                  RunPod cloud routing &amp; provider fallback
+                  RunPod cloud routing &amp; provider fallback<br>
+                  Azure deployment: frontend, backend,<br>
+                  RAG service &amp; database hosting
                 </div>
               </div>
 
