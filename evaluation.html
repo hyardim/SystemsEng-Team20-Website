@@ -129,8 +129,8 @@
         overflow: hidden;
       }
       .ev-team-card__avatar {
-        width: 52px;
-        height: 52px;
+        width: 72px;
+        height: 72px;
         border-radius: 50%;
         background: linear-gradient(135deg, #005eb8, #0072ce);
         display: flex;
@@ -141,6 +141,13 @@
         font-weight: 800;
         color: #fff;
         letter-spacing: 0.02em;
+        overflow: hidden;
+      }
+      .ev-team-card__avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
       }
       .ev-team-card__name {
         font-size: 0.95rem;
@@ -297,6 +304,13 @@
       .ev-reveal.ev-in {
         opacity: 1;
         transform: none;
+      }
+      /* h3 → table spacing fix */
+      body[data-page="evaluation"] .content-stack .section-card > h3 {
+        margin-bottom: 14px !important;
+      }
+      body[data-page="evaluation"] .content-stack .section-card .table-card + h3 {
+        margin-top: 28px !important;
       }
     </style>
   </head>
@@ -643,7 +657,7 @@
             <div class="ev-team-grid ev-reveal">
 
               <div class="ev-team-card">
-                <div class="ev-team-card__avatar">K</div>
+                <div class="ev-team-card__avatar"><img src="assets/team/kavin.jpg" alt="Kavin" /></div>
                 <span class="ev-team-card__name">Kavin</span>
                 <span class="ev-team-card__role">RAG Ingestion · Retrieval · QA</span>
                 <span class="ev-team-card__pct">20%</span>
@@ -658,7 +672,7 @@
               </div>
 
               <div class="ev-team-card">
-                <div class="ev-team-card__avatar">H</div>
+                <div class="ev-team-card__avatar"><img src="assets/team/hakan.jpg" alt="Hakan" /></div>
                 <span class="ev-team-card__name">Hakan</span>
                 <span class="ev-team-card__role">Backend Core · Security · DevOps</span>
                 <span class="ev-team-card__pct">20%</span>
@@ -673,7 +687,7 @@
               </div>
 
               <div class="ev-team-card">
-                <div class="ev-team-card__avatar">D</div>
+                <div class="ev-team-card__avatar"><img src="assets/team/daniel.jpg" alt="Daniel" /></div>
                 <span class="ev-team-card__name">Daniel</span>
                 <span class="ev-team-card__role">Additional Features · Infrastructure</span>
                 <span class="ev-team-card__pct">20%</span>
@@ -687,7 +701,7 @@
               </div>
 
               <div class="ev-team-card">
-                <div class="ev-team-card__avatar">W</div>
+                <div class="ev-team-card__avatar"><img src="assets/team/william.jpg" alt="William" /></div>
                 <span class="ev-team-card__name">William</span>
                 <span class="ev-team-card__role">RAG Generation · System Architecture · Prompts</span>
                 <span class="ev-team-card__pct">20%</span>
@@ -703,7 +717,7 @@
               </div>
 
               <div class="ev-team-card">
-                <div class="ev-team-card__avatar">I</div>
+                <div class="ev-team-card__avatar"><img src="assets/team/ivan.jpg" alt="Ivan" /></div>
                 <span class="ev-team-card__name">Ivan</span>
                 <span class="ev-team-card__role">Frontend · Streaming · Specialist Workflow</span>
                 <span class="ev-team-card__pct">20%</span>
