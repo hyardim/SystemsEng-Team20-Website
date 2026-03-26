@@ -30,40 +30,203 @@
           <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
             <h2 id="key-metrics">Test suite at a glance</h2>
-            <div class="stats-grid">
-              <div class="metric-card">
-                <strong>96+</strong>
-                <p>Total test files across frontend, backend, and RAG service — all passing.</p>
+
+            <div class="ts-stats-grid" id="statsGrid">
+
+              <div class="ts-stat-card" data-count="96" data-suffix="+">
+                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix">+</span></div>
+                <div class="ts-stat-label">Test files across all three services</div>
               </div>
-              <div class="metric-card">
-                <strong>~20 000</strong>
-                <p>Lines of test code written across the three services.</p>
+
+              <div class="ts-stat-card" data-count="20000" data-suffix="+" data-format="compact">
+                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix">+</span></div>
+                <div class="ts-stat-label">Lines of test code written</div>
               </div>
-              <div class="metric-card">
-                <strong>47</strong>
-                <p>RAG service test modules spanning every stage of the ingestion and retrieval pipeline.</p>
+
+              <div class="ts-stat-card" data-count="47" data-suffix="+">
+                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix">+</span></div>
+                <div class="ts-stat-label">RAG service test modules — every pipeline stage covered</div>
               </div>
-              <div class="metric-card">
-                <strong>31</strong>
-                <p>Backend test modules covering auth, chats, specialist workflow, admin, cache, and security.</p>
+
+              <div class="ts-stat-card" data-count="31" data-suffix="+">
+                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix">+</span></div>
+                <div class="ts-stat-label">Backend test modules — auth, chats, cache, admin, security</div>
               </div>
-              <div class="metric-card">
-                <strong>18</strong>
-                <p>Frontend unit and component test files, mirroring the src/ folder hierarchy.</p>
+
+              <div class="ts-stat-card" data-count="18" data-suffix="+">
+                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix">+</span></div>
+                <div class="ts-stat-label">Frontend test files mirroring the src/ folder hierarchy</div>
               </div>
-              <div class="metric-card">
-                <strong>6</strong>
-                <p>Playwright end-to-end test suites covering all major user stories across Chromium and Firefox.</p>
+
+              <div class="ts-stat-card" data-count="6" data-suffix="">
+                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix"></span></div>
+                <div class="ts-stat-label">Playwright E2E suites — Chromium &amp; Firefox</div>
               </div>
-              <div class="metric-card">
-                <strong>90 %</strong>
-                <p>Minimum line coverage threshold enforced in the RAG service CI pipeline.</p>
+
+              <div class="ts-ring-card" data-percent="90">
+                <svg class="ts-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+                  <circle class="ts-ring-track" cx="50" cy="50" r="38"/>
+                  <circle class="ts-ring-fill" cx="50" cy="50" r="38" data-percent="90"/>
+                </svg>
+                <div class="ts-ring-label">Coverage threshold<br>enforced in CI</div>
               </div>
-              <div class="metric-card">
-                <strong>100 %</strong>
-                <p>All tests passing across all three services and both E2E browsers.</p>
+
+              <div class="ts-ring-card" data-percent="100">
+                <svg class="ts-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+                  <circle class="ts-ring-track" cx="50" cy="50" r="38"/>
+                  <circle class="ts-ring-fill" cx="50" cy="50" r="38" data-percent="100"/>
+                </svg>
+                <div class="ts-ring-label">All tests passing<br>across every service</div>
               </div>
+
             </div>
+
+            <style>
+              .ts-stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+                gap: 16px;
+              }
+              .ts-stat-card {
+                background: #fff;
+                border: 1px solid rgba(7,23,45,0.07);
+                border-radius: 16px;
+                box-shadow: 0 1px 3px rgba(7,23,45,0.06), 0 4px 16px rgba(7,23,45,0.07);
+                padding: 28px 22px 24px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 10px;
+                transition: transform 0.18s ease, box-shadow 0.18s ease;
+              }
+              .ts-stat-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(7,23,45,0.08), 0 12px 32px rgba(7,23,45,0.11);
+              }
+              .ts-stat-number {
+                font-size: 3rem;
+                font-weight: 800;
+                line-height: 1;
+                color: var(--nhs-blue, #005eb8);
+                letter-spacing: -0.02em;
+              }
+              .ts-stat-label {
+                font-size: 0.9rem;
+                color: var(--muted, #5b6c7d);
+                line-height: 1.5;
+              }
+              .ts-ring-card {
+                background: #fff;
+                border: 1px solid rgba(7,23,45,0.07);
+                border-radius: 16px;
+                box-shadow: 0 1px 3px rgba(7,23,45,0.06), 0 4px 16px rgba(7,23,45,0.07);
+                padding: 28px 22px 24px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 12px;
+                transition: transform 0.18s ease, box-shadow 0.18s ease;
+              }
+              .ts-ring-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(7,23,45,0.08), 0 12px 32px rgba(7,23,45,0.11);
+              }
+              .ts-ring-svg { width: 108px; height: 108px; }
+              .ts-ring-track { fill: none; stroke: #e8eef6; stroke-width: 8; }
+              .ts-ring-fill {
+                fill: none;
+                stroke: var(--nhs-blue, #005eb8);
+                stroke-width: 8;
+                stroke-linecap: round;
+                transform: rotate(-90deg);
+                transform-origin: 50% 50%;
+                transition: stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1);
+              }
+              .ts-ring-value {
+                font-size: 1.15rem;
+                font-weight: 800;
+                fill: var(--nhs-blue, #005eb8);
+                dominant-baseline: middle;
+                text-anchor: middle;
+              }
+              .ts-ring-label { font-size: 0.9rem; color: var(--muted, #5b6c7d); line-height: 1.5; }
+              .ts-stat-card, .ts-ring-card {
+                opacity: 0;
+                transform: translateY(12px);
+              }
+              .ts-stat-card.ts-visible, .ts-ring-card.ts-visible {
+                opacity: 1;
+                transform: translateY(0);
+                transition: opacity 0.45s ease, transform 0.45s ease, box-shadow 0.18s ease;
+              }
+
+              /* ── Chip tabs ── */
+              .ctabs { margin-top: 22px; }
+              .ctabs__bar {
+                display: flex;
+                gap: 6px;
+                overflow-x: auto;
+                scrollbar-width: none;
+                padding-bottom: 14px;
+                -webkit-mask-image: linear-gradient(to right, black 88%, transparent 100%);
+                mask-image: linear-gradient(to right, black 88%, transparent 100%);
+              }
+              .ctabs__bar::-webkit-scrollbar { display: none; }
+              .ctabs__chip {
+                flex-shrink: 0;
+                padding: 7px 18px;
+                border-radius: 100px;
+                font-size: 0.875rem;
+                font-weight: 500;
+                font-family: inherit;
+                border: none;
+                cursor: pointer;
+                background: #edf2fa;
+                color: #5b6c7d;
+                transition: background 0.15s, color 0.15s, box-shadow 0.15s, transform 0.1s;
+                letter-spacing: 0.01em;
+                line-height: 1;
+              }
+              .ctabs__chip:hover:not(.is-active) { background: #dce8f7; color: #132033; }
+              .ctabs__chip.is-active {
+                background: #005eb8;
+                color: #fff;
+                box-shadow: 0 2px 10px rgba(0,94,184,0.32);
+              }
+              .ctabs__chip:active { transform: scale(0.96); }
+              .ctabs__panels { min-height: 80px; }
+              .ctabs__panel {
+                display: none;
+                padding: 20px 22px;
+                background: #fff;
+                border-radius: 12px;
+                border: 1px solid rgba(7,23,45,0.08);
+                border-left: 3px solid #005eb8;
+                box-shadow: 0 1px 4px rgba(7,23,45,0.05);
+              }
+              .ctabs__panel.is-active { display: block; animation: ctabFade 0.2s ease; }
+              .ctabs__panel-title {
+                display: block;
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #07172d;
+                margin-bottom: 10px;
+              }
+              .ctabs__panel p { margin: 0; font-size: 1rem; line-height: 1.7; color: #132033; }
+              .ctabs__panel code {
+                font-size: 0.88em;
+                background: rgba(0,94,184,0.08);
+                color: #003087;
+                padding: 1px 5px;
+                border-radius: 4px;
+              }
+              @keyframes ctabFade {
+                from { opacity: 0; transform: translateY(5px); }
+                to   { opacity: 1; transform: translateY(0); }
+              }
+            </style>
           </section>
 
           <!-- ═══════════════════════════════════════════════════════════ -->
@@ -77,6 +240,26 @@
               correctly when their parts work together. End-to-end tests at the top confirm
               complete user journeys through the live stack.
             </p>
+
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;margin:4px 0 24px;">
+              <div style="width:28%;min-width:180px;background:#0072ce;color:#fff;border-radius:10px 10px 0 0;padding:14px 20px;text-align:center;">
+                <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.85;margin-bottom:4px;">End-to-end</div>
+                <div style="font-size:0.9rem;font-weight:600;line-height:1.4;">Playwright · Chromium &amp; Firefox</div>
+              </div>
+              <div style="width:56%;min-width:260px;background:#005eb8;color:#fff;padding:14px 20px;text-align:center;">
+                <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.85;margin-bottom:4px;">Integration</div>
+                <div style="font-size:0.9rem;font-weight:600;line-height:1.4;">Feature flows · real databases · full pipelines</div>
+              </div>
+              <div style="width:84%;min-width:320px;background:#003d7a;color:#fff;padding:14px 20px;text-align:center;">
+                <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.85;margin-bottom:4px;">Unit</div>
+                <div style="font-size:0.9rem;font-weight:600;line-height:1.4;">Vitest &amp; Pytest · MSW · pytest fixtures</div>
+              </div>
+              <div style="width:100%;background:#003087;color:#fff;border-radius:0 0 10px 10px;padding:14px 20px;text-align:center;">
+                <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.85;margin-bottom:4px;">Code quality</div>
+                <div style="font-size:0.9rem;font-weight:600;line-height:1.4;">ESLint · TypeScript · Ruff · MyPy — enforced on every commit</div>
+              </div>
+            </div>
+
             <div class="table-card">
               <table>
                 <thead>
@@ -139,35 +322,38 @@
               </div>
             </div>
 
-            <h3>What is tested</h3>
-            <div class="two-col">
-              <div class="mini-card">
-                <strong>Services</strong>
-                <p><code>api.test.ts</code> covers login, register, chat operations, notifications, specialist queue, and admin endpoints. <code>api.streaming.test.ts</code> covers streaming API behaviour.</p>
+            <div class="ctabs" data-ctabs>
+              <div class="ctabs__bar" role="tablist" aria-label="Frontend test areas">
+                <button class="ctabs__chip is-active" role="tab" type="button" data-ctab="fe-services">Services</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="fe-hooks">Hooks</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="fe-components">Components</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="fe-contexts">Contexts</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="fe-pages">Pages</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="fe-utils">Utilities</button>
               </div>
-              <div class="mini-card">
-                <strong>Hooks</strong>
-                <p><code>useChatStream.test.ts</code> exercises the real-time streaming hook including connection state, message accumulation, and error handling.</p>
-              </div>
-              <div class="mini-card">
-                <strong>Components</strong>
-                <p>ChatMessage, ChatInput, NotificationDropdown, Header, ErrorBoundary, ProtectedRoute, and Badges are each tested in isolation with simulated props and user interactions.</p>
-              </div>
-              <div class="mini-card">
-                <strong>Contexts</strong>
-                <p>AuthContext is tested for login, logout, token persistence, and localStorage restoration so that auth state survives page refresh.</p>
-              </div>
-              <div class="mini-card">
-                <strong>Pages</strong>
-                <p>All six auth pages (login, register, forgot password, reset password, verify email, resend verification), GP pages, Specialist pages, and Admin pages each have dedicated test files.</p>
-              </div>
-              <div class="mini-card">
-                <strong>Utilities</strong>
-                <p><code>secureStorage.test.ts</code> and <code>messageMapping.test.ts</code> verify encrypted storage helpers and message transformation logic.</p>
+              <div class="ctabs__panels">
+                <div class="ctabs__panel is-active" id="fe-services" role="tabpanel">
+                  <p><code>api.test.ts</code> covers the full API client surface: login, register, chat create/list/get, send message, notifications, specialist queue operations, and admin endpoints. <code>api.streaming.test.ts</code> covers streaming response handling and partial content delivery.</p>
+                </div>
+                <div class="ctabs__panel" id="fe-hooks" role="tabpanel">
+                  <p><code>useChatStream.test.ts</code> exercises the real-time streaming hook end-to-end: connection setup, message chunk accumulation, stream completion, and error handling when the connection drops or the server returns an error.</p>
+                </div>
+                <div class="ctabs__panel" id="fe-components" role="tabpanel">
+                  <p><code>ChatMessage</code> tests message rendering, attachment display, and guideline reference links. <code>ChatInput</code> tests submission, keyboard shortcuts, and disabled states. <code>NotificationDropdown</code>, <code>Header</code>, <code>ErrorBoundary</code>, <code>ProtectedRoute</code>, and <code>Badges</code> are each tested in isolation with simulated props and user interactions.</p>
+                </div>
+                <div class="ctabs__panel" id="fe-contexts" role="tabpanel">
+                  <p><code>AuthContext.test.tsx</code> verifies login, logout, token persistence, and localStorage restoration. Auth state is confirmed to survive page refresh — the context re-hydrates correctly from encrypted storage on mount.</p>
+                </div>
+                <div class="ctabs__panel" id="fe-pages" role="tabpanel">
+                  <p>All six authentication pages have dedicated test files: login, register, forgot password, reset password, verify email, and resend verification. Role-specific pages are also covered: GP queries and new query pages, the Specialist queries page, and the Admin users page. Each page test uses MSW to mock the API layer and React Testing Library to drive interactions.</p>
+                </div>
+                <div class="ctabs__panel" id="fe-utils" role="tabpanel">
+                  <p><code>secureStorage.test.ts</code> verifies the encrypted localStorage helpers — write, read, and clear operations with correct key derivation. <code>messageMapping.test.ts</code> verifies message transformation logic used to normalise API responses before rendering.</p>
+                </div>
               </div>
             </div>
 
-            <h3>Mocking strategy — MSW</h3>
+            <h3 style="margin-top:36px">Mocking strategy — MSW</h3>
             <p>
               All HTTP calls are intercepted by Mock Service Worker v2. The MSW server is started
               before tests and reset between each test to prevent state leakage. Handlers live in
@@ -185,7 +371,7 @@
           <section class="section-card">
             <h2 id="unit-backend">Unit testing — Backend</h2>
             <p class="lede">
-              The backend suite uses Pytest with pytest-asyncio. 31 test files cover the full
+              The backend suite uses Pytest with pytest-asyncio. Test files cover the full
               feature surface: authentication, chat lifecycle, specialist workflow, admin
               operations, caching, file upload, RAG integration, notifications, and security.
             </p>
@@ -201,18 +387,44 @@
               </div>
             </div>
 
-            <h3>Feature areas covered</h3>
-            <ul>
-              <li><strong>Authentication:</strong> registration, email verification flow, login, JWT issuance, password reset flow, and password strength enforcement.</li>
-              <li><strong>Chat lifecycle:</strong> create, list, get, archive, send message, title updates, submission, and access restrictions between roles.</li>
-              <li><strong>Streaming:</strong> streaming response handling and partial content delivery.</li>
-              <li><strong>Specialist workflow:</strong> assignment, approval, rejection, request-changes, and queue operations.</li>
-              <li><strong>Admin operations:</strong> user management, guideline CRUD, statistics endpoints, and admin-only access control.</li>
-              <li><strong>Caching:</strong> 8 dedicated cache test files covering cache behaviour, disabled state, error paths, key generation, logging, patterns, payloads, and sync wrappers.</li>
-              <li><strong>File upload and RAG:</strong> file upload, text extraction, patient context, RAG audit logging, and grounded-answer distinction.</li>
-              <li><strong>Notifications:</strong> creation, unread filters, and mark-as-read behaviour.</li>
-              <li><strong>Security:</strong> route protection, role enforcement, and token validation.</li>
-            </ul>
+            <div class="ctabs" data-ctabs>
+              <div class="ctabs__bar" role="tablist" aria-label="Backend test areas">
+                <button class="ctabs__chip is-active" role="tab" type="button" data-ctab="be-auth">Auth</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="be-chats">Chats</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="be-specialist">Specialist</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="be-admin">Admin</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="be-cache">Cache</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="be-rag">Files &amp; RAG</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="be-notif">Notifications</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="be-security">Security</button>
+              </div>
+              <div class="ctabs__panels">
+                <div class="ctabs__panel is-active" id="be-auth" role="tabpanel">
+                  <p>Registration, login, and <code>/me</code> endpoint. Email verification token generation, activation, and re-send. Password reset request, token validation, and completion. Password strength enforcement. Profile update operations.</p>
+                </div>
+                <div class="ctabs__panel" id="be-chats" role="tabpanel">
+                  <p>Create, list, get, and archive chats. Send message and receive AI response. Title updates and submission behaviour. Access restrictions between roles — a GP cannot view another GP's chat, and a Specialist cannot access chats they are not assigned to. Streaming response handling and partial content delivery.</p>
+                </div>
+                <div class="ctabs__panel" id="be-specialist" role="tabpanel">
+                  <p>Specialist self-assignment to queued chats. Review approval, rejection, and request-changes flows. Specialist message sending. Queue visibility — only unassigned chats appear in the queue, and assigned chats move to the assigned list.</p>
+                </div>
+                <div class="ctabs__panel" id="be-admin" role="tabpanel">
+                  <p>User listing, role changes, and account management. Guideline create, update, and delete. Statistics endpoint aggregation. Admin-only access control — non-admin users receive a 403 on every admin route.</p>
+                </div>
+                <div class="ctabs__panel" id="be-cache" role="tabpanel">
+                  <p>Multiple dedicated test files cover the cache layer in depth: cache hit and miss behaviour, disabled-cache mode, error paths when Redis is unavailable, key generation correctness, structured logging events, cache patterns, payload serialisation, and sync wrapper behaviour around async cache calls.</p>
+                </div>
+                <div class="ctabs__panel" id="be-rag" role="tabpanel">
+                  <p>File upload and storage. Text extraction from uploaded documents. Patient context injection. RAG audit logging — <code>RAG_ANSWER</code> records log chunk usage and citation count; <code>RAG_ERROR</code> records log the exception type. The grounded-response statistic only increments when citations are present, distinguishing grounded answers from fallback responses.</p>
+                </div>
+                <div class="ctabs__panel" id="be-notif" role="tabpanel">
+                  <p>Notification creation on relevant events. Unread-only filter returns only unseen notifications. Mark-as-read updates state correctly. Notifications are scoped to the correct user — users cannot read each other's notifications.</p>
+                </div>
+                <div class="ctabs__panel" id="be-security" role="tabpanel">
+                  <p>Route protection — unauthenticated requests are rejected with 401. Role enforcement — requests with a valid token but the wrong role receive 403. Token validation — expired, malformed, and revoked tokens are all rejected correctly.</p>
+                </div>
+              </div>
+            </div>
 
             <h3>Fixture design</h3>
             <p>
@@ -240,40 +452,43 @@
           <section class="section-card">
             <h2 id="unit-rag">Unit testing — RAG service</h2>
             <p class="lede">
-              The RAG service has the widest test spread: 47 test modules and approximately
-              10 500 lines of test code. Every stage of the pipeline — from document ingestion
-              to final answer generation — has a corresponding test directory that mirrors
-              the <code>src/</code> structure.
+              The RAG service has the widest test spread, with the most pipeline stages to cover.
+              Every stage of the pipeline — from document ingestion to final answer generation —
+              has a corresponding test directory that mirrors the <code>src/</code> structure.
             </p>
 
-            <div class="card-grid">
-              <div class="metric-card">
-                <strong>Ingestion (14 files)</strong>
-                <p>Text extraction, cleaning, chunking strategies, embedding generation, vector store writes, section detection, table detection, metadata extraction, web source sync, and the ingestion CLI.</p>
+            <div class="ctabs" data-ctabs>
+              <div class="ctabs__bar" role="tablist" aria-label="RAG service test areas">
+                <button class="ctabs__chip is-active" role="tab" type="button" data-ctab="rag-ingestion">Ingestion</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="rag-retrieval">Retrieval</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="rag-generation">Generation</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="rag-pipeline">Pipeline</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="rag-api">API routes</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="rag-infra">Infrastructure</button>
               </div>
-              <div class="metric-card">
-                <strong>Retrieval (10 files)</strong>
-                <p>Vector similarity search, BM25 keyword search, result fusion, reranking, query expansion, metadata filtering, citation construction, and the retrieval CLI.</p>
-              </div>
-              <div class="metric-card">
-                <strong>Generation (4 files)</strong>
-                <p>Prompt construction with patient context, prompt construction with file context, query routing logic, and the LLM client interface.</p>
-              </div>
-              <div class="metric-card">
-                <strong>RAG pipeline (3 files)</strong>
-                <p>End-to-end pipeline execution, generation with retrieved context, and prompt assembly.</p>
-              </div>
-              <div class="metric-card">
-                <strong>API routes (4 files)</strong>
-                <p>RAG query endpoint, document ingestion route, guideline sync routes, and retry job management.</p>
-              </div>
-              <div class="metric-card">
-                <strong>Infrastructure (6 files)</strong>
-                <p>Async retry queue, background retry worker, streaming response handling, configuration management, database utilities, and logging.</p>
+              <div class="ctabs__panels">
+                <div class="ctabs__panel is-active" id="rag-ingestion" role="tabpanel">
+                  <p>The largest test directory covers every stage of the document ingestion pipeline: text extraction from PDFs and other formats, text cleaning and normalisation, chunking strategies and boundary behaviour, embedding generation, vector store writes, section detection, table detection and extraction, metadata extraction, web source ingestion and sync scheduling, and the ingestion CLI.</p>
+                </div>
+                <div class="ctabs__panel" id="rag-retrieval" role="tabpanel">
+                  <p>Vector similarity search and its scoring behaviour. BM25 keyword search. Score fusion combining vector and keyword results. Reranking of fused results. Query expansion strategies. Metadata filtering by source, date, and document type. Citation construction from retrieved chunks. The retrieval CLI.</p>
+                </div>
+                <div class="ctabs__panel" id="rag-generation" role="tabpanel">
+                  <p>Prompt construction with patient context injected — verifies that patient data appears in the correct position in the prompt. Prompt construction with uploaded file context. Query routing logic — tests that queries above and below the routing threshold are sent to the correct provider. LLM client interface and response parsing.</p>
+                </div>
+                <div class="ctabs__panel" id="rag-pipeline" role="tabpanel">
+                  <p>End-to-end pipeline execution wiring retrieval into generation. Generation with retrieved context — verifies that chunks are passed correctly and citations appear in the response. Prompt assembly — verifies the full prompt structure including system instructions, retrieved context blocks, and the user query.</p>
+                </div>
+                <div class="ctabs__panel" id="rag-api" role="tabpanel">
+                  <p>The main RAG query endpoint — request validation, pipeline invocation, and response format. The document ingestion route — upload handling and pipeline trigger. Guideline sync routes — manual and scheduled sync trigger endpoints. Retry job management — job creation, status, and cancellation.</p>
+                </div>
+                <div class="ctabs__panel" id="rag-infra" role="tabpanel">
+                  <p>Async retry queue — job enqueue, dequeue, and failure handling. Background retry worker — processing loop, error recovery, and backoff behaviour. Streaming response handling — chunk delivery and connection teardown. Configuration management — environment variable parsing and defaults. Database utilities. Logger setup — handler registration, naming, and duplicate-handler prevention.</p>
+                </div>
               </div>
             </div>
 
-            <h3>Mocking strategy</h3>
+            <h3 style="margin-top:36px">Mocking strategy</h3>
             <p>
               Unit tests in the RAG service use <code>unittest.mock.patch</code> and
               <code>MagicMock</code> to isolate the component under test from its neighbours.
@@ -336,7 +551,103 @@
           </section>
 
           <!-- ═══════════════════════════════════════════════════════════ -->
-          <!-- 7. END-TO-END TESTING                                        -->
+          <!-- 7. LOGGING & OBSERVABILITY                                   -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="logging">Logging and observability</h2>
+            <p class="lede">
+              The system uses three complementary logging layers: a database-backed audit trail
+              for user actions, structured cache operation logs, and a dual-handler file and
+              console logger in the RAG service. All three are tested.
+            </p>
+
+            <h3>Database-backed audit trail (backend)</h3>
+            <p>
+              Every significant user action is written to an <code>audit_logs</code> database
+              table with a user identifier, action type, optional detail string, and UTC
+              timestamp. Audit records are queryable through the admin API with filters for
+              action, category, user, and date range.
+            </p>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Category</th>
+                    <th>Actions logged</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>AUTH</td>
+                    <td>Login, logout, register, profile update, password reset request, password reset completion, email verification request, email verification sent, email verified</td>
+                  </tr>
+                  <tr>
+                    <td>CHAT</td>
+                    <td>Create, view, update, delete, submit for review, auto-submit for review, AI response generated</td>
+                  </tr>
+                  <tr>
+                    <td>SPECIALIST</td>
+                    <td>Assign specialist, review approve, review reject, review request-changes, specialist message</td>
+                  </tr>
+                  <tr>
+                    <td>RAG</td>
+                    <td>RAG answer (grounded response with citations), RAG error (service unavailable or exception), RAG revise (specialist edits an AI answer)</td>
+                  </tr>
+                  <tr>
+                    <td>ADMIN</td>
+                    <td>Admin-initiated user and guideline operations</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>RAG audit logging</h3>
+            <p>
+              RAG events are logged with enough detail to distinguish a grounded answer from a
+              service failure. A <code>RAG_ANSWER</code> record stores the query length, number
+              of top-k chunks requested, and how many chunks were actually used. A
+              <code>RAG_ERROR</code> record stores the query length and the exception type. The
+              <code>rag_grounded_responses</code> statistic only increments when citations are
+              present, keeping grounded and fallback responses separately countable.
+              <code>test_rag_audit.py</code> verifies all of this behaviour.
+            </p>
+
+            <h3>Structured cache logging (backend)</h3>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Events logged</strong>
+                <p><code>cache.hit</code>, <code>cache.miss</code>, <code>cache.set</code>, <code>cache.delete</code>, <code>cache.disabled</code>, <code>cache.error</code> — one event per cache operation.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Structured fields</strong>
+                <p><code>key</code>, <code>user_id</code>, <code>resource</code>, <code>ttl</code>, <code>count</code>, <code>error</code> — passed as <code>extra</code> so log processors can index them.</p>
+              </div>
+            </div>
+
+            <h3>RAG service file and console logging</h3>
+            <p>
+              The RAG service configures a logger per module using a shared
+              <code>get_logger()</code> utility. Each logger gets two handlers: a console
+              handler at the configured log level (default INFO) and a file handler writing
+              to <code>logs/rag.log</code> always at DEBUG level. Both the log level and log
+              file path are configurable via environment variables. <code>test_logger.py</code>
+              verifies handler setup, logger naming, and that repeated calls to
+              <code>get_logger()</code> do not register duplicate handlers.
+            </p>
+
+            <div class="callout">
+              <h3>Frontend component logging</h3>
+              <p>
+                React components use scoped console calls with a <code>[ComponentName]</code>
+                prefix — for example <code>[ErrorBoundary]</code>, <code>[Notifications]</code>,
+                <code>[GPQueryDetail]</code> — so browser DevTools output is filterable by
+                component without a dedicated logging library.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 8. END-TO-END TESTING                                        -->
           <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
             <h2 id="e2e-testing">End-to-end testing — Playwright</h2>
@@ -405,7 +716,7 @@
           </section>
 
           <!-- ═══════════════════════════════════════════════════════════ -->
-          <!-- 8. CODE QUALITY                                              -->
+          <!-- 9. CODE QUALITY                                              -->
           <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
             <h2 id="code-quality">Code quality — linting, formatting, and type checking</h2>
@@ -478,7 +789,7 @@
           </section>
 
           <!-- ═══════════════════════════════════════════════════════════ -->
-          <!-- 9. CI PIPELINE & COVERAGE                                    -->
+          <!-- 10. CI PIPELINE & COVERAGE                                   -->
           <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
             <h2 id="ci-coverage">CI pipeline and coverage enforcement</h2>
@@ -569,7 +880,7 @@
           </section>
 
           <!-- ═══════════════════════════════════════════════════════════ -->
-          <!-- 10. TOOLING SUMMARY                                          -->
+          <!-- 11. TOOLING SUMMARY                                          -->
           <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
             <h2 id="tooling-summary">Tooling summary</h2>
@@ -673,5 +984,102 @@
 
     <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation.html">Frontend, backend, and RAG implementation</a><a href="system-design.html">Architecture, flows, and data model</a><a href="testing.html">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices.html#user-manual">User manual</a><a href="appendices.html#deployment-manual">Deployment manual</a><a href="appendices.html#privacy">GDPR and privacy</a><a href="blog.html">External blog and monthly video</a></div></section></div></footer>
     <script src="assets/site.js?v=20260322f"></script>
+    <script>
+      (function () {
+        function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+        function formatCompact(n) {
+          if (n >= 1000) return (n / 1000).toFixed(0) + 'k';
+          return n.toLocaleString();
+        }
+
+        function animateCount(card) {
+          var target   = parseInt(card.dataset.count, 10);
+          var compact  = card.dataset.format === 'compact';
+          var numEl    = card.querySelector('.ts-count');
+          var duration = 1600;
+          var start    = performance.now();
+          function step(now) {
+            var progress = Math.min((now - start) / duration, 1);
+            var eased    = easeOutQuart(progress);
+            var value    = Math.round(eased * target);
+            numEl.textContent = compact ? formatCompact(value) : value.toLocaleString();
+            if (progress < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        }
+
+        function animateRing(card) {
+          var percent = parseInt(card.dataset.percent, 10);
+          var circle  = card.querySelector('.ts-ring-fill');
+          var svg     = card.querySelector('.ts-ring-svg');
+          var r       = 38;
+          var circum  = 2 * Math.PI * r;
+          circle.style.strokeDasharray  = circum;
+          circle.style.strokeDashoffset = circum;
+          var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', '50');
+          text.setAttribute('y', '50');
+          text.setAttribute('class', 'ts-ring-value');
+          text.textContent = percent + '%';
+          svg.appendChild(text);
+          var duration = 1400;
+          var start    = performance.now();
+          function step(now) {
+            var progress = Math.min((now - start) / duration, 1);
+            var eased    = easeOutQuart(progress);
+            circle.style.strokeDashoffset = circum - eased * (circum * percent / 100);
+            if (progress < 1) requestAnimationFrame(step);
+          }
+          setTimeout(function () { requestAnimationFrame(step); }, 120);
+        }
+
+        var grid = document.getElementById('statsGrid');
+        if (grid) {
+          var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              var cards = grid.querySelectorAll('.ts-stat-card, .ts-ring-card');
+              cards.forEach(function (card, i) {
+                setTimeout(function () {
+                  card.classList.add('ts-visible');
+                  if (card.classList.contains('ts-stat-card')) animateCount(card);
+                  if (card.classList.contains('ts-ring-card'))  animateRing(card);
+                }, i * 80);
+              });
+              observer.disconnect();
+            });
+          }, { threshold: 0.15 });
+          observer.observe(grid);
+        }
+
+        /* ── Chip tabs ── */
+        function ctabsSetTitle(panel, label) {
+          var existing = panel.querySelector('.ctabs__panel-title');
+          if (existing) { existing.textContent = label; return; }
+          var title = document.createElement('span');
+          title.className = 'ctabs__panel-title';
+          title.textContent = label;
+          panel.insertBefore(title, panel.firstChild);
+        }
+
+        document.querySelectorAll('[data-ctabs]').forEach(function (tabs) {
+          tabs.querySelectorAll('.ctabs__chip').forEach(function (chip) {
+            var panel = document.getElementById(chip.dataset.ctab);
+            if (panel) ctabsSetTitle(panel, chip.textContent.trim());
+          });
+          tabs.querySelectorAll('.ctabs__chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+              var target = chip.dataset.ctab;
+              tabs.querySelectorAll('.ctabs__chip').forEach(function (c) { c.classList.remove('is-active'); });
+              tabs.querySelectorAll('.ctabs__panel').forEach(function (p) { p.classList.remove('is-active'); });
+              chip.classList.add('is-active');
+              var panel = document.getElementById(target);
+              if (panel) panel.classList.add('is-active');
+            });
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
