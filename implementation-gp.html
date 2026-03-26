@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GP Workflow · Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css?v=20260326" />
+  </head>
+  <body data-page="implementation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="index.html" data-nav="home">Home</a><a href="requirements.html" data-nav="requirements">Requirements</a><a href="research.html" data-nav="research">Research</a><a href="ui-design.html" data-nav="ui-design">UI Design</a><a href="system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="testing.html" data-nav="testing">Testing</a><a href="testing.html" data-nav="evaluation">Evaluation</a><a href="appendices.html" data-nav="appendices">Appendices</a><a href="appendices.html#external-links" data-nav="blog">Blog</a></nav><button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">GP Workflow</h1>
+        <p class="report-page-subtitle">Section 3 of 11 · <a href="implementation.html">Back to Implementation</a></p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+
+          <section class="section-bare" id="libraries">
+            <h2>Libraries Used</h2>
+            <table class="impl-table">
+              <thead><tr><th>Library</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>FastAPI</code></td><td>Route definition, request body parsing, background tasks</td></tr>
+                <tr><td><code>Pydantic v2</code></td><td>Request/response schema validation with automatic error messages</td></tr>
+                <tr><td><code>SQLAlchemy</code></td><td>ORM query building</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="section-bare" id="creating-consultation">
+            <h2>Creating a Consultation</h2>
+            <p>A GP creates a consultation by sending a <code>ChatCreate</code> payload. FastAPI validates it via Pydantic before the handler runs. The service creates the chat row, the first message row, and schedules AI generation as a <code>BackgroundTask</code> so the HTTP response returns immediately:</p>
+            <pre><code># backend/src/schemas/chat.py
+class ChatCreate(BaseModel):
+    title:           str       = Field(..., min_length=1, max_length=200)
+    specialty:       str | None = None
+    severity:        str | None = None
+    patient_context: dict | None = None    # {age, gender, notes}
+    message:         str       = Field(..., min_length=1, max_length=10_000)</code></pre>
+            <pre><code># backend/src/services/chat_service.py
+def create_chat(db: Session, user: User, data: ChatCreate) -&gt; ChatResponse:
+    chat = chat_repository.create(
+        db,
+        user_id=user.id,
+        title=data.title,
+        specialty=data.specialty,
+        severity=data.severity,
+        patient_context=data.patient_context,
+        status=ChatStatus.SUBMITTED,
+    )
+    message_repository.create(
+        db,
+        chat_id=chat.id,
+        content=data.message,
+        sender="user",
+    )
+    audit_repository.log(
+        db, user_id=user.id, action="CREATE_CHAT",
+        details=f"Chat {chat.id} created",
+    )
+    # AI generation runs in the background — does not block this response
+    asyncio.ensure_future(
+        _async_generate_ai_response(chat.id, user.id, data.message)
+    )
+    return chat_to_response(chat)</code></pre>
+          </section>
+
+          <section class="section-bare" id="status-lifecycle">
+            <h2>Consultation Status Lifecycle</h2>
+            <p>Status transitions are enforced at the service layer. The full state machine:</p>
+            <pre class="seq-diagram">OPEN ──────────────▶ SUBMITTED ──────────▶ ASSIGNED ──────────▶ REVIEWING
+                          ▲                    │                     │
+                          │                    │ (unassign)          │
+                          └────────────────────┘                     │
+                                                          ┌──────────┴──────────┐
+                                                          ▼                     ▼
+                                                       APPROVED              REJECTED
+                                                          │
+                                                          ▼
+                                                       ARCHIVED</pre>
+            <p>Additional status values:</p>
+            <ul>
+              <li><code>CLOSED</code> — consultations closed by the GP before specialist review</li>
+              <li><code>FLAGGED</code> — reserved for admin moderation use cases</li>
+              <li><code>ARCHIVED</code> — soft-deleted; hidden from normal queries but retained for audit purposes</li>
+            </ul>
+          </section>
+
+        </div>
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="assets/site.js?v=20260326"></script>
+  </body>
+</html>
