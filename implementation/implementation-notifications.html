@@ -29,6 +29,10 @@
             <p>In a multi-role workflow, missed events can break collaboration. Reliable notifications ensure GPs, specialists, and admins see action-required updates quickly, reducing delays in review and response cycles.</p>
           </section>
 
+          <section class="section-bare" id="notification-types">
+            <p>Each <code>NotificationType</code> value corresponds to a specific workflow event. <code>CHAT_ASSIGNED</code> is triggered when a specialist claims a submitted consultation; the GP receives this notification and sees it as confirmation that their query is being reviewed. <code>SPECIALIST_MSG</code> is triggered when a specialist sends a comment on a consultation without finalizing the review; the GP sees a notification prompting them to check the chat for interim feedback or a request for clarification. <code>CHAT_APPROVED</code> is triggered when a specialist approves the AI response or provides a manual response closing the consultation; the GP sees this as confirmation that a reviewed answer is ready to act on. <code>CHAT_REJECTED</code> is triggered when a specialist rejects a consultation, typically because it was submitted in the wrong specialty or lacks sufficient clinical context; the GP is notified to revise and resubmit. <code>CHAT_REVISION</code> is triggered when a specialist requests AI regeneration on a consultation; the GP sees this as a status update that the AI response is being revised based on specialist feedback and a new version will appear shortly.</p>
+          </section>
+
           <section class="section-bare" id="repository-pattern">
             <h2>Repository Pattern</h2>
             <p>All database operations for notifications go through a repository module, keeping query logic out of the service layer:</p>
@@ -116,6 +120,7 @@ def list_notifications(db, user, *, unread_only=False) -&gt; list[NotificationRe
     return response</code></pre>
             <p>Unread count and notification list are cached independently so the frequent badge poll does not repeatedly execute <code>COUNT(*)</code> queries while still allowing full list fetches when dropdowns open.</p>
             <p>A shared invalidation helper runs after every producer/consumer action: specialist review outcomes, specialist comments, mark-as-read, and mark-all-read. It clears unread-only and full-list variants together, keeping badge and dropdown views consistent immediately after writes.</p>
+            <p>Polling was chosen over a persistent WebSocket connection for notifications because notification events are low-frequency and latency-tolerant. In normal clinical workflows, a specialist may review a consultation and the GP receiving that notification can act on it within a minute or two — the precise delivery time within a 30-second window is not clinically significant. A WebSocket connection requires the server to maintain a persistent TCP connection for every logged-in user, which adds memory and file descriptor overhead that scales linearly with active users. For a relatively low-traffic platform where users are GPs checking results periodically throughout their day rather than trading real-time messages, the cost of maintaining per-user persistent connections outweighs the latency benefit. A 30-second polling interval delivers adequate responsiveness without that infrastructure overhead, and the cached unread-count response keeps individual poll requests cheap to serve.</p>
           </section>
 
         </div>

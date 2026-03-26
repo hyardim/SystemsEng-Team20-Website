@@ -67,6 +67,7 @@
   &lt;/Route&gt;
 &lt;/Routes&gt;</code></pre>
             <p>All page components are lazy-loaded via <code>React.lazy()</code> so only the code for the current route is downloaded on first navigation.</p>
+            <p><code>ProtectedRoute</code> is a wrapper component that reads the current user's role from <code>AuthContext</code> before rendering its child routes. If no authenticated user exists in context, it redirects immediately to <code>/login</code> rather than rendering a 401 error page. This redirect behavior is deliberate: a 401 response in a single-page application would require the user to manually navigate to the login page, whereas a redirect preserves the intended destination URL in the navigation state so the user can be returned after authentication. If a user is authenticated but their role is not in the <code>allowedRoles</code> list for that route group, they are redirected to <code>/access-denied</code> instead, providing a clear signal that access is role-restricted rather than suggesting the resource does not exist.</p>
           </section>
 
           <section class="section-bare" id="secure-storage">
@@ -127,6 +128,7 @@ async function refreshSessionRequest(): Promise&lt;boolean&gt; {
   return refreshInFlight;
 }</code></pre>
             <p>The key detail in this snippet is the <code>finally</code> reset. Without resetting <code>refreshInFlight</code> after resolve/reject, the client could become permanently stuck awaiting an old promise and never attempt refresh again.</p>
+            <p>The <code>refreshInFlight</code> singleton prevents a race condition that occurs when several API calls fail simultaneously with a 401. Without coordination, each failing call would independently trigger <code>POST /auth/refresh</code>, resulting in multiple parallel refresh requests. In practice this causes problems: the first refresh succeeds and issues a new access token, the second refresh may succeed or fail depending on whether the refresh token has already been rotated, and the responses arrive in unpredictable order. The singleton ensures that when the first 401 triggers a refresh, all subsequent concurrent 401s await the same in-flight promise rather than starting their own. Once the shared refresh resolves — successfully or not — all pending callers receive the same outcome and either retry with the new token or redirect to login together. The <code>finally</code> block then clears the singleton so the mechanism resets cleanly for the next token expiry cycle.</p>
             <p>After refresh completion, the singleton is reset so the next expiry cycle can start cleanly. Login and registration calls explicitly skip auth-refresh retries because 401 there means invalid credentials, not expired sessions.</p>
             <p>The response handler also normalizes FastAPI 422 validation payloads (array-form <code>detail</code>) and plain string errors into display-ready messages, preventing raw object output in forms.</p>
           </section>
@@ -190,6 +192,7 @@ export function useChatStream(chatId: number) {
               </tbody>
             </table>
             <p>Validation errors are cleared per field on change so stale messages disappear as the user fixes input. This avoids the common UX issue where corrected fields still display outdated errors.</p>
+            <p>Client-side validation is performed in addition to server-side Pydantic validation because the purposes are different. Server-side validation is the authoritative security and correctness boundary — it cannot be bypassed. Client-side validation provides immediate feedback without requiring a round-trip to the server: an incorrect email format or password that fails the strength requirements is caught and displayed inline before the form is submitted, saving the user from waiting for a network request only to receive a validation error. The <code>PasswordStrengthMeter</code> component goes further: rather than just blocking submission when a password is too weak, it provides progressive visual feedback as the user types — showing which requirements (uppercase, digit, special character) are met and which remain — so the user can construct a compliant password on the first attempt without trial-and-error form submissions.</p>
             <p>Inline <code>fieldErrors</code> and top-level <code>error</code> banners serve different failure classes: field-specific issues appear under controls, while non-field API failures are surfaced in a global alert region.</p>
             <p>FastAPI 422 payloads are normalized into readable strings to avoid surfacing raw object structures in the UI.</p>
           </section>
@@ -199,7 +202,6 @@ export function useChatStream(chatId: number) {
             <p>Pages follow a consistent three-tier state model: <code>loading</code> for initial page fetch lifecycle, data state for rendered resources, and <code>actionLoading</code> for mutations. This separation prevents double-submits and keeps refresh behavior predictable under slow network conditions.</p>
             <p>Data state uses explicit nullable defaults and guarded rendering paths, so missing entities render deterministic fallbacks rather than undefined-access failures. After most mutations, pages reconcile via refetch rather than broad optimistic patching to avoid drift from server truth.</p>
             <p>Error state is cleared at action start and set from normalized API responses on failure, so stale errors do not persist across attempts. Abort-controller cleanup prevents setState-on-unmounted warnings when route changes interrupt in-flight requests.</p>
-            <p>*Implementation documentation for Ambience-AI-1.5 — branch <code>main</code> — March 2026*</p>
           </section>
 
         </div>
