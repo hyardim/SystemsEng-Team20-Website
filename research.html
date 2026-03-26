@@ -45,15 +45,13 @@
                 <article class="related-project-tabs__panel is-active" role="tabpanel" id="related-panel-openevidence" aria-labelledby="related-tab-openevidence" data-tab-panel="openevidence">
                   <h3 class="related-project-tabs__title">OpenEvidence</h3>
                   <p>
-                    OpenEvidence is a clinician-facing medical search and synthesis product built
-                    around evidence visibility rather than free-form chatbot fluency
+                    OpenEvidence is a medical search tool designed for clinicians, with a stronger
+                    focus on showing the evidence behind an answer than on sounding conversational
                     <a class="citation" href="#ref-1">[1]</a><a class="citation" href="#ref-2">[2]</a>.
-                    It is a useful comparison because it treats trustworthy retrieval as the core of
-                    the product experience: the system is valuable not simply because it generates
-                    text, but because it helps clinicians move from a question to supporting evidence
-                    quickly. For Ambience, the most useful lesson was that trust comes from keeping
-                    sources in the main answer flow instead of treating references as an optional
-                    extra.
+                    It stood out to us because it helps users get from a clinical question to useful
+                    supporting sources quickly. The main takeaway for Ambience was simple: trust is
+                    easier to build when citations stay visible in the answer instead of being tucked
+                    away as an extra.
                   </p>
 
                   <div class="related-project-tabs__grid">
@@ -89,13 +87,12 @@
                 <article class="related-project-tabs__panel" role="tabpanel" id="related-panel-glass-health" aria-labelledby="related-tab-glass-health" data-tab-panel="glass-health" hidden>
                   <h3 class="related-project-tabs__title">Glass Health</h3>
                   <p>
-                    Glass Health is a stronger comparison on output structure. Its clinical Q&amp;A,
-                    differential diagnosis, and plan-generation workflows show how medical AI becomes
-                    more usable when responses are explicitly organised for scanning and review
-                    <a class="citation" href="#ref-3">[3]</a>. This matters for Ambience because the
-                    project is not only about retrieving good evidence; it is also about presenting
-                    that evidence in a way that supports fast GP-specialist collaboration rather than
-                    leaving users with one long, undifferentiated answer.
+                    Glass Health is a useful comparison because it puts structure first. Its clinical
+                    Q&amp;A, differential diagnosis, and plan-building workflows show that medical AI
+                    is much easier to review when responses are split into clear sections rather than
+                    one long answer <a class="citation" href="#ref-3">[3]</a>. For Ambience, that
+                    reinforced the need to present evidence in a format that both GPs and
+                    specialists can scan and discuss easily.
                   </p>
 
                   <div class="related-project-tabs__grid">
@@ -328,10 +325,11 @@
                   <p>
                     Once the architecture was fixed, the remaining technology review focused on which
                     languages and frameworks best supported a typed frontend, a testable Python API
-                    layer, a retrieval-aware database, and provider-flexible inference. The goal was
-                    not to assemble the most fashionable stack, but to choose technologies that fit
-                    the actual work of the project: role-based dashboards, FastAPI services, vector
-                    retrieval, and medical-document processing.
+                    layer, a retrieval-aware database, provider-flexible inference, and a
+                    reproducible multi-service runtime. The goal was not to assemble the most
+                    fashionable stack, but to choose technologies that fit the actual work of the
+                    project: role-based dashboards, FastAPI services, vector retrieval, and
+                    medical-document processing.
                   </p>
 
                   <div class="related-project-tabs__grid">
@@ -341,7 +339,8 @@
                         <li><strong>Frontend stack:</strong> React SPA with Vite versus heavier SSR-first approaches. For this project, most pages are application screens rather than public SEO pages, so a typed single-page frontend was a better fit <a class="citation" href="#ref-13">[13]</a><a class="citation" href="#ref-14">[14]</a>.</li>
                         <li><strong>Backend framework:</strong> FastAPI versus larger full-stack Python frameworks. FastAPI aligned better with service-style APIs, validation, and async request handling <a class="citation" href="#ref-15">[15]</a>.</li>
                         <li><strong>Data and retrieval layer:</strong> PostgreSQL with pgvector versus a separate specialist vector database. Keeping relational and vector concerns in one database family simplified the deployment model <a class="citation" href="#ref-12">[12]</a>.</li>
-                        <li><strong>Inference interface:</strong> provider-specific clients versus OpenAI-compatible local/cloud endpoints. A compatible API layer reduces switching cost between local and cloud inference paths <a class="citation" href="#ref-8">[8]</a>.</li>
+                        <li><strong>Inference interface:</strong> provider-specific clients versus OpenAI-compatible local/cloud endpoints. Ollama made the local path easier to work with because it exposes a compatible API while keeping model serving relatively simple during development <a class="citation" href="#ref-8">[8]</a>.</li>
+                        <li><strong>Container runtime:</strong> Docker Compose versus managing each service separately in development. For a stack split across frontend, backend, RAG, database, and cache services, Compose made the setup easier to reproduce and run consistently <a class="citation" href="#ref-16">[16]</a>.</li>
                       </ul>
                     </div>
                     <div class="related-project-tabs__block">
@@ -350,8 +349,9 @@
                         <li><strong>Chosen frontend:</strong> React 19, TypeScript, and Vite for a dashboard-style SPA with strong typing and fast local iteration.</li>
                         <li><strong>Chosen backend:</strong> FastAPI because the project is API-heavy and benefits from explicit schemas, validation, and service-oriented routing.</li>
                         <li><strong>Chosen data layer:</strong> PostgreSQL plus pgvector so user data, workflow data, and retrieval data remain in one coherent operational stack.</li>
-                        <li><strong>Chosen inference interface:</strong> OpenAI-compatible local/cloud endpoints so model providers can be changed with less application-level churn.</li>
-                        <li>Together, these choices support the main priorities of the project: typed user interfaces, modular Python services, grounded retrieval, and flexible deployment rather than one tightly locked stack.</li>
+                        <li><strong>Chosen inference interface:</strong> Ollama for local model serving together with OpenAI-compatible local/cloud endpoints, so model providers can be changed with less application-level churn.</li>
+                        <li><strong>Chosen runtime tooling:</strong> Docker Compose so the frontend, backend, RAG service, database, and supporting services can be started and tested as one reproducible stack <a class="citation" href="#ref-16">[16]</a>.</li>
+                        <li>Together, these choices support the main priorities of the project: typed user interfaces, modular Python services, grounded retrieval, and deployment that stays practical to run and test.</li>
                       </ul>
                     </div>
                   </div>
@@ -364,6 +364,7 @@
                       <li><a href="#ref-13">[13] React, "Quick Start."</a></li>
                       <li><a href="#ref-14">[14] Vite, "Why Vite."</a></li>
                       <li><a href="#ref-15">[15] FastAPI, "Features."</a></li>
+                      <li><a href="#ref-16">[16] Docker Docs, "What is Docker Compose?"</a></li>
                     </ul>
                   </div>
                 </article>
@@ -383,22 +384,10 @@
           <section class="section-card">
             <h2 id="summary-of-technical-decisions">Summary of Technical Decisions</h2>
             <p class="lede">
-              The final research outcome was a deliberately constrained clinical support system rather
-              than an unrestricted medical assistant. The technical decisions below are the ones that
-              most strongly shape the final implementation.
+              Ambience was designed as a clinical support tool, not a general-purpose AI doctor.
             </p>
             <p>
-              Taken together, these decisions show that Ambience-AI-1.5 was designed around
-              grounding, inspectability, and specialist oversight rather than maximum automation. The
-              main architectural and technology choices were not made independently: the separate RAG
-              service, hybrid inference path, layered retrieval pipeline, and visible citations all
-              support the same goal of producing answers that are easier to trace, review, and
-              challenge in a clinical workflow.
-            </p>
-            <p>
-              For that reason, the most important decisions are not just which tools were used, but
-              how those tools were combined into a coherent system. The summary cards below highlight
-              the design choices that most directly shaped the final behaviour of the product.
+              The cards below summarise the technical decisions that shaped how the system works:
             </p>
 
             <div class="card-grid">
@@ -502,6 +491,10 @@
               <li id="ref-15">
                 FastAPI, "Features." [Online]. Available:
                 <a href="https://fastapi.tiangolo.com/features/" target="_blank" rel="noreferrer">https://fastapi.tiangolo.com/features/</a>.
+              </li>
+              <li id="ref-16">
+                Docker Docs, "What is Docker Compose?" [Online]. Available:
+                <a href="https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-docker-compose/" target="_blank" rel="noreferrer">https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-docker-compose/</a>.
               </li>
             </ol>
           </section>

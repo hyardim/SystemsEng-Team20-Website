@@ -5,160 +5,362 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="../" />
     <title>Appendices · Ambience-AI-1.5</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20260325ag" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260326a" />
   </head>
   <body data-page="appendices">
-    <header class="site-header"><div class="site-header__inner"><a class="brand" href="/" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="/" data-nav="home">Home</a><a href="requirements/" data-nav="requirements">Requirements</a><a href="research/" data-nav="research">Research</a><a href="ui-design/" data-nav="ui-design">UI Design</a><a href="system-design/" data-nav="system-design">System Design</a><a href="implementation/" data-nav="implementation">Implementation</a><a href="testing/" data-nav="testing">Testing</a><a href="testing/" data-nav="evaluation">Evaluation</a><a href="appendices/" data-nav="appendices">Appendices</a><a href="blog/" data-nav="blog">Blog</a></nav><a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a></div></header>
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="/" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="/" data-nav="home">Home</a><a href="requirements/" data-nav="requirements">Requirements</a><a href="research/" data-nav="research">Research</a><a href="ui-design/" data-nav="ui-design">UI Design</a><a href="system-design/" data-nav="system-design">System Design</a><a href="implementation/" data-nav="implementation">Implementation</a><a href="testing/" data-nav="testing">Testing</a><a href="evaluation/" data-nav="evaluation">Evaluation</a><a href="appendices/" data-nav="appendices">Appendices</a><a href="blog/" data-nav="blog">Blog</a></nav><a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a></div></header>
 
     <main class="page-shell">
       <div class="report-page-header">
         <h1 class="report-page-title">Appendices</h1>
-        <p class="report-page-subtitle">User guide, deployment guide, privacy, and external artefacts</p>
+        <p class="report-page-subtitle">Handover guidance, access details, and supporting submission artefacts</p>
         <p class="report-page-summary">
-          This appendix page collects practical material that sits alongside the main technical report:
-          user instructions, deployment instructions, GDPR-oriented handling notes, and publication
-          placeholders for the monthly video deliverable.
+          This page turns the appendices brief into a project-specific handover pack for
+          Ambience-AI-1.5. It keeps the structure suggested by the UCL example, but presents it
+          in the same design language as the rest of this report: required appendix items first,
+          then practical guidance for user access, deployment, legal coverage, progress evidence,
+          and the common mistakes that usually weaken submission quality.
         </p>
       </div>
 
       <div class="page-grid">
         <div class="content-stack">
+          <section class="section-card" id="appendix-checklist">
+            <h2>Appendix checklist</h2>
+            <p class="lede">
+              The image brief for this page is essentially a submission checklist. The cards below
+              convert that checklist into a cleaner appendix overview before the detailed sections.
+            </p>
+            <div class="appendix-overview">
+              <article class="appendix-overview__card appendix-overview__card--manual">
+                <span class="appendix-overview__eyebrow">User manual</span>
+                <h3>Teach users how to use the application</h3>
+                <ul>
+                  <li>Explain the main workflow in a way that a first-time reader can follow quickly.</li>
+                  <li>Use screenshots to support the explanation instead of relying on text alone.</li>
+                  <li>If there is a live deployment, provide the public URL and login details where authentication is required.</li>
+                  <li>If the system has multiple user types, provide one account for each role.</li>
+                </ul>
+              </article>
+
+              <article class="appendix-overview__card appendix-overview__card--deployment">
+                <span class="appendix-overview__eyebrow">Deployment manual</span>
+                <h3>Provide a step-by-step handover guide</h3>
+                <ul>
+                  <li>Make it possible for a project partner to deploy the system after receiving the source code.</li>
+                  <li>Document prerequisites, environment setup, startup steps, and health checks clearly.</li>
+                  <li>Mark any difficult setup points and support them with screenshots where useful.</li>
+                </ul>
+              </article>
+
+              <article class="appendix-overview__card">
+                <span class="appendix-overview__eyebrow">Legal issues</span>
+                <h3>Use the provided legal and process notes properly</h3>
+                <ul>
+                  <li>Build from the notes already uploaded to Moodle rather than leaving this section generic.</li>
+                  <li>Relate those notes to the actual data, roles, and workflow of this prototype.</li>
+                </ul>
+              </article>
+
+              <article class="appendix-overview__card appendix-overview__card--blog">
+                <span class="appendix-overview__eyebrow">Development blog</span>
+                <h3>Keep the engineering trail visible</h3>
+                <ul>
+                  <li>Link to the blog or timeline that captures weekly decisions, blockers, and progress.</li>
+                </ul>
+              </article>
+
+              <article class="appendix-overview__card appendix-overview__card--video">
+                <span class="appendix-overview__eyebrow">Monthly video</span>
+                <h3>Publish the monthly progress recording</h3>
+                <ul>
+                  <li>Provide a direct link to the video rather than making the reader search elsewhere.</li>
+                </ul>
+              </article>
+            </div>
+          </section>
+
           <section class="section-card" id="user-manual">
-            <h2 id="user-manual-heading">User manual</h2>
-            <div class="appendix-grid">
-              <div class="appendix-card">
+            <h2>User manual</h2>
+            <p class="lede">
+              The appendix should help a marker or project partner get into the system quickly. For
+              Ambience-AI-1.5 that means separating the GP, specialist, and admin journeys rather
+              than describing the whole application as if every user sees the same interface.
+            </p>
+            <div class="appendix-manual-grid">
+              <div>
+                <h3>User-access pack</h3>
+                <p>
+                  The user manual should begin with the live application URL if one exists, explain
+                  what each role can do, and then walk through the most important screens in order.
+                  Screenshots are especially useful for the first-login flow, consultation creation,
+                  specialist review, and admin oversight views.
+                </p>
+                <ul>
+                  <li>Show the reader where to log in and what credentials format to use.</li>
+                  <li>Explain the happy path for each role instead of listing unrelated features.</li>
+                  <li>Use screenshots with short captions to anchor the explanation visually.</li>
+                </ul>
+              </div>
+
+              <div class="appendix-access-card">
+                <h3>Access details to include</h3>
+                <div class="appendix-access-list">
+                  <div class="appendix-access-list__item">
+                    <strong>Live application URL</strong>
+                    <span><a href="#" data-placeholder-link>Replace with the deployed website URL if a live instance is available</a></span>
+                  </div>
+                  <div class="appendix-access-list__item">
+                    <strong>GP account</strong>
+                    <span>Add one working demo account for the GP workflow.</span>
+                  </div>
+                  <div class="appendix-access-list__item">
+                    <strong>Specialist account</strong>
+                    <span>Add one working demo account for the specialist review workflow.</span>
+                  </div>
+                  <div class="appendix-access-list__item">
+                    <strong>Admin account</strong>
+                    <span>Add one working demo account for the admin oversight workflow.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="appendix-role-grid">
+              <div class="appendix-card appendix-role-card">
+                <span class="appendix-role-card__eyebrow">Role 1</span>
                 <h3>GP workflow</h3>
+                <p>The GP journey should show how a consultation starts and where grounded answers appear.</p>
                 <ul>
-                  <li>Log in as a GP user.</li>
-                  <li>Create a new consultation with title, specialty, and severity.</li>
-                  <li>Send the first clinical question to trigger AI generation and auto-submission.</li>
-                  <li>Open the consultation detail timeline to inspect the AI answer and its citations.</li>
-                  <li>Monitor review status through the consultation state and notifications.</li>
+                  <li>Log in as a GP user and create a consultation with title, specialty, and severity.</li>
+                  <li>Submit the first clinical question to trigger grounded AI generation.</li>
+                  <li>Inspect the response, citations, and consultation status in the detailed timeline.</li>
+                  <li>Track when the case moves into specialist review.</li>
                 </ul>
               </div>
-              <div class="appendix-card">
+
+              <div class="appendix-card appendix-role-card">
+                <span class="appendix-role-card__eyebrow">Role 2</span>
                 <h3>Specialist workflow</h3>
+                <p>The specialist path should focus on review decisions, evidence checking, and revisions.</p>
                 <ul>
-                  <li>Open the submitted queue and self-assign a consultation that matches your specialty.</li>
-                  <li>Inspect AI messages and citations in the detailed review view.</li>
-                  <li>Approve, reject, request changes, or replace a specific AI answer manually.</li>
-                  <li>Use review feedback to trigger a revised AI answer when needed.</li>
+                  <li>Open the review queue and self-assign a relevant consultation.</li>
+                  <li>Inspect AI responses and supporting citations in the review interface.</li>
+                  <li>Approve, reject, request changes, or replace an AI answer manually.</li>
+                  <li>Return a review outcome that the GP can follow.</li>
                 </ul>
               </div>
-              <div class="appendix-card">
+
+              <div class="appendix-card appendix-role-card">
+                <span class="appendix-role-card__eyebrow">Role 3</span>
                 <h3>Admin workflow</h3>
+                <p>The admin path should explain oversight rather than ordinary clinical usage.</p>
                 <ul>
-                  <li>View the dashboard for consultation and AI activity statistics.</li>
-                  <li>Inspect user records and role distributions.</li>
-                  <li>Review chats globally when investigating system behaviour.</li>
-                  <li>Open audit logs to trace operational and security-relevant events.</li>
+                  <li>View platform statistics for consultations, users, and AI activity.</li>
+                  <li>Inspect user records and role distribution across the system.</li>
+                  <li>Review chats globally when investigating operational issues.</li>
+                  <li>Open audit logs to trace sensitive or security-relevant actions.</li>
                 </ul>
+              </div>
+            </div>
+
+            <div class="appendix-proof-grid">
+              <div class="mini-card appendix-proof-card">
+                <strong>Screenshots to include</strong>
+                <p>Login, consultation creation, specialist review, and admin oversight should all appear as labelled screenshots.</p>
+              </div>
+              <div class="mini-card appendix-proof-card">
+                <strong>Live access details</strong>
+                <p>If the system is deployed online, add the URL, browser assumptions, and any access restrictions explicitly.</p>
+              </div>
+              <div class="mini-card appendix-proof-card">
+                <strong>Role-specific accounts</strong>
+                <p>Provide one test account per role so the reader can verify each workflow without guessing permissions.</p>
               </div>
             </div>
           </section>
 
           <section class="section-card" id="deployment-manual">
-            <h2 id="deployment-manual-heading">Deployment manual</h2>
-            <div class="timeline-card">
-              <div class="timeline">
-                <div class="timeline__item" data-step="1">
-                  <strong>Prepare the model runtime</strong>
-                  Ensure Ollama or a compatible external inference endpoint is available. The default local stack expects host access from Docker.
+            <div class="appendix-section-heading">
+              <h2>Deployment manual</h2>
+              <span class="badge badge--warning">Very important</span>
+            </div>
+            <p class="lede">
+              This is the section that most directly affects handover quality. A project partner
+              should be able to deploy the system from source without reverse-engineering the rest
+              of the report.
+            </p>
+            <div class="appendix-deployment-grid">
+              <div class="timeline-card">
+                <h3>Suggested deployment flow</h3>
+                <div class="timeline">
+                  <div class="timeline__item" data-step="1">
+                    <strong>Prepare prerequisites</strong>
+                    Confirm Docker is available, the database runtime is reachable, and the local or cloud LLM endpoint expected by the RAG service is configured.
+                  </div>
+                  <div class="timeline__item" data-step="2">
+                    <strong>Populate environment files</strong>
+                    Document the required environment values for frontend, backend, database, and RAG services before the reader starts any containers.
+                  </div>
+                  <div class="timeline__item" data-step="3">
+                    <strong>Launch the stack</strong>
+                    Start the frontend, backend, RAG service, PostgreSQL with pgvector, and any supporting services through Docker Compose.
+                  </div>
+                  <div class="timeline__item" data-step="4">
+                    <strong>Prepare data and migrations</strong>
+                    Explain how schema setup, seeded accounts, and guideline ingestion are handled before first use.
+                  </div>
+                  <div class="timeline__item" data-step="5">
+                    <strong>Verify health</strong>
+                    Check service status, confirm health endpoints respond, and log in using the supplied demo accounts.
+                  </div>
+                  <div class="timeline__item" data-step="6">
+                    <strong>Record difficult steps</strong>
+                    If anything is platform-specific or brittle, include screenshots so the handover is reproducible instead of implicit.
+                  </div>
                 </div>
-                <div class="timeline__item" data-step="2">
-                  <strong>Confirm environment assumptions</strong>
-                  PostgreSQL credentials, database URLs, and RAG service URLs are defined in Compose and container environments.
+              </div>
+
+              <div class="appendix-deployment-stack">
+                <div class="appendix-card">
+                  <h3>Core commands to document</h3>
+                  <p>Use explicit startup commands in the appendix instead of assuming prior knowledge.</p>
+                  <div class="code-list">
+                    <span>git clone &lt;application-repository&gt;</span>
+                    <span>cd &lt;project-root&gt;</span>
+                    <span>cp &lt;env-template&gt; &lt;env-file&gt;</span>
+                    <span>docker compose up --build</span>
+                    <span>docker compose ps</span>
+                    <span>docker compose logs -f &lt;service&gt;</span>
+                  </div>
                 </div>
-                <div class="timeline__item" data-step="3">
-                  <strong>Launch the stack</strong>
-                  Start the compose setup so frontend, backend, RAG service, and pgvector database are built and run together.
-                </div>
-                <div class="timeline__item" data-step="4">
-                  <strong>Verify health</strong>
-                  Confirm backend and RAG health endpoints respond, then log in via the frontend using seeded or registered users.
-                </div>
-                <div class="timeline__item" data-step="5">
-                  <strong>Ingest guideline data</strong>
-                  Ensure the RAG service has access to indexed guideline documents and vector rows before expecting grounded citations.
+
+                <div class="appendix-card">
+                  <h3>What the project partner should receive</h3>
+                  <ul>
+                    <li>A repository URL or archive for the main application codebase.</li>
+                    <li>Environment templates and a safe handover path for secrets.</li>
+                    <li>Instructions for seeded accounts, migrations, and document ingestion.</li>
+                    <li>Notes on whether inference runs locally, in the cloud, or through a hybrid route.</li>
+                  </ul>
                 </div>
               </div>
             </div>
             <div class="callout">
-              <h3>Deployment note</h3>
+              <h3>Deployment evidence</h3>
               <p>
-                The repository also contains cloud-hosting notes for larger Med42 deployments and
-                helper scripts under the <em>serve</em> directory. Those materials indicate planned or
-                optional deployment paths beyond the default local Compose setup.
+                If any setup step is awkward, add screenshots of the relevant terminal output,
+                environment file shape, or first successful login. The goal is reproducibility, not
+                just a conceptual outline.
               </p>
             </div>
           </section>
 
           <section class="section-card" id="privacy">
-            <h2 id="privacy-heading">GDPR and privacy of data</h2>
-            <div class="two-col">
+            <h2>Legal issues and processes</h2>
+            <p class="lede">
+              This section should not be a generic privacy statement. It should explain which legal
+              notes apply, what data risks exist in this prototype, and where the current project
+              still stops short of production-grade governance.
+            </p>
+            <div class="appendix-policy-grid">
               <div class="appendix-card">
-                <h3>Privacy posture in the current design</h3>
+                <h3>Use the provided legal notes</h3>
+                <p>The notes already uploaded to Moodle should be used as the baseline structure for this appendix.</p>
                 <ul>
-                  <li>User accounts include identity and role metadata.</li>
-                  <li>Consultations may store patient context as free-form JSON.</li>
-                  <li>Audit logs record actions and timestamps for traceability.</li>
-                  <li>Notifications and messages persist workflow history.</li>
+                  <li>Reference the relevant course guidance instead of leaving the section vague.</li>
+                  <li>Relate that guidance to this project's roles, audit trail, and access model.</li>
+                  <li>State clearly which assumptions are academic and which controls are actually implemented.</li>
                 </ul>
               </div>
               <div class="appendix-card">
-                <h3>Implications</h3>
+                <h3>Project-specific issues to cover</h3>
                 <ul>
-                  <li>Any real deployment handling patient data would require clear lawful basis, minimisation, retention, and access-control policies.</li>
-                  <li>Prompt payloads sent to external inference endpoints would require careful processor and transfer assessment.</li>
-                  <li>Source documents and consultation data should be handled under strict storage and access governance.</li>
-                  <li>This project should be described as an academic prototype, not a completed GDPR-ready clinical platform.</li>
+                  <li>Consultation payloads and uploaded files may contain sensitive patient context.</li>
+                  <li>External or cloud-hosted inference routes create data transfer and processor questions.</li>
+                  <li>Audit logs, retention, and role-based access all affect the legal interpretation of the system.</li>
+                  <li>Source licensing and generated clinical text should be framed with clear usage boundaries.</li>
                 </ul>
               </div>
             </div>
             <div class="callout callout--warning">
-              <h3>Honest statement</h3>
+              <h3>Boundary to state explicitly</h3>
               <p>
-                The repository demonstrates privacy-aware architectural concerns such as auditability
-                and role separation, but it does not by itself constitute a full GDPR compliance pack.
+                Ambience-AI-1.5 should be presented as an academic prototype. The current design
+                demonstrates privacy-aware architecture and role separation, but it is not a full
+                GDPR compliance or clinical governance pack.
               </p>
             </div>
           </section>
 
           <section class="section-card" id="external-links">
-            <h2 id="external-links-heading">Monthly video</h2>
-            <div class="appendix-grid">
-              <div class="appendix-card">
-                <h3>Monthly video</h3>
-                <p>
-                  Replace the placeholder below with the public monthly progress or demo video link.
-                </p>
-                <p><a href="#" data-placeholder-link>Monthly video link pending publication</a></p>
-              </div>
-              <div class="appendix-card">
-                <h3>Evidence appendix</h3>
-                <p>
-                  Core evidence for this report comes from the application router, backend services,
-                  RAG runtime, compose configuration, and automated tests in the main repository.
-                </p>
-              </div>
+            <h2>Development blog and monthly video</h2>
+            <p class="lede">
+              The appendices page should make progress evidence easy to find. One place for the
+              written development trail, and one place for the monthly video deliverable.
+            </p>
+            <div class="appendix-link-grid">
+              <a class="appendix-link-card" href="blog/">
+                <span class="appendix-link-card__eyebrow">Development blog</span>
+                <h3>Weekly engineering journal</h3>
+                <p>Use the blog timeline to show weekly decisions, blockers, pivots, testing work, and delivery progress.</p>
+                <span class="appendix-link-card__cta">Open development blog ↗</span>
+              </a>
+
+              <a class="appendix-link-card appendix-link-card--placeholder" href="#" data-placeholder-link>
+                <span class="appendix-link-card__eyebrow">Monthly video</span>
+                <h3>Public progress or demo recording</h3>
+                <p>Replace this placeholder with the final published monthly video URL before submission.</p>
+                <span class="appendix-link-card__cta">Add monthly video URL</span>
+              </a>
+            </div>
+          </section>
+
+          <section class="section-card" id="common-issues">
+            <h2>Common issues on the appendices page</h2>
+            <p class="lede">
+              Most appendix problems are not about theory. They come from missing access details,
+              weak evidence, and a handover process that assumes too much of the reader.
+            </p>
+            <div class="appendix-issues-grid">
+              <article class="appendix-issue-card">
+                <span class="appendix-issue-card__index">01</span>
+                <h3>Missing deployed URL</h3>
+                <p>If the application is live, the deployed URL should be written explicitly on this page rather than left implicit.</p>
+              </article>
+
+              <article class="appendix-issue-card">
+                <span class="appendix-issue-card__index">02</span>
+                <h3>Test accounts are not provided</h3>
+                <p>Readers should not have to guess credentials. Add one account for each role that appears in the product.</p>
+              </article>
+
+              <article class="appendix-issue-card">
+                <span class="appendix-issue-card__index">03</span>
+                <h3>User manual lacks screenshots</h3>
+                <p>Screenshots should support the manual for clarity, especially around login, consultation flow, review, and admin views.</p>
+              </article>
             </div>
           </section>
         </div>
 
         <aside class="toc-panel">
           <div id="page-toc"></div>
-          <div class="callout">
+          <div class="callout callout--warning">
             <h3>Before submission</h3>
             <ul>
-              <li>Insert the final monthly video URL.</li>
-              <li>Update any deployment details if infrastructure changes.</li>
+              <li>Add the live deployed URL if one exists.</li>
+              <li>Provide one GP, specialist, and admin test account.</li>
+              <li>Attach screenshots that support the user manual.</li>
+              <li>Replace the monthly video placeholder with the final URL.</li>
+              <li>Check that the deployment guide works from a clean clone.</li>
             </ul>
           </div>
         </aside>
       </div>
     </main>
 
-    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation/">Frontend, backend, and RAG implementation</a><a href="system-design/">Architecture, flows, and data model</a><a href="testing/">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices/#user-manual">User manual</a><a href="appendices/#deployment-manual">Deployment manual</a><a href="appendices/#privacy">GDPR and privacy</a><a href="appendices/#external-links">Monthly video</a></div></section></div></footer>
+    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation/">Frontend, backend, and RAG implementation</a><a href="system-design/">Architecture, flows, and data model</a><a href="testing/">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices/#user-manual">User manual</a><a href="appendices/#deployment-manual">Deployment manual</a><a href="appendices/#privacy">Legal issues and processes</a><a href="appendices/#external-links">Development blog and monthly video</a></div></section></div></footer>
     <script src="assets/site.js?v=20260322f"></script>
   </body>
 </html>
