@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="../" />
+    <title>Algorithms · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css?v=20260325ag" />
+  </head>
+  <body data-page="algorithms">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="/" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="/" data-nav="home">Home</a><a href="requirements/" data-nav="requirements">Requirements</a><a href="research/" data-nav="research">Research</a><a href="ui-design/" data-nav="ui-design">UI Design</a><a href="system-design/" data-nav="system-design">System Design</a><a href="implementation/" data-nav="implementation">Implementation</a><a href="testing/" data-nav="testing">Testing</a><a href="testing/" data-nav="evaluation">Evaluation</a><a href="appendices/" data-nav="appendices">Appendices</a><a href="blog/" data-nav="blog">Blog</a></nav><a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Algorithms</h1>
+        <p class="report-page-subtitle">Retrieval, filtering, routing, and revision logic</p>
+        <p class="report-page-summary">
+          Ambience-AI-1.5 does not present a novel machine-learning algorithm, but it does implement
+          several important algorithmic decisions in the RAG pipeline. These determine what evidence
+          is retrieved, which chunks are considered trustworthy enough to cite, and how specialist
+          feedback is folded back into regeneration.
+        </p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card">
+            <h2 id="ingestion-pipeline">Ingestion pipeline</h2>
+            <div class="diagram-card">
+              <h3>Document-to-vector path</h3>
+              <div class="diagram">
+                <div class="diagram__row">
+                  <div class="diagram__node"><strong>Parse PDFs</strong>PyMuPDF extracts text from guideline documents.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>Clean + normalise</strong>Text is cleaned so downstream chunking is more stable.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>Detect structure</strong>Sections, tables, and metadata are preserved where possible.</div>
+                </div>
+                <div class="diagram__row">
+                  <div class="diagram__node"><strong>Chunk text</strong>Documents are split into retrieval-sized passages.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>Generate embeddings</strong>sentence-transformers converts chunks into dense vectors.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>Store in pgvector</strong>Chunk vectors and metadata persist in PostgreSQL.</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="retrieval-logic">Retrieval and relevance logic</h2>
+            <p class="lede">
+              Query handling begins by embedding the user question, executing vector similarity search,
+              and then applying additional quality checks. The implementation deliberately avoids using
+              the raw nearest-neighbour result set without post-filtering.
+            </p>
+            <div class="timeline-card">
+              <div class="timeline">
+                <div class="timeline__item" data-step="A">
+                  <strong>Vector search</strong>
+                  The question embedding is compared against stored chunk embeddings in pgvector.
+                </div>
+                <div class="timeline__item" data-step="B">
+                  <strong>Minimum score threshold</strong>
+                  Results below a configured relevance floor are discarded.
+                </div>
+                <div class="timeline__item" data-step="C">
+                  <strong>Source-path validation</strong>
+                  A candidate chunk must have source metadata so the citation remains usable.
+                </div>
+                <div class="timeline__item" data-step="D">
+                  <strong>Lexical overlap check</strong>
+                  Shared non-generic tokens between the query and chunk are required to reduce semantically vague matches.
+                </div>
+                <div class="timeline__item" data-step="E">
+                  <strong>Boilerplate rejection</strong>
+                  Chunks dominated by weak material such as copyright or supplementary notes are removed.
+                </div>
+                <div class="timeline__item" data-step="F">
+                  <strong>Top citation cap</strong>
+                  The service limits the answer context to a small number of higher-confidence chunks.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="generation-routing">Generation routing</h2>
+            <p>
+              The RAG service exposes a provider-routing layer that selects how answer generation is
+              performed. In the current runtime this can target a local Ollama-served model or a
+              compatible external generation path. The routing decision is based on request context,
+              retrieved chunk quality, severity, and revision status.
+            </p>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Grounded prompt building</strong>
+                <p>The retrieved chunks are formatted into a prompt that instructs the model to answer using the supplied evidence.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Citation extraction</strong>
+                <p>The service parses answer markers such as numbered references and maps them back onto the retrieved chunk list.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="revision-algorithm">Revision algorithm after specialist feedback</h2>
+            <p>
+              Revision is not a fresh free-form generation request. Instead, it reuses the original
+              clinical question for retrieval, combines it with the previous answer and the
+              specialist’s feedback, and sends the revised prompt through the same grounded generation
+              path.
+            </p>
+            <div class="diagram-card">
+              <h3>Revision control loop</h3>
+              <div class="diagram">
+                <div class="diagram__row">
+                  <div class="diagram__node"><strong>Original query</strong>Retain the original patient question for retrieval.</div>
+                  <div class="diagram__arrow">+</div>
+                  <div class="diagram__node"><strong>Previous AI answer</strong>Provide the answer being critiqued.</div>
+                  <div class="diagram__arrow">+</div>
+                  <div class="diagram__node"><strong>Specialist feedback</strong>Tell the model what must change.</div>
+                </div>
+                <div class="diagram__row">
+                  <div class="diagram__node"><strong>Retrieve again</strong>Search the same evidence base using the original question.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>Build revision prompt</strong>Constrain the new answer to evidence plus specialist instructions.</div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node"><strong>Return revised answer</strong>Persist updated text and citation set in place of the placeholder.</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="failure-behaviour">Failure behaviour and safe degradation</h2>
+            <ul>
+              <li>If no relevant evidence survives filtering, the system returns a no-answer style response instead of hallucinating.</li>
+              <li>If the model endpoint is unavailable, the backend logs a RAG error so admin analytics still record the event.</li>
+              <li>Specialist review blocks terminal approval or rejection while an AI answer is still generating.</li>
+              <li>Revision requests create placeholder messages so the UI remains responsive while regeneration runs in the background.</li>
+            </ul>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout">
+            <h3>Key point</h3>
+            <p>
+              The most important algorithmic contribution is not a new model. It is the chain of
+              practical safeguards around retrieval quality, citation validity, and specialist-guided
+              regeneration.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation/">Frontend, backend, and RAG implementation</a><a href="system-design/">Architecture, flows, and data model</a><a href="testing/">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices/#user-manual">User manual</a><a href="appendices/#deployment-manual">Deployment manual</a><a href="appendices/#privacy">GDPR and privacy</a><a href="blog/">External blog and monthly video</a></div></section></div></footer>
+    <script src="assets/site.js?v=20260322f"></script>
+  </body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="../" />
+    <title>Appendices · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css?v=20260325ag" />
+  </head>
+  <body data-page="appendices">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="/" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="/" data-nav="home">Home</a><a href="requirements/" data-nav="requirements">Requirements</a><a href="research/" data-nav="research">Research</a><a href="ui-design/" data-nav="ui-design">UI Design</a><a href="system-design/" data-nav="system-design">System Design</a><a href="implementation/" data-nav="implementation">Implementation</a><a href="testing/" data-nav="testing">Testing</a><a href="testing/" data-nav="evaluation">Evaluation</a><a href="appendices/" data-nav="appendices">Appendices</a><a href="blog/" data-nav="blog">Blog</a></nav><a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Appendices</h1>
+        <p class="report-page-subtitle">User guide, deployment guide, privacy, and external artefacts</p>
+        <p class="report-page-summary">
+          This appendix page collects practical material that sits alongside the main technical report:
+          user instructions, deployment instructions, GDPR-oriented handling notes, and publication
+          placeholders for the monthly video deliverable.
+        </p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card" id="user-manual">
+            <h2 id="user-manual-heading">User manual</h2>
+            <div class="appendix-grid">
+              <div class="appendix-card">
+                <h3>GP workflow</h3>
+                <ul>
+                  <li>Log in as a GP user.</li>
+                  <li>Create a new consultation with title, specialty, and severity.</li>
+                  <li>Send the first clinical question to trigger AI generation and auto-submission.</li>
+                  <li>Open the consultation detail timeline to inspect the AI answer and its citations.</li>
+                  <li>Monitor review status through the consultation state and notifications.</li>
+                </ul>
+              </div>
+              <div class="appendix-card">
+                <h3>Specialist workflow</h3>
+                <ul>
+                  <li>Open the submitted queue and self-assign a consultation that matches your specialty.</li>
+                  <li>Inspect AI messages and citations in the detailed review view.</li>
+                  <li>Approve, reject, request changes, or replace a specific AI answer manually.</li>
+                  <li>Use review feedback to trigger a revised AI answer when needed.</li>
+                </ul>
+              </div>
+              <div class="appendix-card">
+                <h3>Admin workflow</h3>
+                <ul>
+                  <li>View the dashboard for consultation and AI activity statistics.</li>
+                  <li>Inspect user records and role distributions.</li>
+                  <li>Review chats globally when investigating system behaviour.</li>
+                  <li>Open audit logs to trace operational and security-relevant events.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card" id="deployment-manual">
+            <h2 id="deployment-manual-heading">Deployment manual</h2>
+            <div class="timeline-card">
+              <div class="timeline">
+                <div class="timeline__item" data-step="1">
+                  <strong>Prepare the model runtime</strong>
+                  Ensure Ollama or a compatible external inference endpoint is available. The default local stack expects host access from Docker.
+                </div>
+                <div class="timeline__item" data-step="2">
+                  <strong>Confirm environment assumptions</strong>
+                  PostgreSQL credentials, database URLs, and RAG service URLs are defined in Compose and container environments.
+                </div>
+                <div class="timeline__item" data-step="3">
+                  <strong>Launch the stack</strong>
+                  Start the compose setup so frontend, backend, RAG service, and pgvector database are built and run together.
+                </div>
+                <div class="timeline__item" data-step="4">
+                  <strong>Verify health</strong>
+                  Confirm backend and RAG health endpoints respond, then log in via the frontend using seeded or registered users.
+                </div>
+                <div class="timeline__item" data-step="5">
+                  <strong>Ingest guideline data</strong>
+                  Ensure the RAG service has access to indexed guideline documents and vector rows before expecting grounded citations.
+                </div>
+              </div>
+            </div>
+            <div class="callout">
+              <h3>Deployment note</h3>
+              <p>
+                The repository also contains cloud-hosting notes for larger Med42 deployments and
+                helper scripts under the <em>serve</em> directory. Those materials indicate planned or
+                optional deployment paths beyond the default local Compose setup.
+              </p>
+            </div>
+          </section>
+
+          <section class="section-card" id="privacy">
+            <h2 id="privacy-heading">GDPR and privacy of data</h2>
+            <div class="two-col">
+              <div class="appendix-card">
+                <h3>Privacy posture in the current design</h3>
+                <ul>
+                  <li>User accounts include identity and role metadata.</li>
+                  <li>Consultations may store patient context as free-form JSON.</li>
+                  <li>Audit logs record actions and timestamps for traceability.</li>
+                  <li>Notifications and messages persist workflow history.</li>
+                </ul>
+              </div>
+              <div class="appendix-card">
+                <h3>Implications</h3>
+                <ul>
+                  <li>Any real deployment handling patient data would require clear lawful basis, minimisation, retention, and access-control policies.</li>
+                  <li>Prompt payloads sent to external inference endpoints would require careful processor and transfer assessment.</li>
+                  <li>Source documents and consultation data should be handled under strict storage and access governance.</li>
+                  <li>This project should be described as an academic prototype, not a completed GDPR-ready clinical platform.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="callout callout--warning">
+              <h3>Honest statement</h3>
+              <p>
+                The repository demonstrates privacy-aware architectural concerns such as auditability
+                and role separation, but it does not by itself constitute a full GDPR compliance pack.
+              </p>
+            </div>
+          </section>
+
+          <section class="section-card" id="external-links">
+            <h2 id="external-links-heading">Monthly video</h2>
+            <div class="appendix-grid">
+              <div class="appendix-card">
+                <h3>Monthly video</h3>
+                <p>
+                  Replace the placeholder below with the public monthly progress or demo video link.
+                </p>
+                <p><a href="#" data-placeholder-link>Monthly video link pending publication</a></p>
+              </div>
+              <div class="appendix-card">
+                <h3>Evidence appendix</h3>
+                <p>
+                  Core evidence for this report comes from the application router, backend services,
+                  RAG runtime, compose configuration, and automated tests in the main repository.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout">
+            <h3>Before submission</h3>
+            <ul>
+              <li>Insert the final monthly video URL.</li>
+              <li>Update any deployment details if infrastructure changes.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation/">Frontend, backend, and RAG implementation</a><a href="system-design/">Architecture, flows, and data model</a><a href="testing/">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices/#user-manual">User manual</a><a href="appendices/#deployment-manual">Deployment manual</a><a href="appendices/#privacy">GDPR and privacy</a><a href="appendices/#external-links">Monthly video</a></div></section></div></footer>
+    <script src="assets/site.js?v=20260322f"></script>
+  </body>
+</html>

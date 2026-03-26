@@ -4025,6 +4025,19 @@ body[data-page="blog"] .page-grid {
 	align-items: start;
 }
 
+body[data-page="blog"] .report-page-header {
+	padding-left: 0;
+	margin: 0 0 26px;
+	max-width: 780px;
+	--report-header-line-stop: 0px;
+	--report-header-inset: 0px;
+}
+
+body[data-page="blog"] .report-page-summary {
+	max-width: 100%;
+	margin-top: 12px;
+}
+
 body[data-page="blog"] .toc-panel {
 	top: 110px;
 	position: sticky;
@@ -4038,7 +4051,9 @@ body[data-page="blog"] .toc-panel {
 	border-radius: 0;
 	box-shadow: none !important;
 	max-height: calc(100vh - 128px);
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+	scrollbar-gutter: auto;
 	z-index: 10;
 }
 
@@ -4131,8 +4146,12 @@ body[data-page="blog"] .toc-panel {
 	border-color: transparent;
 }
 
-.blog-nav__list a.is-active .blog-nav__week,
 .blog-nav__list a:hover .blog-nav__week {
+	color: #005eb8;
+	font-weight: 600;
+}
+
+.blog-nav__list a.is-active .blog-nav__week {
 	color: #005eb8;
 	font-weight: 600;
 }
@@ -4145,7 +4164,10 @@ body[data-page="blog"] .content-stack > section:nth-of-type(even)::before {
 }
 
 body[data-page="blog"] .content-stack {
-	gap: 22px;
+	gap: 0;
+	width: 100%;
+	max-width: 780px;
+	--blog-text-max-width: 100%;
 }
 
 body[data-page="blog"] .blog-entry,
@@ -4178,16 +4200,22 @@ body[data-page="blog"] .blog-entry__back {
 }
 
 body[data-page="blog"] .blog-entry__tag {
-	display: inline-block;
-	padding: 4px 12px;
-	background: rgba(0, 94, 184, 0.09);
+	display: flex;
+	align-items: center;
+	gap: 16px;
 	color: var(--brand);
-	border-radius: 999px;
-	font-size: 0.88rem;
+	font-size: 1.6rem;
 	font-weight: 700;
-	letter-spacing: 0.05em;
-	text-transform: uppercase;
-	margin-bottom: 14px;
+	letter-spacing: 0.01em;
+	text-transform: none;
+	margin-bottom: 16px;
+}
+
+body[data-page="blog"] .blog-entry__tag::after {
+	content: "";
+	flex: 1;
+	height: 2px;
+	background: linear-gradient(to right, var(--brand), transparent);
 }
 
 body[data-page="blog"] .blog-entry h2,
@@ -4206,6 +4234,7 @@ body[data-page="blog"] .blog-week-card p {
 	color: var(--text);
 	line-height: 1.75;
 	margin: 0 0 14px;
+	max-width: var(--blog-text-max-width);
 }
 
 body[data-page="blog"] .blog-entry p:last-child,
@@ -4300,7 +4329,7 @@ body[data-page="blog"] .blog-week-card {
 .blog-week-card__summary {
 	margin: 0;
 	max-width: 62ch;
-	font-size: clamp(1.12rem, 1.5vw, 1.3rem);
+	max-width: var(--blog-text-max-width);
 	line-height: 1.82;
 	color: var(--text);
 }
@@ -4364,6 +4393,7 @@ body[data-page="blog"] .blog-week-card {
 	}
 
 	.blog-week-card__header {
+		max-width: var(--blog-text-max-width);
 		display: block;
 		margin-bottom: 18px;
 	}

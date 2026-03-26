@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="../" />
+    <title>UI Design · Ambience-AI-1.5</title>
+    <meta
+      name="description"
+      content="UI design process for Ambience-AI-1.5, covering design principles, sketches, prototype iterations, evaluation, and the role-based clinical interface."
+    />
+    <link rel="stylesheet" href="assets/styles.css?v=20260325ah" />
+  </head>
+  <body data-page="ui-design">
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="/" aria-label="Ambience-AI-1.5 home">
+          <img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" />
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="/" data-nav="home">Home</a>
+          <a href="requirements/" data-nav="requirements">Requirements</a>
+          <a href="research/" data-nav="research">Research</a>
+          <a href="ui-design/" data-nav="ui-design">UI Design</a>
+          <a href="system-design/" data-nav="system-design">System Design</a>
+          <a href="implementation/" data-nav="implementation">Implementation</a>
+          <a href="testing/" data-nav="testing">Testing</a>
+          <a href="testing/" data-nav="evaluation">Evaluation</a>
+          <a href="appendices/" data-nav="appendices">Appendices</a>
+          <a href="blog/" data-nav="blog">Blog</a>
+        </nav>
+        <button class="site-header__github-btn" type="button" aria-label="GitHub repository link">
+          GitHub ↗
+        </button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">UI Design</h1>
+        <p class="report-page-subtitle">
+          Designing a trustworthy interface for AI-assisted clinical consultations
+        </p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+          <section class="section-card">
+            <h2 id="design-principles">Design principles</h2>
+            <p class="lede">
+              The UI had to feel familiar to NHS users while still making evidence, uncertainty, review
+              state, and account trust visible. We therefore centred the design on familiarity,
+              structure, and trustworthy feedback.
+            </p>
+            <div class="two-col mini-card-group mini-card-group--principles">
+              <div class="mini-card">
+                <strong>Primary design pressure</strong>
+                <p>
+                  Feedback from the sketch stage suggested that users did not want to learn a completely
+                  new interface. They preferred layouts that felt close to existing NHS web systems and
+                  made common actions obvious.
+                </p>
+              </div>
+              <div class="mini-card">
+                <strong>Core design response</strong>
+                <p>
+                  We used structured cards, filters, tabs, and role-specific workspaces so the product
+                  felt orderly and easy to scan, while keeping trust cues such as notifications, inline
+                  citations, review state, and account-status messaging close to the workflow.
+                </p>
+              </div>
+            </div>
+
+            <details class="interview-item" open>
+              <summary>Visibility of system status and trust</summary>
+              <div class="interview-item__body">
+                <p>
+                  Status badges, review banners, AI generating states, unread notification counts, and
+                  inline citations are all visible at the point of use, so users can see both what the
+                  system is doing and why an answer should be trusted.
+                </p>
+              </div>
+            </details>
+
+            <details class="interview-item">
+              <summary>Match to clinical workflow</summary>
+              <div class="interview-item__body">
+                <p>
+                  We avoided AI jargon and used terms such as consultation, specialty, urgency, review,
+                  assign, request changes, and manual response because they better match how clinicians
+                  think and act.
+                </p>
+              </div>
+            </details>
+
+            <details class="interview-item">
+              <summary>Error prevention and safe control</summary>
+              <div class="interview-item__body">
+                <p>
+                  Structured GP intake, file-size validation, archive and close confirmations, and
+                  message-level specialist review actions reduce accidental mistakes. Specialists can
+                  approve, approve with comment, request changes, or replace an AI answer manually
+                  rather than being forced into one action.
+                </p>
+              </div>
+            </details>
+
+            <details class="interview-item">
+              <summary>Recognition and efficiency</summary>
+              <div class="interview-item__body">
+                <p>
+                  Citations sit directly under AI answers, queue tabs reduce scanning effort,
+                  notification links take users straight to the relevant consultation, and specialists
+                  can act on individual AI messages in place.
+                </p>
+              </div>
+            </details>
+
+            <details class="interview-item">
+              <summary>Consistency, familiarity, and accessibility</summary>
+              <div class="interview-item__body">
+                <p>
+                  Users preferred the sketch direction that looked more like the current NHS website.
+                  We therefore leaned into a calm visual language with clear boxes, familiar spacing,
+                  repeated status colours, and obvious hierarchy.
+                </p>
+              </div>
+            </details>
+
+            <details class="interview-item">
+              <summary>Recovery and lightweight help</summary>
+              <div class="interview-item__body">
+                <p>
+                  Not-found states, retry behaviour, resend-verification and password-reset pages,
+                  specialist feedback, and the report site together provide enough help without
+                  overloading the main consultation screens themselves.
+                </p>
+              </div>
+            </details>
+          </section>
+
+          <section class="section-card">
+            <h2 id="workflow-mapping">User-centred workflow mapping</h2>
+            <p>
+              Before building the prototype, we mapped the product around the core workflow:
+              authentication, role entry, consultation lists, structured query creation, chat detail,
+              and specialist response. That same spine is now extended with email verification,
+              password reset, profile management, live AI streaming, and a fuller admin governance
+              workspace.
+            </p>
+            <div class="three-col mini-card-group mini-card-group--roles">
+              <div class="mini-card">
+                <strong>GP</strong>
+                <p>
+                  Needs a homepage with tabs, search, and specialty or date filters, a structured
+                  consultation form with patient context and attachments, and a chat view where review
+                  state and evidence remain visible.
+                </p>
+              </div>
+              <div class="mini-card">
+                <strong>Specialist reviewer</strong>
+                <p>
+                  Needs queue and assigned views, fast access to the relevant consultation, clear role
+                  labelling, and message-level review controls directly on each AI answer.
+                </p>
+              </div>
+              <div class="mini-card">
+                <strong>Admin</strong>
+                <p>
+                  Now includes dashboard analytics, user and chat management, audit logs, and guideline
+                  ingestion rather than only passive observability.
+                </p>
+              </div>
+            </div>
+
+            <div class="diagram-card">
+              <h3>Chosen workflow structure</h3>
+              <div class="diagram">
+                <div class="diagram__row">
+                  <div class="diagram__node">
+                    <strong>Authentication and recovery</strong>
+                    Users can register, verify email, resend verification, reset passwords, and then
+                    enter the role-appropriate workspace.
+                  </div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node">
+                    <strong>Homepage and new consultation</strong>
+                    GPs review consultations through tabs, search, and filters, then create a new
+                    consultation with title, patient age, sex, specialty, urgency, notes, question,
+                    and optional files.
+                  </div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node">
+                    <strong>Chat interface and AI response</strong>
+                    The initial clinical question is sent from the detail page and the AI answer streams
+                    into the thread with citations and visible review state.
+                  </div>
+                </div>
+                <div class="diagram__row">
+                  <div class="diagram__node">
+                    <strong>Automatic submission to review</strong>
+                    In this workflow, the first GP message moves the consultation into the submitted
+                    review workflow instead of relying on a separate manual escalation step.
+                  </div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node">
+                    <strong>Specialist queue and message review</strong>
+                    Specialists assign a case to themselves, approve an AI answer, approve with
+                    comment, request changes, or replace it with a manual response before closing the
+                    consultation.
+                  </div>
+                  <div class="diagram__arrow">→</div>
+                  <div class="diagram__node">
+                    <strong>Admin governance layer</strong>
+                    Admins use a dedicated sidebar workspace for analytics, user and chat controls,
+                    audit logs, and guideline uploads.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="callout">
+              <h3>Workflow nuance</h3>
+              <p>
+                Specialist involvement is modelled as an automatic transition after the first GP
+                message, moving the consultation into the specialist workflow while preserving review
+                controls.
+              </p>
+            </div>
+
+            <div class="callout">
+              <h3>Key early decision</h3>
+              <p>
+                The most important product decision was to keep the GP and specialist sides visually
+                close but operationally distinct. That gave users NHS-like familiarity while still
+                avoiding confusion about who was acting in the system.
+              </p>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="sketches">Sketches and initial concepts</h2>
+            <p class="lede">
+              The design process used two sketch stages. Sketch 1 captured rough ideas quickly, while
+              Sketch 2 made the interface more structured and closer to the look and feel users already
+              associated with NHS web systems.
+            </p>
+
+            <div class="artifact-grid artifact-grid--stacked">
+              <article class="artifact-card">
+                <h3>Sketch 1: rough exploratory layout</h3>
+                <p>
+                  The first sketch was intentionally rough. It helped us map page types and content, but
+                  it still felt too loose and abstract to communicate a confident NHS-facing workflow.
+                </p>
+                <img
+                  class="asset-image"
+                  src="assets/ui-design/sketch-1.png"
+                  alt="Sketch 1 exploratory wireframe for Ambience-AI-1.5"
+                  loading="lazy"
+                />
+              </article>
+
+              <article class="artifact-card">
+                <h3>Sketch 2: structured NHS-like direction</h3>
+                <p>
+                  Users preferred Sketch 2 because it looked more like the current NHS website. They
+                  highlighted the clearer structure, boxes, icons, and content regions, which made the
+                  layout feel easier to navigate and faster to understand.
+                </p>
+                <img
+                  class="asset-image"
+                  src="assets/ui-design/sketch-2.png"
+                  alt="Sketch 2 structured NHS-like wireframe for Ambience-AI-1.5"
+                  loading="lazy"
+                />
+              </article>
+            </div>
+
+            <div class="callout">
+              <h3>Main outcomes from sketch review</h3>
+              <div class="decision-list">
+                <span>Users preferred the more NHS-like sketch because it reduced the learning curve.</span>
+                <span>Structured boxes, tabs, and list areas made navigation feel smoother.</span>
+                <span>The chosen direction became the basis for the shipped landing, consultation, and review workflows.</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="prototype">Prototype and iteration</h2>
+            <p>
+              The prototype stage used a Figma model to test authentication, role landing or homepage
+              states, the new-consultation form, and the GP-specialist chat journey. The final product
+              keeps that backbone but extends it with safer account flows, file upload, inline
+              citations, streaming AI responses, and admin governance screens.
+            </p>
+
+            <div class="artifact-grid">
+              <article class="artifact-card">
+                <h3>Prototype composite</h3>
+                <p>
+                  This composite shows the key prototype pages: authentication, role landing or
+                  homepage states, new consultation, and the GP-specialist chat journey.
+                </p>
+                <img
+                  class="asset-image"
+                  src="assets/ui-design/prototype-iteration-gallery.png"
+                  alt="Prototype composite showing authentication, homepage, consultation creation, and GP-specialist chat journey"
+                  loading="lazy"
+                />
+              </article>
+            </div>
+
+            <div class="table-card">
+              <h3>Evaluation of the prototype</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Heuristic</th>
+                    <th>Problem identified</th>
+                    <th>Design response</th>
+                    <th>Severity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Urgency and ease of use</td>
+                    <td>GPs and specialists needed a faster way to notice new messages and review events.</td>
+                    <td>Add a notifications dropdown with unread counts and deep links to the affected consultation.</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <td>Functionality and practicality</td>
+                    <td>Plain text alone was not always enough for detailed medical queries.</td>
+                    <td>Support PDF or text uploads on consultation creation and in-chat messages, then pass extracted file text into the RAG request.</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <td>Transparency</td>
+                    <td>Users wanted clearer access to the guidelines behind the chatbot's suggestions.</td>
+                    <td>Show inline citations with title, page, section, and document links directly under AI answers.</td>
+                    <td>1</td>
+                  </tr>
+                  <tr>
+                    <td>Functionality and ease of use</td>
+                    <td>It was not always obvious whether the user was on the GP side or specialist side of the product.</td>
+                    <td>Keep explicit header role labels, separate portals, and dedicated specialist queue or assigned views.</td>
+                    <td>2</td>
+                  </tr>
+                  <tr>
+                    <td>Trust and recovery</td>
+                    <td>A simple login and signup pair was not enough once the product matured into a real multi-role system.</td>
+                    <td>Add email verification, resend-verification, forgot-password, reset-password, password-strength feedback, and profile editing.</td>
+                    <td>2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout">
+              <h3>What carried into the refined design</h3>
+              <div class="decision-list">
+                <span>The header now explicitly communicates which side of the site the user is on.</span>
+                <span>Notifications are part of the core interaction model so users can react quickly to assignment, specialist messages, approvals, and rejections.</span>
+                <span>The prototype's transparency goal is now implemented as inline citations with document links directly on AI answers.</span>
+                <span>Attachments are no longer just a design direction: PDF and text uploads are supported and contribute file context to generation.</span>
+                <span>The auth flow has expanded with verification, recovery, and profile management to support a production-like multi-role workflow.</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="final-design">Final design</h2>
+            <p class="lede">
+              The final UI keeps an NHS-familiar structure while broadening the original GP-specialist
+              prototype. The core consultation journey remains central, with stronger auth flows, live
+              AI streaming, message-level review state, and a full admin governance workspace.
+            </p>
+
+            <div class="screen-grid screen-grid--final-design">
+              <article class="screen-card">
+                <h3>Landing page and auth entry</h3>
+                <p>
+                  The public landing page establishes the product as an NHS advice-and-guidance
+                  assistant and makes GP and specialist entry points clear. Signed-in users also see
+                  session state, while admin entry is surfaced from authenticated admin context rather
+                  than as a default public card.
+                </p>
+                <img
+                  class="asset-image"
+                  src="assets/ui-design/final-entry.png"
+                  alt="Final landing page and authentication entry interface"
+                  loading="lazy"
+                />
+              </article>
+
+              <article class="screen-card">
+                <h3>GP consultation flow</h3>
+                <p>
+                  The GP side now includes submitted, under-review, and closed tabs, search plus
+                  specialty or date filters, archiving, and a structured consultation form with title,
+                  age, sex, specialty, urgency, additional clinical context, and optional files. The
+                  first clinical question is then sent from the detail view and the consultation moves
+                  into submitted review state automatically.
+                </p>
+                <img
+                  class="asset-image"
+                  src="assets/ui-design/final-queries.png"
+                  alt="Final GP consultation flow with lists, filters, and query creation"
+                  loading="lazy"
+                />
+              </article>
+
+              <article class="screen-card">
+                <h3>Specialist review flow</h3>
+                <p>
+                  The specialist side now has both a queue and a separate My Assigned view. From the
+                  detail page, specialists assign a case to themselves, review AI answers individually,
+                  approve with comment, request changes, or replace an answer manually, while revised AI
+                  output can stream back into the same thread.
+                </p>
+                <img
+                  class="asset-image"
+                  src="assets/ui-design/final-review.png"
+                  alt="Final specialist review workflow with assignment and message-level actions"
+                  loading="lazy"
+                />
+              </article>
+
+              <article class="screen-card">
+                <h3>Admin workspace</h3>
+                <p>
+                  The admin role keeps the same visual language but adds a shared sidebar for dashboard
+                  analytics, user management, chat management, audit logs, and guideline upload or
+                  ingestion.
+                </p>
+                <img
+                  class="asset-image"
+                  src="assets/ui-design/final-admin.png"
+                  alt="Final admin workspace showing governance, analytics, and management tools"
+                  loading="lazy"
+                />
+                <img
+                  class="asset-image"
+                  src="assets/ui-design/final-admin-2.png"
+                  alt="Additional admin dashboard view showing management and monitoring controls"
+                  loading="lazy"
+                />
+                <img
+                  class="asset-image"
+                  src="assets/ui-design/final-admin-3.png"
+                  alt="Additional admin dashboard view highlighting administrative workflow details"
+                  loading="lazy"
+                />
+              </article>
+            </div>
+
+            <div class="two-col mini-card-group mini-card-group--outcomes">
+              <div class="mini-card">
+                <strong>Strengths</strong>
+                <ul>
+                  <li>The interface stays close to familiar NHS website patterns, which lowers the learning curve.</li>
+                  <li>Structured intake captures patient context before generation and keeps the consultation timeline orderly.</li>
+                  <li>Inline citations, per-message review badges, notifications, and loading states reinforce trust and orientation.</li>
+                  <li>The admin workspace now supports governance beyond metrics alone through users, chats, audit, and guideline tools.</li>
+                </ul>
+              </div>
+              <div class="mini-card">
+                <strong>Trade-offs</strong>
+                <ul>
+                  <li>Live AI generation uses server-sent events with polling fallback rather than a fully push-based model everywhere in the UI.</li>
+                  <li>The visual style stays intentionally restrained, prioritising legibility over novelty.</li>
+                  <li>The richer GP intake form captures safer patient context, but it is longer than the prototype's minimal version.</li>
+                  <li>The admin view is optimised more for desktop governance than for mobile usage.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <h2 id="references">References</h2>
+            <ol class="reference-list">
+              <li>
+                J. Nielsen, "10 Usability Heuristics for User Interface Design," Nielsen Norman Group.
+                Available: <a href="https://www.nngroup.com/articles/ten-usability-heuristics/">https://www.nngroup.com/articles/ten-usability-heuristics/</a>
+              </li>
+              <li>
+                World Wide Web Consortium, "Web Content Accessibility Guidelines (WCAG) 2.2."
+                Available: <a href="https://www.w3.org/TR/WCAG22/">https://www.w3.org/TR/WCAG22/</a>
+              </li>
+              <li>
+                NHS England, "NHS service manual." Available:
+                <a href="https://service-manual.nhs.uk/">https://service-manual.nhs.uk/</a>
+              </li>
+              <li>
+                H. Sharp, Y. Rogers, and J. Preece, <em>Interaction Design: Beyond Human-Computer Interaction</em>,
+                5th ed., Wiley, 2019.
+              </li>
+            </ol>
+          </section>
+        </div>
+
+        <aside class="toc-panel" id="page-toc" aria-label="Page sections"></aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="assets/site.js?v=20260325a"></script>
+  </body>
+</html>
