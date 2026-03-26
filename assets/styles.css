@@ -4013,6 +4013,7 @@ body[data-page="blog"] .content-stack > section:nth-of-type(even)::before {
 
 body[data-page="blog"] .content-stack {
 	gap: 0;
+	max-width: 740px;
 }
 
 body[data-page="blog"] .blog-entry {
@@ -4038,16 +4039,22 @@ body[data-page="blog"] .blog-entry:hover {
 }
 
 body[data-page="blog"] .blog-entry__tag {
-	display: inline-block;
-	padding: 3px 11px;
-	background: rgba(0, 94, 184, 0.09);
+	display: flex;
+	align-items: center;
+	gap: 16px;
 	color: var(--brand);
-	border-radius: 999px;
-	font-size: 1.1rem;
+	font-size: 1.6rem;
 	font-weight: 700;
-	letter-spacing: 0.05em;
-	text-transform: uppercase;
-	margin-bottom: 12px;
+	letter-spacing: 0.01em;
+	text-transform: none;
+	margin-bottom: 16px;
+}
+
+body[data-page="blog"] .blog-entry__tag::after {
+	content: "";
+	flex: 1;
+	height: 2px;
+	background: linear-gradient(to right, var(--brand), transparent);
 }
 
 body[data-page="blog"] .blog-entry h2 {
