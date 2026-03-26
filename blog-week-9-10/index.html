@@ -79,14 +79,7 @@
             <a class="blog-entry__back" href="blog/">← Back to timeline overview</a>
             <h2>Server access lost and the architecture pivot begins</h2>
             <p>
-              Around one month into infrastructure work, access to the original server was lost.
-              This forced a planned rework: keep the clinical workflow intact while changing the
-              deployment strategy to local-first processing with controlled cloud fallback.
-            </p>
-            <p>
-              This was the biggest disruption in the project timeline. Instead of dropping features,
-              we reprioritized the order of work and redesigned provider routing so we could preserve
-              safety and review guarantees while migrating away from the original server dependency.
+              This week, Intel informed us that in a few weeks time they would need to reclaim the server we were using as the Gaudi's contract was expiring. This made us replan our strategy for the backend to run the model, and we concluded that we wouldn't be able to use the Med42 70B paramater version as it was much too demanding to run locally, and other cloud solutions for the uptime we were expecting were expensive. We finalised a plan to implement an intelligent routing layer that would allow us to run a more lightweight model locally, and for more demanding queries, we would outsource to a cloud server that would run the 70B parameter version.
             </p>
           </section>
 
