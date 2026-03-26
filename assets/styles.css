@@ -4017,6 +4017,19 @@ body[data-page="blog"] .page-grid {
 	align-items: start;
 }
 
+body[data-page="blog"] .report-page-header {
+	padding-left: 0;
+	margin: 0 0 26px;
+	max-width: 780px;
+	--report-header-line-stop: 0px;
+	--report-header-inset: 0px;
+}
+
+body[data-page="blog"] .report-page-summary {
+	max-width: 68ch;
+	margin-top: 12px;
+}
+
 body[data-page="blog"] .toc-panel {
 	top: 110px;
 	position: sticky;
@@ -4138,7 +4151,8 @@ body[data-page="blog"] .content-stack > section:nth-of-type(even)::before {
 
 body[data-page="blog"] .content-stack {
 	gap: 0;
-	max-width: 740px;
+	width: 100%;
+	max-width: 780px;
 }
 
 body[data-page="blog"] .blog-entry,
