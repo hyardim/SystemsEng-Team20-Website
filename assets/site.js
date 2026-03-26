@@ -396,6 +396,84 @@ function initBlogNav() {
     });
   };
 
+  const headerHeight = () => {
+    const h = document.querySelector('.site-header');
+    return h ? h.getBoundingClientRect().height : 0;
+  };
+
+  const getHashFromHref = (href) => {
+    if (!href) return '';
+    try {
+      return new URL(href, window.location.href).hash || '';
+    } catch {
+      const hashIndex = href.indexOf('#');
+      return hashIndex >= 0 ? href.slice(hashIndex) : '';
+    }
+  };
+
+  const hashTargets = links
+    .map((link) => {
+      const hash = getHashFromHref(link.getAttribute('href'));
+      if (!hash || hash.length <= 1) return null;
+      const target = document.querySelector(hash);
+      if (!target) return null;
+      return { link, hash, target };
+    })
+    .filter(Boolean);
+
+  if (hashTargets.length) {
+    const setActiveByHash = (hash) => {
+      links.forEach((link) => {
+        const isActive = getHashFromHref(link.getAttribute('href')) === hash;
+        link.classList.toggle('is-active', isActive);
+        if (isActive) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+    };
+
+    const scrollToHashTarget = (target) => {
+      const y = target.getBoundingClientRect().top + window.scrollY - headerHeight() - 24;
+      window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
+    };
+
+    const updateFromScroll = () => {
+      const offset = headerHeight() + Math.max((window.innerHeight - headerHeight()) * 0.3, 120);
+      let activeHash = hashTargets[0].hash;
+      for (const { hash, target } of hashTargets) {
+        if (target.getBoundingClientRect().top - offset <= 0) activeHash = hash;
+        else break;
+      }
+      setActiveByHash(activeHash);
+    };
+
+    hashTargets.forEach(({ link, hash, target }) => {
+      link.addEventListener('click', (event) => {
+        if (event.defaultPrevented || event.button !== 0) return;
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        scrollToHashTarget(target);
+        history.replaceState(null, '', hash);
+        setActiveByHash(hash);
+      });
+    });
+
+    if (window.location.hash) {
+      const initialTarget = document.querySelector(window.location.hash);
+      if (initialTarget) {
+        requestAnimationFrame(() => scrollToHashTarget(initialTarget));
+      }
+    }
+
+    updateFromScroll();
+    window.addEventListener('scroll', updateFromScroll, { passive: true });
+    window.addEventListener('resize', updateFromScroll);
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash;
+      if (hash) setActiveByHash(hash);
+    });
+    return;
+  }
+
   const currentWeek = document.body.dataset.blogWeek;
   if (currentWeek) {
     setActiveByFilename(`blog-${currentWeek}.html`);
@@ -414,11 +492,6 @@ function initBlogNav() {
     setActiveByFilename(getFilename(window.location.pathname));
     return;
   }
-
-  const headerHeight = () => {
-    const h = document.querySelector('.site-header');
-    return h ? h.getBoundingClientRect().height : 0;
-  };
 
   const getActiveFilename = () => {
     const offset = headerHeight() + Math.max((window.innerHeight - headerHeight()) * 0.32, 120);
