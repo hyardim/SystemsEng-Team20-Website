@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evaluation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="assets/styles.css?v=20260326ev" />
+    <style>
+      /* ── Evaluation page ───────────────────────────────────────────── */
+
+      /* Summary stat chips */
+      .ev-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+      .ev-summary-chip {
+        background: #f0f4ff;
+        border: 1.5px solid #c5d4f0;
+        border-radius: 14px;
+        padding: 18px 14px 14px;
+        text-align: center;
+      }
+      .ev-summary-chip__num {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #003087;
+        line-height: 1;
+        display: block;
+      }
+      .ev-summary-chip__label {
+        font-size: 0.78rem;
+        color: #4a5568;
+        margin-top: 6px;
+        display: block;
+        line-height: 1.35;
+      }
+      .ev-summary-chip--green { background: #f0fff4; border-color: #9ae6b4; }
+      .ev-summary-chip--green .ev-summary-chip__num { color: #22543d; }
+      .ev-summary-chip--amber { background: #fffaf0; border-color: #f6d860; }
+      .ev-summary-chip--amber .ev-summary-chip__num { color: #7b4f12; }
+
+      /* Requirements table status badges */
+      .ev-badge {
+        display: inline-block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        padding: 3px 10px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .ev-badge--met    { background: #c6f6d5; color: #22543d; }
+      .ev-badge--partial{ background: #fef3c7; color: #7b4f12; }
+      .ev-badge--na     { background: #e9ecef; color: #495057; }
+
+      .ev-priority--must    { font-weight: 700; color: #003087; }
+      .ev-priority--should  { font-weight: 600; color: #0072ce; }
+      .ev-priority--could   { color: #4a5568; }
+      .ev-priority--wont    { color: #9ca3af; font-style: italic; }
+
+      /* Critical evaluation bars */
+      .ev-eval-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-top: 8px;
+      }
+      .ev-eval-row {
+        display: grid;
+        grid-template-columns: 220px 1fr 60px;
+        align-items: center;
+        gap: 16px;
+      }
+      @media (max-width: 600px) {
+        .ev-eval-row { grid-template-columns: 1fr; gap: 6px; }
+      }
+      .ev-eval-label {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: #1a202c;
+      }
+      .ev-eval-bar-track {
+        height: 14px;
+        background: #e9ecef;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .ev-eval-bar-fill {
+        height: 100%;
+        width: 0;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #005eb8, #0072ce);
+        transition: width 1.2s cubic-bezier(.25,.8,.25,1);
+      }
+      .ev-eval-bar-fill--high { background: linear-gradient(90deg, #22543d, #38a169); }
+      .ev-eval-bar-fill--amber { background: linear-gradient(90deg, #b7791f, #d69e2e); }
+      .ev-eval-score {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #003087;
+        text-align: right;
+      }
+      .ev-eval-note {
+        grid-column: 2 / 4;
+        font-size: 0.77rem;
+        color: #718096;
+        margin-top: -8px;
+      }
+      @media (max-width: 600px) {
+        .ev-eval-note { grid-column: 1; margin-top: 0; }
+      }
+
+      /* Team contributions */
+      .ev-team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-top: 8px;
+      }
+      .ev-team-card {
+        background: #f8faff;
+        border: 1.5px solid #d0e0f5;
+        border-radius: 14px;
+        padding: 20px 18px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .ev-team-card__avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #005eb8, #0072ce);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: 0.02em;
+      }
+      .ev-team-card__name {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #1a202c;
+        display: block;
+      }
+      .ev-team-card__role {
+        font-size: 0.78rem;
+        color: #718096;
+        margin-top: 3px;
+        display: block;
+      }
+      .ev-team-card__pct {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #005eb8;
+        display: block;
+        margin: 14px 0 4px;
+      }
+      .ev-team-card__tasks {
+        font-size: 0.74rem;
+        color: #4a5568;
+        line-height: 1.5;
+      }
+
+      /* Future work cards */
+      .ev-future-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        margin-top: 8px;
+      }
+      .ev-future-card {
+        border: 1.5px solid #d0e0f5;
+        border-radius: 14px;
+        padding: 20px 18px;
+        background: #fff;
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+      .ev-future-card.ev-in {
+        opacity: 1;
+        transform: none;
+      }
+      .ev-future-card__icon {
+        font-size: 1.5rem;
+        display: block;
+        margin-bottom: 10px;
+      }
+      .ev-future-card__title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #003087;
+        display: block;
+        margin-bottom: 6px;
+      }
+      .ev-future-card p {
+        font-size: 0.82rem;
+        color: #4a5568;
+        line-height: 1.5;
+        margin: 0;
+      }
+      .ev-future-card--accent::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #005eb8, #0072ce);
+        border-radius: 14px 14px 0 0;
+      }
+
+      /* Known issues callouts */
+      .ev-issues-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+        margin-top: 8px;
+      }
+      .ev-issue-card {
+        border-left: 4px solid #f6d860;
+        background: #fffaf0;
+        border-radius: 0 10px 10px 0;
+        padding: 14px 16px;
+      }
+      .ev-issue-card--red {
+        border-left-color: #fc8181;
+        background: #fff5f5;
+      }
+      .ev-issue-card strong {
+        display: block;
+        font-size: 0.88rem;
+        color: #1a202c;
+        margin-bottom: 4px;
+      }
+      .ev-issue-card p {
+        font-size: 0.8rem;
+        color: #4a5568;
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      /* Overall verdict card */
+      .ev-verdict {
+        background: linear-gradient(135deg, #003087 0%, #005eb8 100%);
+        border-radius: 16px;
+        padding: 28px 32px;
+        color: #fff;
+        margin-top: 4px;
+      }
+      .ev-verdict h3 {
+        color: #fff !important;
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 0 0 12px !important;
+      }
+      .ev-verdict p {
+        color: rgba(255,255,255,0.88);
+        font-size: 0.9rem;
+        line-height: 1.65;
+        margin: 0;
+      }
+      .ev-verdict__scores {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+      .ev-verdict__score-item {
+        text-align: center;
+      }
+      .ev-verdict__score-num {
+        font-size: 2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1;
+      }
+      .ev-verdict__score-label {
+        font-size: 0.73rem;
+        opacity: 0.8;
+        display: block;
+        margin-top: 4px;
+      }
+
+      /* scroll-reveal generic */
+      .ev-reveal {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.55s ease, transform 0.55s ease;
+      }
+      .ev-reveal.ev-in {
+        opacity: 1;
+        transform: none;
+      }
+    </style>
+  </head>
+  <body data-page="evaluation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="index.html" data-nav="home">Home</a><a href="requirements.html" data-nav="requirements">Requirements</a><a href="research.html" data-nav="research">Research</a><a href="ui-design.html" data-nav="ui-design">UI Design</a><a href="system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="testing.html" data-nav="testing">Testing</a><a href="evaluation.html" data-nav="evaluation">Evaluation</a><a href="appendices.html" data-nav="appendices">Appendices</a><a href="blog.html" data-nav="blog">Blog</a></nav><a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Evaluation</h1>
+        <p class="report-page-subtitle">How well the system meets its stated requirements</p>
+        <p class="report-page-summary">
+          This page evaluates Ambience-AI-1.5 against its original MoSCoW requirements, provides a
+          critical assessment of each major technical dimension, identifies known limitations, and
+          documents the team's contributions. All Must requirements were met. The majority of Should
+          requirements were fully met, with partial coverage on file-attachment flows. Both Could
+          requirements were addressed.
+        </p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 1. REQUIREMENTS ACHIEVEMENT                                  -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="requirements-achievement">Requirements achievement</h2>
+            <p class="lede">
+              The project set out 12 functional requirements and 7 non-functional requirements.
+              Here we assess completion status against each, cross-referenced with the original MoSCoW
+              priority.
+            </p>
+
+            <div class="ev-summary-grid ev-reveal">
+              <div class="ev-summary-chip ev-summary-chip--green">
+                <span class="ev-summary-chip__num">5 / 5</span>
+                <span class="ev-summary-chip__label">Must FRs fully met</span>
+              </div>
+              <div class="ev-summary-chip ev-summary-chip--green">
+                <span class="ev-summary-chip__num">3 / 4</span>
+                <span class="ev-summary-chip__label">Should FRs fully met (1 partial)</span>
+              </div>
+              <div class="ev-summary-chip ev-summary-chip--amber">
+                <span class="ev-summary-chip__num">1½ / 2</span>
+                <span class="ev-summary-chip__label">Could FRs met or partially met</span>
+              </div>
+              <div class="ev-summary-chip ev-summary-chip--green">
+                <span class="ev-summary-chip__num">3 / 3</span>
+                <span class="ev-summary-chip__label">Must NFRs fully met</span>
+              </div>
+              <div class="ev-summary-chip ev-summary-chip--green">
+                <span class="ev-summary-chip__num">2 / 2</span>
+                <span class="ev-summary-chip__label">Should NFRs fully met</span>
+              </div>
+              <div class="ev-summary-chip ev-summary-chip--green">
+                <span class="ev-summary-chip__num">1 / 1</span>
+                <span class="ev-summary-chip__label">Could NFR met</span>
+              </div>
+            </div>
+
+            <h3>Functional requirements</h3>
+            <div class="table-card ev-reveal">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Requirement</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Evidence / Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>FR1</td>
+                    <td>Retrieve relevant NICE / BSR sections per query</td>
+                    <td><span class="ev-priority--must">Must</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>pgvector cosine search retrieves guideline chunks; unit tests cover retrieval pipeline end-to-end.</td>
+                  </tr>
+                  <tr>
+                    <td>FR2</td>
+                    <td>Generate evidence-grounded draft answer with citation references</td>
+                    <td><span class="ev-priority--must">Must</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>/answer endpoint returns answer text with structured citation sets. E2E tests validate citation presence.</td>
+                  </tr>
+                  <tr>
+                    <td>FR3</td>
+                    <td>Low-confidence refusal with safe review fallback</td>
+                    <td><span class="ev-priority--must">Must</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>Below-threshold queries return safe refusal; consultation remains in specialist-reviewed workflow regardless.</td>
+                  </tr>
+                  <tr>
+                    <td>FR4</td>
+                    <td>Authenticated, role-based access control for GP / specialist / admin workflows</td>
+                    <td><span class="ev-priority--must">Must</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>JWT-backed protected routes, role-scoped API paths. Auth unit tests and Playwright E2E suites confirm enforcement.</td>
+                  </tr>
+                  <tr>
+                    <td>FR12</td>
+                    <td>Require specialist approval before any response is shown to GP</td>
+                    <td><span class="ev-priority--must">Must</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>Consultation state machine enforces pending → reviewed transition. No draft is visible to GP until specialist acts.</td>
+                  </tr>
+                  <tr>
+                    <td>FR5</td>
+                    <td>Display source version / effective-date metadata alongside citations</td>
+                    <td><span class="ev-priority--should">Should</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>Citation objects carry guideline title and version metadata when available from ingested documents.</td>
+                  </tr>
+                  <tr>
+                    <td>FR6</td>
+                    <td>Consultation history and review audit trail</td>
+                    <td><span class="ev-priority--should">Should</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>Audit log records messages, decisions, comments, and timestamps. Admin oversight page surfaces this trail.</td>
+                  </tr>
+                  <tr>
+                    <td>FR9</td>
+                    <td>Structured consultation submission with optional file uploads</td>
+                    <td><span class="ev-priority--should">Should</span></td>
+                    <td><span class="ev-badge ev-badge--partial">Partial</span></td>
+                    <td>FileAttachment model exists; structured submission is implemented. Dominant consultation flow remains text-centric — attachments not prominent in live workflow.</td>
+                  </tr>
+                  <tr>
+                    <td>FR10</td>
+                    <td>Notifications for assignment, review, and message events</td>
+                    <td><span class="ev-priority--should">Should</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>Notification dropdown polls every 15 s, shows unread counts, and deep-links into related consultations.</td>
+                  </tr>
+                  <tr>
+                    <td>FR7</td>
+                    <td>Configurable provider routing for local-first inference</td>
+                    <td><span class="ev-priority--could">Could</span></td>
+                    <td><span class="ev-badge ev-badge--partial">Partial</span></td>
+                    <td>Local-first RAG processing works end-to-end. Threshold-based provider selection config is present but cloud-fallback path not exercised in production.</td>
+                  </tr>
+                  <tr>
+                    <td>FR11</td>
+                    <td>Admin observability: users, consultations, logs, dashboard metrics</td>
+                    <td><span class="ev-priority--could">Could</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>Admin pages with Recharts dashboards, user management, audit trail view, and chat oversight implemented.</td>
+                  </tr>
+                  <tr>
+                    <td>FR8</td>
+                    <td>Voice input for consultation queries</td>
+                    <td><span class="ev-priority--wont">Won't</span></td>
+                    <td><span class="ev-badge ev-badge--na">Out of scope</span></td>
+                    <td>Explicitly excluded from this release. No voice input implemented.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Non-functional requirements</h3>
+            <div class="table-card ev-reveal">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Requirement</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Evidence / Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>NFR1</td>
+                    <td>Interactive latency for routine GP interactions</td>
+                    <td>Performance</td>
+                    <td><span class="ev-priority--must">Must</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>Draft-response latency tested under normal load; workflow walkthrough faster than manual guideline lookup for routine cases.</td>
+                  </tr>
+                  <tr>
+                    <td>NFR2</td>
+                    <td>Local-first processing and controlled data transfer</td>
+                    <td>Security / Privacy</td>
+                    <td><span class="ev-priority--must">Must</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>Default processing runs entirely local via Ollama / pgvector. No unintended data egress paths identified.</td>
+                  </tr>
+                  <tr>
+                    <td>NFR3</td>
+                    <td>Graceful fallback on retrieval / model failure</td>
+                    <td>Reliability</td>
+                    <td><span class="ev-priority--must">Must</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>Failures return safe messaging and preserve consultation workflow without service crash. RAG unit tests cover error paths.</td>
+                  </tr>
+                  <tr>
+                    <td>NFR4</td>
+                    <td>Readable, accessible interface for clinical workflows</td>
+                    <td>Usability</td>
+                    <td><span class="ev-priority--should">Should</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>Clear contrast, role-clarity in core workflow views. No formal WCAG audit conducted; subjective usability reviewed during Playwright walkthroughs.</td>
+                  </tr>
+                  <tr>
+                    <td>NFR5</td>
+                    <td>Containerised deployment and modular codebase</td>
+                    <td>Maintainability</td>
+                    <td><span class="ev-priority--should">Should</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>Full Docker Compose stack with documented startup. Service boundaries are distinct: frontend / backend / RAG service / database.</td>
+                  </tr>
+                  <tr>
+                    <td>NFR6</td>
+                    <td>Provider-agnostic architecture for future evolution</td>
+                    <td>Extensibility</td>
+                    <td><span class="ev-priority--could">Could</span></td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>RAG service accepts configurable routing thresholds; swap to a cloud provider requires config change, not workflow redesign.</td>
+                  </tr>
+                  <tr>
+                    <td>NFR7</td>
+                    <td>Open-source release and full EHR integration</td>
+                    <td>Scope</td>
+                    <td><span class="ev-priority--wont">Won't</span></td>
+                    <td><span class="ev-badge ev-badge--na">Out of scope</span></td>
+                    <td>Both remain outside coursework delivery scope.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 2. CRITICAL EVALUATION                                       -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="critical-evaluation">Critical evaluation</h2>
+            <p class="lede">
+              Each major technical dimension is rated on a 5-point scale with a brief justification.
+              Ratings reflect engineering quality and delivery confidence, not production readiness
+              for clinical deployment.
+            </p>
+
+            <div class="ev-eval-grid" id="evalBars">
+
+              <div class="ev-eval-row ev-reveal">
+                <span class="ev-eval-label">RAG grounding &amp; citations</span>
+                <div class="ev-eval-bar-track"><div class="ev-eval-bar-fill" data-pct="80"></div></div>
+                <span class="ev-eval-score">4 / 5</span>
+                <span class="ev-eval-note">pgvector retrieval with citation structures is solid engineering. No formal clinical golden-set validation; accuracy claims remain prototype-level.</span>
+              </div>
+
+              <div class="ev-eval-row ev-reveal">
+                <span class="ev-eval-label">Specialist review workflow</span>
+                <div class="ev-eval-bar-track"><div class="ev-eval-bar-fill ev-eval-bar-fill--high" data-pct="100"></div></div>
+                <span class="ev-eval-score">5 / 5</span>
+                <span class="ev-eval-note">End-to-end consultation lifecycle embedded in the state machine from the start, not bolted on. Approve / edit / reject / revise paths all implemented.</span>
+              </div>
+
+              <div class="ev-eval-row ev-reveal">
+                <span class="ev-eval-label">Role-based access control</span>
+                <div class="ev-eval-bar-track"><div class="ev-eval-bar-fill" data-pct="80"></div></div>
+                <span class="ev-eval-score">4 / 5</span>
+                <span class="ev-eval-note">JWT authentication with role-scoped routes and protected API paths. No MFA or session revocation; acceptable for prototype scope.</span>
+              </div>
+
+              <div class="ev-eval-row ev-reveal">
+                <span class="ev-eval-label">Test coverage &amp; quality</span>
+                <div class="ev-eval-bar-track"><div class="ev-eval-bar-fill ev-eval-bar-fill--high" data-pct="100"></div></div>
+                <span class="ev-eval-score">5 / 5</span>
+                <span class="ev-eval-note">Layered strategy: unit → integration → Playwright E2E. 90 %+ threshold enforced in CI. 96+ test files, 20 000+ lines of test code.</span>
+              </div>
+
+              <div class="ev-eval-row ev-reveal">
+                <span class="ev-eval-label">Frontend usability</span>
+                <div class="ev-eval-bar-track"><div class="ev-eval-bar-fill" data-pct="80"></div></div>
+                <span class="ev-eval-score">4 / 5</span>
+                <span class="ev-eval-note">Clean role-differentiated views, notification polling, Recharts dashboards. No formal WCAG audit; keyboard navigation not fully validated.</span>
+              </div>
+
+              <div class="ev-eval-row ev-reveal">
+                <span class="ev-eval-label">Containerised deployment</span>
+                <div class="ev-eval-bar-track"><div class="ev-eval-bar-fill" data-pct="80"></div></div>
+                <span class="ev-eval-score">4 / 5</span>
+                <span class="ev-eval-note">Docker Compose stack documented and working. Startup patch helpers are a pragmatic shortcut; a proper migration-only workflow would score 5.</span>
+              </div>
+
+              <div class="ev-eval-row ev-reveal">
+                <span class="ev-eval-label">Audit logging &amp; observability</span>
+                <div class="ev-eval-bar-track"><div class="ev-eval-bar-fill" data-pct="80"></div></div>
+                <span class="ev-eval-score">4 / 5</span>
+                <span class="ev-eval-note">Structured audit trail for every specialist decision; admin dashboard surfaces statistics. No external monitoring (Prometheus / alerting) in scope.</span>
+              </div>
+
+              <div class="ev-eval-row ev-reveal">
+                <span class="ev-eval-label">Failure handling &amp; resilience</span>
+                <div class="ev-eval-bar-track"><div class="ev-eval-bar-fill ev-eval-bar-fill--amber" data-pct="60"></div></div>
+                <span class="ev-eval-score">3 / 5</span>
+                <span class="ev-eval-note">Graceful fallbacks on retrieval / model failure implemented and tested. Coexistence of older and newer RAG code paths increases fragility surface.</span>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 3. KNOWN ISSUES &amp; LIMITATIONS                           -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="known-issues">Known issues &amp; limitations</h2>
+            <p>
+              The following limitations are known and acknowledged. They do not undermine the core
+              prototype goals but would need to be addressed before any production deployment.
+            </p>
+
+            <div class="ev-issues-grid ev-reveal">
+              <div class="ev-issue-card ev-issue-card--red">
+                <strong>No formal clinical validation</strong>
+                <p>Accuracy claims about RAG answers have not been evaluated by domain experts against a golden test set. The system is an engineering prototype, not a clinically validated tool.</p>
+              </div>
+              <div class="ev-issue-card ev-issue-card--red">
+                <strong>Startup patch helpers</strong>
+                <p>The backend applies schema patches at startup rather than using a strict migration-only workflow (e.g. Alembic). This is fragile for long-lived deployments with data.</p>
+              </div>
+              <div class="ev-issue-card">
+                <strong>Attachment integration incomplete</strong>
+                <p>FileAttachment exists in the data model and the API supports uploads, but the dominant consultation flow remains text-centric. Attachments are not prominently surfaced during specialist review.</p>
+              </div>
+              <div class="ev-issue-card">
+                <strong>Dual RAG code paths</strong>
+                <p>The RAG service contains both older and newer answer generation code paths. These should be consolidated over time to reduce maintenance surface and eliminate ambiguity about which path is active.</p>
+              </div>
+              <div class="ev-issue-card">
+                <strong>No MFA or session revocation</strong>
+                <p>Authentication uses JWT with a fixed expiry. There is no multi-factor authentication or token revocation list. Acceptable for a prototype but required for clinical deployment.</p>
+              </div>
+              <div class="ev-issue-card">
+                <strong>Local model dependency</strong>
+                <p>The RAG service depends on a locally running Ollama instance. If the model server is unavailable, the fallback path is safe but the system cannot generate grounded answers.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 4. TEAM CONTRIBUTIONS                                        -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="team-contributions">Team contributions</h2>
+            <p>
+              The project was delivered by a team of five. Each member contributed equally across the
+              project lifecycle. Contribution percentages are equal at 20% each.
+            </p>
+
+            <div class="ev-team-grid ev-reveal">
+
+              <div class="ev-team-card">
+                <div class="ev-team-card__avatar">K</div>
+                <span class="ev-team-card__name">Kavin</span>
+                <span class="ev-team-card__role">RAG Service · Testing · Integration</span>
+                <span class="ev-team-card__pct">20%</span>
+                <div class="ev-team-card__tasks">
+                  RAG pipeline, retrieval &amp; generation modules,<br>
+                  test strategy &amp; CI setup,<br>
+                  integration with backend service
+                </div>
+              </div>
+
+              <div class="ev-team-card">
+                <div class="ev-team-card__avatar">H</div>
+                <span class="ev-team-card__name">Hakan</span>
+                <span class="ev-team-card__role">Backend · DevOps · Auth</span>
+                <span class="ev-team-card__pct">20%</span>
+                <div class="ev-team-card__tasks">
+                  FastAPI backend, JWT auth,<br>
+                  specialist workflow services,<br>
+                  Docker Compose stack
+                </div>
+              </div>
+
+              <div class="ev-team-card">
+                <div class="ev-team-card__avatar">D</div>
+                <span class="ev-team-card__name">Daniel</span>
+                <span class="ev-team-card__role">Frontend · UI Design</span>
+                <span class="ev-team-card__pct">20%</span>
+                <div class="ev-team-card__tasks">
+                  React frontend, role-based routing,<br>
+                  notification system,<br>
+                  admin dashboard &amp; charts
+                </div>
+              </div>
+
+              <div class="ev-team-card">
+                <div class="ev-team-card__avatar">W</div>
+                <span class="ev-team-card__name">William</span>
+                <span class="ev-team-card__role">Requirements · Research · Docs</span>
+                <span class="ev-team-card__pct">20%</span>
+                <div class="ev-team-card__tasks">
+                  MoSCoW requirements elicitation,<br>
+                  literature &amp; technology research,<br>
+                  project documentation
+                </div>
+              </div>
+
+              <div class="ev-team-card">
+                <div class="ev-team-card__avatar">I</div>
+                <span class="ev-team-card__name">Ivan</span>
+                <span class="ev-team-card__role">System Design · Testing</span>
+                <span class="ev-team-card__pct">20%</span>
+                <div class="ev-team-card__tasks">
+                  Architecture &amp; data model design,<br>
+                  Playwright E2E test suites,<br>
+                  deployment documentation
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 5. FUTURE WORK                                               -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="future-work">Future work</h2>
+            <p>
+              The following directions represent the highest-value investments for a next iteration
+              of Ambience-AI-1.5, ordered roughly by impact on production readiness.
+            </p>
+
+            <div class="ev-future-grid">
+              <div class="ev-future-card ev-future-card--accent">
+                <span class="ev-future-card__icon">🏥</span>
+                <span class="ev-future-card__title">Clinical expert evaluation</span>
+                <p>Engage NHS GPs and specialists in structured usability and accuracy evaluation. Build a golden-set of consultation queries with expert-validated reference answers to measure RAG answer quality formally.</p>
+              </div>
+              <div class="ev-future-card ev-future-card--accent">
+                <span class="ev-future-card__icon">🗃️</span>
+                <span class="ev-future-card__title">Alembic migration workflow</span>
+                <p>Replace startup patch helpers with a proper Alembic migration chain. This would make schema evolution predictable, auditable, and safe for deployments with existing data.</p>
+              </div>
+              <div class="ev-future-card ev-future-card--accent">
+                <span class="ev-future-card__icon">📎</span>
+                <span class="ev-future-card__title">Full attachment integration</span>
+                <p>Surface uploaded files prominently in the specialist review view. Allow specialists to open and annotate attached documents during the review step, and include attachment context in RAG retrieval.</p>
+              </div>
+              <div class="ev-future-card ev-future-card--accent">
+                <span class="ev-future-card__icon">🔗</span>
+                <span class="ev-future-card__title">RAG code path consolidation</span>
+                <p>Unify the older and newer RAG generation code paths into a single well-tested pipeline. Standardise the answer schema and eliminate deprecated generation routes.</p>
+              </div>
+              <div class="ev-future-card ev-future-card--accent">
+                <span class="ev-future-card__icon">🔐</span>
+                <span class="ev-future-card__title">MFA &amp; session management</span>
+                <p>Add multi-factor authentication, refresh-token rotation, and a token revocation list. These are baseline requirements for any NHS-adjacent clinical deployment.</p>
+              </div>
+              <div class="ev-future-card ev-future-card--accent">
+                <span class="ev-future-card__icon">📊</span>
+                <span class="ev-future-card__title">External monitoring &amp; alerting</span>
+                <p>Integrate Prometheus metrics and Grafana dashboards. Add structured logging export to allow SRE-style alerting on latency regressions, retrieval failures, and model unavailability.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 6. OVERALL VERDICT                                           -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="overall-verdict">Overall verdict</h2>
+
+            <div class="ev-verdict ev-reveal">
+              <h3>Assessment summary</h3>
+              <p>
+                Ambience-AI-1.5 is a technically credible full-stack prototype for guideline-grounded
+                clinical consultation support. All Must requirements were delivered. The specialist
+                review workflow and test strategy are the strongest engineering contributions. The
+                primary gap is the absence of formal clinical validation — necessary before making
+                stronger claims about real-world utility. The codebase is well-structured, modular,
+                and deployable; the architecture supports the next iteration described in future work.
+              </p>
+              <div class="ev-verdict__scores">
+                <div class="ev-verdict__score-item">
+                  <span class="ev-verdict__score-num">100%</span>
+                  <span class="ev-verdict__score-label">Must requirements met</span>
+                </div>
+                <div class="ev-verdict__score-item">
+                  <span class="ev-verdict__score-num">4.1 / 5</span>
+                  <span class="ev-verdict__score-label">Avg. dimension rating</span>
+                </div>
+                <div class="ev-verdict__score-item">
+                  <span class="ev-verdict__score-num">90%+</span>
+                  <span class="ev-verdict__score-label">CI test coverage</span>
+                </div>
+                <div class="ev-verdict__score-item">
+                  <span class="ev-verdict__score-num">19 / 19</span>
+                  <span class="ev-verdict__score-label">In-scope requirements</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- ── ToC sidebar ─────────────────────────────────────────── -->
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+          <div class="callout">
+            <h3>Scope note</h3>
+            <p>
+              Ratings on this page reflect engineering delivery and prototype quality, not clinical
+              validation. Real-world deployment would require formal evaluation by domain experts.
+            </p>
+          </div>
+          <div class="callout" style="margin-top:16px;">
+            <h3>Requirements tracing</h3>
+            <p>
+              Each FR and NFR traces back to user research questions (Q1–Q6) and evaluation
+              methods (E1–E6) defined in the
+              <a href="requirements.html">Requirements page</a>.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation.html">Frontend, backend, and RAG implementation</a><a href="system-design.html">Architecture, flows, and data model</a><a href="testing.html">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices.html#user-manual">User manual</a><a href="appendices.html#deployment-manual">Deployment manual</a><a href="appendices.html#privacy">GDPR and privacy</a><a href="blog.html">External blog and monthly video</a></div></section></div></footer>
+
+    <script src="assets/site.js?v=20260322f"></script>
+    <script>
+      // ── Scroll-reveal ──────────────────────────────────────────────
+      (function () {
+        var obs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add('ev-in');
+              obs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.ev-reveal, .ev-future-card').forEach(function (el, i) {
+          if (el.classList.contains('ev-future-card')) {
+            el.style.transitionDelay = (i % 6) * 80 + 'ms';
+          }
+          obs.observe(el);
+        });
+      })();
+
+      // ── Eval bars animation ────────────────────────────────────────
+      (function () {
+        var barObs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.querySelectorAll('.ev-eval-bar-fill').forEach(function (fill) {
+                var pct = fill.getAttribute('data-pct');
+                fill.style.width = pct + '%';
+              });
+              barObs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.15 });
+
+        var grid = document.getElementById('evalBars');
+        if (grid) barObs.observe(grid);
+      })();
+    </script>
+  </body>
+</html>
