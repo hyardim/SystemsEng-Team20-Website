@@ -310,9 +310,8 @@
         <p class="report-page-summary">
           This page evaluates Ambience-AI-1.5 against its original MoSCoW requirements, provides a
           critical assessment of each major technical dimension, identifies known limitations, and
-          documents the team's contributions. All Must requirements were met. The majority of Should
-          requirements were fully met, with partial coverage on file-attachment flows. Both Could
-          requirements were addressed.
+          documents the team's contributions. All Must, Should, and Could requirements were fully met.
+          Codebase verification confirmed implementations across all 19 in-scope requirements.
         </p>
       </div>
 
@@ -336,12 +335,12 @@
                 <span class="ev-summary-chip__label">Must FRs fully met</span>
               </div>
               <div class="ev-summary-chip ev-summary-chip--green">
-                <span class="ev-summary-chip__num">3 / 4</span>
-                <span class="ev-summary-chip__label">Should FRs fully met (1 partial)</span>
+                <span class="ev-summary-chip__num">4 / 4</span>
+                <span class="ev-summary-chip__label">Should FRs fully met</span>
               </div>
-              <div class="ev-summary-chip ev-summary-chip--amber">
-                <span class="ev-summary-chip__num">1½ / 2</span>
-                <span class="ev-summary-chip__label">Could FRs met or partially met</span>
+              <div class="ev-summary-chip ev-summary-chip--green">
+                <span class="ev-summary-chip__num">2 / 2</span>
+                <span class="ev-summary-chip__label">Could FRs fully met</span>
               </div>
               <div class="ev-summary-chip ev-summary-chip--green">
                 <span class="ev-summary-chip__num">3 / 3</span>
@@ -423,8 +422,8 @@
                     <td>FR9</td>
                     <td>Structured consultation submission with optional file uploads</td>
                     <td><span class="ev-priority--should">Should</span></td>
-                    <td><span class="ev-badge ev-badge--partial">Partial</span></td>
-                    <td>FileAttachment model exists; structured submission is implemented. Dominant consultation flow remains text-centric — attachments not prominent in live workflow.</td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>POST /{chat_id}/files endpoint live; 3 MB per-file / 5-file cap enforced; PDF extraction via pypdf; file context injected into RAG prompt as "UPLOADED DOCUMENTS" section.</td>
                   </tr>
                   <tr>
                     <td>FR10</td>
@@ -437,8 +436,8 @@
                     <td>FR7</td>
                     <td>Configurable provider routing for local-first inference</td>
                     <td><span class="ev-priority--could">Could</span></td>
-                    <td><span class="ev-badge ev-badge--partial">Partial</span></td>
-                    <td>Local-first RAG processing works end-to-end. Threshold-based provider selection config is present but cloud-fallback path not exercised in production.</td>
+                    <td><span class="ev-badge ev-badge--met">Met</span></td>
+                    <td>generate_answer() routes local→cloud with automatic fallback. LLM_ROUTE_THRESHOLD, LOCAL_LLM_BASE_URL, CLOUD_LLM_BASE_URL all env-var configurable in docker-compose.yml. Provider swap needs no code change.</td>
                   </tr>
                   <tr>
                     <td>FR11</td>
@@ -510,7 +509,7 @@
                     <td>Maintainability</td>
                     <td><span class="ev-priority--should">Should</span></td>
                     <td><span class="ev-badge ev-badge--met">Met</span></td>
-                    <td>Full Docker Compose stack with documented startup. Service boundaries are distinct: frontend / backend / RAG service / database.</td>
+                    <td>7-container Docker Compose stack: db_vector, backend, rag_service, rag_worker (Redis queue), frontend, nginx (TLS reverse proxy), redis, and mailpit (SMTP). Health checks and dependency ordering configured throughout.</td>
                   </tr>
                   <tr>
                     <td>NFR6</td>
@@ -625,8 +624,8 @@
                 <p>The backend applies schema patches at startup rather than using a strict migration-only workflow (e.g. Alembic). This is fragile for long-lived deployments with data.</p>
               </div>
               <div class="ev-issue-card">
-                <strong>Attachment integration incomplete</strong>
-                <p>FileAttachment exists in the data model and the API supports uploads, but the dominant consultation flow remains text-centric. Attachments are not prominently surfaced during specialist review.</p>
+                <strong>Attachment visibility in specialist review</strong>
+                <p>File uploads are fully implemented and injected into RAG context, but uploaded files are not separately surfaced as a panel during specialist review — a specialist must infer attachment presence from the AI prompt context rather than viewing files directly.</p>
               </div>
               <div class="ev-issue-card">
                 <strong>Dual RAG code paths</strong>
@@ -658,60 +657,60 @@
               <div class="ev-team-card">
                 <div class="ev-team-card__avatar">K</div>
                 <span class="ev-team-card__name">Kavin</span>
-                <span class="ev-team-card__role">RAG Service · Testing · Integration</span>
+                <span class="ev-team-card__role">RAG Retrieval · Testing · CI/DevOps</span>
                 <span class="ev-team-card__pct">20%</span>
                 <div class="ev-team-card__tasks">
-                  RAG pipeline, retrieval &amp; generation modules,<br>
-                  test strategy &amp; CI setup,<br>
-                  integration with backend service
+                  Vector &amp; keyword search pipeline,<br>
+                  reranking, deduplication &amp; citation assembly,<br>
+                  retrieval test suite &amp; CI setup
                 </div>
               </div>
 
               <div class="ev-team-card">
                 <div class="ev-team-card__avatar">H</div>
                 <span class="ev-team-card__name">Hakan</span>
-                <span class="ev-team-card__role">Backend · DevOps · Auth</span>
+                <span class="ev-team-card__role">Security · File Uploads · Patient Context</span>
                 <span class="ev-team-card__pct">20%</span>
                 <div class="ev-team-card__tasks">
-                  FastAPI backend, JWT auth,<br>
-                  specialist workflow services,<br>
-                  Docker Compose stack
+                  AES-GCM localStorage encryption,<br>
+                  file upload pipeline (pypdf, RAG injection),<br>
+                  patient context, Alembic migrations, Docker secrets
                 </div>
               </div>
 
               <div class="ev-team-card">
                 <div class="ev-team-card__avatar">D</div>
                 <span class="ev-team-card__name">Daniel</span>
-                <span class="ev-team-card__role">Frontend · UI Design</span>
+                <span class="ev-team-card__role">Auth Flows · Guideline Sync · Caching</span>
                 <span class="ev-team-card__pct">20%</span>
                 <div class="ev-team-card__tasks">
-                  React frontend, role-based routing,<br>
-                  notification system,<br>
-                  admin dashboard &amp; charts
+                  Email verification &amp; password reset flows,<br>
+                  guideline web-crawl &amp; auto-sync scheduler,<br>
+                  Redis caching layer for chats &amp; profiles
                 </div>
               </div>
 
               <div class="ev-team-card">
                 <div class="ev-team-card__avatar">W</div>
                 <span class="ev-team-card__name">William</span>
-                <span class="ev-team-card__role">Requirements · Research · Docs</span>
+                <span class="ev-team-card__role">RAG Generation · Citations · Fallback</span>
                 <span class="ev-team-card__pct">20%</span>
                 <div class="ev-team-card__tasks">
-                  MoSCoW requirements elicitation,<br>
-                  literature &amp; technology research,<br>
-                  project documentation
+                  RAG ask pipeline with Med42 / Ollama,<br>
+                  citation metadata &amp; source labelling,<br>
+                  low-confidence fallback &amp; no-context prompt
                 </div>
               </div>
 
               <div class="ev-team-card">
                 <div class="ev-team-card__avatar">I</div>
                 <span class="ev-team-card__name">Ivan</span>
-                <span class="ev-team-card__role">System Design · Testing</span>
+                <span class="ev-team-card__role">Streaming · Async · Specialist Workflow</span>
                 <span class="ev-team-card__pct">20%</span>
                 <div class="ev-team-card__tasks">
-                  Architecture &amp; data model design,<br>
-                  Playwright E2E test suites,<br>
-                  deployment documentation
+                  SSE real-time AI response streaming,<br>
+                  asyncio + asyncpg architecture conversion,<br>
+                  per-message specialist review &amp; chat policy
                 </div>
               </div>
 
@@ -772,11 +771,13 @@
               <h3>Assessment summary</h3>
               <p>
                 Ambience-AI-1.5 is a technically credible full-stack prototype for guideline-grounded
-                clinical consultation support. All Must requirements were delivered. The specialist
-                review workflow and test strategy are the strongest engineering contributions. The
-                primary gap is the absence of formal clinical validation — necessary before making
-                stronger claims about real-world utility. The codebase is well-structured, modular,
-                and deployable; the architecture supports the next iteration described in future work.
+                clinical consultation support. All Must, Should, and Could requirements were fully
+                delivered — confirmed by direct codebase inspection. The specialist review workflow,
+                real-time SSE streaming, and layered test strategy are the strongest engineering
+                contributions. The primary gap is the absence of formal clinical validation, necessary
+                before making stronger claims about real-world utility. The codebase is well-structured,
+                modular, and deployable; the architecture supports the next iteration described in
+                future work.
               </p>
               <div class="ev-verdict__scores">
                 <div class="ev-verdict__score-item">
@@ -792,8 +793,8 @@
                   <span class="ev-verdict__score-label">CI test coverage</span>
                 </div>
                 <div class="ev-verdict__score-item">
-                  <span class="ev-verdict__score-num">19 / 19</span>
-                  <span class="ev-verdict__score-label">In-scope requirements</span>
+                  <span class="ev-verdict__score-num">11 / 11</span>
+                  <span class="ev-verdict__score-label">In-scope FRs met</span>
                 </div>
               </div>
             </div>
