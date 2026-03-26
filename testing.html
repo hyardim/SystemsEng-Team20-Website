@@ -162,6 +162,15 @@
                 transition: opacity 0.45s ease, transform 0.45s ease, box-shadow 0.18s ease;
               }
 
+              /* ── Spacing: h3 after cards/callouts ── */
+              /* Match specificity 0-4-3 of styles.css body:not()x3 rule, appear later = win */
+              html body[data-page="testing"] .content-stack .section-card .callout + h3,
+              html body[data-page="testing"] .content-stack .section-card .table-card + h3,
+              html body[data-page="testing"] .content-stack .section-card .two-col + h3,
+              html body[data-page="testing"] .content-stack .section-card .ctabs + h3 {
+                margin-top: 32px !important;
+              }
+
               /* ── Chip tabs ── */
               .ctabs { margin-top: 22px; }
               .ctabs__bar {
