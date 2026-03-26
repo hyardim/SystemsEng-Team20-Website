@@ -3949,6 +3949,227 @@ body[data-page="home"] .member-meta {
 	font-weight: 500;
 }
 
+@keyframes home-castle-pulse {
+	0%,
+	100% {
+		transform: translate(-50%, -50%) scale(1);
+	}
+
+	50% {
+		transform: translate(-50%, -50%) scale(1.035);
+	}
+}
+
+@keyframes home-siege-advance {
+	0%,
+	100% {
+		transform: translate(calc(-50% + var(--pos-x)), calc(-50% + var(--pos-y)));
+	}
+
+	50% {
+		transform: translate(
+			calc(-50% + var(--pos-x) + var(--advance-x)),
+			calc(-50% + var(--pos-y) + var(--advance-y))
+		);
+	}
+}
+
+@media (min-width: 901px) {
+	body[data-page="home"] .team-grid--siege {
+		position: relative;
+		display: block;
+		width: min(100%, 940px);
+		min-height: 790px;
+		margin: 18px auto 0;
+		background:
+			radial-gradient(circle at 50% 46%, rgba(0, 94, 184, 0.07) 0%, rgba(255, 255, 255, 0) 48%),
+			linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(231, 239, 249, 0.72) 100%);
+		border-radius: 36px;
+	}
+
+	body[data-page="home"] .team-grid--siege::before,
+	body[data-page="home"] .team-grid--siege::after {
+		content: "";
+		position: absolute;
+		pointer-events: none;
+	}
+
+	body[data-page="home"] .team-grid--siege::before {
+		left: 50%;
+		top: 50%;
+		width: 468px;
+		height: 468px;
+		transform: translate(-50%, -50%);
+		border-radius: 50%;
+		border: 1px dashed rgba(0, 94, 184, 0.18);
+		box-shadow:
+			0 0 0 32px rgba(228, 237, 248, 0.86),
+			0 0 0 62px rgba(0, 94, 184, 0.08);
+	}
+
+	body[data-page="home"] .team-grid--siege::after {
+		left: 50%;
+		bottom: 76px;
+		width: 670px;
+		height: 140px;
+		transform: translateX(-50%);
+		border-radius: 50%;
+		background:
+			radial-gradient(ellipse at center, rgba(0, 48, 135, 0.16) 0%, rgba(0, 48, 135, 0.06) 44%, rgba(255, 255, 255, 0) 76%);
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card {
+		position: absolute;
+		margin: 0;
+		padding: 0 0 10px;
+		background: transparent;
+		border: none;
+		box-shadow: none;
+		text-align: center;
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card .member-actions {
+		display: none;
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card h3 {
+		margin: 14px 0 0;
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.2;
+	}
+
+	body[data-page="home"] .team-grid--siege .avatar-placeholder--photo {
+		border: 4px solid rgba(255, 255, 255, 0.82);
+		box-shadow: 0 18px 40px rgba(0, 48, 135, 0.18);
+		background: #dfe7f3;
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--attacker {
+		top: 50%;
+		left: 50%;
+		width: 174px;
+		z-index: 2;
+		animation: home-siege-advance 4.8s ease-in-out infinite;
+		animation-delay: var(--motion-delay);
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--attacker::after {
+		content: "";
+		position: absolute;
+		top: 62px;
+		left: 50%;
+		width: var(--trail-width);
+		border-top: 2px dashed rgba(0, 94, 184, 0.26);
+		transform: rotate(var(--trail-angle));
+		transform-origin: left center;
+		pointer-events: none;
+		z-index: -1;
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--attacker .avatar-placeholder {
+		width: 136px;
+		height: 136px;
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--attacker .member-meta,
+	body[data-page="home"] .team-grid--siege .member-card--attacker > p:not(.member-meta) {
+		display: none;
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--castle {
+		top: 50%;
+		left: 50%;
+		width: 360px;
+		padding: 82px 30px 32px;
+		transform: translate(-50%, -50%);
+		z-index: 3;
+		border: 1px solid rgba(0, 48, 135, 0.14);
+		border-radius: 28px;
+		background: linear-gradient(180deg, #fbfdff 0%, #eef4ff 100%);
+		box-shadow: 0 28px 68px rgba(0, 48, 135, 0.16);
+		animation: home-castle-pulse 3.8s ease-in-out infinite;
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--castle::before {
+		content: "";
+		position: absolute;
+		top: -22px;
+		left: 50%;
+		width: 252px;
+		height: 34px;
+		transform: translateX(-50%);
+		border: 1px solid rgba(0, 48, 135, 0.14);
+		border-bottom: none;
+		border-radius: 16px 16px 0 0;
+		background:
+			repeating-linear-gradient(
+				90deg,
+				#e7eef9 0 26px,
+				#f7faff 26px 38px
+			);
+		box-shadow: 0 10px 24px rgba(0, 48, 135, 0.08);
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--castle::after {
+		content: "";
+		position: absolute;
+		inset: 18px;
+		border-radius: 22px;
+		border: 1px solid rgba(74, 163, 255, 0.14);
+		pointer-events: none;
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--castle .avatar-placeholder {
+		width: 212px;
+		height: 212px;
+		border-width: 6px;
+		box-shadow: 0 24px 56px rgba(0, 48, 135, 0.24);
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--castle h3 {
+		margin-top: 18px;
+		font-size: 1.34rem;
+		font-weight: 700;
+		line-height: 1.18;
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--castle .member-honorific {
+		display: block;
+		margin-top: 6px;
+		font-size: 0.98rem;
+		font-weight: 600;
+		letter-spacing: 0.03em;
+		color: var(--nhs-blue);
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--castle .member-meta {
+		margin-top: 10px;
+		color: var(--nhs-dark-blue);
+		font-weight: 600;
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--castle .member-castle-note {
+		margin: 10px auto 0;
+		max-width: 26ch;
+		font-size: 0.98rem;
+		line-height: 1.58;
+		color: var(--muted);
+	}
+}
+
+@media (min-width: 901px) and (hover: hover) {
+	body[data-page="home"] .team-grid--siege .member-card--attacker:hover .avatar-placeholder--photo,
+	body[data-page="home"] .team-grid--siege .member-card--castle:hover .avatar-placeholder--photo {
+		transform: scale(1.035);
+	}
+
+	body[data-page="home"] .team-grid--siege .member-card--attacker:hover .avatar-photo,
+	body[data-page="home"] .team-grid--siege .member-card--castle:hover .avatar-photo {
+		filter: brightness(1.04);
+	}
+}
+
 @media (max-width: 820px) {
 	body[data-page="home"] .page-shell {
 		width: min(1440px, calc(100% - 24px));
