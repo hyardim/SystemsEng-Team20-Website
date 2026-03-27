@@ -3676,6 +3676,72 @@ body[data-page="appendices"] .appendix-link-card--placeholder p {
 	color: rgba(90, 47, 18, 0.82);
 }
 
+body[data-page="appendices"] .appendix-external-link {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 22px 26px;
+	border-radius: 14px;
+	border: 1px solid rgba(7, 23, 45, 0.09);
+	background: linear-gradient(135deg, #f8faff 0%, #f0f5ff 100%);
+	text-decoration: none;
+	color: inherit;
+	transition: border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+body[data-page="appendices"] .appendix-external-link:hover {
+	border-color: var(--nhs-blue);
+	box-shadow: 0 4px 16px rgba(0, 48, 135, 0.1);
+}
+
+body[data-page="appendices"] .appendix-external-link__icon {
+	flex-shrink: 0;
+	width: 44px;
+	height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 12px;
+	background: linear-gradient(135deg, var(--nhs-dark-blue), var(--nhs-blue));
+	color: #ffffff;
+}
+
+body[data-page="appendices"] .appendix-external-link__icon svg {
+	width: 20px;
+	height: 20px;
+}
+
+body[data-page="appendices"] .appendix-external-link__body {
+	flex: 1;
+	min-width: 0;
+}
+
+body[data-page="appendices"] .appendix-external-link__body h3 {
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: #0f172a;
+	margin: 0 0 4px;
+}
+
+body[data-page="appendices"] .appendix-external-link__body p {
+	font-size: 0.9rem;
+	color: #64748b;
+	margin: 0;
+	line-height: 1.5;
+}
+
+body[data-page="appendices"] .appendix-external-link__arrow {
+	flex-shrink: 0;
+	font-size: 1.3rem;
+	font-weight: 600;
+	color: var(--nhs-blue);
+	transition: transform 0.2s ease;
+}
+
+body[data-page="appendices"] .appendix-external-link:hover .appendix-external-link__arrow {
+	transform: translateX(4px);
+}
+
 body[data-page="appendices"] .appendix-issue-card {
 	--appendix-card-bar: linear-gradient(90deg, #ff7a45 0%, #ffb36b 100%);
 	padding: 24px;
