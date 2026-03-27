@@ -240,7 +240,7 @@ function renderFooter() {
           <a href="requirements/">Requirements</a>
           <a href="testing/">Testing</a>
           <a href="research/">Research</a>
-          <a href="testing/">Evaluation</a>
+          <a href="evaluation/">Evaluation</a>
           <a href="ui-design/">UI Design</a>
           <a href="appendices/">Appendices</a>
           <a href="system-design/">System Design</a>
