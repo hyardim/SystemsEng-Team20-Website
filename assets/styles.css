@@ -2798,7 +2798,6 @@ tr:last-child td {
 	font-weight: 700;
 	color: #ffffff;
 	background: linear-gradient(90deg, var(--nhs-dark-blue), var(--nhs-blue));
-	box-shadow: 0 6px 14px rgba(0, 48, 135, 0.24);
 	white-space: nowrap;
 	z-index: 1;
 }
