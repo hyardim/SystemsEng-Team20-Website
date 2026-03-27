@@ -1,268 +1,361 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="960" viewBox="0 0 1100 960" font-family="Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 1230" width="2400" height="1230" font-family="'Segoe UI',system-ui,-apple-system,sans-serif">
   <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#005EB8"/>
-    </marker>
-    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
-      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#00000020"/>
-    </filter>
+    <filter id="s"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#00000028"/></filter>
+    <marker id="fk" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#64748B"/></marker>
+    <marker id="fk-b" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#2563EB"/></marker>
   </defs>
 
-  <!-- Background -->
-  <rect width="1100" height="960" fill="#F0F4F5"/>
+  <rect width="2400" height="1700" fill="#F8FAFC"/>
 
   <!-- Title bar -->
-  <rect x="0" y="0" width="1100" height="52" fill="#005EB8"/>
-  <text x="550" y="33" text-anchor="middle" font-size="18" font-weight="bold" fill="white">Entity-Relationship Diagram — Ambience-AI Database Schema</text>
+  <rect x="0" y="0" width="2400" height="52" fill="#005EB8"/>
+  <text x="1200" y="33" text-anchor="middle" font-size="18" font-weight="bold" fill="white">Ambience AI 1.5 — Entity Relationship Diagram</text>
 
-  <!-- ===== users (x=420 y=80 w=220 h=250) ===== -->
-  <g id="users" filter="url(#shadow)">
-    <rect x="420" y="80" width="220" height="250" rx="8" fill="white" stroke="#005EB8" stroke-width="2"/>
-    <rect x="420" y="80" width="220" height="30" rx="8" fill="#005EB8"/>
-    <rect x="420" y="98" width="220" height="12" fill="#005EB8"/>
-    <text x="530" y="100" text-anchor="middle" font-size="13" font-weight="bold" fill="white">users</text>
-    <line x1="420" y1="116" x2="640" y2="116" stroke="#DDE" stroke-width="1"/>
-    <text x="432" y="130" font-size="11" font-weight="bold" fill="#003087">🔑 id</text><text x="570" y="130" font-size="10" fill="#666">INT PK</text>
-    <line x1="420" y1="134" x2="640" y2="134" stroke="#EEF" stroke-width="1"/>
-    <text x="432" y="148" font-size="11" fill="#003087">email</text><text x="570" y="148" font-size="10" fill="#666">VARCHAR UNIQUE</text>
-    <line x1="420" y1="152" x2="640" y2="152" stroke="#EEF" stroke-width="1"/>
-    <text x="432" y="166" font-size="11" fill="#003087">full_name</text><text x="570" y="166" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="420" y1="170" x2="640" y2="170" stroke="#EEF" stroke-width="1"/>
-    <text x="432" y="184" font-size="11" fill="#003087">role</text><text x="570" y="184" font-size="10" fill="#666">ENUM</text>
-    <line x1="420" y1="188" x2="640" y2="188" stroke="#EEF" stroke-width="1"/>
-    <text x="432" y="202" font-size="11" fill="#003087">hashed_password</text><text x="570" y="202" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="420" y1="206" x2="640" y2="206" stroke="#EEF" stroke-width="1"/>
-    <text x="432" y="220" font-size="11" fill="#003087">is_active</text><text x="570" y="220" font-size="10" fill="#666">BOOLEAN</text>
-    <line x1="420" y1="224" x2="640" y2="224" stroke="#EEF" stroke-width="1"/>
-    <text x="432" y="238" font-size="11" fill="#003087">specialty</text><text x="570" y="238" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="420" y1="242" x2="640" y2="242" stroke="#EEF" stroke-width="1"/>
-    <text x="432" y="256" font-size="11" fill="#003087">email_verified</text><text x="570" y="256" font-size="10" fill="#666">BOOLEAN</text>
-    <line x1="420" y1="260" x2="640" y2="260" stroke="#EEF" stroke-width="1"/>
-    <text x="432" y="274" font-size="11" fill="#003087">email_verified_at</text><text x="570" y="274" font-size="10" fill="#666">DATETIME</text>
-    <line x1="420" y1="278" x2="640" y2="278" stroke="#EEF" stroke-width="1"/>
-    <text x="432" y="292" font-size="11" fill="#003087">session_version</text><text x="570" y="292" font-size="10" fill="#666">INTEGER</text>
-    <line x1="420" y1="296" x2="640" y2="296" stroke="#EEF" stroke-width="1"/>
-    <text x="432" y="316" font-size="11" fill="#888" font-style="italic">created_at</text>
-  </g>
+  <!-- COLOUR LEGEND -->
+  <rect x="40" y="95" width="2320" height="42" rx="8" fill="#FFF" stroke="#E2E8F0" stroke-width="1.5" filter="url(#s)"/>
+  <rect x="60" y="108" width="14" height="14" rx="3" fill="#DBEAFE"/><text x="82" y="120" font-size="12" fill="#374151">Auth / User</text>
+  <rect x="200" y="108" width="14" height="14" rx="3" fill="#D1FAE5"/><text x="222" y="120" font-size="12" fill="#374151">Clinical core</text>
+  <rect x="360" y="108" width="14" height="14" rx="3" fill="#F3E8FF"/><text x="382" y="120" font-size="12" fill="#374151">System / ops</text>
+  <rect x="510" y="108" width="14" height="14" rx="3" fill="#FEF3C7"/><text x="532" y="120" font-size="12" fill="#374151">RAG vector store</text>
+  <text x="680" y="120" font-size="12" fill="#64748B">🔑 Primary key   🔗 Foreign key   ◆ Not null   ◇ Nullable</text>
 
-  <!-- ===== chats (x=20 y=352 w=245 h=286) ===== -->
-  <g id="chats" filter="url(#shadow)">
-    <rect x="20" y="352" width="245" height="286" rx="8" fill="white" stroke="#005EB8" stroke-width="2"/>
-    <rect x="20" y="352" width="245" height="30" rx="8" fill="#005EB8"/>
-    <rect x="20" y="370" width="245" height="12" fill="#005EB8"/>
-    <text x="142" y="372" text-anchor="middle" font-size="13" font-weight="bold" fill="white">chats</text>
-    <line x1="20" y1="388" x2="265" y2="388" stroke="#DDE" stroke-width="1"/>
-    <text x="32" y="402" font-size="11" font-weight="bold" fill="#003087">🔑 id</text><text x="175" y="402" font-size="10" fill="#666">INT PK</text>
-    <line x1="20" y1="406" x2="265" y2="406" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="420" font-size="11" fill="#003087">🔗 user_id</text><text x="175" y="420" font-size="10" fill="#666">FK → users</text>
-    <line x1="20" y1="424" x2="265" y2="424" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="438" font-size="11" fill="#003087">🔗 specialist_id</text><text x="175" y="438" font-size="10" fill="#666">FK → users (opt)</text>
-    <line x1="20" y1="442" x2="265" y2="442" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="456" font-size="11" fill="#003087">title</text><text x="175" y="456" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="20" y1="460" x2="265" y2="460" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="474" font-size="11" fill="#003087">status</text><text x="175" y="474" font-size="10" fill="#666">ENUM</text>
-    <line x1="20" y1="478" x2="265" y2="478" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="492" font-size="11" fill="#003087">specialty</text><text x="175" y="492" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="20" y1="496" x2="265" y2="496" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="510" font-size="11" fill="#003087">severity</text><text x="175" y="510" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="20" y1="514" x2="265" y2="514" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="528" font-size="11" fill="#003087">patient_context</text><text x="175" y="528" font-size="10" fill="#666">JSONB</text>
-    <line x1="20" y1="532" x2="265" y2="532" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="546" font-size="11" fill="#003087">is_archived</text><text x="175" y="546" font-size="10" fill="#666">BOOLEAN</text>
-    <line x1="20" y1="550" x2="265" y2="550" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="564" font-size="11" fill="#003087">assigned_at</text><text x="175" y="564" font-size="10" fill="#666">DATETIME (opt)</text>
-    <line x1="20" y1="568" x2="265" y2="568" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="582" font-size="11" fill="#003087">reviewed_at</text><text x="175" y="582" font-size="10" fill="#666">DATETIME (opt)</text>
-    <line x1="20" y1="586" x2="265" y2="586" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="600" font-size="11" fill="#003087">review_feedback</text><text x="175" y="600" font-size="10" fill="#666">TEXT (opt)</text>
-    <line x1="20" y1="604" x2="265" y2="604" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="622" font-size="11" fill="#888" font-style="italic">created_at, updated_at</text>
-  </g>
+  <!-- ════════════════════════════════════ -->
+  <!-- USERS table  (x=60, y=155) -->
+  <rect x="60" y="155" width="320" height="456" rx="10" fill="#DBEAFE" stroke="#93C5FD" stroke-width="2" filter="url(#s)"/>
+  <rect x="60" y="155" width="320" height="40" rx="10" fill="#1D4ED8"/>
+  <rect x="60" y="183" width="320" height="12" fill="#1D4ED8"/>
+  <text x="220" y="181" text-anchor="middle" font-size="15" font-weight="700" fill="#FFF">users</text>
+  <line x1="60" y1="195" x2="380" y2="195" stroke="#93C5FD" stroke-width="1"/>
+  <!-- rows -->
+  <text x="80" y="215" font-size="12" fill="#1E40AF">🔑 id</text><text x="300" y="215" text-anchor="end" font-size="11" fill="#3B82F6">INT PK</text>
+  <line x1="60" y1="222" x2="380" y2="222" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="240" font-size="12" fill="#1E3A8A">◆ email</text><text x="300" y="240" text-anchor="end" font-size="11" fill="#3B82F6">VARCHAR UNIQUE</text>
+  <line x1="60" y1="247" x2="380" y2="247" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="265" font-size="12" fill="#1E3A8A">◆ full_name</text><text x="300" y="265" text-anchor="end" font-size="11" fill="#3B82F6">VARCHAR</text>
+  <line x1="60" y1="272" x2="380" y2="272" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="290" font-size="12" fill="#1E3A8A">◆ role</text><text x="300" y="290" text-anchor="end" font-size="11" fill="#3B82F6">ENUM(gp,specialist,admin)</text>
+  <line x1="60" y1="297" x2="380" y2="297" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="315" font-size="12" fill="#1E3A8A">◆ hashed_password</text><text x="300" y="315" text-anchor="end" font-size="11" fill="#3B82F6">VARCHAR</text>
+  <line x1="60" y1="322" x2="380" y2="322" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="340" font-size="12" fill="#1E3A8A">◆ is_active</text><text x="300" y="340" text-anchor="end" font-size="11" fill="#3B82F6">BOOLEAN</text>
+  <line x1="60" y1="347" x2="380" y2="347" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="365" font-size="12" fill="#1E3A8A">◇ specialty</text><text x="300" y="365" text-anchor="end" font-size="11" fill="#3B82F6">VARCHAR</text>
+  <line x1="60" y1="372" x2="380" y2="372" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="390" font-size="12" fill="#1E3A8A">◆ email_verified</text><text x="300" y="390" text-anchor="end" font-size="11" fill="#3B82F6">BOOLEAN</text>
+  <line x1="60" y1="397" x2="380" y2="397" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="415" font-size="12" fill="#1E3A8A">◇ email_verified_at</text><text x="300" y="415" text-anchor="end" font-size="11" fill="#3B82F6">TIMESTAMPTZ</text>
+  <line x1="60" y1="422" x2="380" y2="422" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="440" font-size="12" fill="#1E3A8A">◆ session_version</text><text x="300" y="440" text-anchor="end" font-size="11" fill="#3B82F6">INT default 0</text>
+  <line x1="60" y1="447" x2="380" y2="447" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="465" font-size="12" fill="#1E3A8A">◆ created_at</text><text x="300" y="465" text-anchor="end" font-size="11" fill="#3B82F6">TIMESTAMPTZ</text>
+  <line x1="60" y1="472" x2="380" y2="472" stroke="#BFDBFE" stroke-width="0.8"/>
+  <!-- indexes badge -->
+  <rect x="68" y="480" width="304" height="22" rx="5" fill="#BFDBFE"/>
+  <text x="220" y="495" text-anchor="middle" font-size="11" fill="#1D4ED8">idx: email(unique) · role · is_active · (is_active,role)</text>
+  <line x1="60" y1="502" x2="380" y2="502" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="520" font-size="12" fill="#1E3A8A">◆ updated_at</text><text x="300" y="520" text-anchor="end" font-size="11" fill="#3B82F6">TIMESTAMPTZ</text>
+  <line x1="60" y1="527" x2="380" y2="527" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="545" font-size="12" fill="#1E3A8A">◆ is_superuser</text><text x="300" y="545" text-anchor="end" font-size="11" fill="#3B82F6">BOOLEAN default false</text>
+  <line x1="60" y1="552" x2="380" y2="552" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="570" font-size="12" fill="#1E3A8A">◇ last_login_at</text><text x="300" y="570" text-anchor="end" font-size="11" fill="#3B82F6">TIMESTAMPTZ</text>
+  <line x1="60" y1="577" x2="380" y2="577" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="595" font-size="12" fill="#1E3A8A">◇ deactivated_at</text><text x="300" y="595" text-anchor="end" font-size="11" fill="#3B82F6">TIMESTAMPTZ</text>
 
-  <!-- ===== messages (x=20 y=660 w=240 h=250) ===== -->
-  <g id="messages" filter="url(#shadow)">
-    <rect x="20" y="660" width="240" height="250" rx="8" fill="white" stroke="#005EB8" stroke-width="2"/>
-    <rect x="20" y="660" width="240" height="30" rx="8" fill="#005EB8"/>
-    <rect x="20" y="678" width="240" height="12" fill="#005EB8"/>
-    <text x="140" y="680" text-anchor="middle" font-size="13" font-weight="bold" fill="white">messages</text>
-    <line x1="20" y1="696" x2="260" y2="696" stroke="#DDE" stroke-width="1"/>
-    <text x="32" y="710" font-size="11" font-weight="bold" fill="#003087">🔑 id</text><text x="160" y="710" font-size="10" fill="#666">INT PK</text>
-    <line x1="20" y1="714" x2="260" y2="714" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="728" font-size="11" fill="#003087">🔗 chat_id</text><text x="160" y="728" font-size="10" fill="#666">FK → chats</text>
-    <line x1="20" y1="732" x2="260" y2="732" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="746" font-size="11" fill="#003087">content</text><text x="160" y="746" font-size="10" fill="#666">TEXT</text>
-    <line x1="20" y1="750" x2="260" y2="750" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="764" font-size="11" fill="#003087">sender</text><text x="160" y="764" font-size="10" fill="#666">ENUM</text>
-    <line x1="20" y1="768" x2="260" y2="768" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="782" font-size="11" fill="#003087">role</text><text x="160" y="782" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="20" y1="786" x2="260" y2="786" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="800" font-size="11" fill="#003087">citations</text><text x="160" y="800" font-size="10" fill="#666">JSONB</text>
-    <line x1="20" y1="804" x2="260" y2="804" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="818" font-size="11" fill="#003087">is_generating</text><text x="160" y="818" font-size="10" fill="#666">BOOLEAN</text>
-    <line x1="20" y1="822" x2="260" y2="822" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="836" font-size="11" fill="#003087">review_status</text><text x="160" y="836" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="20" y1="840" x2="260" y2="840" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="854" font-size="11" fill="#003087">review_feedback</text><text x="160" y="854" font-size="10" fill="#666">TEXT (opt)</text>
-    <line x1="20" y1="858" x2="260" y2="858" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="872" font-size="11" fill="#003087">reviewed_at</text><text x="160" y="872" font-size="10" fill="#666">DATETIME (opt)</text>
-    <line x1="20" y1="876" x2="260" y2="876" stroke="#EEF" stroke-width="1"/>
-    <text x="32" y="896" font-size="11" fill="#888" font-style="italic">created_at</text>
-  </g>
+  <!-- ════════════════════════════════════ -->
+  <!-- CHATS table  (x=460, y=155) -->
+  <rect x="460" y="155" width="360" height="596" rx="10" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="2" filter="url(#s)"/>
+  <rect x="460" y="155" width="360" height="40" rx="10" fill="#065F46"/>
+  <rect x="460" y="183" width="360" height="12" fill="#065F46"/>
+  <text x="640" y="181" text-anchor="middle" font-size="15" font-weight="700" fill="#FFF">chats</text>
+  <line x1="460" y1="195" x2="820" y2="195" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="480" y="215" font-size="12" fill="#065F46">🔑 id</text><text x="800" y="215" text-anchor="end" font-size="11" fill="#059669">INT PK</text>
+  <line x1="460" y1="222" x2="820" y2="222" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="240" font-size="12" fill="#065F46">🔗 user_id</text><text x="800" y="240" text-anchor="end" font-size="11" fill="#059669">FK → users.id</text>
+  <line x1="460" y1="247" x2="820" y2="247" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="265" font-size="12" fill="#065F46">🔗 specialist_id</text><text x="800" y="265" text-anchor="end" font-size="11" fill="#059669">FK → users.id ◇</text>
+  <line x1="460" y1="272" x2="820" y2="272" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="290" font-size="12" fill="#065F46">◆ title</text><text x="800" y="290" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="460" y1="297" x2="820" y2="297" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="315" font-size="12" fill="#065F46">◆ status</text><text x="800" y="315" text-anchor="end" font-size="11" fill="#059669">ENUM(9 states)</text>
+  <line x1="460" y1="322" x2="820" y2="322" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="340" font-size="12" fill="#065F46">◆ specialty</text><text x="800" y="340" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="460" y1="347" x2="820" y2="347" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="365" font-size="12" fill="#065F46">◇ severity</text><text x="800" y="365" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="460" y1="372" x2="820" y2="372" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="390" font-size="12" fill="#065F46">◇ patient_context</text><text x="800" y="390" text-anchor="end" font-size="11" fill="#059669">JSONB</text>
+  <line x1="460" y1="397" x2="820" y2="397" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="415" font-size="12" fill="#065F46">◇ assigned_at</text><text x="800" y="415" text-anchor="end" font-size="11" fill="#059669">TIMESTAMPTZ</text>
+  <line x1="460" y1="422" x2="820" y2="422" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="440" font-size="12" fill="#065F46">◇ reviewed_at</text><text x="800" y="440" text-anchor="end" font-size="11" fill="#059669">TIMESTAMPTZ</text>
+  <line x1="460" y1="447" x2="820" y2="447" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="465" font-size="12" fill="#065F46">◇ review_feedback</text><text x="800" y="465" text-anchor="end" font-size="11" fill="#059669">TEXT</text>
+  <line x1="460" y1="472" x2="820" y2="472" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="490" font-size="12" fill="#065F46">◆ created_at</text><text x="800" y="490" text-anchor="end" font-size="11" fill="#059669">TIMESTAMPTZ</text>
+  <line x1="460" y1="497" x2="820" y2="497" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="515" font-size="12" fill="#065F46">◆ updated_at</text><text x="800" y="515" text-anchor="end" font-size="11" fill="#059669">TIMESTAMPTZ</text>
+  <line x1="460" y1="522" x2="820" y2="522" stroke="#A7F3D0" stroke-width="0.8"/>
+  <!-- status enum badge -->
+  <rect x="468" y="530" width="344" height="34" rx="5" fill="#A7F3D0"/>
+  <text x="640" y="543" text-anchor="middle" font-size="10" fill="#065F46" font-weight="600">status: open · submitted · assigned · reviewing</text>
+  <text x="640" y="558" text-anchor="middle" font-size="10" fill="#065F46">approved · rejected · closed · flagged · archived</text>
+  <line x1="460" y1="564" x2="820" y2="564" stroke="#A7F3D0" stroke-width="0.8"/>
+  <!-- indexes badge -->
+  <rect x="468" y="572" width="344" height="22" rx="5" fill="#A7F3D0"/>
+  <text x="640" y="587" text-anchor="middle" font-size="11" fill="#065F46">idx: user_id · specialist_id · status · specialty · created_at</text>
+  <line x1="460" y1="594" x2="820" y2="594" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="612" font-size="12" fill="#065F46">◇ patient_age</text><text x="800" y="612" text-anchor="end" font-size="11" fill="#059669">INT</text>
+  <line x1="460" y1="619" x2="820" y2="619" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="637" font-size="12" fill="#065F46">◇ patient_sex</text><text x="800" y="637" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="460" y1="644" x2="820" y2="644" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="662" font-size="12" fill="#065F46">◇ urgency</text><text x="800" y="662" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="460" y1="669" x2="820" y2="669" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="687" font-size="12" fill="#065F46">◇ is_archived</text><text x="800" y="687" text-anchor="end" font-size="11" fill="#059669">BOOLEAN (derived)</text>
+  <line x1="460" y1="694" x2="820" y2="694" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="712" font-size="12" fill="#065F46">◇ clinical_notes</text><text x="800" y="712" text-anchor="end" font-size="11" fill="#059669">TEXT</text>
+  <line x1="460" y1="719" x2="820" y2="719" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="480" y="737" font-size="12" fill="#065F46">◇ submitted_at</text><text x="800" y="737" text-anchor="end" font-size="11" fill="#059669">TIMESTAMPTZ</text>
 
-  <!-- ===== file_attachments (x=285 y=660 w=235 h=196) ===== -->
-  <g id="file_attachments" filter="url(#shadow)">
-    <rect x="285" y="660" width="235" height="196" rx="8" fill="white" stroke="#005EB8" stroke-width="2"/>
-    <rect x="285" y="660" width="235" height="30" rx="8" fill="#005EB8"/>
-    <rect x="285" y="678" width="235" height="12" fill="#005EB8"/>
-    <text x="402" y="680" text-anchor="middle" font-size="13" font-weight="bold" fill="white">file_attachments</text>
-    <line x1="285" y1="696" x2="520" y2="696" stroke="#DDE" stroke-width="1"/>
-    <text x="297" y="710" font-size="11" font-weight="bold" fill="#003087">🔑 id</text><text x="415" y="710" font-size="10" fill="#666">INT PK</text>
-    <line x1="285" y1="714" x2="520" y2="714" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="728" font-size="11" fill="#003087">🔗 chat_id</text><text x="415" y="728" font-size="10" fill="#666">FK → chats</text>
-    <line x1="285" y1="732" x2="520" y2="732" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="746" font-size="11" fill="#003087">🔗 uploader_id</text><text x="415" y="746" font-size="10" fill="#666">FK → users</text>
-    <line x1="285" y1="750" x2="520" y2="750" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="764" font-size="11" fill="#003087">filename</text><text x="415" y="764" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="285" y1="768" x2="520" y2="768" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="782" font-size="11" fill="#003087">file_path</text><text x="415" y="782" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="285" y1="786" x2="520" y2="786" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="800" font-size="11" fill="#003087">file_type</text><text x="415" y="800" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="285" y1="804" x2="520" y2="804" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="818" font-size="11" fill="#003087">file_size</text><text x="415" y="818" font-size="10" fill="#666">INTEGER</text>
-    <line x1="285" y1="822" x2="520" y2="822" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="840" font-size="11" fill="#888" font-style="italic">created_at</text>
-  </g>
+  <!-- ════════════════════════════════════ -->
+  <!-- MESSAGES table  (x=900, y=155) -->
+  <rect x="900" y="155" width="340" height="466" rx="10" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="2" filter="url(#s)"/>
+  <rect x="900" y="155" width="340" height="40" rx="10" fill="#047857"/>
+  <rect x="900" y="183" width="340" height="12" fill="#047857"/>
+  <text x="1070" y="181" text-anchor="middle" font-size="15" font-weight="700" fill="#FFF">messages</text>
+  <line x1="900" y1="195" x2="1240" y2="195" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="920" y="215" font-size="12" fill="#065F46">🔑 id</text><text x="1220" y="215" text-anchor="end" font-size="11" fill="#059669">INT PK</text>
+  <line x1="900" y1="222" x2="1240" y2="222" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="240" font-size="12" fill="#065F46">🔗 chat_id</text><text x="1220" y="240" text-anchor="end" font-size="11" fill="#059669">FK → chats.id</text>
+  <line x1="900" y1="247" x2="1240" y2="247" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="265" font-size="12" fill="#065F46">◆ content</text><text x="1220" y="265" text-anchor="end" font-size="11" fill="#059669">TEXT</text>
+  <line x1="900" y1="272" x2="1240" y2="272" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="290" font-size="12" fill="#065F46">◆ sender</text><text x="1220" y="290" text-anchor="end" font-size="11" fill="#059669">ENUM(gp,specialist,ai,system)</text>
+  <line x1="900" y1="297" x2="1240" y2="297" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="315" font-size="12" fill="#065F46">◇ role</text><text x="1220" y="315" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="900" y1="322" x2="1240" y2="322" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="340" font-size="12" fill="#065F46">◇ citations</text><text x="1220" y="340" text-anchor="end" font-size="11" fill="#059669">JSONB</text>
+  <line x1="900" y1="347" x2="1240" y2="347" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="365" font-size="12" fill="#065F46">◆ is_generating</text><text x="1220" y="365" text-anchor="end" font-size="11" fill="#059669">BOOLEAN</text>
+  <line x1="900" y1="372" x2="1240" y2="372" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="390" font-size="12" fill="#065F46">◇ review_status</text><text x="1220" y="390" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="900" y1="397" x2="1240" y2="397" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="415" font-size="12" fill="#065F46">◇ review_feedback</text><text x="1220" y="415" text-anchor="end" font-size="11" fill="#059669">TEXT</text>
+  <line x1="900" y1="422" x2="1240" y2="422" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="440" font-size="12" fill="#065F46">◇ reviewed_at</text><text x="1220" y="440" text-anchor="end" font-size="11" fill="#059669">TIMESTAMPTZ</text>
+  <line x1="900" y1="447" x2="1240" y2="447" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="465" font-size="12" fill="#065F46">◆ is_error</text><text x="1220" y="465" text-anchor="end" font-size="11" fill="#059669">BOOLEAN default false</text>
+  <line x1="900" y1="472" x2="1240" y2="472" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="490" font-size="12" fill="#065F46">◆ created_at</text><text x="1220" y="490" text-anchor="end" font-size="11" fill="#059669">TIMESTAMPTZ</text>
+  <line x1="900" y1="497" x2="1240" y2="497" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="515" font-size="12" fill="#065F46">◇ updated_at</text><text x="1220" y="515" text-anchor="end" font-size="11" fill="#059669">TIMESTAMPTZ</text>
+  <line x1="900" y1="522" x2="1240" y2="522" stroke="#A7F3D0" stroke-width="0.8"/>
+  <rect x="908" y="530" width="324" height="22" rx="5" fill="#A7F3D0"/>
+  <text x="1070" y="545" text-anchor="middle" font-size="11" fill="#065F46">idx: chat_id · sender · created_at</text>
+  <line x1="900" y1="552" x2="1240" y2="552" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="570" font-size="12" fill="#065F46">◇ grounding_score</text><text x="1220" y="570" text-anchor="end" font-size="11" fill="#059669">FLOAT</text>
+  <line x1="900" y1="577" x2="1240" y2="577" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="595" font-size="12" fill="#065F46">◇ rag_used</text><text x="1220" y="595" text-anchor="end" font-size="11" fill="#059669">BOOLEAN</text>
+  <line x1="900" y1="602" x2="1240" y2="602" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="920" y="620" font-size="12" fill="#065F46">◇ token_count</text><text x="1220" y="620" text-anchor="end" font-size="11" fill="#059669">INT</text>
 
-  <!-- ===== email_verification_tokens (x=285 y=352 w=235 h=170) ===== -->
-  <g id="email_tokens" filter="url(#shadow)">
-    <rect x="285" y="352" width="235" height="170" rx="8" fill="white" stroke="#005EB8" stroke-width="2"/>
-    <rect x="285" y="352" width="235" height="30" rx="8" fill="#005EB8"/>
-    <rect x="285" y="370" width="235" height="12" fill="#005EB8"/>
-    <text x="402" y="372" text-anchor="middle" font-size="12" font-weight="bold" fill="white">email_verification_tokens</text>
-    <line x1="285" y1="388" x2="520" y2="388" stroke="#DDE" stroke-width="1"/>
-    <text x="297" y="402" font-size="11" font-weight="bold" fill="#003087">🔑 id</text><text x="430" y="402" font-size="10" fill="#666">INT PK</text>
-    <line x1="285" y1="406" x2="520" y2="406" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="420" font-size="11" fill="#003087">🔗 user_id</text><text x="430" y="420" font-size="10" fill="#666">FK → users</text>
-    <line x1="285" y1="424" x2="520" y2="424" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="438" font-size="11" fill="#003087">token_hash</text><text x="430" y="438" font-size="10" fill="#666">VARCHAR UNIQUE</text>
-    <line x1="285" y1="442" x2="520" y2="442" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="456" font-size="11" fill="#003087">expires_at</text><text x="430" y="456" font-size="10" fill="#666">TIMESTAMP</text>
-    <line x1="285" y1="460" x2="520" y2="460" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="474" font-size="11" fill="#003087">used_at</text><text x="430" y="474" font-size="10" fill="#666">TIMESTAMP (opt)</text>
-    <line x1="285" y1="478" x2="520" y2="478" stroke="#EEF" stroke-width="1"/>
-    <text x="297" y="498" font-size="11" fill="#888" font-style="italic">created_at</text>
-  </g>
+  <!-- ════════════════════════════════════ -->
+  <!-- FILE_ATTACHMENTS  (x=1300, y=155) -->
+  <rect x="1300" y="155" width="320" height="316" rx="10" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="2" filter="url(#s)"/>
+  <rect x="1300" y="155" width="320" height="40" rx="10" fill="#065F46"/>
+  <rect x="1300" y="183" width="320" height="12" fill="#065F46"/>
+  <text x="1460" y="181" text-anchor="middle" font-size="15" font-weight="700" fill="#FFF">file_attachments</text>
+  <line x1="1300" y1="195" x2="1620" y2="195" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="1320" y="215" font-size="12" fill="#065F46">🔑 id</text><text x="1600" y="215" text-anchor="end" font-size="11" fill="#059669">INT PK</text>
+  <line x1="1300" y1="222" x2="1620" y2="222" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="1320" y="240" font-size="12" fill="#065F46">🔗 chat_id</text><text x="1600" y="240" text-anchor="end" font-size="11" fill="#059669">FK → chats.id</text>
+  <line x1="1300" y1="247" x2="1620" y2="247" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="1320" y="265" font-size="12" fill="#065F46">🔗 uploader_id</text><text x="1600" y="265" text-anchor="end" font-size="11" fill="#059669">FK → users.id</text>
+  <line x1="1300" y1="272" x2="1620" y2="272" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="1320" y="290" font-size="12" fill="#065F46">◆ filename</text><text x="1600" y="290" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="1300" y1="297" x2="1620" y2="297" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="1320" y="315" font-size="12" fill="#065F46">◆ file_path</text><text x="1600" y="315" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="1300" y1="322" x2="1620" y2="322" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="1320" y="340" font-size="12" fill="#065F46">◆ file_type</text><text x="1600" y="340" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="1300" y1="347" x2="1620" y2="347" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="1320" y="365" font-size="12" fill="#065F46">◆ file_size</text><text x="1600" y="365" text-anchor="end" font-size="11" fill="#059669">INT (bytes)</text>
+  <line x1="1300" y1="372" x2="1620" y2="372" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="1320" y="390" font-size="12" fill="#065F46">◆ created_at</text><text x="1600" y="390" text-anchor="end" font-size="11" fill="#059669">TIMESTAMPTZ</text>
+  <line x1="1300" y1="397" x2="1620" y2="397" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="1320" y="415" font-size="12" fill="#065F46">◇ original_filename</text><text x="1600" y="415" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="1300" y1="422" x2="1620" y2="422" stroke="#A7F3D0" stroke-width="0.8"/>
+  <text x="1320" y="440" font-size="12" fill="#065F46">◇ mime_type</text><text x="1600" y="440" text-anchor="end" font-size="11" fill="#059669">VARCHAR</text>
+  <line x1="1300" y1="447" x2="1620" y2="447" stroke="#A7F3D0" stroke-width="0.8"/>
+  <rect x="1308" y="455" width="304" height="22" rx="5" fill="#A7F3D0"/>
+  <text x="1460" y="470" text-anchor="middle" font-size="11" fill="#065F46">idx: chat_id · uploader_id</text>
 
-  <!-- ===== password_reset_tokens (x=545 y=352 w=215 h=180) ===== -->
-  <g id="reset_tokens" filter="url(#shadow)">
-    <rect x="545" y="352" width="215" height="180" rx="8" fill="white" stroke="#005EB8" stroke-width="2"/>
-    <rect x="545" y="352" width="215" height="30" rx="8" fill="#005EB8"/>
-    <rect x="545" y="370" width="215" height="12" fill="#005EB8"/>
-    <text x="652" y="372" text-anchor="middle" font-size="12" font-weight="bold" fill="white">password_reset_tokens</text>
-    <line x1="545" y1="388" x2="760" y2="388" stroke="#DDE" stroke-width="1"/>
-    <text x="557" y="402" font-size="11" font-weight="bold" fill="#003087">🔑 id</text><text x="660" y="402" font-size="10" fill="#666">INT PK</text>
-    <line x1="545" y1="406" x2="760" y2="406" stroke="#EEF" stroke-width="1"/>
-    <text x="557" y="420" font-size="11" fill="#003087">🔗 user_id</text><text x="660" y="420" font-size="10" fill="#666">FK → users</text>
-    <line x1="545" y1="424" x2="760" y2="424" stroke="#EEF" stroke-width="1"/>
-    <text x="557" y="438" font-size="11" fill="#003087">token_hash</text><text x="660" y="438" font-size="10" fill="#666">VARCHAR UNIQUE</text>
-    <line x1="545" y1="442" x2="760" y2="442" stroke="#EEF" stroke-width="1"/>
-    <text x="557" y="456" font-size="11" fill="#003087">expires_at</text><text x="660" y="456" font-size="10" fill="#666">TIMESTAMP</text>
-    <line x1="545" y1="460" x2="760" y2="460" stroke="#EEF" stroke-width="1"/>
-    <text x="557" y="474" font-size="11" fill="#003087">used_at</text><text x="660" y="474" font-size="10" fill="#666">TIMESTAMP (opt)</text>
-    <line x1="545" y1="478" x2="760" y2="478" stroke="#EEF" stroke-width="1"/>
-    <text x="557" y="498" font-size="11" fill="#888" font-style="italic">created_at</text>
-  </g>
+  <!-- ════════════════════════════════════ -->
+  <!-- EMAIL_VERIFICATION_TOKENS  (x=60, y=920) — moved down for routing space -->
+  <rect x="60" y="920" width="320" height="236" rx="10" fill="#DBEAFE" stroke="#93C5FD" stroke-width="2" filter="url(#s)"/>
+  <rect x="60" y="920" width="320" height="40" rx="10" fill="#1D4ED8"/>
+  <rect x="60" y="948" width="320" height="12" fill="#1D4ED8"/>
+  <text x="220" y="946" text-anchor="middle" font-size="14" font-weight="700" fill="#FFF">email_verification_tokens</text>
+  <line x1="60" y1="960" x2="380" y2="960" stroke="#93C5FD" stroke-width="1"/>
+  <text x="80" y="980" font-size="12" fill="#1E40AF">🔑 id</text><text x="360" y="980" text-anchor="end" font-size="11" fill="#3B82F6">INT PK</text>
+  <line x1="60" y1="987" x2="380" y2="987" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="1005" font-size="12" fill="#1E40AF">🔗 user_id</text><text x="360" y="1005" text-anchor="end" font-size="11" fill="#3B82F6">FK → users.id</text>
+  <line x1="60" y1="1012" x2="380" y2="1012" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="1030" font-size="12" fill="#1E40AF">◆ token_hash</text><text x="360" y="1030" text-anchor="end" font-size="11" fill="#3B82F6">VARCHAR UNIQUE</text>
+  <line x1="60" y1="1037" x2="380" y2="1037" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="1055" font-size="12" fill="#1E40AF">◆ expires_at</text><text x="360" y="1055" text-anchor="end" font-size="11" fill="#3B82F6">TIMESTAMPTZ</text>
+  <line x1="60" y1="1062" x2="380" y2="1062" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="1080" font-size="12" fill="#1E40AF">◇ used_at</text><text x="360" y="1080" text-anchor="end" font-size="11" fill="#3B82F6">TIMESTAMPTZ</text>
+  <line x1="60" y1="1087" x2="380" y2="1087" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="1105" font-size="12" fill="#1E40AF">◆ created_at</text><text x="360" y="1105" text-anchor="end" font-size="11" fill="#3B82F6">TIMESTAMPTZ</text>
+  <line x1="60" y1="1112" x2="380" y2="1112" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="1130" font-size="12" fill="#1E40AF">◇ ip_address</text><text x="360" y="1130" text-anchor="end" font-size="11" fill="#3B82F6">VARCHAR</text>
+  <line x1="60" y1="1137" x2="380" y2="1137" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="80" y="1155" font-size="12" fill="#1E40AF">◆ is_single_use</text><text x="360" y="1155" text-anchor="end" font-size="11" fill="#3B82F6">BOOLEAN default true</text>
 
-  <!-- ===== audit_logs (x=780 y=352 w=215 h=180) ===== -->
-  <g id="audit_logs" filter="url(#shadow)">
-    <rect x="780" y="352" width="215" height="180" rx="8" fill="white" stroke="#005EB8" stroke-width="2"/>
-    <rect x="780" y="352" width="215" height="30" rx="8" fill="#005EB8"/>
-    <rect x="780" y="370" width="215" height="12" fill="#005EB8"/>
-    <text x="887" y="372" text-anchor="middle" font-size="13" font-weight="bold" fill="white">audit_logs</text>
-    <line x1="780" y1="388" x2="995" y2="388" stroke="#DDE" stroke-width="1"/>
-    <text x="792" y="402" font-size="11" font-weight="bold" fill="#003087">🔑 id</text><text x="890" y="402" font-size="10" fill="#666">INT PK</text>
-    <line x1="780" y1="406" x2="995" y2="406" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="420" font-size="11" fill="#003087">🔗 user_id</text><text x="890" y="420" font-size="10" fill="#666">FK → users</text>
-    <line x1="780" y1="424" x2="995" y2="424" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="438" font-size="11" fill="#003087">action</text><text x="890" y="438" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="780" y1="442" x2="995" y2="442" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="456" font-size="11" fill="#003087">category</text><text x="890" y="456" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="780" y1="460" x2="995" y2="460" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="474" font-size="11" fill="#003087">details</text><text x="890" y="474" font-size="10" fill="#666">JSON</text>
-    <line x1="780" y1="478" x2="995" y2="478" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="492" font-size="11" fill="#003087">timestamp</text><text x="890" y="492" font-size="10" fill="#666">TIMESTAMP</text>
-    <line x1="780" y1="496" x2="995" y2="496" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="514" font-size="11" fill="#888" font-style="italic">ip_address, user_agent</text>
-  </g>
+  <!-- ════════════════════════════════════ -->
+  <!-- PASSWORD_RESET_TOKENS  (x=440, y=920) -->
+  <rect x="440" y="920" width="320" height="236" rx="10" fill="#DBEAFE" stroke="#93C5FD" stroke-width="2" filter="url(#s)"/>
+  <rect x="440" y="920" width="320" height="40" rx="10" fill="#1D4ED8"/>
+  <rect x="440" y="948" width="320" height="12" fill="#1D4ED8"/>
+  <text x="600" y="946" text-anchor="middle" font-size="14" font-weight="700" fill="#FFF">password_reset_tokens</text>
+  <line x1="440" y1="960" x2="760" y2="960" stroke="#93C5FD" stroke-width="1"/>
+  <text x="460" y="980" font-size="12" fill="#1E40AF">🔑 id</text><text x="740" y="980" text-anchor="end" font-size="11" fill="#3B82F6">INT PK</text>
+  <line x1="440" y1="987" x2="760" y2="987" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="460" y="1005" font-size="12" fill="#1E40AF">🔗 user_id</text><text x="740" y="1005" text-anchor="end" font-size="11" fill="#3B82F6">FK → users.id</text>
+  <line x1="440" y1="1012" x2="760" y2="1012" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="460" y="1030" font-size="12" fill="#1E40AF">◆ token_hash</text><text x="740" y="1030" text-anchor="end" font-size="11" fill="#3B82F6">VARCHAR UNIQUE</text>
+  <line x1="440" y1="1037" x2="760" y2="1037" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="460" y="1055" font-size="12" fill="#1E40AF">◆ expires_at</text><text x="740" y="1055" text-anchor="end" font-size="11" fill="#3B82F6">TIMESTAMPTZ</text>
+  <line x1="440" y1="1062" x2="760" y2="1062" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="460" y="1080" font-size="12" fill="#1E40AF">◇ used_at</text><text x="740" y="1080" text-anchor="end" font-size="11" fill="#3B82F6">TIMESTAMPTZ</text>
+  <line x1="440" y1="1087" x2="760" y2="1087" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="460" y="1105" font-size="12" fill="#1E40AF">◆ created_at</text><text x="740" y="1105" text-anchor="end" font-size="11" fill="#3B82F6">TIMESTAMPTZ</text>
+  <line x1="440" y1="1112" x2="760" y2="1112" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="460" y="1130" font-size="12" fill="#1E40AF">◇ ip_address</text><text x="740" y="1130" text-anchor="end" font-size="11" fill="#3B82F6">VARCHAR</text>
+  <line x1="440" y1="1137" x2="760" y2="1137" stroke="#BFDBFE" stroke-width="0.8"/>
+  <text x="460" y="1155" font-size="12" fill="#1E40AF">◆ invalidated</text><text x="740" y="1155" text-anchor="end" font-size="11" fill="#3B82F6">BOOLEAN default false</text>
 
-  <!-- ===== notifications (x=780 y=555 w=215 h=192) ===== -->
-  <g id="notifications" filter="url(#shadow)">
-    <rect x="780" y="555" width="215" height="192" rx="8" fill="white" stroke="#005EB8" stroke-width="2"/>
-    <rect x="780" y="555" width="215" height="30" rx="8" fill="#005EB8"/>
-    <rect x="780" y="573" width="215" height="12" fill="#005EB8"/>
-    <text x="887" y="575" text-anchor="middle" font-size="13" font-weight="bold" fill="white">notifications</text>
-    <line x1="780" y1="591" x2="995" y2="591" stroke="#DDE" stroke-width="1"/>
-    <text x="792" y="605" font-size="11" font-weight="bold" fill="#003087">🔑 id</text><text x="890" y="605" font-size="10" fill="#666">INT PK</text>
-    <line x1="780" y1="609" x2="995" y2="609" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="623" font-size="11" fill="#003087">🔗 user_id</text><text x="890" y="623" font-size="10" fill="#666">FK → users</text>
-    <line x1="780" y1="627" x2="995" y2="627" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="641" font-size="11" fill="#003087">type</text><text x="890" y="641" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="780" y1="645" x2="995" y2="645" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="659" font-size="11" fill="#003087">title</text><text x="890" y="659" font-size="10" fill="#666">VARCHAR</text>
-    <line x1="780" y1="663" x2="995" y2="663" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="677" font-size="11" fill="#003087">body</text><text x="890" y="677" font-size="10" fill="#666">TEXT</text>
-    <line x1="780" y1="681" x2="995" y2="681" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="695" font-size="11" fill="#003087">🔗 chat_id</text><text x="890" y="695" font-size="10" fill="#666">FK → chats (opt)</text>
-    <line x1="780" y1="699" x2="995" y2="699" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="713" font-size="11" fill="#003087">is_read</text><text x="890" y="713" font-size="10" fill="#666">BOOLEAN</text>
-    <line x1="780" y1="717" x2="995" y2="717" stroke="#EEF" stroke-width="1"/>
-    <text x="792" y="733" font-size="11" fill="#888" font-style="italic">created_at</text>
-  </g>
+  <!-- ════════════════════════════════════ -->
+  <!-- AUDIT_LOGS  (x=840, y=920) -->
+  <rect x="840" y="920" width="320" height="276" rx="10" fill="#F3E8FF" stroke="#D8B4FE" stroke-width="2" filter="url(#s)"/>
+  <rect x="840" y="920" width="320" height="40" rx="10" fill="#5B21B6"/>
+  <rect x="840" y="948" width="320" height="12" fill="#5B21B6"/>
+  <text x="1000" y="946" text-anchor="middle" font-size="15" font-weight="700" fill="#FFF">audit_logs</text>
+  <line x1="840" y1="960" x2="1160" y2="960" stroke="#D8B4FE" stroke-width="1"/>
+  <text x="860" y="980" font-size="12" fill="#5B21B6">🔑 id</text><text x="1140" y="980" text-anchor="end" font-size="11" fill="#7C3AED">INT PK</text>
+  <line x1="840" y1="987" x2="1160" y2="987" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="860" y="1005" font-size="12" fill="#5B21B6">🔗 user_id</text><text x="1140" y="1005" text-anchor="end" font-size="11" fill="#7C3AED">FK → users.id ◇</text>
+  <line x1="840" y1="1012" x2="1160" y2="1012" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="860" y="1030" font-size="12" fill="#5B21B6">◆ action</text><text x="1140" y="1030" text-anchor="end" font-size="11" fill="#7C3AED">VARCHAR</text>
+  <line x1="840" y1="1037" x2="1160" y2="1037" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="860" y="1055" font-size="12" fill="#5B21B6">◆ category</text><text x="1140" y="1055" text-anchor="end" font-size="11" fill="#7C3AED">VARCHAR</text>
+  <line x1="840" y1="1062" x2="1160" y2="1062" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="860" y="1080" font-size="12" fill="#5B21B6">◇ details</text><text x="1140" y="1080" text-anchor="end" font-size="11" fill="#7C3AED">JSONB</text>
+  <line x1="840" y1="1087" x2="1160" y2="1087" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="860" y="1105" font-size="12" fill="#5B21B6">◆ timestamp</text><text x="1140" y="1105" text-anchor="end" font-size="11" fill="#7C3AED">TIMESTAMPTZ</text>
+  <line x1="840" y1="1112" x2="1160" y2="1112" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="860" y="1130" font-size="12" fill="#5B21B6">◇ ip_address</text><text x="1140" y="1130" text-anchor="end" font-size="11" fill="#7C3AED">VARCHAR</text>
+  <line x1="840" y1="1137" x2="1160" y2="1137" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="860" y="1155" font-size="12" fill="#5B21B6">◇ user_agent</text><text x="1140" y="1155" text-anchor="end" font-size="11" fill="#7C3AED">VARCHAR</text>
+  <line x1="840" y1="1162" x2="1160" y2="1162" stroke="#E9D5FF" stroke-width="0.8"/>
+  <rect x="848" y="1170" width="304" height="22" rx="5" fill="#E9D5FF"/>
+  <text x="1000" y="1185" text-anchor="middle" font-size="11" fill="#5B21B6">idx: user_id · category · action · timestamp</text>
 
-  <!-- =================== RELATIONSHIP LINES =================== -->
+  <!-- ════════════════════════════════════ -->
+  <!-- NOTIFICATIONS  (x=1220, y=920) -->
+  <rect x="1220" y="920" width="320" height="276" rx="10" fill="#F3E8FF" stroke="#D8B4FE" stroke-width="2" filter="url(#s)"/>
+  <rect x="1220" y="920" width="320" height="40" rx="10" fill="#5B21B6"/>
+  <rect x="1220" y="948" width="320" height="12" fill="#5B21B6"/>
+  <text x="1380" y="946" text-anchor="middle" font-size="15" font-weight="700" fill="#FFF">notifications</text>
+  <line x1="1220" y1="960" x2="1540" y2="960" stroke="#D8B4FE" stroke-width="1"/>
+  <text x="1240" y="980" font-size="12" fill="#5B21B6">🔑 id</text><text x="1520" y="980" text-anchor="end" font-size="11" fill="#7C3AED">INT PK</text>
+  <line x1="1220" y1="987" x2="1540" y2="987" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="1240" y="1005" font-size="12" fill="#5B21B6">🔗 user_id</text><text x="1520" y="1005" text-anchor="end" font-size="11" fill="#7C3AED">FK → users.id</text>
+  <line x1="1220" y1="1012" x2="1540" y2="1012" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="1240" y="1030" font-size="12" fill="#5B21B6">🔗 chat_id</text><text x="1520" y="1030" text-anchor="end" font-size="11" fill="#7C3AED">FK → chats.id ◇</text>
+  <line x1="1220" y1="1037" x2="1540" y2="1037" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="1240" y="1055" font-size="12" fill="#5B21B6">◆ type</text><text x="1520" y="1055" text-anchor="end" font-size="11" fill="#7C3AED">VARCHAR</text>
+  <line x1="1220" y1="1062" x2="1540" y2="1062" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="1240" y="1080" font-size="12" fill="#5B21B6">◆ title</text><text x="1520" y="1080" text-anchor="end" font-size="11" fill="#7C3AED">VARCHAR</text>
+  <line x1="1220" y1="1087" x2="1540" y2="1087" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="1240" y="1105" font-size="12" fill="#5B21B6">◇ body</text><text x="1520" y="1105" text-anchor="end" font-size="11" fill="#7C3AED">TEXT</text>
+  <line x1="1220" y1="1112" x2="1540" y2="1112" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="1240" y="1130" font-size="12" fill="#5B21B6">◆ is_read</text><text x="1520" y="1130" text-anchor="end" font-size="11" fill="#7C3AED">BOOLEAN</text>
+  <line x1="1220" y1="1137" x2="1540" y2="1137" stroke="#E9D5FF" stroke-width="0.8"/>
+  <text x="1240" y="1155" font-size="12" fill="#5B21B6">◆ created_at</text><text x="1520" y="1155" text-anchor="end" font-size="11" fill="#7C3AED">TIMESTAMPTZ</text>
+  <line x1="1220" y1="1162" x2="1540" y2="1162" stroke="#E9D5FF" stroke-width="0.8"/>
+  <rect x="1228" y="1170" width="304" height="22" rx="5" fill="#E9D5FF"/>
+  <text x="1380" y="1185" text-anchor="middle" font-size="11" fill="#5B21B6">idx: user_id · is_read · chat_id</text>
 
-  <!-- users 1──N chats (user_id): users bottom→y=342→chats top -->
-  <path d="M 530 330 L 530 342 L 142 342 L 142 352" fill="none" stroke="#005EB8" stroke-width="1.8"/>
-  <text x="537" y="340" font-size="12" font-weight="bold" fill="#005EB8">1</text>
-  <text x="126" y="346" font-size="12" font-weight="bold" fill="#005EB8">N</text>
+  <!-- ════════════════════════════════════ -->
+  <!-- RAG_CHUNKS  (x=1700, y=155) -->
+  <rect x="1700" y="155" width="660" height="426" rx="10" fill="#FEF3C7" stroke="#FCD34D" stroke-width="2" filter="url(#s)"/>
+  <rect x="1700" y="155" width="660" height="40" rx="10" fill="#92400E"/>
+  <rect x="1700" y="183" width="660" height="12" fill="#92400E"/>
+  <text x="2030" y="181" text-anchor="middle" font-size="15" font-weight="700" fill="#FFF">rag_chunks  —  vector store (pgvector)</text>
+  <line x1="1700" y1="195" x2="2360" y2="195" stroke="#FCD34D" stroke-width="1"/>
+  <text x="1720" y="215" font-size="12" fill="#92400E">🔑 id</text><text x="2340" y="215" text-anchor="end" font-size="11" fill="#B45309">BIGINT PK</text>
+  <line x1="1700" y1="222" x2="2360" y2="222" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="240" font-size="12" fill="#92400E">◆ doc_id</text><text x="2340" y="240" text-anchor="end" font-size="11" fill="#B45309">TEXT</text>
+  <line x1="1700" y1="247" x2="2360" y2="247" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="265" font-size="12" fill="#92400E">◆ doc_version</text><text x="2340" y="265" text-anchor="end" font-size="11" fill="#B45309">TEXT</text>
+  <line x1="1700" y1="272" x2="2360" y2="272" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="290" font-size="12" fill="#92400E">◆ chunk_id</text><text x="2340" y="290" text-anchor="end" font-size="11" fill="#B45309">TEXT</text>
+  <line x1="1700" y1="297" x2="2360" y2="297" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="315" font-size="12" fill="#92400E">◆ chunk_index</text><text x="2340" y="315" text-anchor="end" font-size="11" fill="#B45309">INT</text>
+  <line x1="1700" y1="322" x2="2360" y2="322" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="340" font-size="12" fill="#92400E">◆ content_type</text><text x="2340" y="340" text-anchor="end" font-size="11" fill="#B45309">TEXT</text>
+  <line x1="1700" y1="347" x2="2360" y2="347" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="365" font-size="12" fill="#92400E">◆ text</text><text x="2340" y="365" text-anchor="end" font-size="11" fill="#B45309">TEXT (guideline passage)</text>
+  <line x1="1700" y1="372" x2="2360" y2="372" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="390" font-size="12" fill="#92400E">◆ embedding</text><text x="2340" y="390" text-anchor="end" font-size="11" fill="#B45309">VECTOR(384)  —  HNSW index</text>
+  <line x1="1700" y1="397" x2="2360" y2="397" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="415" font-size="12" fill="#92400E">◆ metadata</text><text x="2340" y="415" text-anchor="end" font-size="11" fill="#B45309">JSONB  (title, source, citations…)</text>
+  <line x1="1700" y1="422" x2="2360" y2="422" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="440" font-size="12" fill="#92400E">◆ text_search_vector</text><text x="2340" y="440" text-anchor="end" font-size="11" fill="#B45309">TSVECTOR  (GIN index, generated)</text>
+  <line x1="1700" y1="447" x2="2360" y2="447" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="465" font-size="12" fill="#92400E">◆ created_at</text><text x="2340" y="465" text-anchor="end" font-size="11" fill="#B45309">TIMESTAMPTZ</text>
+  <line x1="1700" y1="472" x2="2360" y2="472" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="490" font-size="12" fill="#92400E">◆ updated_at</text><text x="2340" y="490" text-anchor="end" font-size="11" fill="#B45309">TIMESTAMPTZ</text>
+  <line x1="1700" y1="497" x2="2360" y2="497" stroke="#FDE68A" stroke-width="0.8"/>
+  <rect x="1708" y="505" width="644" height="22" rx="5" fill="#FDE68A"/>
+  <text x="2030" y="520" text-anchor="middle" font-size="11" fill="#92400E">UNIQUE(doc_id, doc_version, chunk_id) · idx: doc_id · doc_version · content_type · metadata(GIN) · embedding(HNSW)</text>
+  <line x1="1700" y1="527" x2="2360" y2="527" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="547" font-size="12" fill="#92400E">7,384 chunks seeded</text><text x="2340" y="547" text-anchor="end" font-size="11" fill="#B45309">NICE + BSR guidelines</text>
+  <line x1="1700" y1="554" x2="2360" y2="554" stroke="#FDE68A" stroke-width="0.8"/>
+  <text x="1720" y="574" font-size="12" fill="#92400E">Specialties</text><text x="2340" y="574" text-anchor="end" font-size="11" fill="#B45309">neurology · rheumatology</text>
 
-  <!-- users 1──N email_verification_tokens: users bottom→y=342→tokens top -->
-  <path d="M 490 330 L 490 342 L 402 342 L 402 352" fill="none" stroke="#005EB8" stroke-width="1.8"/>
-  <text x="497" y="340" font-size="12" font-weight="bold" fill="#005EB8">1</text>
-  <text x="386" y="346" font-size="12" font-weight="bold" fill="#005EB8">N</text>
+  <!-- ════════════════════════════════════ -->
+  <!-- FK RELATIONSHIP LINES -->
+  <!-- users → chats (user_id) — direct horizontal -->
+  <line x1="380" y1="230" x2="460" y2="230" stroke="#64748B" stroke-width="2" marker-end="url(#fk)"/>
+  <text x="420" y="224" font-size="11" fill="#64748B">1..N</text>
+  <!-- users → chats (specialist_id) — direct horizontal dashed -->
+  <line x1="380" y1="260" x2="460" y2="260" stroke="#64748B" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#fk)"/>
+  <text x="420" y="254" font-size="11" fill="#64748B">0..N</text>
+  <!-- chats → messages — direct horizontal -->
+  <line x1="820" y1="240" x2="900" y2="240" stroke="#059669" stroke-width="2" marker-end="url(#fk)"/>
+  <text x="836" y="234" font-size="11" fill="#059669">1..N</text>
+  <!-- chats → file_attachments — exit chats top, overhead channel y=148, enter file_attachments left -->
+  <path d="M 700 155 L 700 148 L 1290 148 L 1290 240 L 1300 240" stroke="#059669" stroke-width="2" fill="none" marker-end="url(#fk)"/>
+  <text x="960" y="144" font-size="11" fill="#059669">1..N</text>
+  <!-- users → file_attachments (uploader) — exit users right, overhead channel y=141, enter file_attachments top -->
+  <path d="M 380 290 L 395 290 L 395 141 L 1460 141 L 1460 155" stroke="#64748B" stroke-width="1.5" stroke-dasharray="4,3" fill="none" marker-end="url(#fk)"/>
+  <!-- users → email_verification_tokens — straight vertical (same x column) -->
+  <path d="M 220 611 L 220 920" stroke="#1D4ED8" stroke-width="2" fill="none" marker-end="url(#fk-b)"/>
+  <text x="228" y="760" font-size="11" fill="#1D4ED8">1..N</text>
+  <!-- users → password_reset_tokens — gap channel x=408, routing lane y=840 -->
+  <path d="M 380 530 L 408 530 L 408 840 L 600 840 L 600 920" stroke="#1D4ED8" stroke-width="2" fill="none" marker-end="url(#fk-b)"/>
+  <text x="490" y="836" font-size="11" fill="#1D4ED8">1..N</text>
+  <!-- users → audit_logs — gap channel x=420, routing lane y=852 -->
+  <path d="M 380 480 L 420 480 L 420 852 L 1000 852 L 1000 920" stroke="#7C3AED" stroke-width="2" fill="none" marker-end="url(#fk)"/>
+  <text x="720" y="848" font-size="11" fill="#7C3AED">1..N</text>
+  <!-- users → notifications — gap channel x=432, routing lane y=864 -->
+  <path d="M 380 450 L 432 450 L 432 864 L 1380 864 L 1380 920" stroke="#7C3AED" stroke-width="2" fill="none" marker-end="url(#fk)"/>
+  <!-- chats → notifications — routing lane y=835, enter notifications left -->
+  <path d="M 640 751 L 640 835 L 1215 835 L 1215 1030 L 1220 1030" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="5,3" fill="none" marker-end="url(#fk)"/>
+  <text x="925" y="831" font-size="11" fill="#7C3AED">0..N</text>
 
-  <!-- users 1──N password_reset_tokens: users bottom→y=342→tokens top -->
-  <path d="M 570 330 L 570 342 L 652 342 L 652 352" fill="none" stroke="#005EB8" stroke-width="1.8"/>
-  <text x="577" y="340" font-size="12" font-weight="bold" fill="#005EB8">1</text>
-  <text x="636" y="346" font-size="12" font-weight="bold" fill="#005EB8">N</text>
-
-  <!-- users 1──N audit_logs: users right→x=765→audit_logs left (y=420 user_id row)
-       x=765 is clear: pw_reset_tokens right=760, audit_logs left=780. -->
-  <path d="M 640 184 L 765 184 L 765 420 L 780 420" fill="none" stroke="#005EB8" stroke-width="1.8"/>
-  <text x="645" y="181" font-size="12" font-weight="bold" fill="#005EB8">1</text>
-  <text x="768" y="418" font-size="12" font-weight="bold" fill="#005EB8">N</text>
-
-  <!-- users 1──N notifications: users right→x=765→notifications left (y=623 user_id row)
-       x=765 clears pw_reset right=760 and audit_logs left=780. -->
-  <path d="M 640 220 L 765 220 L 765 623 L 780 623" fill="none" stroke="#005EB8" stroke-width="1.8"/>
-  <text x="645" y="217" font-size="12" font-weight="bold" fill="#005EB8">1</text>
-  <text x="768" y="621" font-size="12" font-weight="bold" fill="#005EB8">N</text>
-
-  <!-- chats 1──N messages: chats bottom→messages top (both cx≈140) -->
-  <path d="M 142 638 L 142 660" fill="none" stroke="#005EB8" stroke-width="1.8"/>
-  <text x="126" y="644" font-size="12" font-weight="bold" fill="#005EB8">1</text>
-  <text x="126" y="658" font-size="12" font-weight="bold" fill="#005EB8">N</text>
-
-  <!-- chats 1──N file_attachments: chats bottom→y=650→file_attachments top -->
-  <path d="M 200 638 L 200 650 L 402 650 L 402 660" fill="none" stroke="#005EB8" stroke-width="1.8"/>
-  <text x="184" y="644" font-size="12" font-weight="bold" fill="#005EB8">1</text>
-  <text x="386" y="656" font-size="12" font-weight="bold" fill="#005EB8">N</text>
-
-  <!-- Legend -->
-  <rect x="50" y="916" width="700" height="32" rx="6" fill="white" stroke="#ccc" stroke-width="1"/>
-  <text x="65" y="936" font-size="11" font-weight="bold" fill="#003087">Legend:</text>
-  <text x="120" y="936" font-size="11" fill="#003087">🔑 Primary Key</text>
-  <text x="250" y="936" font-size="11" fill="#003087">🔗 Foreign Key</text>
-  <text x="370" y="936" font-size="11" fill="#003087">1 ── N  One-to-Many relationship</text>
-  <text x="590" y="936" font-size="11" fill="#888" font-style="italic">specialist_id and uploader_id FKs shown as fields</text>
+  <!-- rag_chunks note - no FK (standalone) -->
+  <rect x="1708" y="620" width="644" height="36" rx="6" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="2030" y="636" text-anchor="middle" font-size="12" fill="#92400E" font-weight="600">⚠ rag_chunks has no foreign keys to application tables</text>
+  <text x="2030" y="650" text-anchor="middle" font-size="11" fill="#B45309">Managed exclusively by rag_service · queried via pgvector similarity search</text>
 </svg>
