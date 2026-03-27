@@ -4740,15 +4740,40 @@ body[data-page="implementation"] .seq-diagram {
 	border-radius: 12px;
 	text-decoration: none;
 	color: inherit;
-	transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
+	transition: border-color 0.22s, box-shadow 0.22s, transform 0.22s;
 	background: #fff;
+	position: relative;
+	overflow: hidden;
+}
+
+.impl-index-card::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -75%;
+	width: 50%;
+	height: 100%;
+	background: linear-gradient(
+		120deg,
+		transparent 0%,
+		rgba(0, 94, 184, 0.09) 50%,
+		transparent 100%
+	);
+	transform: skewX(-18deg);
+	transition: left 0s;
+	pointer-events: none;
 }
 
 .impl-index-card:hover {
 	border-color: var(--nhs-blue, #005eb8);
-	box-shadow: 0 4px 20px rgba(0, 94, 184, 0.1);
-	transform: translateY(-2px);
+	box-shadow: 0 6px 28px rgba(0, 94, 184, 0.14);
+	transform: translateY(-4px);
 	color: inherit;
+}
+
+.impl-index-card:hover::before {
+	left: 140%;
+	transition: left 0.52s ease;
 }
 
 .impl-index-card__number {
