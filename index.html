@@ -27,7 +27,6 @@
           <a href="testing.html" data-nav="testing">Testing</a>
           <a href="evaluation.html" data-nav="evaluation">Evaluation</a>
           <a href="appendices.html" data-nav="appendices">Appendices</a>
-          <a href="blog/blog.html" data-nav="blog">Blog</a>
         </nav>
         <a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a>
       </div>
@@ -259,12 +258,12 @@
           <section class="section-card section-card--project-management">
             <h2 id="project-management">Project management</h2>
             <p>
-              Planned schedule from 20 October 2025 to 27 March 2026 across infrastructure,
-              data processing, RAG development, interface delivery, and final validation.
+              Planned schedule from October 2025 to March 2026 across research, design,
+              infrastructure, RAG development, model integration, and final delivery.
             </p>
-            <div class="gantt-chart" role="img" aria-label="Gantt chart showing project phases from October 2025 to March 2026">
+            <div class="gantt-chart" role="img" aria-label="Gantt chart showing project work items from October 2025 to March 2026">
               <div class="gantt-chart__axis" aria-hidden="true">
-                <span class="gantt-chart__axis-label">Work package</span>
+                <span class="gantt-chart__axis-label">Work item</span>
                 <div class="gantt-chart__months">
                   <span>Oct</span>
                   <span>Nov</span>
@@ -276,41 +275,105 @@
               </div>
 
               <div class="gantt-chart__row">
-                <div class="gantt-chart__label">Foundation &amp; Infrastructure</div>
+                <div class="gantt-chart__label">Research</div>
                 <div class="gantt-chart__track">
-                  <span class="gantt-chart__bar" style="--start: 0; --span: 4;">W1–4</span>
+                  <span class="gantt-chart__bar gantt-chart__bar--research" style="--start: 0; --span: 7;">W1–7</span>
                 </div>
               </div>
 
               <div class="gantt-chart__row">
-                <div class="gantt-chart__label">Data Processing</div>
+                <div class="gantt-chart__label">UI Design</div>
                 <div class="gantt-chart__track">
-                  <span class="gantt-chart__bar" style="--start: 4; --span: 4;">W5–8</span>
+                  <span class="gantt-chart__bar gantt-chart__bar--design" style="--start: 2; --span: 3;">W3–5</span>
                 </div>
               </div>
 
               <div class="gantt-chart__row">
-                <div class="gantt-chart__label">Core RAG Pipeline Development</div>
+                <div class="gantt-chart__label">Requirements</div>
                 <div class="gantt-chart__track">
-                  <span class="gantt-chart__bar" style="--start: 8; --span: 4;">W9–12</span>
+                  <span class="gantt-chart__bar gantt-chart__bar--design" style="--start: 1; --span: 3;">W2–4</span>
                 </div>
               </div>
 
               <div class="gantt-chart__row">
-                <div class="gantt-chart__label">UI &amp; Interaction Layer</div>
+                <div class="gantt-chart__label">Gaudi 2 / HPU Setup</div>
                 <div class="gantt-chart__track">
-                  <span class="gantt-chart__bar" style="--start: 12; --span: 4;">W13–16</span>
+                  <span class="gantt-chart__bar gantt-chart__bar--infra" style="--start: 3; --span: 8;">W4–11</span>
                 </div>
               </div>
 
               <div class="gantt-chart__row">
-                <div class="gantt-chart__label">Testing &amp; Final Delivery</div>
+                <div class="gantt-chart__label">RAG Ingestion</div>
                 <div class="gantt-chart__track">
-                  <span class="gantt-chart__bar" style="--start: 16; --span: 4;">W17–20</span>
+                  <span class="gantt-chart__bar" style="--start: 7; --span: 6;">W8–13</span>
                 </div>
               </div>
 
-              <p class="gantt-chart__note">Timeline expressed in 20 project weeks (5 phases × 4 weeks).</p>
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Vector Search</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 9; --span: 6;">W10–15</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Backend API</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 7; --span: 8;">W8–15</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Frontend</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 8; --span: 10;">W9–18</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">LLM Integration</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 6; --span: 7;">W7–13</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Model Routing</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 12; --span: 6;">W13–18</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Citation Mapping</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 11; --span: 9;">W12–20</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Database</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 7; --span: 7;">W8–14</span>
+                  <span class="gantt-chart__bar" style="--start: 20; --span: 2;">W21–22</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Testing</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 16; --span: 7;">W17–23</span>
+                </div>
+              </div>
+
+              <div class="gantt-chart__row">
+                <div class="gantt-chart__label">Documentation</div>
+                <div class="gantt-chart__track">
+                  <span class="gantt-chart__bar" style="--start: 20; --span: 4;">W21–24</span>
+                </div>
+              </div>
+
+              <p class="gantt-chart__note">Timeline: 24 project weeks, October 2025 – March 2026.</p>
             </div>
           </section>
         </div>

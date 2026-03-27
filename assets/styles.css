@@ -952,11 +952,6 @@ body:not([data-page="home"]) .page-shell {
 
 .section-card {
 	padding: 32px;
-	transition: box-shadow 0.2s ease;
-}
-
-.section-card:hover {
-	box-shadow: 0 2px 6px rgba(7, 23, 45, 0.07), 0 12px 32px rgba(7, 23, 45, 0.1);
 }
 
 .section-bare {
@@ -2715,7 +2710,7 @@ tr:last-child td {
 .gantt-chart__axis,
 .gantt-chart__row {
 	display: grid;
-	grid-template-columns: 230px minmax(560px, 1fr);
+	grid-template-columns: 200px minmax(560px, 1fr);
 	gap: 14px;
 	align-items: center;
 }
@@ -2757,7 +2752,7 @@ tr:last-child td {
 			rgba(17, 24, 39, 0.06) 0,
 			rgba(17, 24, 39, 0.06) 1px,
 			transparent 1px,
-			transparent calc(100% / 20)
+			transparent calc(100% / 24)
 		),
 		linear-gradient(180deg, #f8fbff, #eef4ff);
 	border: 1px solid #d7e0ed;
@@ -2771,9 +2766,9 @@ tr:last-child td {
 	background: repeating-linear-gradient(
 		90deg,
 		transparent 0,
-		transparent calc(100% / 5 - 1px),
-		rgba(0, 48, 135, 0.12) calc(100% / 5 - 1px),
-		rgba(0, 48, 135, 0.12) calc(100% / 5)
+		transparent calc(100% / 6 - 1px),
+		rgba(0, 48, 135, 0.12) calc(100% / 6 - 1px),
+		rgba(0, 48, 135, 0.12) calc(100% / 6)
 	);
 	pointer-events: none;
 }
@@ -2787,8 +2782,8 @@ tr:last-child td {
 .gantt-chart__bar {
 	position: absolute;
 	top: 6px;
-	left: calc((var(--start) / 20) * 100%);
-	width: calc((var(--span) / 20) * 100%);
+	left: calc((var(--start) / 24) * 100%);
+	width: calc((var(--span) / 24) * 100%);
 	height: 22px;
 	display: inline-flex;
 	align-items: center;
@@ -2798,9 +2793,14 @@ tr:last-child td {
 	font-weight: 700;
 	color: #ffffff;
 	background: linear-gradient(90deg, var(--nhs-dark-blue), var(--nhs-blue));
-	box-shadow: 0 6px 14px rgba(0, 48, 135, 0.24);
 	white-space: nowrap;
 	z-index: 1;
+}
+
+.gantt-chart__bar--research,
+.gantt-chart__bar--design,
+.gantt-chart__bar--infra {
+	background: linear-gradient(90deg, var(--nhs-dark-blue), var(--nhs-blue));
 }
 
 .gantt-chart__note {
@@ -3685,6 +3685,70 @@ body[data-page="appendices"] .appendix-link-card--placeholder p {
 	color: rgba(11, 47, 111, 0.82);
 }
 
+body[data-page="appendices"] .appendix-showcase-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	max-width: 480px;
+	margin: 0 auto;
+	padding: 40px 36px 34px;
+	border-radius: 18px;
+	border: 1px solid rgba(7, 23, 45, 0.1);
+	background: #ffffff;
+	text-decoration: none;
+	color: inherit;
+	transition: box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+body[data-page="appendices"] .appendix-showcase-card:hover {
+	box-shadow: 0 8px 28px rgba(7, 23, 45, 0.08);
+	transform: translateY(-2px);
+}
+
+body[data-page="appendices"] .appendix-showcase-card__icon {
+	width: 48px;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 20px;
+	color: #1f2937;
+}
+
+body[data-page="appendices"] .appendix-showcase-card__icon svg {
+	width: 32px;
+	height: 32px;
+}
+
+body[data-page="appendices"] .appendix-showcase-card h3 {
+	font-size: 1.3rem;
+	font-weight: 800;
+	color: #0f172a;
+	margin: 0 0 10px;
+}
+
+body[data-page="appendices"] .appendix-showcase-card p {
+	font-size: 0.95rem;
+	color: #94a3b8;
+	margin: 0 0 20px;
+	line-height: 1.6;
+	max-width: 32ch;
+}
+
+body[data-page="appendices"] .appendix-showcase-card__cta {
+	display: inline-flex;
+	align-items: center;
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: #0f172a;
+	transition: color 0.2s ease;
+}
+
+body[data-page="appendices"] .appendix-showcase-card:hover .appendix-showcase-card__cta {
+	color: var(--nhs-blue);
+}
+
 body[data-page="appendices"] .appendix-issue-card {
 	--appendix-card-bar: linear-gradient(90deg, #0b2f6f 0%, #005eb8 58%, #4aa3ff 100%);
 	padding: 24px;
@@ -3954,6 +4018,38 @@ body[data-page="ui-design"] .asset-image {
 	border-radius: 14px;
 	border: 1px solid rgba(7, 23, 45, 0.1);
 	margin-top: 12px;
+}
+
+body[data-page="ui-design"] .prototype-figma-link-row {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 12px;
+}
+
+body[data-page="ui-design"] .prototype-figma-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 0;
+	font-weight: 600;
+	font-size: 0.96rem;
+	color: #0f4fa9;
+	text-decoration: none;
+	border-bottom: 1px solid rgba(15, 79, 169, 0.3);
+	padding-bottom: 2px;
+	transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+body[data-page="ui-design"] .prototype-figma-link:hover {
+	color: #0a3b7d;
+	border-bottom-color: rgba(10, 59, 125, 0.5);
+	transform: translateX(1px);
+}
+
+body[data-page="ui-design"] .prototype-figma-link:focus-visible {
+	outline: 2px solid rgba(15, 79, 169, 0.35);
+	outline-offset: 3px;
+	border-bottom-color: rgba(15, 79, 169, 0.65);
 }
 
 body[data-page="ui-design"] .artifact-grid--stacked {
