@@ -241,15 +241,15 @@ function renderFooter() {
       <section class="site-footer__docs">
         <h4 class="site-footer__heading">Documentation</h4>
         <div class="site-footer__docs-grid">
-          <a href="${_root}requirements.html">Requirements</a>
-          <a href="${_root}testing.html">Testing</a>
-          <a href="${_root}research.html">Research</a>
-          <a href="${_root}evaluation.html">Evaluation</a>
-          <a href="${_root}ui-design.html">UI Design</a>
-          <a href="${_root}appendices.html">Appendices</a>
-          <a href="${_root}system-design.html">System Design</a>
-          <a href="${_root}blog/blog.html">Blog</a>
-          <a href="${_root}implementation/implementation.html">Implementation</a>
+          <a href="${_root}requirements/">Requirements</a>
+          <a href="${_root}testing/">Testing</a>
+          <a href="${_root}research/">Research</a>
+          <a href="${_root}evaluation/">Evaluation</a>
+          <a href="${_root}ui-design/">UI Design</a>
+          <a href="${_root}appendices/">Appendices</a>
+          <a href="${_root}system-design/">System Design</a>
+          <a href="${_root}blog/">Blog</a>
+          <a href="${_root}implementation/">Implementation</a>
         </div>
       </section>
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Appendices · Ambience-AI-1.5</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20260325ag" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260326h" />
   </head>
   <body data-page="appendices">
     <header class="site-header"><div class="site-header__inner"><a class="brand" href="index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="index.html" data-nav="home">Home</a><a href="requirements.html" data-nav="requirements">Requirements</a><a href="research.html" data-nav="research">Research</a><a href="ui-design.html" data-nav="ui-design">UI Design</a><a href="system-design.html" data-nav="system-design">System Design</a><a href="implementation/implementation.html" data-nav="implementation">Implementation</a><a href="testing.html" data-nav="testing">Testing</a><a href="evaluation.html" data-nav="evaluation">Evaluation</a><a href="appendices.html" data-nav="appendices">Appendices</a><a href="blog/blog.html" data-nav="blog">Blog</a></nav><a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a></div></header>
@@ -12,152 +12,557 @@
     <main class="page-shell">
       <div class="report-page-header">
         <h1 class="report-page-title">Appendices</h1>
-        <p class="report-page-subtitle">User guide, deployment guide, privacy, and external artefacts</p>
-        <p class="report-page-summary">
-          This appendix page collects practical material that sits alongside the main technical report:
-          user instructions, deployment instructions, GDPR-oriented handling notes, and publication
-          placeholders for the monthly video deliverable.
-        </p>
+        <p class="report-page-subtitle">User manual, README, GDPR, privacy policy, dependencies, and contributions</p>
       </div>
 
       <div class="page-grid">
         <div class="content-stack">
           <section class="section-card" id="user-manual">
-            <h2 id="user-manual-heading">User manual</h2>
-            <div class="appendix-grid">
-              <div class="appendix-card">
+            <h2>User manual</h2>
+            <p class="lede">
+              The appendix should help a marker or project partner get into the system quickly. For
+              Ambience-AI-1.5 that means separating the GP, specialist, and admin journeys rather
+              than describing the whole application as if every user sees the same interface.
+            </p>
+            <div class="appendix-manual-grid">
+              <div>
+                <h3>User-access pack</h3>
+                <p>
+                  The user manual should begin with the live application URL if one exists, explain
+                  what each role can do, and then walk through the most important screens in order.
+                  Screenshots are especially useful for the first-login flow, consultation creation,
+                  specialist review, and admin oversight views.
+                </p>
+                <ul>
+                  <li>Show the reader where to log in and what credentials format to use.</li>
+                  <li>Explain the happy path for each role instead of listing unrelated features.</li>
+                  <li>Use screenshots with short captions to anchor the explanation visually.</li>
+                </ul>
+              </div>
+
+              <div class="appendix-access-card">
+                <h3>Access details to include</h3>
+                <div class="appendix-access-list">
+                  <div class="appendix-access-list__item">
+                    <strong>Live application URL</strong>
+                    <span><a href="#" data-placeholder-link>Replace with the deployed website URL if a live instance is available</a></span>
+                  </div>
+                  <div class="appendix-access-list__item">
+                    <strong>GP account</strong>
+                    <span>Add one working demo account for the GP workflow.</span>
+                  </div>
+                  <div class="appendix-access-list__item">
+                    <strong>Specialist account</strong>
+                    <span>Add one working demo account for the specialist review workflow.</span>
+                  </div>
+                  <div class="appendix-access-list__item">
+                    <strong>Admin account</strong>
+                    <span>Add one working demo account for the admin oversight workflow.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="appendix-role-grid">
+              <div class="appendix-card appendix-role-card">
+                <span class="appendix-role-card__eyebrow">Role 1</span>
                 <h3>GP workflow</h3>
+                <p>The GP journey should show how a consultation starts and where grounded answers appear.</p>
                 <ul>
-                  <li>Log in as a GP user.</li>
-                  <li>Create a new consultation with title, specialty, and severity.</li>
-                  <li>Send the first clinical question to trigger AI generation and auto-submission.</li>
-                  <li>Open the consultation detail timeline to inspect the AI answer and its citations.</li>
-                  <li>Monitor review status through the consultation state and notifications.</li>
+                  <li>Log in as a GP user and create a consultation with title, specialty, and severity.</li>
+                  <li>Submit the first clinical question to trigger grounded AI generation.</li>
+                  <li>Inspect the response, citations, and consultation status in the detailed timeline.</li>
+                  <li>Track when the case moves into specialist review.</li>
                 </ul>
               </div>
-              <div class="appendix-card">
+
+              <div class="appendix-card appendix-role-card">
+                <span class="appendix-role-card__eyebrow">Role 2</span>
                 <h3>Specialist workflow</h3>
+                <p>The specialist path should focus on review decisions, evidence checking, and revisions.</p>
                 <ul>
-                  <li>Open the submitted queue and self-assign a consultation that matches your specialty.</li>
-                  <li>Inspect AI messages and citations in the detailed review view.</li>
-                  <li>Approve, reject, request changes, or replace a specific AI answer manually.</li>
-                  <li>Use review feedback to trigger a revised AI answer when needed.</li>
+                  <li>Open the review queue and self-assign a relevant consultation.</li>
+                  <li>Inspect AI responses and supporting citations in the review interface.</li>
+                  <li>Approve, reject, request changes, or replace an AI answer manually.</li>
+                  <li>Return a review outcome that the GP can follow.</li>
                 </ul>
               </div>
-              <div class="appendix-card">
+
+              <div class="appendix-card appendix-role-card">
+                <span class="appendix-role-card__eyebrow">Role 3</span>
                 <h3>Admin workflow</h3>
+                <p>The admin path should explain oversight rather than ordinary clinical usage.</p>
                 <ul>
-                  <li>View the dashboard for consultation and AI activity statistics.</li>
-                  <li>Inspect user records and role distributions.</li>
-                  <li>Review chats globally when investigating system behaviour.</li>
-                  <li>Open audit logs to trace operational and security-relevant events.</li>
+                  <li>View platform statistics for consultations, users, and AI activity.</li>
+                  <li>Inspect user records and role distribution across the system.</li>
+                  <li>Review chats globally when investigating operational issues.</li>
+                  <li>Open audit logs to trace sensitive or security-relevant actions.</li>
                 </ul>
+              </div>
+            </div>
+
+            <div class="appendix-proof-grid">
+              <div class="mini-card appendix-proof-card">
+                <strong>Screenshots to include</strong>
+                <p>Login, consultation creation, specialist review, and admin oversight should all appear as labelled screenshots.</p>
+              </div>
+              <div class="mini-card appendix-proof-card">
+                <strong>Live access details</strong>
+                <p>If the system is deployed online, add the URL, browser assumptions, and any access restrictions explicitly.</p>
+              </div>
+              <div class="mini-card appendix-proof-card">
+                <strong>Role-specific accounts</strong>
+                <p>Provide one test account per role so the reader can verify each workflow without guessing permissions.</p>
               </div>
             </div>
           </section>
 
-          <section class="section-card" id="deployment-manual">
-            <h2 id="deployment-manual-heading">Deployment manual</h2>
-            <div class="timeline-card">
-              <div class="timeline">
-                <div class="timeline__item" data-step="1">
-                  <strong>Prepare the model runtime</strong>
-                  Ensure Ollama or a compatible external inference endpoint is available. The default local stack expects host access from Docker.
-                </div>
-                <div class="timeline__item" data-step="2">
-                  <strong>Confirm environment assumptions</strong>
-                  PostgreSQL credentials, database URLs, and RAG service URLs are defined in Compose and container environments.
-                </div>
-                <div class="timeline__item" data-step="3">
-                  <strong>Launch the stack</strong>
-                  Start the compose setup so frontend, backend, RAG service, and pgvector database are built and run together.
-                </div>
-                <div class="timeline__item" data-step="4">
-                  <strong>Verify health</strong>
-                  Confirm backend and RAG health endpoints respond, then log in via the frontend using seeded or registered users.
-                </div>
-                <div class="timeline__item" data-step="5">
-                  <strong>Ingest guideline data</strong>
-                  Ensure the RAG service has access to indexed guideline documents and vector rows before expecting grounded citations.
-                </div>
+          <section class="section-card" id="readme">
+            <h2>README</h2>
+            <p class="lede">
+              The README area should act as the document a developer reads first. It needs to state
+              what Ambience-AI-1.5 is, how the services fit together, and where somebody should
+              begin when running or extending the project.
+            </p>
+            <div class="appendix-policy-grid">
+              <div class="appendix-card">
+                <h3>Project overview</h3>
+                <p>
+                  Ambience-AI-1.5 is a role-aware clinical consultation platform. The system joins a
+                  React frontend, a FastAPI backend, a separate RAG service, PostgreSQL with
+                  pgvector, Redis-backed background work, and containerised runtime tooling.
+                </p>
+                <ul>
+                  <li>The frontend serves GP, specialist, and admin interfaces.</li>
+                  <li>The backend handles auth, workflow state, notifications, and auditability.</li>
+                  <li>The RAG service handles retrieval, reranking, and grounded answer generation.</li>
+                </ul>
+              </div>
+
+              <div class="appendix-card">
+                <h3>What the README should contain</h3>
+                <ul>
+                  <li>A short statement of purpose and target users.</li>
+                  <li>The service layout and repository structure.</li>
+                  <li>Prerequisites, local setup, and environment assumptions.</li>
+                  <li>Where to find implementation, testing, and system-design evidence.</li>
+                  <li>Any important deployment or infrastructure caveats.</li>
+                </ul>
               </div>
             </div>
             <div class="callout">
-              <h3>Deployment note</h3>
+              <h3>README anchor</h3>
               <p>
-                The repository also contains cloud-hosting notes for larger Med42 deployments and
-                helper scripts under the <em>serve</em> directory. Those materials indicate planned or
-                optional deployment paths beyond the default local Compose setup.
+                The main application repository is linked from the site header. Its README should be
+                the developer-facing entry point, while this page acts as the document map for the
+                report website.
               </p>
             </div>
           </section>
 
-          <section class="section-card" id="privacy">
-            <h2 id="privacy-heading">GDPR and privacy of data</h2>
-            <div class="two-col">
-              <div class="appendix-card">
-                <h3>Privacy posture in the current design</h3>
-                <ul>
-                  <li>User accounts include identity and role metadata.</li>
-                  <li>Consultations may store patient context as free-form JSON.</li>
-                  <li>Audit logs record actions and timestamps for traceability.</li>
-                  <li>Notifications and messages persist workflow history.</li>
-                </ul>
+          <section class="section-card" id="gdpr">
+            <h2>GDPR</h2>
+            <p class="lede">
+              This section explains how Ambience-AI-1.5 should be understood from a GDPR
+              perspective. The project is an academic prototype, but the workflow still raises real
+              data-protection questions because clinical prompts, uploaded files, and review notes
+              may contain sensitive health information if used carelessly.
+            </p>
+            <div class="appendix-legal-flow">
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>Data Usage Statement</h3>
+                </div>
+                <p>
+                  Ambience-AI-1.5 processes account information, consultation records, uploaded
+                  guideline material, notifications, and audit logs in order to support the GP,
+                  specialist, and admin workflows described elsewhere in this report. In a real
+                  deployment, consultation content could amount to personal data and, in many cases,
+                  special category health data. That means data entered into the system should be
+                  treated with a higher level of care than ordinary application content.
+                </p>
+                <p>
+                  For the purposes of this university project, the system should be presented as a
+                  prototype and demonstrations should avoid unnecessary real patient-identifying
+                  information. The academic setting does not remove GDPR concerns; it only narrows
+                  the claim being made about deployment readiness.
+                </p>
               </div>
-              <div class="appendix-card">
-                <h3>Implications</h3>
-                <ul>
-                  <li>Any real deployment handling patient data would require clear lawful basis, minimisation, retention, and access-control policies.</li>
-                  <li>Prompt payloads sent to external inference endpoints would require careful processor and transfer assessment.</li>
-                  <li>Source documents and consultation data should be handled under strict storage and access governance.</li>
-                  <li>This project should be described as an academic prototype, not a completed GDPR-ready clinical platform.</li>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>Key GDPR Considerations</h3>
+                </div>
+                <p>
+                  Anyone using or evaluating the prototype should keep the following principles in
+                  mind when entering or handling data:
+                </p>
+                <ul class="appendix-legal-list">
+                  <li><strong>Data minimisation:</strong> only the minimum necessary clinical context should be entered into prompts, notes, or uploaded supporting material.</li>
+                  <li><strong>Purpose limitation:</strong> consultation data should only be used to support the defined referral and review workflow, not unrelated experimentation.</li>
+                  <li><strong>Access control:</strong> GP, specialist, and admin accounts should only access the information required for their role.</li>
+                  <li><strong>External processing risk:</strong> if a prompt or document is routed to a cloud-hosted inference provider, that creates additional processor and transfer questions that would need formal review before real deployment.</li>
+                  <li><strong>Auditability and retention:</strong> logs and workflow records improve traceability, but they also require clear retention and governance rules in any production setting.</li>
                 </ul>
+                <p>
+                  This means the current project should not be described as GDPR-complete. It shows
+                  awareness of the right concerns, but it does not replace a full compliance pack,
+                  organisational policy set, or legal review.
+                </p>
+              </div>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>User Responsibility</h3>
+                </div>
+                <p>
+                  By using the system in demonstrations, testing, or handover review, users should
+                  understand that they are responsible for avoiding unnecessary personal data and
+                  for respecting the access boundaries associated with each role. The safest default
+                  for this project is to use anonymised, fictional, or otherwise non-identifying
+                  examples wherever possible.
+                </p>
+                <p>
+                  If there is any doubt about whether information is appropriate to enter into the
+                  prototype, it should be removed or anonymised first. If there is any doubt about
+                  whether cloud routing is permissible for a dataset, the data should not be sent
+                  until the relevant legal and organisational approvals are in place.
+                </p>
               </div>
             </div>
-            <div class="callout callout--warning">
-              <h3>Honest statement</h3>
+          </section>
+
+          <section class="section-card" id="privacy-policy">
+            <h2>Privacy Policy</h2>
+            <p class="lede">
+              This privacy policy explains how Ambience-AI-1.5 may use and process data when the
+              application is used for demonstrations, evaluation, or future deployment-oriented
+              handover. Because the platform supports clinical consultation workflows, users should
+              assume that anything entered into the system may require a higher standard of care
+              than ordinary consumer application content.
+            </p>
+            <div class="appendix-legal-flow">
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>What data do we collect?</h3>
+                </div>
+                <p>
+                  Ambience-AI-1.5 may collect and process data that is necessary to run its
+                  role-based clinical workflow. This can include account and authentication data,
+                  role assignments, consultation titles, specialties, severity information, message
+                  content, specialist review notes, notifications, audit-log events, and uploaded
+                  reference or supporting documents.
+                </p>
+                <p>
+                  In a real deployment, some of this information could include personal data or
+                  special category health data if users were to enter identifiable patient
+                  information. For this reason, demonstrations and academic use should avoid
+                  unnecessary real-world identifiers wherever possible.
+                </p>
+              </div>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>How do we collect your data?</h3>
+                </div>
+                <p>
+                  You provide data to the application directly when you register an account, log in,
+                  request password-reset or verification flows, create consultations, send clinical
+                  messages, upload files, review cases, or use admin functions. Additional system
+                  data is generated automatically as part of the platform workflow, including audit
+                  logs, status transitions, notification records, and service-level operational
+                  metadata.
+                </p>
+              </div>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>How will we use your data?</h3>
+                </div>
+                <p>
+                  Ambience-AI-1.5 uses collected data to authenticate users, enforce GP,
+                  specialist, and admin permissions, manage consultation workflows, generate and
+                  revise grounded AI responses, display notifications, support specialist review,
+                  and maintain an auditable record of key actions. Operational data may also be
+                  used for debugging, reliability monitoring, and testing.
+                </p>
+              </div>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>How do we store your data?</h3>
+                </div>
+                <p>
+                  Core application data is stored within the project database layer, based on
+                  PostgreSQL and pgvector. Some transient operational data may also pass through
+                  Redis-backed queues and caches as part of notifications, retries, and background
+                  processing. If the application is configured to use an external or cloud-hosted
+                  model provider, relevant prompt content may be transmitted to that configured
+                  endpoint as part of the AI generation workflow.
+                </p>
+                <p>
+                  The safest assumption for this project is that data should be minimised and
+                  anonymised before use. This appendix does not claim that the current prototype
+                  provides a production-ready retention, deletion, or compliance framework.
+                </p>
+              </div>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>What are your data protection rights?</h3>
+                </div>
+                <p>
+                  Under UK GDPR, users may have rights that include access to their personal data,
+                  rectification of inaccurate data, erasure in certain circumstances, restriction of
+                  processing, objection to processing, and data portability. In a real deployment,
+                  these rights would need to be supported through clear operational and legal
+                  processes, not only through interface design.
+                </p>
+              </div>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>Privacy policies of other websites and services</h3>
+                </div>
+                <p>
+                  This website contains links to external websites and services, including GitHub
+                  and other third-party resources. If a deployment uses an external inference
+                  provider or links users to external platforms, those services will have their own
+                  privacy policies and terms. This privacy policy applies only to Ambience-AI-1.5
+                  as described in this report website.
+                </p>
+              </div>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>Changes to our privacy policy</h3>
+                </div>
+                <p>
+                  This privacy policy should be reviewed whenever the project changes its hosting
+                  model, authentication flow, storage design, or inference routing path. In
+                  particular, any move from local development to a cloud-hosted clinical context
+                  would require a more formal and complete policy review.
+                </p>
+                <p>
+                  This appendix version was last updated on 26 March 2026.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card" id="dependencies">
+            <h2>Dependencies</h2>
+            <p class="lede">
+              This appendix records the main libraries, frameworks, and runtime services used by
+              Ambience-AI-1.5. It is written as a readable dependency reference for the actual
+              implemented stack rather than a raw package dump.
+            </p>
+            <div class="appendix-legal-flow">
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>Frontend Application Dependencies</h3>
+                </div>
+                <p>
+                  The user-facing client is a React single-page application for GP, specialist, and
+                  admin workflows. Its dependencies focus on routing, API access, dashboard
+                  rendering, and secure client-side session handling.
+                </p>
+                <div class="appendix-dependency-file">
+                  <div class="appendix-dependency-file__bar">
+                    <span>frontend-dependencies.md</span>
+                  </div>
+                  <pre><code>- react
+- typescript
+- vite
+- react-router-dom
+- axios
+- tailwindcss
+- recharts
+- crypto-js</code></pre>
+                </div>
+                <p>
+                  Together these packages provide the component model, typed frontend build setup,
+                  route structure, authenticated API communication, utility-first styling,
+                  dashboard charts, and client-side token protection used across the browser
+                  application.
+                </p>
+              </div>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>Backend API Dependencies</h3>
+                </div>
+                <p>
+                  The backend is built as a FastAPI service responsible for authentication,
+                  consultation lifecycle management, notifications, audit logging, and
+                  role-enforced clinical workflow control.
+                </p>
+                <div class="appendix-dependency-file">
+                  <div class="appendix-dependency-file__bar">
+                    <span>backend-dependencies.md</span>
+                  </div>
+                  <pre><code>- fastapi
+- sqlalchemy
+- alembic
+- pydantic
+- PyJWT
+- bcrypt
+- httpx
+- redis-py</code></pre>
+                </div>
+                <p>
+                  This backend stack covers the API layer, schema validation, database access,
+                  migrations, authentication, outbound service calls, and Redis-backed operational
+                  behaviour.
+                </p>
+              </div>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>Retrieval and AI Dependencies</h3>
+                </div>
+                <p>
+                  The RAG service is separated from the main backend and depends on document
+                  extraction, chunking, embedding, vector retrieval, and retry-oriented background
+                  processing. This is the part of the system that grounds responses against medical
+                  evidence rather than returning free-form outputs alone.
+                </p>
+                <div class="appendix-dependency-file">
+                  <div class="appendix-dependency-file__bar">
+                    <span>rag-dependencies.md</span>
+                  </div>
+                  <pre><code>- sentence-transformers
+- torch
+- pgvector
+- PyMuPDF
+- langchain-text-splitters
+- rq
+- httpx
+- ollama
+- Med42</code></pre>
+                </div>
+                <p>
+                  These dependencies support embedding generation, vector search inside PostgreSQL,
+                  PDF extraction, document chunking, Redis-backed retry workers, and routing to
+                  either local Ollama-hosted inference or a cloud Med42 endpoint.
+                </p>
+              </div>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>Infrastructure and Runtime Services</h3>
+                </div>
+                <p>
+                  Ambience-AI-1.5 is designed as a multi-service deployment rather than a single
+                  process application. The supporting runtime stack handles persistence, queueing,
+                  reverse proxying, and development-time email flows.
+                </p>
+                <div class="appendix-dependency-file">
+                  <div class="appendix-dependency-file__bar">
+                    <span>infrastructure-dependencies.md</span>
+                  </div>
+                  <pre><code>- Docker Compose
+- PostgreSQL
+- pgvector
+- Redis
+- nginx
+- Mailpit</code></pre>
+                </div>
+                <p>
+                  This runtime layer orchestrates the container stack, stores operational and
+                  vector data, supports cache and queue behaviour, handles reverse proxying, and
+                  provides local email testing.
+                </p>
+              </div>
+
+              <div class="appendix-legal-block">
+                <div class="appendix-legal-heading">
+                  <h3>Testing Dependencies</h3>
+                </div>
+                <p>
+                  The project uses separate frontend and backend testing stacks, with end-to-end
+                  coverage layered on top. This keeps browser behaviour, API correctness, and
+                  service integration under test using tools appropriate to each layer.
+                </p>
+                <div class="appendix-dependency-file">
+                  <div class="appendix-dependency-file__bar">
+                    <span>testing-dependencies.md</span>
+                  </div>
+                  <pre><code>- vitest
+- jsdom
+- @testing-library/react
+- @testing-library/user-event
+- msw
+- pytest
+- pytest-asyncio
+- SQLite
+- FastAPI TestClient
+- playwright</code></pre>
+                </div>
+                <p>
+                  This testing stack spans frontend component tests, mocked API flows, backend
+                  route and async workflow tests, temporary SQLite-backed backend isolation, and
+                  browser-level end-to-end coverage.
+                </p>
+              </div>
+            </div>
+            <div class="callout">
+              <h3>Dependency reference</h3>
               <p>
-                The repository demonstrates privacy-aware architectural concerns such as auditability
-                and role separation, but it does not by itself constitute a full GDPR compliance pack.
+                This appendix is grouped by responsibility area rather than by license or lockfile
+                order. For the broader architectural view, see
+                <a href="system-design.html#packages-apis">System Design → Packages and APIs</a>
+                and <a href="testing.html">Testing</a>.
               </p>
             </div>
           </section>
 
-          <section class="section-card" id="external-links">
-            <h2 id="external-links-heading">Monthly video</h2>
-            <div class="appendix-grid">
+          <section class="section-card" id="contributions">
+            <h2>Contributions</h2>
+            <p class="lede">
+              This section records how work was distributed across the team. It should match the
+              contribution breakdown used elsewhere in the report rather than introducing a separate
+              version here.
+            </p>
+            <div class="card-grid">
               <div class="appendix-card">
-                <h3>Monthly video</h3>
-                <p>
-                  Replace the placeholder below with the public monthly progress or demo video link.
-                </p>
-                <p><a href="#" data-placeholder-link>Monthly video link pending publication</a></p>
+                <h3>Kavin</h3>
+                <p><strong>20%</strong> · Retrieval, fusion, reranking, citation logic, integration testing, and Docker seeding for RAG chunks.</p>
               </div>
               <div class="appendix-card">
-                <h3>Evidence appendix</h3>
-                <p>
-                  Core evidence for this report comes from the application router, backend services,
-                  RAG runtime, compose configuration, and automated tests in the main repository.
-                </p>
+                <h3>Hakan</h3>
+                <p><strong>20%</strong> · Backend core, auth and authorisation, migrations, file uploads, admin dashboard, and security hardening.</p>
               </div>
+              <div class="appendix-card">
+                <h3>Daniel</h3>
+                <p><strong>20%</strong> · Email verification, password reset, guideline sync, Redis caching, retry queue handling, and cloud deployment work.</p>
+              </div>
+              <div class="appendix-card">
+                <h3>William</h3>
+                <p><strong>20%</strong> · RAG answer generation, prompt engineering, local/cloud model routing, architecture, and container structure.</p>
+              </div>
+              <div class="appendix-card">
+                <h3>Ivan</h3>
+                <p><strong>20%</strong> · Frontend implementation, UI changes, SSE streaming, specialist review flow, and notification interfaces.</p>
+              </div>
+            </div>
+            <div class="callout">
+              <h3>Contribution reference</h3>
+              <p>
+                The detailed contribution breakdown with roles and percentages is documented in
+                <a href="evaluation.html#team-contributions">Evaluation → Team contributions</a>.
+              </p>
             </div>
           </section>
         </div>
 
         <aside class="toc-panel">
           <div id="page-toc"></div>
-          <div class="callout">
-            <h3>Before submission</h3>
-            <ul>
-              <li>Insert the final monthly video URL.</li>
-              <li>Update any deployment details if infrastructure changes.</li>
-            </ul>
-          </div>
         </aside>
       </div>
     </main>
 
-    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation/implementation.html">Frontend, backend, and RAG implementation</a><a href="system-design.html">Architecture, flows, and data model</a><a href="testing.html">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices.html#user-manual">User manual</a><a href="appendices.html#deployment-manual">Deployment manual</a><a href="appendices.html#privacy">GDPR and privacy</a><a href="appendices.html#external-links">Monthly video</a></div></section></div></footer>
+    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation.html">Frontend, backend, and RAG implementation</a><a href="system-design.html">Architecture, flows, and data model</a><a href="testing.html">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices.html#user-manual">User manual</a><a href="appendices.html#readme">README</a><a href="appendices.html#gdpr">GDPR</a><a href="appendices.html#privacy-policy">Privacy policy</a><a href="appendices.html#dependencies">Dependencies</a><a href="appendices.html#contributions">Contributions</a></div></section></div></footer>
     <script src="assets/site.js?v=20260322f"></script>
   </body>
 </html>

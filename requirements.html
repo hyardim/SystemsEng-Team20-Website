@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Requirements · Ambience-AI-1.5</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20260325ag" />
+    <link rel="stylesheet" href="assets/styles.css?v=20260327c" />
   </head>
   <body data-page="requirements">
     <header class="site-header">
@@ -50,10 +50,7 @@
                 </div>
                 <p>
                   Intel hardware planning influenced early deployment objectives and performance
-                  constraints for local inference and infrastructure-aware system design. The
-                  original Intel-backed server access ended during the project, so infrastructure
-                  requirements were revised to support a local-first path with controlled
-                  cloud fallback.
+                  constraints for local inference and infrastructure-aware system design.
                 </p>
               </article>
               <article class="partner-intro__card">
@@ -151,10 +148,10 @@
                   <strong>Technical goals</strong>
                   <span class="project-goals-card__subtitle">Solving existing problems</span>
                   <ul>
-                    <li>Deploy a domain-adapted Med42 runtime with efficient inference performance on local hardware.</li>
-                    <li>Build a retrieval pipeline that surfaces the correct NICE and BSR guideline sections.</li>
-                    <li>Implement safety mechanisms for refusal when evidence is insufficient.</li>
-                    <li>Provide a clean, accessible web interface aligned with NHS usability guidance.</li>
+                    <li>Build a secure multi-role consultation platform for GP, Specialist, and Admin users with authentication, role-based access control, and audit visibility.</li>
+                    <li>Implement a grounded RAG pipeline that retrieves the right NICE and BSR guidance sections, generates cited answers, and keeps evidence visible in the workflow.</li>
+                    <li>Support specialist oversight through assignment, review, rejection or replacement of AI answers, and safe fallback behaviour when evidence is weak or the case is high risk.</li>
+                    <li>Deliver the system as a reproducible multi-service stack using a React frontend, FastAPI services, PostgreSQL with pgvector, Redis, and Docker Compose.</li>
                   </ul>
                 </div>
                 <div class="mini-card project-goals-card project-goals-card--nontechnical">
@@ -180,29 +177,23 @@
           <section class="section-card--requirement-gathering">
             <h2 id="requirement-gathering">Requirement gathering</h2>
             <div class="requirement-gathering__inner">
-              <p class="lede">
-                The final requirements below reflect the baseline agreed after iterative refinement
-                during the project. We gathered requirements through specialist interviews,
-                stakeholder check-ins, and a short validation survey, then refined them as
-                workflow, prototypes, and technical constraints became clearer. This remained
-                interview-led collaboration with two client-side specialists and regular partner
-                check-ins throughout delivery.
-              </p>
               <div class="requirement-methods">
                 <article class="mini-card requirement-methods__item">
                   <strong>How did we collect requirements?</strong>
                   <p>
-                    We combined direct meetings with two client specialists (Rheumatology and
-                    Neurology), both highly experienced specialists in their fields, regular
-                    supervisor and partner checkpoints, and guideline-driven validation against
-                    NICE/BSR sources.
+                    We gathered requirements through direct interviews and meetings with two client
+                    specialists in Rheumatology and Neurology, together with regular supervisor and
+                    partner checkpoints. We then cross-checked the resulting workflow assumptions
+                    and evidence needs against NICE and BSR guidance.
                   </p>
                 </article>
                 <article class="mini-card requirement-methods__item">
                   <strong>What evidence was used?</strong>
                   <p>
-                    Requirement decisions were grounded in client meetings, internal scoping work,
-                    workflow and prototype reviews, and validation against the relevant guideline set.
+                    Requirement decisions were grounded in responses from the conducted interviews,
+                    workflow walkthroughs, prototype review feedback, the short validation survey,
+                    internal scoping work, and cross-checking against the relevant NICE and BSR
+                    guideline set.
                   </p>
                 </article>
                 <article class="mini-card requirement-methods__item">
@@ -227,8 +218,10 @@
                 <strong>How requirements evolved</strong>
                 <p>
                   Several requirements became explicit only after workflow walkthroughs, prototype
-                  reviews, and infrastructure constraints were validated. The table below captures
-                  the major changes that shaped the final baseline.
+                  reviews, and infrastructure constraints were validated. One important shift was
+                  that the originally expected Intel-backed server was not available by the end of
+                  the project. The table below captures the major changes that shaped the final
+                  baseline.
                 </p>
               </div>
 
@@ -245,9 +238,9 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Infrastructure constraints changed</td>
-                      <td>Core deployment could rely on the originally available Intel-backed environment.</td>
-                      <td>Processing should remain local-first but support controlled cloud fallback when needed.</td>
+                      <td>Infrastructure constraints changed after Intel server access ended</td>
+                      <td>Core deployment could rely on continued access to the originally planned Intel-backed server environment.</td>
+                      <td>Because that server was no longer available by the end of the project, processing should remain local-first but support controlled cloud fallback when needed.</td>
                       <td>FR7, NFR2, NFR6</td>
                     </tr>
                     <tr>

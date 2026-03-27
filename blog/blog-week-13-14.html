@@ -32,7 +32,7 @@
     <main class="page-shell">
       <div class="report-page-header">
         <h1 class="report-page-title">Development Blog</h1>
-        <p class="report-page-subtitle">Week 13–14 · Workflow simplification and specialist gate hardening</p>
+        <p class="report-page-subtitle">Week 13–14 · Intel server loss and the routing pivot</p>
       </div>
 
       <div class="page-grid">
@@ -53,20 +53,20 @@
                 <li><a href="blog-week-23-24.html"><span class="blog-nav__week">Week 23–24</span><span class="blog-nav__meta">Testing wave 3 and handover readiness</span></a></li>
                 <li><a href="blog-week-21-22.html"><span class="blog-nav__week">Week 21–22</span><span class="blog-nav__meta">Performance, reliability, and usability testing</span></a></li>
                 <li><a href="blog-week-19-20.html"><span class="blog-nav__week">Week 19–20</span><span class="blog-nav__meta">Functional and integration testing</span></a></li>
-                <li><a href="blog-week-17-18.html"><span class="blog-nav__week">Week 17–18</span><span class="blog-nav__meta">Integration hardening and defect burn-down</span></a></li>
-                <li><a href="blog-week-15-16.html"><span class="blog-nav__week">Week 15–16</span><span class="blog-nav__meta">Platform breadth beyond core answering</span></a></li>
-                <li><a href="blog-week-13-14.html" class="is-active" aria-current="page"><span class="blog-nav__week">Week 13–14</span><span class="blog-nav__meta">Workflow simplification and specialist gate hardening</span></a></li>
-                <li><a href="blog-week-11-12.html"><span class="blog-nav__week">Week 11–12</span><span class="blog-nav__meta">Local-first routing becomes operational</span></a></li>
+                <li><a href="blog-week-17-18.html"><span class="blog-nav__week">Week 17–18</span><span class="blog-nav__meta">Local-first routing and cloud fallback</span></a></li>
+                <li><a href="blog-week-15-16.html"><span class="blog-nav__week">Week 15–16</span><span class="blog-nav__meta">Local Med42 and RunPod deployment plan</span></a></li>
+                <li><a href="blog-week-13-14.html" class="is-active" aria-current="page"><span class="blog-nav__week">Week 13–14</span><span class="blog-nav__meta">Intel server loss and the routing pivot</span></a></li>
+                <li><a href="blog-week-11-12.html"><span class="blog-nav__week">Week 11–12</span><span class="blog-nav__meta">Merging the GP flow and chatbot</span></a></li>
               </ul>
             </div>
 
             <div class="blog-nav__year-group">
               <h4 class="blog-nav__year">2025</h4>
               <ul class="blog-nav__list">
-                <li><a href="blog-week-9-10.html"><span class="blog-nav__week">Week 9–10</span><span class="blog-nav__meta">Server access loss and architecture pivot</span></a></li>
-                <li><a href="blog-week-7-8.html"><span class="blog-nav__week">Week 7–8</span><span class="blog-nav__meta">Stabilization on the original server path</span></a></li>
-                <li><a href="blog-week-5-6.html"><span class="blog-nav__week">Week 5–6</span><span class="blog-nav__meta">Gaudi 2 setup and first integrations</span></a></li>
-                <li><a href="blog-week-3-4.html"><span class="blog-nav__week">Week 3–4</span><span class="blog-nav__meta">Requirement baseline and acceptance criteria</span></a></li>
+                <li><a href="blog-week-9-10.html"><span class="blog-nav__week">Week 9–10</span><span class="blog-nav__meta">Implementation begins with RAG ingestion</span></a></li>
+                <li><a href="blog-week-7-8.html"><span class="blog-nav__week">Week 7–8</span><span class="blog-nav__meta">Gaudi 2 stabilisation and safety refinements</span></a></li>
+                <li><a href="blog-week-5-6.html"><span class="blog-nav__week">Week 5–6</span><span class="blog-nav__meta">Gaudi 2 setup and Med42 70B bring-up</span></a></li>
+                <li><a href="blog-week-3-4.html"><span class="blog-nav__week">Week 3–4</span><span class="blog-nav__meta">Requirements baseline and Gaudi planning</span></a></li>
                 <li><a href="blog-week-1-2.html"><span class="blog-nav__week">Week 1–2</span><span class="blog-nav__meta">Problem framing and specialist interviews</span></a></li>
               </ul>
             </div>
@@ -76,27 +76,23 @@
         <div class="content-stack">
           <section class="blog-entry blog-entry--detail">
             <a class="blog-entry__back" href="blog.html">← Back to timeline overview</a>
-            <h2>Workflow simplification and specialist gate hardening</h2>
+            <h2>Intel server loss and the routing pivot</h2>
             <p>
-              Requirement refinement and prototype review led to a major product decision: merge
-              assistant-like interactions into one consultation-based journey where generation,
-              review and decision history stay connected.
+              This week, Intel informed us that unfortunately in a few weeks time they would need to reclaim the server we were using as the Gaudi's contract was expiring. This made us rethink our strategy for the backend to run the model, and we concluded that we wouldn't be able to use the Med42 70B parameter version as it was much too demanding to run locally, and other cloud solutions for the uptime we were expecting were expensive. We finalised a plan to implement an intelligent routing layer that would allow us to run a more lightweight model locally, and for more demanding queries, we would outsource to a cloud server that would run the 70B parameter version.
             </p>
             <p>
-              This was an important simplification for us. We removed split interaction paths,
-              enforced the specialist gate before GP-visible completion and improved traceability so
-              review decisions were easier to follow and audit.
+              We have also got the RAG fully working, though in need of much testing and optimisation. Improvements to performance will likely come after lots of trial and error in this field.
             </p>
           </section>
 
           <nav class="blog-post-nav" aria-label="Adjacent blog entries">
             <a class="blog-post-nav__link" href="blog-week-15-16.html">
               <span class="blog-post-nav__label">Newer post</span>
-              <span class="blog-post-nav__title">Week 15–16 · Platform breadth beyond core answering</span>
+              <span class="blog-post-nav__title">Week 15–16 · Local Med42 and RunPod deployment plan</span>
             </a>
             <a class="blog-post-nav__link" href="blog-week-11-12.html">
               <span class="blog-post-nav__label">Older post</span>
-              <span class="blog-post-nav__title">Week 11–12 · Local-first route operational</span>
+              <span class="blog-post-nav__title">Week 11–12 · Merging the GP flow and chatbot</span>
             </a>
           </nav>
         </div>
