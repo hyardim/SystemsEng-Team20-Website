@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>README · Ambience-AI-1.5</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20260326h" />
+  <style>
+    body[data-page="readme"] .content-stack {
+      max-width: 900px;
+    }
+    .readme-content h2 {
+      margin-top: 2em;
+      margin-bottom: 0.6em;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #0f172a;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 1.2em;
+    }
+    .readme-content h2:first-of-type {
+      border-top: none;
+      margin-top: 0;
+      padding-top: 0;
+    }
+    .readme-content h3 {
+      margin-top: 1.4em;
+      margin-bottom: 0.6em;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .readme-content h4 {
+      margin-top: 1em;
+      margin-bottom: 0.4em;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #374151;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .readme-content p {
+      margin-bottom: 1em;
+      color: #475569;
+      line-height: 1.7;
+    }
+    .readme-content ul, .readme-content ol {
+      margin-bottom: 1em;
+      padding-left: 1.8em;
+      color: #475569;
+      line-height: 1.7;
+    }
+    .readme-content li {
+      margin-bottom: 0.5em;
+    }
+    .readme-content code {
+      font-family: "SF Mono", "Monaco", "Courier New", monospace;
+      background: #f1f5f9;
+      padding: 0.2em 0.5em;
+      border-radius: 4px;
+      font-size: 0.9em;
+      color: #005eb8;
+    }
+    .readme-content pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1em;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-bottom: 1em;
+      font-size: 0.85em;
+      font-family: "SF Mono", "Monaco", "Courier New", monospace;
+      line-height: 1.6;
+    }
+    .readme-content pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+  </style>
+</head>
+<body data-page="readme">
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="index.html" aria-label="Ambience-AI-1.5 home">
+        <img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" />
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="requirements.html" data-nav="requirements">Requirements</a>
+        <a href="research.html" data-nav="research">Research</a>
+        <a href="ui-design.html" data-nav="ui-design">UI Design</a>
+        <a href="system-design.html" data-nav="system-design">System Design</a>
+        <a href="implementation/implementation.html" data-nav="implementation">Implementation</a>
+        <a href="testing.html" data-nav="testing">Testing</a>
+        <a href="evaluation.html" data-nav="evaluation">Evaluation</a>
+        <a href="appendices.html" data-nav="appendices">Appendices</a>
+      </nav>
+      <a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <div class="report-page-header">
+      <h1 class="report-page-title">README</h1>
+      <p class="report-page-subtitle">Installation, quick start, and development guide</p>
+    </div>
+
+    <div class="page-grid">
+      <div class="content-stack readme-content">
+        <h2>Ambience-AI-1.5</h2>
+        <p>Ambience AI 1.5 is a multi-role clinical decision-support platform with three core services:</p>
+        <ul>
+          <li><code>frontend/</code> React + TypeScript UI for GP, Specialist, and Admin users</li>
+          <li><code>backend/</code> FastAPI application for auth, chat workflows, reviews, audit, notifications</li>
+          <li><code>rag_service/</code> retrieval-augmented generation (RAG) service for grounded clinical responses</li>
+        </ul>
+
+        <h2>Repository structure</h2>
+        <pre><code>backend/       FastAPI backend and business workflows
+frontend/      React frontend
+rag_service/   RAG ingestion/retrieval/generation service
+nginx/         Optional TLS reverse proxy (production profile)
+</code></pre>
+
+        <h2>Role workflows (implemented)</h2>
+        <h3>GP workflow</h3>
+        <ol>
+          <li>Register/login and access the GP portal.</li>
+          <li>Create a consultation with required patient metadata:
+            <ul>
+              <li>title, specialty, urgency, patient age, patient sex, clinical question</li>
+            </ul>
+          </li>
+          <li>Optionally upload supporting files.</li>
+          <li>Send/continue messages in consultation detail:
+            <ul>
+              <li>AI responses stream via SSE and include citations when available</li>
+            </ul>
+          </li>
+          <li>Track consultations across statuses:
+            <ul>
+              <li><code>open/submitted</code> → <code>assigned/reviewing</code> → <code>approved/rejected</code></li>
+            </ul>
+          </li>
+          <li>Archive consultations from the GP list when no longer needed.</li>
+        </ol>
+
+        <h3>Specialist workflow</h3>
+        <ol>
+          <li>Open Specialist queue (<code>submitted</code> consultations; specialty-aware filtering).</li>
+          <li>Assign a consultation to self.</li>
+          <li>Review at message-level and consultation-level using actions such as:
+            <ul>
+              <li>approve</li>
+              <li>request changes (triggers RAG revise path)</li>
+              <li>edit response</li>
+              <li>replace with manual response</li>
+              <li>send specialist comment</li>
+              <li>unassign</li>
+            </ul>
+          </li>
+          <li>Monitor revisions and live updates while AI regeneration is running.</li>
+          <li>Close by approving/send or rejection path, with GP notifications emitted.</li>
+        </ol>
+
+        <h3>Admin workflow</h3>
+        <ol>
+          <li>Dashboard:
+            <ul>
+              <li>AI response volume</li>
+              <li>RAG-grounded ratio</li>
+              <li>consultation status/specialty distribution</li>
+              <li>daily trend charts and recent RAG logs</li>
+            </ul>
+          </li>
+          <li>User management:
+            <ul>
+              <li>filter, edit, and deactivate users</li>
+            </ul>
+          </li>
+          <li>Chat management:
+            <ul>
+              <li>inspect chat/message detail, update metadata/status, delete chats</li>
+            </ul>
+          </li>
+          <li>Audit logs:
+            <ul>
+              <li>filter by category/action/user/date/search</li>
+            </ul>
+          </li>
+          <li>Guideline ingestion:
+            <ul>
+              <li>upload PDF guideline sources to RAG service</li>
+            </ul>
+          </li>
+          <li>RAG pipeline status:
+            <ul>
+              <li>service health, indexed docs, ingestion job counts</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h2>Effective usage guide for clinicians</h2>
+        <h3>GP playbook (recommended)</h3>
+        <ol>
+          <li>Start with a specific consultation title and a single clear clinical question.</li>
+          <li>Always provide core patient context:
+            <ul>
+              <li>age</li>
+              <li>sex</li>
+              <li>specialty</li>
+              <li>urgency</li>
+            </ul>
+          </li>
+          <li>Add concise clinical notes with only relevant history, current meds, and key findings.</li>
+          <li>Upload supporting files only when they materially affect the question.</li>
+          <li>Review AI output with citations before acting.</li>
+          <li>If response quality is weak, add missing context and ask a narrower follow-up question.</li>
+          <li>Track consultation state and act accordingly:
+            <ul>
+              <li><code>open</code>: draft/new consultation state</li>
+              <li><code>submitted</code>: sent for specialist workflow</li>
+              <li><code>assigned</code>: specialist has claimed it</li>
+              <li><code>reviewing</code>: specialist is iterating or revising response</li>
+              <li><code>approved</code>: specialist-approved response ready for GP use</li>
+              <li><code>rejected</code>: response rejected and requires further action</li>
+              <li><code>archived</code>: removed from GP list view</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h3>Specialist playbook (recommended)</h3>
+        <ol>
+          <li>Work queue first:
+            <ul>
+              <li>claim consultations from <code>submitted</code> queue</li>
+              <li>prioritize by urgency and clinical risk</li>
+            </ul>
+          </li>
+          <li>Review full context before decision:
+            <ul>
+              <li>patient details</li>
+              <li>GP messages</li>
+              <li>AI draft and citations</li>
+            </ul>
+          </li>
+          <li>Use the right action for the situation:
+            <ul>
+              <li><code>approve</code>: response is clinically acceptable as-is</li>
+              <li><code>request_changes</code>: ask AI to regenerate with specialist feedback</li>
+              <li><code>edit_response</code>: refine the AI text directly</li>
+              <li><code>manual_response</code>: replace AI answer with specialist-authored response</li>
+              <li><code>send_comment</code>: request clarification or provide specialist guidance</li>
+              <li><code>unassign</code>: return case to queue if unable to continue</li>
+            </ul>
+          </li>
+          <li>Close consultation only when response quality and safety are acceptable.</li>
+          <li>Ensure feedback is explicit when requesting changes to improve revision quality.</li>
+        </ol>
+
+        <h3>Safety and limitations (all clinical users)</h3>
+        <ul>
+          <li>The system is decision support, not an autonomous decision-maker.</li>
+          <li>Responses are only as good as provided context and available guideline coverage.</li>
+          <li>Neurology and rheumatology are the primary configured specialties in current workflows.</li>
+          <li>File uploads are size-limited and may be truncated for context processing.</li>
+          <li>Clinical accountability remains with licensed clinicians at point of care.</li>
+        </ul>
+
+        <h2>Quick start (Docker, recommended)</h2>
+        <h3>Prerequisites</h3>
+        <ul>
+          <li>Docker + Docker Compose</li>
+          <li>Ollama running locally (for default local model path)</li>
+        </ul>
+
+        <h3>Minimum measured specs (local Med42 8B, 8-bit quantized)</h3>
+        <p>Model: <code>thewindmom/llama3-med42-8b</code> (<code>Q8_0</code>), download size ~7.95 GB.</p>
+        <p><strong>Benchmark protocol used (March 27, 2026):</strong></p>
+        <ul>
+          <li>Host used for measurement: Apple M4 Pro, 14 CPU cores, 24 GB RAM</li>
+          <li>Load profile: 12 sequential <code>/ask</code> requests + 16 <code>/ask</code> requests at concurrency 4</li>
+          <li>Result quality during run: 100% valid JSON, 100% with citations, 0 fallback responses</li>
+        </ul>
+        <p><strong>Measured peak usage on this setup:</strong></p>
+        <ul>
+          <li>Ollama runner RSS peak: ~8.13 GiB</li>
+          <li>Docker services peak total: ~1.53 GiB</li>
+          <li>Combined observed service/process peak: ~9.7 GiB (excluding normal OS + browser/editor headroom)</li>
+        </ul>
+        <p><strong>Recommended minimum for reliable local development:</strong></p>
+        <ul>
+          <li>CPU: 4 physical cores (8 threads)</li>
+          <li>System RAM (model only): 12 GB minimum</li>
+          <li>System RAM (full stack + model): 16 GB minimum (24 GB preferred)</li>
+          <li>Optional GPU for faster inference: 10 GB VRAM minimum (12 GB+ recommended)</li>
+          <li>Free disk space: at least 15 GB total (model + logs/cache + working headroom)</li>
+        </ul>
+
+        <h3>1) Configure environment</h3>
+        <pre><code>cp .env.example .env</code></pre>
+        <p>Set required values in <code>.env</code> at minimum:</p>
+        <ul>
+          <li><code>POSTGRES_PASSWORD</code></li>
+          <li><code>SECRET_KEY</code></li>
+          <li><code>EMAIL_VERIFICATION_TOKEN_PEPPER</code></li>
+          <li><code>PASSWORD_RESET_TOKEN_PEPPER</code></li>
+          <li><code>RAG_INTERNAL_API_KEY</code></li>
+          <li><code>VITE_STORAGE_KEY</code></li>
+        </ul>
+        <p>For local development, ensure:</p>
+        <ul>
+          <li><code>COOKIE_SECURE=false</code></li>
+          <li><code>FRONTEND_BASE_URL=http://localhost:3000</code></li>
+        </ul>
+
+        <h3>2) Start Ollama and model</h3>
+        <pre><code>ollama pull thewindmom/llama3-med42-8b
+ollama serve</code></pre>
+
+        <h3>3) Start the stack</h3>
+        <pre><code>docker compose up -d --build</code></pre>
+
+        <h3>4) Open services</h3>
+        <ul>
+          <li>Frontend: <code>http://localhost:3000</code></li>
+          <li>Backend API: <code>http://localhost:8000</code></li>
+          <li>RAG service: <code>http://localhost:8001</code></li>
+          <li>Mailpit UI (local mail capture): <code>http://localhost:8025</code></li>
+        </ul>
+
+        <h2>Demo users (optional)</h2>
+        <p>If <code>AUTH_BOOTSTRAP_DEMO_USERS=true</code>, backend startup seeds GP/Specialist/Admin users using:</p>
+        <ul>
+          <li><code>DEMO_GP_PASSWORD</code></li>
+          <li><code>DEMO_SPECIALIST_PASSWORD</code></li>
+          <li><code>DEMO_ADMIN_PASSWORD</code></li>
+        </ul>
+        <p><strong>Default demo emails:</strong></p>
+        <ul>
+          <li><code>gp@example.com</code></li>
+          <li><code>specialist@example.com</code></li>
+          <li><code>admin@example.com</code></li>
+        </ul>
+
+        <h3>First login walkthrough (GP and Specialist)</h3>
+        <ol>
+          <li>Open <code>http://localhost:3000</code>.</li>
+          <li>Sign in as GP or Specialist.</li>
+          <li>If email verification is enabled, open Mailpit (<code>http://localhost:8025</code>) and complete verification.</li>
+          <li>GP user:
+            <ul>
+              <li>create a new consultation</li>
+              <li>submit first message and wait for AI response stream</li>
+              <li>monitor status changes in consultation list</li>
+            </ul>
+          </li>
+          <li>Specialist user:
+            <ul>
+              <li>open queue</li>
+              <li>assign one submitted consultation</li>
+              <li>perform review action (<code>approve</code>, <code>request_changes</code>, or <code>manual_response</code>)</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h2>Validated example queries (recommended)</h2>
+        <p>The following prompts were tested repeatedly on March 27, 2026 against the current seeded corpus and consistently returned grounded responses with citations.</p>
+        <ol>
+          <li>Specialty: <code>neurology</code><br/>
+            Query: <em>How can migraine aura be distinguished from transient ischaemic attack (TIA) in primary care?</em></li>
+          <li>Specialty: <code>rheumatology</code><br/>
+            Query: <em>A patient taking methotrexate has fever and neutropenia. What immediate management steps and referral urgency are recommended?</em></li>
+          <li>Specialty: <code>neurology</code><br/>
+            Query: <em>For suspected cauda equina syndrome in primary care, what immediate actions are recommended before urgent transfer?</em></li>
+          <li>Specialty: <code>rheumatology</code><br/>
+            Query: <em>In systemic lupus erythematosus with new proteinuria and rising creatinine, what investigations and referral pathway are recommended?</em></li>
+        </ol>
+        <p><strong>Direct API example:</strong></p>
+        <pre><code>curl -s -X POST http://localhost:8001/ask \
+  -H "X-Internal-API-Key: &lt;your-RAG_INTERNAL_API_KEY&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "How can migraine aura be distinguished from transient ischaemic attack (TIA) in primary care?",
+    "specialty": "neurology",
+    "top_k": 5
+  }'</code></pre>
+
+        <h2>Database bootstrap notes</h2>
+        <ul>
+          <li>The root Compose stack mounts SQL bootstrap assets from <code>rag_service/scripts/db/migrations/</code>.</li>
+          <li><code>rag_chunks</code> seed data is applied only when Postgres initializes a fresh <code>postgres_data/</code> directory.</li>
+          <li>If you already have existing local DB data, seed/init scripts are not re-run automatically.</li>
+        </ul>
+
+        <h2>Local service-level development</h2>
+        <p>For deep service-specific workflows and commands:</p>
+        <ul>
+          <li><a href="https://github.com/hyardim/Ambience-AI-1.5/blob/main/backend/README.md">backend/README.md</a></li>
+          <li><a href="https://github.com/hyardim/Ambience-AI-1.5/blob/main/frontend/README.md">frontend/README.md</a></li>
+          <li><a href="https://github.com/hyardim/Ambience-AI-1.5/blob/main/rag_service/README.md">rag_service/README.md</a></li>
+        </ul>
+
+        <h2>CI quality gates</h2>
+        <h3>Frontend CI (<code>.github/workflows/ci-frontend.yml</code>)</h3>
+        <ul>
+          <li><code>npm ci</code></li>
+          <li><code>npm run lint</code></li>
+          <li><code>npm run format:check</code></li>
+          <li><code>npm run typecheck</code></li>
+          <li><code>npm run test:coverage</code></li>
+        </ul>
+
+        <h3>Backend CI (<code>.github/workflows/ci-backend.yml</code>)</h3>
+        <ul>
+          <li><code>pip install -e ".[dev]"</code></li>
+          <li><code>ruff check src tests</code></li>
+          <li><code>ruff format --check src tests</code></li>
+          <li><code>mypy src</code></li>
+          <li><code>pytest --cov=src --cov-fail-under=90</code></li>
+        </ul>
+
+        <h3>RAG CI (<code>.github/workflows/ci-rag-service.yml</code>)</h3>
+        <ul>
+          <li><code>pip install -e ".[dev]"</code></li>
+          <li><code>ruff check .</code></li>
+          <li><code>ruff format --check .</code></li>
+          <li><code>mypy src</code></li>
+          <li><code>pytest --cov=src --cov-fail-under=90</code></li>
+        </ul>
+
+        <h2>Current constraints and implementation notes</h2>
+        <ul>
+          <li>Primary clinical specialties currently surfaced in core workflows: neurology and rheumatology.</li>
+          <li>File upload limits are enforced (size/count/extensions; backend defaults include 3 MB max file size).</li>
+          <li>Chat archive behavior is status-driven (<code>ChatStatus.ARCHIVED</code>).</li>
+          <li>SSE chat streaming uses an in-process event bus; multi-worker web server configs are intentionally guarded against.</li>
+          <li>New-user login behavior depends on email-verification settings (<code>NEW_USERS_REQUIRE_EMAIL_VERIFICATION</code>).</li>
+        </ul>
+
+        <h2>Priority roadmap (important features to implement)</h2>
+        <ol>
+          <li>In-app role onboarding and contextual help: GP/Specialist/Admin guided tours and workflow tips directly in the product.</li>
+          <li>Setup doctor and environment validation CLI: one command to validate required env vars, service connectivity, migrations, and model availability.</li>
+          <li>Unified domain enums across frontend/backend/admin: remove severity/status inconsistencies and enforce one shared contract.</li>
+          <li>Stronger production access controls: admin MFA, privileged action re-auth, and session-risk policies.</li>
+          <li>Specialist workload balancing and SLA tooling: queue prioritization, assignment fairness, and escalation timers.</li>
+          <li>RAG quality governance: automated grounding-score checks, citation quality metrics, and regression gates in CI.</li>
+          <li>Operational observability and runbooks: service SLO dashboards, alert routing, and failure playbooks for backend/RAG workflows.</li>
+          <li>Data governance improvements: configurable retention windows, safer archival/export flows, and clearer audit event taxonomy.</li>
+        </ol>
+      </div>
+
+      <aside class="toc-panel">
+        <div id="page-toc"></div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer"></footer>
+  <script src="assets/site.js?v=20260322f"></script>
+</body>
+</html>
