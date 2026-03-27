@@ -1801,7 +1801,7 @@ body:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-
 }
 
 body:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .content-stack > section > h2,
-body:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .content-stack > section > h3 {
+body:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]):not([data-page="appendices"]) .content-stack > section > h3 {
 	margin-top: 0 !important;
 	line-height: 1.12;
 }
@@ -3312,10 +3312,19 @@ tr:last-child td {
 }
 
 body[data-page="appendices"] {
-	--appendix-warm: #ff7a45;
-	--appendix-warm-soft: rgba(255, 122, 69, 0.16);
+	--appendix-warm: #005eb8;
+	--appendix-warm-soft: rgba(15, 98, 254, 0.12);
 	--appendix-blue-soft: #f4f8ff;
 	--appendix-surface-shadow: 0 14px 34px rgba(7, 23, 45, 0.08);
+}
+
+body[data-page="appendices"] .section-card > h3 {
+	margin-top: 40px !important;
+	margin-bottom: 14px !important;
+}
+
+body[data-page="appendices"] .section-card > h3:first-child {
+	margin-top: 0 !important;
 }
 
 body[data-page="appendices"] .report-page-summary {
@@ -3432,7 +3441,7 @@ body[data-page="appendices"] .appendix-deployment-grid {
 }
 
 body[data-page="appendices"] .appendix-access-card {
-	--appendix-card-bar: linear-gradient(90deg, #ff7a45 0%, #ffb36b 100%);
+	--appendix-card-bar: linear-gradient(90deg, #0b2f6f 0%, #005eb8 58%, #4aa3ff 100%);
 	padding: 24px;
 }
 
@@ -3524,7 +3533,7 @@ body[data-page="appendices"] .appendix-legal-heading__line {
 	flex: 1;
 	height: 8px;
 	border-radius: 999px;
-	background: linear-gradient(90deg, #b51200 0%, #ef6a1a 52%, #ff9a32 100%);
+	background: linear-gradient(90deg, #0b2f6f 0%, #005eb8 52%, #4aa3ff 100%);
 }
 
 body[data-page="appendices"] .appendix-legal-block p {
@@ -3657,29 +3666,29 @@ body[data-page="appendices"] .appendix-link-card__cta {
 }
 
 body[data-page="appendices"] .appendix-link-card--placeholder {
-	background: linear-gradient(180deg, #fff6ee 0%, #ffe7d6 100%);
-	box-shadow: 0 18px 34px rgba(153, 83, 20, 0.12);
-	color: #5a2f12;
+	background: linear-gradient(180deg, #eef4ff 0%, #d6e8ff 100%);
+	box-shadow: 0 18px 34px rgba(0, 48, 135, 0.12);
+	color: #0b2f6f;
 }
 
 body[data-page="appendices"] .appendix-link-card--placeholder:hover {
-	color: #5a2f12;
-	box-shadow: 0 22px 40px rgba(153, 83, 20, 0.15);
+	color: #0b2f6f;
+	box-shadow: 0 22px 40px rgba(0, 48, 135, 0.15);
 }
 
 body[data-page="appendices"] .appendix-link-card--placeholder .appendix-link-card__eyebrow {
-	background: rgba(255, 122, 69, 0.16);
-	color: #9a461b;
+	background: rgba(15, 98, 254, 0.12);
+	color: #0b3d91;
 }
 
 body[data-page="appendices"] .appendix-link-card--placeholder p {
-	color: rgba(90, 47, 18, 0.82);
+	color: rgba(11, 47, 111, 0.82);
 }
 
 body[data-page="appendices"] .appendix-issue-card {
-	--appendix-card-bar: linear-gradient(90deg, #ff7a45 0%, #ffb36b 100%);
+	--appendix-card-bar: linear-gradient(90deg, #0b2f6f 0%, #005eb8 58%, #4aa3ff 100%);
 	padding: 24px;
-	background: linear-gradient(180deg, #ffffff 0%, #fff9f5 100%);
+	background: linear-gradient(180deg, #ffffff 0%, var(--appendix-blue-soft) 100%);
 }
 
 body[data-page="appendices"] .appendix-issue-card__index {
