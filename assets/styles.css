@@ -3947,6 +3947,38 @@ body[data-page="ui-design"] .asset-image {
 	margin-top: 12px;
 }
 
+body[data-page="ui-design"] .prototype-figma-link-row {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 12px;
+}
+
+body[data-page="ui-design"] .prototype-figma-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 0;
+	font-weight: 600;
+	font-size: 0.96rem;
+	color: #0f4fa9;
+	text-decoration: none;
+	border-bottom: 1px solid rgba(15, 79, 169, 0.3);
+	padding-bottom: 2px;
+	transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+body[data-page="ui-design"] .prototype-figma-link:hover {
+	color: #0a3b7d;
+	border-bottom-color: rgba(10, 59, 125, 0.5);
+	transform: translateX(1px);
+}
+
+body[data-page="ui-design"] .prototype-figma-link:focus-visible {
+	outline: 2px solid rgba(15, 79, 169, 0.35);
+	outline-offset: 3px;
+	border-bottom-color: rgba(15, 79, 169, 0.65);
+}
+
 body[data-page="ui-design"] .artifact-grid--stacked {
 	grid-template-columns: 1fr;
 }
