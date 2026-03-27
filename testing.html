@@ -740,7 +740,248 @@
           </section>
 
           <!-- ═══════════════════════════════════════════════════════════ -->
-          <!-- 9. CODE QUALITY                                              -->
+          <!-- 9. COMPATIBILITY & RESPONSIVE TESTING                        -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="compatibility-responsive">Compatibility and responsive design testing</h2>
+            <p class="lede">
+              The application is tested across two browser engines and at a mobile viewport size
+              to catch rendering and interaction differences that affect real users.
+            </p>
+
+            <h3>Cross-browser testing</h3>
+            <p>
+              Playwright end-to-end tests run against both <strong>Chromium</strong> and
+              <strong>Firefox</strong>, configured as named projects in
+              <code>playwright.config.ts</code>. Every E2E scenario — authentication, GP workflow,
+              specialist queue, admin operations, and access control — executes on both engines,
+              so browser-specific regressions in event handling, CSS layout, or JavaScript APIs
+              are caught before merge.
+            </p>
+            <div class="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Browser engine</th>
+                    <th>Coverage</th>
+                    <th>Known gaps</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Chromium (Blink)</td>
+                    <td>All 6 E2E suites</td>
+                    <td>—</td>
+                  </tr>
+                  <tr>
+                    <td>Firefox (Gecko)</td>
+                    <td>All 6 E2E suites</td>
+                    <td>—</td>
+                  </tr>
+                  <tr>
+                    <td>WebKit (Safari)</td>
+                    <td>Not tested</td>
+                    <td>Safari-specific CSS and input handling differences are untested; a Playwright WebKit project could be added in future</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Responsive design testing</h3>
+            <p>
+              A dedicated Playwright test resizes the viewport to <strong>375 × 812</strong> (iPhone SE / small mobile)
+              and verifies that navigation and core page content remain functional at that breakpoint. The test
+              authenticates as a GP, navigates to the consultations list, and confirms that profile navigation
+              works correctly at the mobile width.
+            </p>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Mobile viewport test</strong>
+                <p><code>app.spec.ts</code> sets <code>page.setViewportSize({ width: 375, height: 812 })</code>, authenticates, and verifies the consultation list and profile navigation render correctly at mobile width.</p>
+              </div>
+              <div class="mini-card">
+                <strong>CSS responsive foundations</strong>
+                <p>The frontend uses CSS grid with <code>minmax()</code> tracks, flexbox wrapping, and media queries so layouts adapt fluidly. The E2E test validates the end result in a real browser engine.</p>
+              </div>
+            </div>
+
+            <div class="callout callout--warning">
+              <h3>Known limitations</h3>
+              <p>
+                Only one mobile viewport (375 × 812) is tested. Tablet breakpoints, landscape
+                orientations, and intermediate widths (e.g. 768 px) do not have dedicated E2E
+                coverage. WebKit / Safari is not included in the Playwright browser matrix.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 10. PROMPT & RAG QUALITY TESTING                            -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="prompt-rag-quality">Prompt and RAG quality testing</h2>
+            <p class="lede">
+              Because the system generates medical advice grounded in clinical guidelines, the
+              quality of prompt construction, retrieval accuracy, and response safety are tested
+              extensively — beyond standard unit and integration coverage.
+            </p>
+
+            <h3>Prompt safety — input sanitisation</h3>
+            <p>
+              Every user-supplied string — the query, patient notes, conversation history,
+              uploaded file context, and specialist feedback — passes through
+              <code>_sanitize_input()</code> before being assembled into a prompt. The function
+              strips ASCII control characters, removes substrings matching known prompt-injection
+              patterns (e.g. <code>ignore previous instructions</code>,
+              <code>system:</code>, <code>new instructions:</code>), collapses leftover
+              whitespace, and truncates to a configurable maximum length to prevent
+              context-window abuse.
+            </p>
+
+            <h3>Prompt construction verification</h3>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>System prompt</strong>
+                <p>Tests verify the system prompt contains citation instructions and context references — <code>test_build_system_prompt_mentions_context_and_citations()</code>.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Context formatting</strong>
+                <p>Retrieved chunks are rendered as numbered passages with guideline title, section path, and page numbers — verified in <code>test_format_context_with_results()</code>.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Patient context injection</strong>
+                <p>Patient demographics, severity, notes, and conversation history are injected into the correct prompt positions — a full test class in <code>test_prompts_patient_context.py</code>.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Uploaded document context</strong>
+                <p>File content from uploaded documents appears in a dedicated <code>UPLOADED DOCUMENTS</code> block within the prompt — tested in <code>test_prompts_file_context.py</code>.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Chunk text truncation</strong>
+                <p>Long chunk text is truncated with preference for sentence boundaries, then word boundaries, with a <code>…[truncated]</code> marker — three dedicated truncation tests.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Evidence notes</strong>
+                <p>When an evidence note is provided, it appears in the prompt sent to the LLM — verified in <code>test_generate_includes_evidence_note_in_prompt()</code>.</p>
+              </div>
+            </div>
+
+            <h3>Model routing logic</h3>
+            <p>
+              A complexity-aware router decides whether each query should be handled by the
+              local model (Med42 on Intel HPU) or escalated to the cloud LLM. The routing
+              decision is based on query complexity, retrieval confidence scores, clinical
+              severity, and whether the request is a specialist revision. Tests verify:
+            </p>
+            <div class="ctabs" data-ctabs>
+              <div class="ctabs__bar" role="tablist" aria-label="Router test areas">
+                <button class="ctabs__chip is-active" role="tab" type="button" data-ctab="rt-simple">Simple → local</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="rt-complex">Complex → cloud</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="rt-fallback">Fallback behaviour</button>
+                <button class="ctabs__chip" role="tab" type="button" data-ctab="rt-scoring">Scoring signals</button>
+              </div>
+              <div class="ctabs__panels">
+                <div class="ctabs__panel is-active" id="rt-simple" role="tabpanel">
+                  <p>Simple queries with high-confidence retrieval scores are routed to the local model. The test confirms <code>decision.provider == "local"</code> and that the composite score stays below the escalation threshold.</p>
+                </div>
+                <div class="ctabs__panel" id="rt-complex" role="tabpanel">
+                  <p>Multi-sentence queries with low retrieval confidence and urgent clinical severity are routed to the cloud model. Tests verify the <code>"severity_urgent"</code> reason tag appears and the score exceeds the threshold.</p>
+                </div>
+                <div class="ctabs__panel" id="rt-fallback" role="tabpanel">
+                  <p>When the cloud provider is unavailable, queries that would normally escalate fall back to the local model with a <code>"cloud_unavailable"</code> reason. This includes forced-cloud mode, revision flows, and high-severity queries — all tested.</p>
+                </div>
+                <div class="ctabs__panel" id="rt-scoring" role="tabpanel">
+                  <p>Individual scoring signals are tested: <code>multi_sentence</code>, <code>complex_reasoning_terms</code>, <code>low_top_score</code>, <code>small_top_gap</code>, and <code>severity_emergency</code>. Each signal's contribution to the routing decision is verified in isolation.</p>
+                </div>
+              </div>
+            </div>
+
+            <h3>Retrieval quality testing</h3>
+            <p>
+              The retrieval pipeline has dedicated quality-focused tests beyond basic input/output verification:
+            </p>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Relevance scoring</strong>
+                <p><code>test_relevance.py</code> tests query-overlap ratio, text quality scoring (rejecting numbers-only or empty text), document-kind scoring (demoting opaque product codes), and intent alignment (demoting surgical content for non-surgical queries).</p>
+              </div>
+              <div class="mini-card">
+                <strong>Reranking accuracy</strong>
+                <p><code>test_rerank.py</code> (100+ test cases) verifies cross-encoder scoring, sigmoid normalisation, Jaccard-similarity deduplication, graceful degradation when models fail, and correct handling of NaN logits.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Score fusion</strong>
+                <p><code>test_fusion.py</code> verifies Reciprocal Rank Fusion (RRF) scoring correctness, metadata preservation from source results, and deduplication between vector and keyword search results.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Citation accuracy</strong>
+                <p><code>test_citation.py</code>, <code>test_citations.py</code>, and <code>test_canonicalization.py</code> verify that citations are constructed correctly from chunk metadata, document titles are canonicalised, and citation structures are well-formed.</p>
+              </div>
+            </div>
+
+            <div class="callout callout--warning">
+              <h3>What is not tested</h3>
+              <p>
+                The test suite verifies prompt construction, retrieval quality, and routing
+                correctness, but does not include automated evaluation of LLM output quality.
+                There are no BLEU/ROUGE benchmarks, hallucination detection tests, or
+                medical accuracy scoring against a gold-standard answer set. Response quality
+                is assessed through manual specialist review in the application workflow
+                rather than through automated metrics.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 11. PERFORMANCE TESTING                                     -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <section class="section-card">
+            <h2 id="performance-testing">Performance testing</h2>
+            <p class="lede">
+              Performance was measured during development through targeted profiling of the
+              RAG pipeline and database layer, rather than through a formal load-testing framework.
+            </p>
+
+            <h3>Latency and throughput profiling</h3>
+            <p>
+              The team measured end-to-end latency across the retrieval and
+              generation pipeline, identified bottlenecks in ingestion and search, and tuned
+              defaults so the system stayed responsive on local Intel HPU hardware. Timeout
+              behaviour was hardened so the user experience remained consistent even when
+              external services were unavailable.
+            </p>
+            <div class="two-col">
+              <div class="mini-card">
+                <strong>Database performance indexes</strong>
+                <p>A dedicated Alembic migration (<code>add_performance_indexes.py</code>) adds indexes to frequently queried columns, improving lookup and join performance on the production database.</p>
+              </div>
+              <div class="mini-card">
+                <strong>LLM timeout handling</strong>
+                <p>The generation client tests verify configurable timeout propagation, timeout-exception mapping, and fallback alert delivery — ensuring slow model responses degrade gracefully rather than hanging.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Reranking batch processing</strong>
+                <p>The cross-encoder reranker processes results in a single batch. Tests verify correct scoring and deduplication, and the model is cached to avoid repeated loading across requests.</p>
+              </div>
+              <div class="mini-card">
+                <strong>Cache layer</strong>
+                <p>Redis caching is tested for hit/miss behaviour, TTL correctness, and graceful degradation when Redis is unavailable — preventing redundant computation for repeated queries.</p>
+              </div>
+            </div>
+
+            <div class="callout callout--warning">
+              <h3>Known limitations</h3>
+              <p>
+                No formal load testing (e.g. k6, Locust) or Lighthouse audits are part of the
+                CI pipeline. Concurrent user simulation and throughput benchmarks under sustained
+                load were not performed. Performance validation relied on manual profiling during
+                development rather than automated regression checks.
+              </p>
+            </div>
+          </section>
+
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- 12. CODE QUALITY                                             -->
           <!-- ═══════════════════════════════════════════════════════════ -->
           <section class="section-card">
             <h2 id="code-quality">Code quality — linting, formatting, and type checking</h2>

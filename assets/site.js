@@ -100,11 +100,11 @@ function renderToc() {
       return heading;
     })
     .filter((heading) => heading.id)
-    .map((heading) => ({
-      id: heading.id,
-      label: heading.textContent,
-      element: heading,
-    }));
+    .map((heading) => {
+      const clone = heading.cloneNode(true);
+      clone.querySelectorAll('.ts-pass-badge').forEach((el) => el.remove());
+      return { id: heading.id, label: clone.textContent.trim(), element: heading };
+    });
 
   const tocEntries = headingEntries.length
     ? headingEntries
