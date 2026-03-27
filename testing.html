@@ -37,7 +37,8 @@
           source folder structure of every service, integration tests that exercise full feature
           flows, Playwright end-to-end tests that drive the real browser across major user stories,
           and automated code-quality checks — linting, formatting, and type checking — enforced on
-          every commit. All tests pass. Coverage is enforced in CI.
+          every commit. 154 test files and over 48,000 lines of test code span all three services.
+          All tests pass. Coverage is enforced in CI.
         </p>
       </div>
 
@@ -52,34 +53,34 @@
 
             <div class="ts-stats-grid" id="statsGrid">
 
-              <div class="ts-stat-card" data-count="96" data-suffix="+">
+              <div class="ts-stat-card" data-count="154" data-suffix="+">
                 <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix">+</span></div>
                 <div class="ts-stat-label">Test files across all three services</div>
               </div>
 
-              <div class="ts-stat-card" data-count="20000" data-suffix="+" data-format="compact">
+              <div class="ts-stat-card" data-count="48000" data-suffix="+" data-format="compact">
                 <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix">+</span></div>
                 <div class="ts-stat-label">Lines of test code written</div>
               </div>
 
-              <div class="ts-stat-card" data-count="47" data-suffix="+">
-                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix">+</span></div>
+              <div class="ts-stat-card" data-count="55" data-suffix="">
+                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix"></span></div>
                 <div class="ts-stat-label">RAG service test modules — every pipeline stage covered</div>
               </div>
 
-              <div class="ts-stat-card" data-count="31" data-suffix="+">
-                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix">+</span></div>
+              <div class="ts-stat-card" data-count="45" data-suffix="">
+                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix"></span></div>
                 <div class="ts-stat-label">Backend test modules — auth, chats, cache, admin, security</div>
               </div>
 
-              <div class="ts-stat-card" data-count="18" data-suffix="+">
-                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix">+</span></div>
+              <div class="ts-stat-card" data-count="53" data-suffix="">
+                <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix"></span></div>
                 <div class="ts-stat-label">Frontend test files mirroring the src/ folder hierarchy</div>
               </div>
 
-              <div class="ts-stat-card" data-count="6" data-suffix="">
+              <div class="ts-stat-card" data-count="2" data-suffix="">
                 <div class="ts-stat-number"><span class="ts-count">0</span><span class="ts-suffix"></span></div>
-                <div class="ts-stat-label">Playwright E2E suites — Chromium &amp; Firefox</div>
+                <div class="ts-stat-label">Playwright E2E browser targets — Chromium &amp; Firefox</div>
               </div>
 
               <div class="ts-ring-card" data-percent="90">
@@ -1393,6 +1394,7 @@
               <span class="ts-tool-badge ts-tool-badge--be">pytest-asyncio</span>
               <span class="ts-tool-badge ts-tool-badge--be">pytest-cov</span>
               <span class="ts-tool-badge ts-tool-badge--qual">ESLint</span>
+              <span class="ts-tool-badge ts-tool-badge--qual">Prettier</span>
               <span class="ts-tool-badge ts-tool-badge--qual">Ruff</span>
               <span class="ts-tool-badge ts-tool-badge--qual">MyPy</span>
             </div>
@@ -1433,8 +1435,14 @@
                   </tr>
                   <tr>
                     <td>ESLint</td>
-                    <td>—</td>
+                    <td>9.39.1</td>
                     <td>JavaScript/TypeScript linting</td>
+                    <td>Frontend</td>
+                  </tr>
+                  <tr>
+                    <td>Prettier</td>
+                    <td>3.8.1</td>
+                    <td>Code formatting for TypeScript and JSX</td>
                     <td>Frontend</td>
                   </tr>
                   <tr>
@@ -1451,7 +1459,7 @@
                   </tr>
                   <tr>
                     <td>pytest-asyncio</td>
-                    <td>—</td>
+                    <td>≥0.23</td>
                     <td>Async test support</td>
                     <td>Backend, RAG service</td>
                   </tr>
@@ -1459,11 +1467,11 @@
                     <td>pytest-cov</td>
                     <td>≥4.1</td>
                     <td>Coverage measurement and threshold enforcement</td>
-                    <td>RAG service</td>
+                    <td>Backend, RAG service</td>
                   </tr>
                   <tr>
                     <td>Ruff</td>
-                    <td>≥0.1</td>
+                    <td>≥0.5</td>
                     <td>Linting and formatting (replaces Flake8 + Black + isort)</td>
                     <td>Backend, RAG service</td>
                   </tr>
