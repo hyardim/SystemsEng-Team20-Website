@@ -3336,36 +3336,36 @@ body[data-page="appendices"] .report-page-header {
 }
 
 body[data-page="appendices"] .content-stack > section {
-	background: #ffffff !important;
+	background: #f4f4f5 !important;
 }
 
 body[data-page="appendices"] .content-stack > section:nth-of-type(even) {
-	background: #f4f4f5 !important;
+	background: #ffffff !important;
 }
 
 body[data-page="appendices"] .content-stack > section::before,
 body[data-page="appendices"] .content-stack > section:nth-of-type(odd)::before {
-	background: #ffffff;
+	background: #f4f4f5;
 }
 
 body[data-page="appendices"] .content-stack > section:nth-of-type(even)::before {
-	background: #f4f4f5;
-}
-
-body[data-page="appendices"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section {
-	background: #ffffff !important;
-}
-
-body[data-page="appendices"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even) {
-	background: #f4f4f5 !important;
-}
-
-body[data-page="appendices"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section::before {
 	background: #ffffff;
 }
 
-body[data-page="appendices"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even)::before {
+body[data-page="appendices"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section {
+	background: #f4f4f5 !important;
+}
+
+body[data-page="appendices"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even) {
+	background: #ffffff !important;
+}
+
+body[data-page="appendices"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section::before {
 	background: #f4f4f5;
+}
+
+body[data-page="appendices"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even)::before {
+	background: #ffffff;
 }
 
 body[data-page="appendices"] .appendix-section-heading {

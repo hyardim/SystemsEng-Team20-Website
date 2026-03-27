@@ -223,7 +223,7 @@ function renderFooter() {
         <h4 class="site-footer__heading">About Us</h4>
         <p class="site-footer__about-text">Clinical guidance + AI insights for specialist-supported consultation workflows.</p>
         <div class="site-footer__links site-footer__social">
-          <a href="#" data-placeholder-link="github" aria-label="GitHub">
+          <a href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noreferrer" aria-label="GitHub">
             <img src="${_root}assets/icons/github.svg" alt="" aria-hidden="true" />
             <span>GitHub</span>
           </a>
@@ -231,7 +231,7 @@ function renderFooter() {
             <img src="${_root}assets/icons/youtube.svg" alt="" aria-hidden="true" />
             <span>YouTube</span>
           </a>
-          <a href="mailto:daniel.rotariu.24@ucl.ac.uk" aria-label="Contact us">
+          <a href="mailto:hakan.yardim.24@ucl.ac.uk" aria-label="Contact us">
             <img src="${_root}assets/icons/contact.svg" alt="" aria-hidden="true" />
             <span>Contact Us</span>
           </a>
@@ -248,7 +248,6 @@ function renderFooter() {
           <a href="${_root}ui-design/">UI Design</a>
           <a href="${_root}appendices/">Appendices</a>
           <a href="${_root}system-design/">System Design</a>
-          <a href="${_root}blog/">Blog</a>
           <a href="${_root}implementation/">Implementation</a>
         </div>
       </section>
