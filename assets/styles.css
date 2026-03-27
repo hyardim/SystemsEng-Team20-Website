@@ -948,6 +948,7 @@ body:not([data-page="home"]) .page-shell {
 .content-stack {
 	display: grid;
 	gap: 22px;
+	grid-template-columns: minmax(0, 1fr);
 }
 
 .section-card {
@@ -2025,6 +2026,10 @@ body[data-page="evaluation"]:not([data-page="home"]):not([data-page="requirement
 
 body[data-page="evaluation"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even)::before {
 	background: #ffffff;
+}
+
+body[data-page="evaluation"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid {
+	column-gap: 36px;
 }
 
 body[data-page="implementation"][data-impl-start-grey="true"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section::before {

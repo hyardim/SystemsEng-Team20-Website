@@ -91,7 +91,7 @@
                 <div class="ts-ring-label">Coverage threshold<br>enforced in CI</div>
               </div>
 
-              <div class="ts-ring-card" data-percent="100">
+              <div class="ts-ring-card ts-ring-card--green" data-percent="100">
                 <svg class="ts-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
                   <circle class="ts-ring-track" cx="50" cy="50" r="38"/>
                   <circle class="ts-ring-fill" cx="50" cy="50" r="38" data-percent="100"/>
@@ -162,7 +162,8 @@
                 stroke-linecap: round;
                 transform: rotate(-90deg);
                 transform-origin: 50% 50%;
-                transition: stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1);
+                stroke-dasharray: 238.76;
+                stroke-dashoffset: 238.76;
               }
               .ts-ring-value {
                 font-size: 1.15rem;
@@ -171,6 +172,8 @@
                 dominant-baseline: middle;
                 text-anchor: middle;
               }
+              .ts-ring-card--green .ts-ring-fill  { stroke: #38a169; }
+              .ts-ring-card--green .ts-ring-value { fill: #22543d; }
               .ts-ring-label { font-size: 0.9rem; color: var(--muted, #5b6c7d); line-height: 1.5; }
               .ts-stat-card, .ts-ring-card {
                 opacity: 0;
@@ -1648,14 +1651,16 @@
           text.setAttribute('x', '50');
           text.setAttribute('y', '50');
           text.setAttribute('class', 'ts-ring-value');
-          text.textContent = percent + '%';
+          text.textContent = '0%';
           svg.appendChild(text);
-          var duration = 1400;
-          var start    = performance.now();
+          var duration = 1800;
+          var start    = null;
           function step(now) {
+            if (!start) start = now;
             var progress = Math.min((now - start) / duration, 1);
             var eased    = easeOutQuart(progress);
             circle.style.strokeDashoffset = circum - eased * (circum * percent / 100);
+            text.textContent = Math.round(eased * percent) + '%';
             if (progress < 1) requestAnimationFrame(step);
           }
           setTimeout(function () { requestAnimationFrame(step); }, 120);
