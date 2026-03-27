@@ -7,12 +7,41 @@
     <link rel="stylesheet" href="assets/styles.css?v=20260327d" />
   </head>
   <body data-page="appendices">
-    <header class="site-header"><div class="site-header__inner"><a class="brand" href="index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="index.html" data-nav="home">Home</a><a href="requirements.html" data-nav="requirements">Requirements</a><a href="research.html" data-nav="research">Research</a><a href="ui-design.html" data-nav="ui-design">UI Design</a><a href="system-design.html" data-nav="system-design">System Design</a><a href="implementation/implementation.html" data-nav="implementation">Implementation</a><a href="testing.html" data-nav="testing">Testing</a><a href="evaluation.html" data-nav="evaluation">Evaluation</a><a href="appendices.html" data-nav="appendices">Appendices</a><a href="blog/blog.html" data-nav="blog">Blog</a></nav><a class="site-header__github-btn" href="https://github.com/hyardim/Ambience-AI-1.5" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository link">GitHub ↗</a></div></header>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="index.html" aria-label="Ambience-AI-1.5 home">
+          <img class="brand__logo-image" src="assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" />
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="index.html" data-nav="home">Home</a>
+          <a href="requirements.html" data-nav="requirements">Requirements</a>
+          <a href="research.html" data-nav="research">Research</a>
+          <a href="ui-design.html" data-nav="ui-design">UI Design</a>
+          <a href="system-design.html" data-nav="system-design">System Design</a>
+          <a href="implementation/implementation.html" data-nav="implementation">Implementation</a>
+          <a href="testing.html" data-nav="testing">Testing</a>
+          <a href="evaluation.html" data-nav="evaluation">Evaluation</a>
+          <a href="appendices.html" data-nav="appendices">Appendices</a>
+        </nav>
+        <a
+          class="site-header__github-btn"
+          href="https://github.com/hyardim/Ambience-AI-1.5"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub repository link"
+          >GitHub ↗</a
+        >
+      </div>
+    </header>
 
     <main class="page-shell">
       <div class="report-page-header">
         <h1 class="report-page-title">Appendices</h1>
-        <p class="report-page-subtitle">User manual, deployment manual, README, GDPR, privacy policy, dependencies, development blog, and monthly videos</p>
+        <p class="report-page-subtitle">
+          User manual, deployment manual, README, GDPR, privacy policy, dependencies, development
+          blog, and monthly videos
+        </p>
       </div>
 
       <div class="page-grid">
@@ -21,24 +50,35 @@
             <h2>User manual</h2>
             <p class="lede">
               Ambience-AI-1.5 is a role-aware clinical consultation platform. GPs create
-              consultations and receive AI-generated answers grounded in ingested medical guidelines.
-              Specialists review and validate those answers before they reach clinical use. Admins
-              oversee the platform, manage users, and upload new evidence documents. This manual
-              covers each role end-to-end.
+              consultations and receive AI-generated answers grounded in ingested medical
+              guidelines. Specialists review and validate those answers before they reach clinical
+              use. Admins oversee the platform, manage users, and upload new evidence documents.
+              This manual covers each role end-to-end.
             </p>
 
             <div class="appendix-manual-grid">
               <div>
                 <h3>System overview</h3>
                 <p>
-                  The application is fully containerised. Running <code>docker compose up --build</code>
-                  starts all seven services and seeds three demo accounts automatically. Open
-                  <strong>http://localhost:3000</strong> in any modern browser to begin.
+                  The application is fully containerised. Running
+                  <code>docker compose up --build</code> starts all seven services and seeds three
+                  demo accounts automatically. Open <strong>http://localhost:3000</strong> in any
+                  modern browser to begin.
                 </p>
                 <ul>
-                  <li>GPs create consultations, ask clinical questions, and receive grounded AI answers with numbered citations drawn from ingested clinical guidelines.</li>
-                  <li>Specialists review AI responses, inspect the cited evidence, and decide to approve, reject, request changes, or write a manual answer.</li>
-                  <li>Admins monitor platform-wide statistics, manage user accounts, review all consultations, trace audit logs, and upload new PDF clinical documents for RAG ingestion.</li>
+                  <li>
+                    GPs create consultations, ask clinical questions, and receive grounded AI
+                    answers with numbered citations drawn from ingested clinical guidelines.
+                  </li>
+                  <li>
+                    Specialists review AI responses, inspect the cited evidence, and decide to
+                    approve, reject, request changes, or write a manual answer.
+                  </li>
+                  <li>
+                    Admins monitor platform-wide statistics, manage user accounts, review all
+                    consultations, trace audit logs, and upload new PDF clinical documents for RAG
+                    ingestion.
+                  </li>
                 </ul>
                 <p>
                   New self-registered accounts require email verification. In local development,
@@ -80,59 +120,132 @@
               Navigate to <strong>http://localhost:3000</strong> and use the credentials above to
               log in without any extra steps. If you register a new account instead, a verification
               link is sent to the email you provide. Open Mailpit at localhost:8025, find the
-              message, and click the link — it expires after 60 minutes. A <em>Resend verification</em>
-              option appears on the login screen if the link expires. The <em>Forgot password</em>
-              flow follows the same mechanism: check Mailpit for the reset link, which expires after
-              30 minutes.
+              message, and click the link — it expires after 60 minutes. A
+              <em>Resend verification</em> option appears on the login screen if the link expires.
+              The <em>Forgot password</em> flow follows the same mechanism: check Mailpit for the
+              reset link, which expires after 30 minutes.
             </p>
 
             <div class="appendix-role-grid">
               <div class="appendix-card appendix-role-card">
                 <span class="appendix-role-card__eyebrow">Role 1 — GP</span>
                 <h3>GP workflow</h3>
-                <p>GPs manage consultations from creation through to receiving a specialist review outcome.</p>
+                <p>
+                  GPs manage consultations from creation through to receiving a specialist review
+                  outcome.
+                </p>
                 <ul>
                   <li>Log in → the dashboard lists all your consultations with status badges.</li>
-                  <li>Click <em>New Consultation</em>. Enter a title, select a specialty, and set a severity level (routine, urgent, emergency).</li>
-                  <li>Inside the consultation, type a clinical question and submit. The system routes it through the RAG pipeline: vector search + keyword search + reranking produce a grounded answer with numbered citations below each response.</li>
-                  <li>Attach supporting files (PDF, images) via the upload button within the chat. Uploaded files are stored and visible in the consultation timeline.</li>
-                  <li>Use the filter controls to narrow your consultation list by status, specialty, or date range.</li>
-                  <li>When a specialist claims the case, its status updates to <em>In review</em>. Once the specialist acts, the outcome (approved, rejected, changes requested, or manual response) appears in the timeline and you receive an in-app notification.</li>
-                  <li>If changes are requested, revise the clinical context or question and resubmit. The updated consultation re-enters the review queue.</li>
+                  <li>
+                    Click <em>New Consultation</em>. Enter a title, select a specialty, and set a
+                    severity level (routine, urgent, emergency).
+                  </li>
+                  <li>
+                    Inside the consultation, type a clinical question and submit. The system routes
+                    it through the RAG pipeline: vector search + keyword search + reranking produce
+                    a grounded answer with numbered citations below each response.
+                  </li>
+                  <li>
+                    Attach supporting files (PDF, images) via the upload button within the chat.
+                    Uploaded files are stored and visible in the consultation timeline.
+                  </li>
+                  <li>
+                    Use the filter controls to narrow your consultation list by status, specialty,
+                    or date range.
+                  </li>
+                  <li>
+                    When a specialist claims the case, its status updates to <em>In review</em>.
+                    Once the specialist acts, the outcome (approved, rejected, changes requested,
+                    or manual response) appears in the timeline and you receive an in-app
+                    notification.
+                  </li>
+                  <li>
+                    If changes are requested, revise the clinical context or question and resubmit.
+                    The updated consultation re-enters the review queue.
+                  </li>
                 </ul>
               </div>
 
               <div class="appendix-card appendix-role-card">
                 <span class="appendix-role-card__eyebrow">Role 2 — Specialist</span>
                 <h3>Specialist workflow</h3>
-                <p>Specialists validate AI-generated answers against the cited evidence before they are visible to GPs as confirmed outcomes.</p>
+                <p>
+                  Specialists validate AI-generated answers against the cited evidence before they
+                  are visible to GPs as confirmed outcomes.
+                </p>
                 <ul>
-                  <li>Log in → the review queue lists all consultations awaiting specialist attention across all GPs.</li>
-                  <li>Open a case and click <em>Assign to me</em> to claim it and remove it from the shared queue.</li>
-                  <li>Read the full AI answer and expand each numbered citation to inspect the source passage from the ingested guidelines.</li>
-                  <li>Choose one of four review outcomes:
+                  <li>
+                    Log in → the review queue lists all consultations awaiting specialist attention
+                    across all GPs.
+                  </li>
+                  <li>
+                    Open a case and click <em>Assign to me</em> to claim it and remove it from the
+                    shared queue.
+                  </li>
+                  <li>
+                    Read the full AI answer and expand each numbered citation to inspect the source
+                    passage from the ingested guidelines.
+                  </li>
+                  <li>
+                    Choose one of four review outcomes:
                     <ul>
-                      <li><strong>Approve</strong> — AI answer is clinically sound; outcome released to GP.</li>
-                      <li><strong>Reject</strong> — AI answer is not acceptable; GP is notified.</li>
-                      <li><strong>Request changes</strong> — returns the consultation to the GP with notes explaining what to clarify.</li>
-                      <li><strong>Manual response</strong> — replace the AI answer with a specialist-written response.</li>
+                      <li>
+                        <strong>Approve</strong> — AI answer is clinically sound; outcome released
+                        to GP.
+                      </li>
+                      <li>
+                        <strong>Reject</strong> — AI answer is not acceptable; GP is notified.
+                      </li>
+                      <li>
+                        <strong>Request changes</strong> — returns the consultation to the GP with
+                        notes explaining what to clarify.
+                      </li>
+                      <li>
+                        <strong>Manual response</strong> — replace the AI answer with a
+                        specialist-written response.
+                      </li>
                     </ul>
                   </li>
                   <li>Add review notes to any decision to document the clinical reasoning.</li>
-                  <li>Close the consultation once review is complete. The GP receives an in-app notification with the outcome.</li>
+                  <li>
+                    Close the consultation once review is complete. The GP receives an in-app
+                    notification with the outcome.
+                  </li>
                 </ul>
               </div>
 
               <div class="appendix-card appendix-role-card">
                 <span class="appendix-role-card__eyebrow">Role 3 — Admin</span>
                 <h3>Admin workflow</h3>
-                <p>Admins have platform-wide visibility for governance, user management, and evidence ingestion.</p>
+                <p>
+                  Admins have platform-wide visibility for governance, user management, and
+                  evidence ingestion.
+                </p>
                 <ul>
-                  <li>Log in → the admin dashboard shows platform statistics: total consultations, registered users, AI request counts, and review throughput.</li>
-                  <li><strong>Users</strong> — inspect all accounts, their roles, email verification status, and activation state. Admins can deactivate accounts or change role assignments.</li>
-                  <li><strong>Chats</strong> — view all consultations across all GPs for operational oversight.</li>
-                  <li><strong>Audit logs</strong> — trace security-relevant events including login attempts, role changes, and admin actions, with timestamps and actor IDs.</li>
-                  <li><strong>Guidelines</strong> — upload new PDF clinical documents. The RAG background worker (rag_worker service) automatically extracts, chunks, embeds with <code>all-MiniLM-L6-v2</code>, and stores vectors in PostgreSQL with pgvector. Uploaded documents immediately extend the evidence base for new consultations.</li>
+                  <li>
+                    Log in → the admin dashboard shows platform statistics: total consultations,
+                    registered users, AI request counts, and review throughput.
+                  </li>
+                  <li>
+                    <strong>Users</strong> — inspect all accounts, their roles, email verification
+                    status, and activation state. Admins can deactivate accounts or change role
+                    assignments.
+                  </li>
+                  <li>
+                    <strong>Chats</strong> — view all consultations across all GPs for operational
+                    oversight.
+                  </li>
+                  <li>
+                    <strong>Audit logs</strong> — trace security-relevant events including login
+                    attempts, role changes, and admin actions, with timestamps and actor IDs.
+                  </li>
+                  <li>
+                    <strong>Guidelines</strong> — upload new PDF clinical documents. The RAG
+                    background worker (rag_worker service) automatically extracts, chunks, embeds
+                    with <code>all-MiniLM-L6-v2</code>, and stores vectors in PostgreSQL with
+                    pgvector. Uploaded documents immediately extend the evidence base for new
+                    consultations.
+                  </li>
                 </ul>
               </div>
             </div>
@@ -140,41 +253,67 @@
             <div class="appendix-proof-grid">
               <div class="mini-card appendix-proof-card">
                 <strong>AI citations and grounding</strong>
-                <p>Every AI answer lists numbered citations from ingested clinical guidelines. The RAG service uses hybrid vector + keyword search and cross-encoder reranking for high relevance. Specialists see the exact source passage next to each citation number.</p>
+                <p>
+                  Every AI answer lists numbered citations from ingested clinical guidelines. The
+                  RAG service uses hybrid vector + keyword search and cross-encoder reranking for
+                  high relevance. Specialists see the exact source passage next to each citation
+                  number.
+                </p>
               </div>
               <div class="mini-card appendix-proof-card">
                 <strong>In-app notifications</strong>
-                <p>Role-appropriate notifications appear for all key workflow events: consultation status changes, specialist assignments, review outcomes (approve, reject, changes requested), and admin actions. Notifications are dismissed individually from the notification panel.</p>
+                <p>
+                  Role-appropriate notifications appear for all key workflow events: consultation
+                  status changes, specialist assignments, review outcomes (approve, reject, changes
+                  requested), and admin actions. Notifications are dismissed individually from the
+                  notification panel.
+                </p>
               </div>
               <div class="mini-card appendix-proof-card">
                 <strong>Profile management</strong>
-                <p>All users can update their display name and change their password from the profile screen. Admins can also update role assignments and account activation states from the Users panel without needing direct database access.</p>
+                <p>
+                  All users can update their display name and change their password from the
+                  profile screen. Admins can also update role assignments and account activation
+                  states from the Users panel without needing direct database access.
+                </p>
               </div>
             </div>
           </section>
 
-          <!-- ─────────────────────────────────────────── -->
-          <!-- DEPLOYMENT MANUAL                           -->
-          <!-- ─────────────────────────────────────────── -->
           <section class="section-card" id="deployment-manual">
             <h2>Deployment manual</h2>
             <p class="lede">
-              Ambience-AI-1.5 runs as seven Docker containers orchestrated with Docker Compose.
-              A single command builds and starts the full stack. This manual covers local
-              development setup, required environment variables, LLM configuration, and the
-              steps needed for a production TLS deployment.
+              Ambience-AI-1.5 runs as seven Docker containers orchestrated with Docker Compose. A
+              single command builds and starts the full stack. This manual covers local development
+              setup, required environment variables, LLM configuration, and the steps needed for a
+              production TLS deployment.
             </p>
 
             <div class="appendix-deployment-grid">
               <div>
                 <h3>Prerequisites</h3>
                 <ul>
-                  <li><strong>Docker Desktop</strong> — required (Mac, Windows, or Linux). Minimum version 24.x recommended.</li>
-                  <li><strong>8 GB RAM</strong> available to Docker — needed to run all seven containers comfortably.</li>
+                  <li>
+                    <strong>Docker Desktop</strong> — required (Mac, Windows, or Linux). Minimum
+                    version 24.x recommended.
+                  </li>
+                  <li>
+                    <strong>8 GB RAM</strong> available to Docker — needed to run all seven
+                    containers comfortably.
+                  </li>
                   <li><strong>Git</strong> — to clone the repository.</li>
-                  <li><strong>Ollama</strong> (optional) — for local LLM inference. Install from <a href="https://ollama.com" target="_blank" rel="noopener">ollama.com</a>, then pull the model: <code>ollama pull thewindmom/llama3-med42-8b</code>. No GPU is required but generation is significantly faster with one.</li>
+                  <li>
+                    <strong>Ollama</strong> (optional) — for local LLM inference. Install from
+                    <a href="https://ollama.com" target="_blank" rel="noopener">ollama.com</a>,
+                    then pull the model:
+                    <code>ollama pull thewindmom/llama3-med42-8b</code>. No GPU is required but
+                    generation is significantly faster with one.
+                  </li>
                 </ul>
-                <p>No Python or Node.js installation is needed on the host machine. All build and runtime dependencies are resolved inside Docker images at build time.</p>
+                <p>
+                  No Python or Node.js installation is needed on the host machine. All build and
+                  runtime dependencies are resolved inside Docker images at build time.
+                </p>
               </div>
 
               <div class="appendix-access-card">
@@ -217,14 +356,19 @@ cd Ambience-AI-1.5</code></pre>
 
               <div class="appendix-card">
                 <h4>Step 2 — Create environment files</h4>
-                <p>Copy the provided example files to create your own <code>.env</code> files. At minimum, set the three required variables shown below.</p>
+                <p>
+                  Copy the provided example files to create your own <code>.env</code> files. At
+                  minimum, set the three required variables shown below.
+                </p>
                 <div class="appendix-dependency-file">
                   <div class="appendix-dependency-file__bar"><span>terminal</span></div>
                   <pre><code>cp backend/.env.example backend/.env
 cp rag_service/.env.example rag_service/.env</code></pre>
                 </div>
                 <div class="appendix-dependency-file">
-                  <div class="appendix-dependency-file__bar"><span>backend/.env — required values</span></div>
+                  <div class="appendix-dependency-file__bar">
+                    <span>backend/.env — required values</span>
+                  </div>
                   <pre><code>SECRET_KEY=your-secret-key-here
 POSTGRES_PASSWORD=your-db-password-here
 RAG_INTERNAL_API_KEY=your-rag-api-key-here
@@ -233,7 +377,9 @@ RAG_INTERNAL_API_KEY=your-rag-api-key-here
 AUTH_BOOTSTRAP_DEMO_USERS=true</code></pre>
                 </div>
                 <div class="appendix-dependency-file">
-                  <div class="appendix-dependency-file__bar"><span>rag_service/.env — required values</span></div>
+                  <div class="appendix-dependency-file__bar">
+                    <span>rag_service/.env — required values</span>
+                  </div>
                   <pre><code>POSTGRES_PASSWORD=your-db-password-here
 RAG_INTERNAL_API_KEY=your-rag-api-key-here</code></pre>
                 </div>
@@ -255,7 +401,13 @@ RAG_INTERNAL_API_KEY=your-rag-api-key-here</code></pre>
 
               <div class="appendix-card">
                 <h4>Step 4 — Open the application</h4>
-                <p>Navigate to <strong>http://localhost:3000</strong>. Log in with one of the demo accounts: <code>gp@example.com</code>, <code>specialist@example.com</code>, or <code>admin@example.com</code> — all with password <code>password123</code>. Demo accounts are only created when <code>AUTH_BOOTSTRAP_DEMO_USERS=true</code>.</p>
+                <p>
+                  Navigate to <strong>http://localhost:3000</strong>. Log in with one of the demo
+                  accounts: <code>gp@example.com</code>, <code>specialist@example.com</code>, or
+                  <code>admin@example.com</code> — all with password <code>password123</code>. Demo
+                  accounts are only created when
+                  <code>AUTH_BOOTSTRAP_DEMO_USERS=true</code>.
+                </p>
               </div>
             </div>
 
@@ -263,31 +415,60 @@ RAG_INTERNAL_API_KEY=your-rag-api-key-here</code></pre>
             <div class="appendix-policy-grid">
               <div class="appendix-card">
                 <h4>mailpit</h4>
-                <p>Local SMTP server and email UI. Captures all outgoing emails (verification, password reset) without sending to real inboxes. UI at <code>:8025</code>, SMTP on <code>:1025</code>.</p>
+                <p>
+                  Local SMTP server and email UI. Captures all outgoing emails (verification,
+                  password reset) without sending to real inboxes. UI at <code>:8025</code>, SMTP
+                  on <code>:1025</code>.
+                </p>
               </div>
               <div class="appendix-card">
                 <h4>redis</h4>
-                <p>Redis 7 Alpine. Used for RAG background job queuing (<code>rq</code>), API response caching, and rate-limit counters for auth endpoints. Capped at 256 MB with LRU eviction.</p>
+                <p>
+                  Redis 7 Alpine. Used for RAG background job queuing (<code>rq</code>), API
+                  response caching, and rate-limit counters for auth endpoints. Capped at 256 MB
+                  with LRU eviction.
+                </p>
               </div>
               <div class="appendix-card">
                 <h4>db_vector</h4>
-                <p>PostgreSQL 16 with <code>pgvector</code> extension. Stores all application data and RAG chunk embeddings. SQL migrations and a compressed seed of RAG chunks are auto-applied on first start via <code>docker-entrypoint-initdb.d</code>.</p>
+                <p>
+                  PostgreSQL 16 with <code>pgvector</code> extension. Stores all application data
+                  and RAG chunk embeddings. SQL migrations and a compressed seed of RAG chunks are
+                  auto-applied on first start via <code>docker-entrypoint-initdb.d</code>.
+                </p>
               </div>
               <div class="appendix-card">
                 <h4>backend</h4>
-                <p>FastAPI service on port <code>8000</code>. Handles authentication (JWT + refresh tokens), consultation lifecycle, notifications, audit logging, and role-enforced access control. Depends on db_vector and redis.</p>
+                <p>
+                  FastAPI service on port <code>8000</code>. Handles authentication (JWT + refresh
+                  tokens), consultation lifecycle, notifications, audit logging, and role-enforced
+                  access control. Depends on db_vector and redis.
+                </p>
               </div>
               <div class="appendix-card">
                 <h4>rag_service</h4>
-                <p>FastAPI RAG engine on port <code>8001</code>. Performs ingestion, hybrid retrieval, cross-encoder reranking, relevance scoring, and LLM routing (local Ollama or cloud RunPod). Exposes an internal API protected by <code>RAG_INTERNAL_API_KEY</code>.</p>
+                <p>
+                  FastAPI RAG engine on port <code>8001</code>. Performs ingestion, hybrid
+                  retrieval, cross-encoder reranking, relevance scoring, and LLM routing (local
+                  Ollama or cloud RunPod). Exposes an internal API protected by
+                  <code>RAG_INTERNAL_API_KEY</code>.
+                </p>
               </div>
               <div class="appendix-card">
                 <h4>rag_worker</h4>
-                <p>Background RQ worker that processes document ingestion jobs queued by the RAG service. Extracts, chunks, embeds, and stores vectors in PostgreSQL asynchronously without blocking API requests.</p>
+                <p>
+                  Background RQ worker that processes document ingestion jobs queued by the RAG
+                  service. Extracts, chunks, embeds, and stores vectors in PostgreSQL
+                  asynchronously without blocking API requests.
+                </p>
               </div>
               <div class="appendix-card">
                 <h4>frontend</h4>
-                <p>React + Vite application on port <code>3000</code>. Serves the GP, specialist, and admin interfaces with hot-module reloading in development. In production the nginx container handles TLS termination and proxying.</p>
+                <p>
+                  React + Vite application on port <code>3000</code>. Serves the GP, specialist,
+                  and admin interfaces with hot-module reloading in development. In production the
+                  nginx container handles TLS termination and proxying.
+                </p>
               </div>
             </div>
 
@@ -297,9 +478,15 @@ RAG_INTERNAL_API_KEY=your-rag-api-key-here</code></pre>
                 <div class="appendix-legal-heading">
                   <h3>Required variables</h3>
                 </div>
-                <p>The three variables below must be set before the stack will start. The compose file uses <code>:?</code> notation so Docker will refuse to start with a clear error if any are missing.</p>
+                <p>
+                  The three variables below must be set before the stack will start. The compose
+                  file uses <code>:?</code> notation so Docker will refuse to start with a clear
+                  error if any are missing.
+                </p>
                 <div class="appendix-dependency-file">
-                  <div class="appendix-dependency-file__bar"><span>backend/.env and rag_service/.env</span></div>
+                  <div class="appendix-dependency-file__bar">
+                    <span>backend/.env and rag_service/.env</span>
+                  </div>
                   <pre><code>SECRET_KEY            # JWT signing secret — use a long random string (64+ chars)
 POSTGRES_PASSWORD     # PostgreSQL password for the 'admin' user
 RAG_INTERNAL_API_KEY  # Shared secret between backend and rag_service — any string</code></pre>
@@ -310,9 +497,15 @@ RAG_INTERNAL_API_KEY  # Shared secret between backend and rag_service — any st
                 <div class="appendix-legal-heading">
                   <h3>LLM routing</h3>
                 </div>
-                <p>The RAG service can use a local Ollama instance or a cloud-hosted RunPod endpoint. The routing threshold controls when complex queries are escalated to the cloud model.</p>
+                <p>
+                  The RAG service can use a local Ollama instance or a cloud-hosted RunPod
+                  endpoint. The routing threshold controls when complex queries are escalated to the
+                  cloud model.
+                </p>
                 <div class="appendix-dependency-file">
-                  <div class="appendix-dependency-file__bar"><span>rag_service/.env — LLM settings</span></div>
+                  <div class="appendix-dependency-file__bar">
+                    <span>rag_service/.env — LLM settings</span>
+                  </div>
                   <pre><code># Local Ollama (default, optional)
 OLLAMA_BASE_URL=http://host.docker.internal:11434
 OLLAMA_MODEL=thewindmom/llama3-med42-8b
@@ -326,7 +519,11 @@ CLOUD_LLM_API_KEY=your-runpod-api-key
 # Score threshold 0–1: queries below this route to local, above to cloud
 LLM_ROUTE_THRESHOLD=0.65</code></pre>
                 </div>
-                <p>If neither Ollama nor a cloud key is configured, the RAG service will still start but LLM generation calls will fail. Retrieval, chunking, and embedding still work independently.</p>
+                <p>
+                  If neither Ollama nor a cloud key is configured, the RAG service will still start
+                  but LLM generation calls will fail. Retrieval, chunking, and embedding still work
+                  independently.
+                </p>
               </div>
 
               <div class="appendix-legal-block">
@@ -334,7 +531,9 @@ LLM_ROUTE_THRESHOLD=0.65</code></pre>
                   <h3>Demo accounts and email</h3>
                 </div>
                 <div class="appendix-dependency-file">
-                  <div class="appendix-dependency-file__bar"><span>backend/.env — auth and email settings</span></div>
+                  <div class="appendix-dependency-file__bar">
+                    <span>backend/.env — auth and email settings</span>
+                  </div>
                   <pre><code># Seed demo GP, specialist, and admin accounts on startup
 AUTH_BOOTSTRAP_DEMO_USERS=true
 DEMO_GP_PASSWORD=password123
@@ -357,13 +556,15 @@ PASSWORD_RESET_EMAIL_LOG_ONLY=false</code></pre>
                   <h3>Production deployment</h3>
                 </div>
                 <p>
-                  The stack includes an nginx container with TLS support that is disabled by default
-                  (it belongs to the <code>production</code> Docker Compose profile). To enable it,
-                  set real SMTP credentials, place SSL certificates in <code>nginx/certs/</code>,
-                  and start with the production profile:
+                  The stack includes an nginx container with TLS support that is disabled by
+                  default (it belongs to the <code>production</code> Docker Compose profile). To
+                  enable it, set real SMTP credentials, place SSL certificates in
+                  <code>nginx/certs/</code>, and start with the production profile:
                 </p>
                 <div class="appendix-dependency-file">
-                  <div class="appendix-dependency-file__bar"><span>terminal — production start</span></div>
+                  <div class="appendix-dependency-file__bar">
+                    <span>terminal — production start</span>
+                  </div>
                   <pre><code># Set your domain in backend/.env
 FRONTEND_BASE_URL=https://your-domain.example.com
 COOKIE_SECURE=true
@@ -372,7 +573,10 @@ COOKIE_SECURE=true
 docker compose --profile production up --build -d</code></pre>
                 </div>
                 <p>
-                  When <code>NGINX_GENERATE_SELF_SIGNED=true</code> (the default), nginx generates a self-signed certificate on startup — useful for staging. Replace with a real cert from Let's Encrypt or another CA for production. Place <code>cert.pem</code> and <code>key.pem</code> in <code>nginx/certs/</code>.
+                  When <code>NGINX_GENERATE_SELF_SIGNED=true</code> (the default), nginx generates
+                  a self-signed certificate on startup — useful for staging. Replace with a real
+                  cert from Let's Encrypt or another CA for production. Place <code>cert.pem</code>
+                  and <code>key.pem</code> in <code>nginx/certs/</code>.
                 </p>
               </div>
 
@@ -392,7 +596,10 @@ docker compose down -v
 docker compose build --no-cache
 docker compose up</code></pre>
                 </div>
-                <p>Use <code>docker compose down -v</code> with caution — it permanently deletes the PostgreSQL data volume including all consultations and ingested RAG chunks.</p>
+                <p>
+                  Use <code>docker compose down -v</code> with caution — it permanently deletes the
+                  PostgreSQL data volume including all consultations and ingested RAG chunks.
+                </p>
               </div>
             </div>
 
@@ -400,27 +607,56 @@ docker compose up</code></pre>
             <div class="appendix-policy-grid">
               <div class="appendix-card">
                 <h4>Services fail to start</h4>
-                <p>Check that Docker Desktop is running and that no other process is occupying ports 3000, 8000, 8001, 8025, or 5432. Run <code>docker compose ps</code> to see which containers exited and <code>docker compose logs &lt;service&gt;</code> for detailed output.</p>
+                <p>
+                  Check that Docker Desktop is running and that no other process is occupying ports
+                  3000, 8000, 8001, 8025, or 5432. Run <code>docker compose ps</code> to see which
+                  containers exited and <code>docker compose logs &lt;service&gt;</code> for
+                  detailed output.
+                </p>
               </div>
               <div class="appendix-card">
                 <h4>Demo login fails</h4>
-                <p>Ensure <code>AUTH_BOOTSTRAP_DEMO_USERS=true</code> is set in <code>backend/.env</code> before the first start. If the backend started without it, run <code>docker compose restart backend</code> after adding the variable. Demo accounts are created during startup only.</p>
+                <p>
+                  Ensure <code>AUTH_BOOTSTRAP_DEMO_USERS=true</code> is set in
+                  <code>backend/.env</code> before the first start. If the backend started without
+                  it, run <code>docker compose restart backend</code> after adding the variable.
+                  Demo accounts are created during startup only.
+                </p>
               </div>
               <div class="appendix-card">
                 <h4>No verification email received</h4>
-                <p>Verification emails in local dev are delivered to Mailpit, not a real inbox. Open <strong>http://localhost:8025</strong> to find the message. If the mailpit container is not running, check <code>docker compose logs mailpit</code>.</p>
+                <p>
+                  Verification emails in local dev are delivered to Mailpit, not a real inbox. Open
+                  <strong>http://localhost:8025</strong> to find the message. If the mailpit
+                  container is not running, check <code>docker compose logs mailpit</code>.
+                </p>
               </div>
               <div class="appendix-card">
                 <h4>AI response hangs or times out</h4>
-                <p>The RAG service is waiting on the LLM. Either Ollama is not running (<code>ollama serve</code> then <code>ollama pull thewindmom/llama3-med42-8b</code>), or the cloud <code>CLOUD_LLM_API_KEY</code> is missing. Check <code>docker compose logs rag_service</code> for the exact error.</p>
+                <p>
+                  The RAG service is waiting on the LLM. Either Ollama is not running
+                  (<code>ollama serve</code> then
+                  <code>ollama pull thewindmom/llama3-med42-8b</code>), or the cloud
+                  <code>CLOUD_LLM_API_KEY</code> is missing. Check
+                  <code>docker compose logs rag_service</code> for the exact error.
+                </p>
               </div>
               <div class="appendix-card">
                 <h4>Database errors on startup</h4>
-                <p>The database volume may be in an inconsistent state. Stop the stack, remove volumes with <code>docker compose down -v</code>, and restart with <code>docker compose up --build</code>. All migrations and seed data are re-applied automatically.</p>
+                <p>
+                  The database volume may be in an inconsistent state. Stop the stack, remove
+                  volumes with <code>docker compose down -v</code>, and restart with
+                  <code>docker compose up --build</code>. All migrations and seed data are
+                  re-applied automatically.
+                </p>
               </div>
               <div class="appendix-card">
                 <h4>Build fails with dependency errors</h4>
-                <p>Clear the Docker build cache and rebuild from scratch: <code>docker compose build --no-cache &amp;&amp; docker compose up</code>. This is especially useful after pulling new commits that add Python or Node dependencies.</p>
+                <p>
+                  Clear the Docker build cache and rebuild from scratch:
+                  <code>docker compose build --no-cache &amp;&amp; docker compose up</code>. This is
+                  especially useful after pulling new commits that add Python or Node dependencies.
+                </p>
               </div>
             </div>
           </section>
@@ -461,9 +697,9 @@ docker compose up</code></pre>
             <div class="callout">
               <h3>README anchor</h3>
               <p>
-                The main application repository is linked from the site header. Its README should be
-                the developer-facing entry point, while this page acts as the document map for the
-                report website.
+                The main application repository is linked from the site header. Its README should
+                be the developer-facing entry point, while this page acts as the document map for
+                the report website.
               </p>
             </div>
           </section>
@@ -485,9 +721,9 @@ docker compose up</code></pre>
                   Ambience-AI-1.5 processes account information, consultation records, uploaded
                   guideline material, notifications, and audit logs in order to support the GP,
                   specialist, and admin workflows described elsewhere in this report. In a real
-                  deployment, consultation content could amount to personal data and, in many cases,
-                  special category health data. That means data entered into the system should be
-                  treated with a higher level of care than ordinary application content.
+                  deployment, consultation content could amount to personal data and, in many
+                  cases, special category health data. That means data entered into the system
+                  should be treated with a higher level of care than ordinary application content.
                 </p>
                 <p>
                   For the purposes of this university project, the system should be presented as a
@@ -506,11 +742,28 @@ docker compose up</code></pre>
                   mind when entering or handling data:
                 </p>
                 <ul class="appendix-legal-list">
-                  <li><strong>Data minimisation:</strong> only the minimum necessary clinical context should be entered into prompts, notes, or uploaded supporting material.</li>
-                  <li><strong>Purpose limitation:</strong> consultation data should only be used to support the defined referral and review workflow, not unrelated experimentation.</li>
-                  <li><strong>Access control:</strong> GP, specialist, and admin accounts should only access the information required for their role.</li>
-                  <li><strong>External processing risk:</strong> if a prompt or document is routed to a cloud-hosted inference provider, that creates additional processor and transfer questions that would need formal review before real deployment.</li>
-                  <li><strong>Auditability and retention:</strong> logs and workflow records improve traceability, but they also require clear retention and governance rules in any production setting.</li>
+                  <li>
+                    <strong>Data minimisation:</strong> only the minimum necessary clinical context
+                    should be entered into prompts, notes, or uploaded supporting material.
+                  </li>
+                  <li>
+                    <strong>Purpose limitation:</strong> consultation data should only be used to
+                    support the defined referral and review workflow, not unrelated experimentation.
+                  </li>
+                  <li>
+                    <strong>Access control:</strong> GP, specialist, and admin accounts should only
+                    access the information required for their role.
+                  </li>
+                  <li>
+                    <strong>External processing risk:</strong> if a prompt or document is routed to
+                    a cloud-hosted inference provider, that creates additional processor and
+                    transfer questions that would need formal review before real deployment.
+                  </li>
+                  <li>
+                    <strong>Auditability and retention:</strong> logs and workflow records improve
+                    traceability, but they also require clear retention and governance rules in any
+                    production setting.
+                  </li>
                 </ul>
                 <p>
                   This means the current project should not be described as GDPR-complete. It shows
@@ -636,8 +889,8 @@ docker compose up</code></pre>
                   This website contains links to external websites and services, including GitHub
                   and other third-party resources. If a deployment uses an external inference
                   provider or links users to external platforms, those services will have their own
-                  privacy policies and terms. This privacy policy applies only to Ambience-AI-1.5
-                  as described in this report website.
+                  privacy policies and terms. This privacy policy applies only to Ambience-AI-1.5 as
+                  described in this report website.
                 </p>
               </div>
 
@@ -651,9 +904,7 @@ docker compose up</code></pre>
                   particular, any move from local development to a cloud-hosted clinical context
                   would require a more formal and complete policy review.
                 </p>
-                <p>
-                  This appendix version was last updated on 26 March 2026.
-                </p>
+                <p>This appendix version was last updated on 26 March 2026.</p>
               </div>
             </div>
           </section>
@@ -826,33 +1077,70 @@ docker compose up</code></pre>
           </section>
 
           <section class="section-card" id="development-blog">
-            <h2>Development blog</h2>
+            <h2>Development Blog</h2>
             <p class="lede">
-              The full development blog is available at the link below.
+              Explore the journey behind the code. Here, we reveal our insights, challenges, and
+              breakthroughs across both terms.
             </p>
-            <div class="appendix-link-grid">
-              <a class="appendix-link-card" href="blog/blog.html">
-                <span class="appendix-link-card__eyebrow">External link</span>
-                <h3>Open the development blog</h3>
-                <p>Weekly project progress, decisions, and updates.</p>
-                <span class="appendix-link-card__cta">Go to blog →</span>
-              </a>
-            </div>
+            <a
+              class="appendix-showcase-card"
+              href="https://daniel75beregsau.github.io/Ambience-AI-Blog/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="appendix-showcase-card__icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+              </div>
+              <h3>Behind the Code</h3>
+              <p>Dive into the development process and discover the story behind each feature.</p>
+              <span class="appendix-showcase-card__cta">Visit the journal &nbsp;→</span>
+            </a>
           </section>
 
           <section class="section-card" id="monthly-videos">
-            <h2>Monthly videos</h2>
+            <h2>Monthly Videos</h2>
             <p class="lede">
-              The monthly videos are available at the link below.
+              Short video updates recorded at the end of each month to demonstrate working software
+              and summarise progress for the project partners.
             </p>
-            <div class="appendix-link-grid">
-              <a class="appendix-link-card" href="blog/blog.html">
-                <span class="appendix-link-card__eyebrow">External link</span>
-                <h3>Open monthly videos</h3>
-                <p>Video updates are published alongside the development blog.</p>
-                <span class="appendix-link-card__cta">View videos →</span>
-              </a>
-            </div>
+            <a
+              class="appendix-showcase-card"
+              href="https://daniel75beregsau.github.io/Ambience-AI-Blog/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="appendix-showcase-card__icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon points="23 7 16 12 23 17 23 7" />
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                </svg>
+              </div>
+              <h3>Watch the Progress</h3>
+              <p>
+                See the platform evolve month by month through live demonstrations and walkthroughs.
+              </p>
+              <span class="appendix-showcase-card__cta">View recordings &nbsp;→</span>
+            </a>
           </section>
         </div>
 
@@ -862,7 +1150,43 @@ docker compose up</code></pre>
       </div>
     </main>
 
-    <footer class="site-footer"><div class="site-footer__inner"><section><h3>Ambience-AI-1.5</h3><p>A technical systems report for a university software engineering project. The system under study is a role-aware clinical consultation platform that combines React, FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.</p><p class="muted">This website intentionally describes implementation details, deployment paths, safeguards, testing, and known limitations rather than product marketing claims.</p></section><section><h4>Key evidence base</h4><div class="site-footer__links"><a href="implementation.html">Frontend, backend, and RAG implementation</a><a href="system-design.html">Architecture, flows, and data model</a><a href="testing.html">Automated test strategy and caveats</a></div></section><section><h4>Appendix items</h4><div class="site-footer__links"><a href="appendices.html#user-manual">User manual</a><a href="appendices.html#deployment-manual">Deployment manual</a><a href="appendices.html#readme">README</a><a href="appendices.html#gdpr">GDPR</a><a href="appendices.html#privacy-policy">Privacy policy</a><a href="appendices.html#dependencies">Dependencies</a><a href="appendices.html#development-blog">Development blog</a><a href="appendices.html#monthly-videos">Monthly videos</a></div></section></div></footer>
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <section>
+          <h3>Ambience-AI-1.5</h3>
+          <p>
+            A technical systems report for a university software engineering project. The system
+            under study is a role-aware clinical consultation platform that combines React,
+            FastAPI, PostgreSQL with pgvector, and a grounded medical RAG service.
+          </p>
+          <p class="muted">
+            This website intentionally describes implementation details, deployment paths,
+            safeguards, testing, and known limitations rather than product marketing claims.
+          </p>
+        </section>
+        <section>
+          <h4>Key evidence base</h4>
+          <div class="site-footer__links">
+            <a href="implementation.html">Frontend, backend, and RAG implementation</a>
+            <a href="system-design.html">Architecture, flows, and data model</a>
+            <a href="testing.html">Automated test strategy and caveats</a>
+          </div>
+        </section>
+        <section>
+          <h4>Appendix items</h4>
+          <div class="site-footer__links">
+            <a href="appendices.html#user-manual">User manual</a>
+            <a href="appendices.html#deployment-manual">Deployment manual</a>
+            <a href="appendices.html#readme">README</a>
+            <a href="appendices.html#gdpr">GDPR</a>
+            <a href="appendices.html#privacy-policy">Privacy policy</a>
+            <a href="appendices.html#dependencies">Dependencies</a>
+            <a href="appendices.html#development-blog">Development blog</a>
+            <a href="appendices.html#monthly-videos">Monthly videos</a>
+          </div>
+        </section>
+      </div>
+    </footer>
     <script src="assets/site.js?v=20260322f"></script>
   </body>
 </html>
