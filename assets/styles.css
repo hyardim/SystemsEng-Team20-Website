@@ -1845,6 +1845,10 @@ body[data-page="research"] .report-page-header {
 	margin-bottom: 34px;
 }
 
+body[data-page="implementation"] .report-page-header {
+	margin-bottom: 34px;
+}
+
 body[data-page="research"] h2#summary-of-technical-decisions + .lede {
 	color: var(--text);
 }
@@ -2026,6 +2030,22 @@ body[data-page="evaluation"]:not([data-page="home"]):not([data-page="requirement
 
 body[data-page="evaluation"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even)::before {
 	background: #ffffff;
+}
+
+body[data-page="implementation"][data-impl-start-grey="true"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section::before {
+	background: #f4f4f5;
+}
+
+body[data-page="implementation"][data-impl-start-grey="true"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even)::before {
+	background: #ffffff;
+}
+
+body[data-page="implementation"][data-impl-start-grey="true"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section {
+	background: #f4f4f5 !important;
+}
+
+body[data-page="implementation"][data-impl-start-grey="true"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even) {
+	background: #ffffff !important;
 }
 
 body[data-page="research"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .content-stack > section:last-child {
