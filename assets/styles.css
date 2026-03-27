@@ -1575,11 +1575,14 @@ body[data-page="requirements"] .project-bg__card h3 {
 	letter-spacing: -0.01em;
 }
 
+body[data-page="requirements"] .content-stack :is(p:not(.lede), li) {
+	font-size: 1rem;
+	line-height: 1.65;
+}
+
 body[data-page="requirements"] .partner-intro__card p,
 body[data-page="requirements"] .project-bg__card p,
 body[data-page="requirements"] .requirement-methods__item p {
-	font-size: 1rem;
-	line-height: 1.65;
 	color: var(--muted);
 }
 
@@ -1818,6 +1821,12 @@ body:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-
 
 body:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .content-stack > section:nth-of-type(even)::before {
 	background: #f4f4f5;
+}
+
+/* Keep body copy consistent across report pages (Research baseline). */
+body:not([data-page="home"]) .content-stack :is(p:not(.lede), li) {
+	font-size: 1rem;
+	line-height: 1.65;
 }
 
 body[data-page="research"] .related-project-tabs {
