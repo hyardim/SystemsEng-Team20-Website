@@ -3676,70 +3676,68 @@ body[data-page="appendices"] .appendix-link-card--placeholder p {
 	color: rgba(90, 47, 18, 0.82);
 }
 
-body[data-page="appendices"] .appendix-external-link {
+body[data-page="appendices"] .appendix-showcase-card {
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	gap: 20px;
-	padding: 22px 26px;
-	border-radius: 14px;
-	border: 1px solid rgba(7, 23, 45, 0.09);
-	background: linear-gradient(135deg, #f8faff 0%, #f0f5ff 100%);
+	text-align: center;
+	max-width: 480px;
+	margin: 0 auto;
+	padding: 40px 36px 34px;
+	border-radius: 18px;
+	border: 1px solid rgba(7, 23, 45, 0.1);
+	background: #ffffff;
 	text-decoration: none;
 	color: inherit;
-	transition: border-color 0.22s ease, box-shadow 0.22s ease;
+	transition: box-shadow 0.22s ease, transform 0.22s ease;
 }
 
-body[data-page="appendices"] .appendix-external-link:hover {
-	border-color: var(--nhs-blue);
-	box-shadow: 0 4px 16px rgba(0, 48, 135, 0.1);
+body[data-page="appendices"] .appendix-showcase-card:hover {
+	box-shadow: 0 8px 28px rgba(7, 23, 45, 0.08);
+	transform: translateY(-2px);
 }
 
-body[data-page="appendices"] .appendix-external-link__icon {
-	flex-shrink: 0;
-	width: 44px;
-	height: 44px;
+body[data-page="appendices"] .appendix-showcase-card__icon {
+	width: 48px;
+	height: 48px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 12px;
-	background: linear-gradient(135deg, var(--nhs-dark-blue), var(--nhs-blue));
-	color: #ffffff;
+	margin-bottom: 20px;
+	color: #1f2937;
 }
 
-body[data-page="appendices"] .appendix-external-link__icon svg {
-	width: 20px;
-	height: 20px;
+body[data-page="appendices"] .appendix-showcase-card__icon svg {
+	width: 32px;
+	height: 32px;
 }
 
-body[data-page="appendices"] .appendix-external-link__body {
-	flex: 1;
-	min-width: 0;
+body[data-page="appendices"] .appendix-showcase-card h3 {
+	font-size: 1.3rem;
+	font-weight: 800;
+	color: #0f172a;
+	margin: 0 0 10px;
 }
 
-body[data-page="appendices"] .appendix-external-link__body h3 {
-	font-size: 1.05rem;
+body[data-page="appendices"] .appendix-showcase-card p {
+	font-size: 0.95rem;
+	color: #94a3b8;
+	margin: 0 0 20px;
+	line-height: 1.6;
+	max-width: 32ch;
+}
+
+body[data-page="appendices"] .appendix-showcase-card__cta {
+	display: inline-flex;
+	align-items: center;
+	font-size: 0.95rem;
 	font-weight: 700;
 	color: #0f172a;
-	margin: 0 0 4px;
+	transition: color 0.2s ease;
 }
 
-body[data-page="appendices"] .appendix-external-link__body p {
-	font-size: 0.9rem;
-	color: #64748b;
-	margin: 0;
-	line-height: 1.5;
-}
-
-body[data-page="appendices"] .appendix-external-link__arrow {
-	flex-shrink: 0;
-	font-size: 1.3rem;
-	font-weight: 600;
+body[data-page="appendices"] .appendix-showcase-card:hover .appendix-showcase-card__cta {
 	color: var(--nhs-blue);
-	transition: transform 0.2s ease;
-}
-
-body[data-page="appendices"] .appendix-external-link:hover .appendix-external-link__arrow {
-	transform: translateX(4px);
 }
 
 body[data-page="appendices"] .appendix-issue-card {
