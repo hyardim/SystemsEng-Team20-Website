@@ -3754,6 +3754,65 @@ body[data-page="appendices"] .appendix-showcase-card:hover .appendix-showcase-ca
 	color: var(--nhs-blue);
 }
 
+/* ── Video grid ─────────────────────────────────── */
+body[data-page="appendices"] .video-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1.5rem;
+	margin-top: 1.5rem;
+}
+body[data-page="appendices"] .video-card {
+	background: #ffffff;
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	overflow: hidden;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+body[data-page="appendices"] .video-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+body[data-page="appendices"] .video-embed {
+	position: relative;
+	padding-bottom: 56.25%;
+	height: 0;
+	overflow: hidden;
+}
+body[data-page="appendices"] .video-embed iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: none;
+}
+body[data-page="appendices"] .video-card__info {
+	padding: 1rem 1.25rem 1.25rem;
+}
+body[data-page="appendices"] .video-card__info h3 {
+	font-size: 1rem;
+	font-weight: 700;
+	color: #0f172a;
+	margin: 0 0 0.4rem;
+}
+body[data-page="appendices"] .video-card__info p {
+	font-size: 0.85rem;
+	color: #64748b;
+	line-height: 1.5;
+	margin: 0;
+}
+@media (max-width: 900px) {
+	body[data-page="appendices"] .video-grid {
+		grid-template-columns: 1fr;
+		max-width: 560px;
+	}
+}
+@media (min-width: 901px) and (max-width: 1100px) {
+	body[data-page="appendices"] .video-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
 body[data-page="appendices"] .appendix-issue-card {
 	--appendix-card-bar: linear-gradient(90deg, #0b2f6f 0%, #005eb8 58%, #4aa3ff 100%);
 	padding: 24px;
