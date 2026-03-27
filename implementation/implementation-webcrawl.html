@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto-Sync &amp; Web Crawl · Implementation · Ambience-AI-1.5</title>
+    <link rel="stylesheet" href="../assets/styles.css?v=20260325ag" />
+  </head>
+  <body data-page="implementation">
+    <header class="site-header"><div class="site-header__inner"><a class="brand" href="../index.html" aria-label="Ambience-AI-1.5 home"><img class="brand__logo-image" src="../assets/ambience-logo.svg" alt="Ambience-AI-1.5 logo" /></a><button class="nav-toggle" type="button" aria-label="Toggle navigation">Menu</button><nav class="site-nav" aria-label="Primary"><a href="../index.html" data-nav="home">Home</a><a href="../requirements.html" data-nav="requirements">Requirements</a><a href="../research.html" data-nav="research">Research</a><a href="../ui-design.html" data-nav="ui-design">UI Design</a><a href="../system-design.html" data-nav="system-design">System Design</a><a href="implementation.html" data-nav="implementation">Implementation</a><a href="../testing.html" data-nav="testing">Testing</a><a href="../evaluation.html" data-nav="evaluation">Evaluation</a><a href="../appendices.html" data-nav="appendices">Appendices</a><a href="../blog/blog.html" data-nav="blog">Blog</a></nav><button class="site-header__github-btn" type="button" aria-label="GitHub repository link">GitHub ↗</button></div></header>
+
+    <main class="page-shell">
+      <div class="report-page-header">
+        <h1 class="report-page-title">Auto-Sync &amp; Web Crawl</h1>
+        <p class="report-page-subtitle">Section 12 of 12 · <a href="implementation.html">Back to Implementation</a></p>
+      </div>
+
+      <div class="page-grid">
+        <div class="content-stack">
+
+          <section class="section-bare" id="overview">
+            <h2>Overview</h2>
+            <p>The auto-sync feature (merged via PR #90, branch <code>feature/guideline-web-sync</code>) automatically discovers, downloads, and ingests clinical guidelines from the web, keeping the RAG index up to date without manual admin intervention. It runs on a configurable schedule and feeds the same 8-stage ingestion pipeline used for manual PDF uploads.</p>
+            <p>The feature is disabled by default (<code>GUIDELINE_SYNC_ENABLED=false</code>) and requires explicit opt-in. When enabled, it runs on startup and then on a fixed interval. The three components — discovery client, change-detection sync service, and asyncio scheduler — are each independently replaceable.</p>
+          </section>
+
+          <section class="section-bare" id="source-registry">
+            <h2>Source Registry</h2>
+            <p>The set of sources to crawl is defined as a hardcoded registry in <code>web_sources.py</code>. Each entry maps a key to a publisher, specialty, and listing URL.</p>
+            <table class="impl-table">
+              <thead><tr><th>Key</th><th>Publisher</th><th>Specialty</th></tr></thead>
+              <tbody>
+                <tr><td><code>nice-musculoskeletal</code></td><td>NICE</td><td>rheumatology</td></tr>
+                <tr><td><code>nice-neurological</code></td><td>NICE</td><td>neurology</td></tr>
+                <tr><td><code>bsr-guidelines</code></td><td>BSR</td><td>rheumatology</td></tr>
+              </tbody>
+            </table>
+            <p>Hardcoding the registry rather than storing it in the database keeps the crawl configuration under version control. Adding a new source requires a code change and a deliberate deployment rather than a runtime database edit, which reduces the risk of accidentally pointing the crawler at an unintended domain.</p>
+          </section>
+
+          <section class="section-bare" id="discovery">
+            <h2>Discovery</h2>
+            <p><code>SourceDiscoveryClient.discover_source()</code> in <code>web_sources.py</code> is responsible for finding all PDF URLs for a given source. The first action for every source is a <code>robots.txt</code> check — if the configured user-agent (<code>AmbienceRAGGuidelineSync/1.0</code>) is disallowed, the source is skipped entirely before any further network requests are made.</p>
+            <p>For <strong>NICE sources</strong>, discovery runs a multi-depth crawl:</p>
+            <ol>
+              <li>Fetch the category listing page (e.g. <code>nice.org.uk/guidance/conditions-and-diseases/musculoskeletal-conditions</code>)</li>
+              <li>Follow subcategory links up to depth 2, visiting up to 120 pages per source</li>
+              <li>Extract links matching the NICE guideline path regex (<code>/guidance/(ng|cg|qs|ta|...)NNN</code>)</li>
+              <li>Visit each matched guideline page and extract PDF download links</li>
+            </ol>
+            <p>For <strong>BSR sources</strong>, the crawler extracts links whose URL or anchor text contains keywords such as <em>guideline</em>, <em>recommendation</em>, or <em>arthritis</em>, without the multi-depth subcategory traversal.</p>
+            <p>After locating each PDF URL, the client sends a <code>HEAD</code> request to collect metadata — <code>ETag</code>, <code>Last-Modified</code>, and <code>Content-Length</code> — without downloading the file. This metadata is used in the next stage to determine whether the document has changed since the last sync. The depth cap (2) and page limit (120) exist to bound network cost; clinical guideline sites tend to have shallow, well-structured hierarchies so these limits are rarely hit in practice.</p>
+          </section>
+
+          <section class="section-bare" id="change-detection">
+            <h2>Change Detection</h2>
+            <p><code>GuidelineWebSync.sync_once()</code> in <code>web_sync.py</code> maintains a persistent JSON state file at <code>data/raw/_sync_state/guideline_sync_state.json</code>. On each run it compares discovered documents against this state to decide what needs to be downloaded.</p>
+            <p>The decision logic per document is:</p>
+            <ol>
+              <li>No prior record → download and ingest</li>
+              <li><code>ETag</code> matches stored value → skip (unchanged)</li>
+              <li><code>Last-Modified</code> and <code>Content-Length</code> both match → skip</li>
+              <li>Otherwise → re-download and re-ingest</li>
+            </ol>
+            <p>As a final guard, after downloading the file a SHA-256 content hash is computed and compared to the stored hash. If the hash is identical the ingestion step is skipped even if HTTP headers changed — this handles CDN or server configurations that vary <code>ETag</code> without changing file content. <code>ETag</code> is preferred as the primary signal because it is set by the origin server specifically to indicate content identity; <code>Last-Modified</code> + <code>Content-Length</code> are used as a fallback for servers that do not send ETags.</p>
+            <p>Downloads stream directly to a <code>.tmp</code> file that is atomically renamed on completion. This prevents a partially downloaded file from being passed to the ingestion pipeline if the connection drops mid-transfer. After processing all discovered documents, any entry in state that was not seen in the current crawl is marked <code>stale: true</code> but is not automatically removed from the pgvector index — stale marking flags the document for manual review rather than silently deleting clinical content.</p>
+          </section>
+
+          <section class="section-bare" id="ingestion-bridge">
+            <h2>Ingestion Bridge</h2>
+            <p>After a file is downloaded, <code>_run_ingestion()</code> is called with the destination path and source name. This calls the existing <code>run_ingestion()</code> pipeline — the same EXTRACT → CLEAN → SECTION → TABLE → METADATA → CHUNK → EMBED → STORE sequence used for manual PDF uploads via the admin panel. The web crawl feature adds no new ingestion logic; it only automates the document acquisition step that a human admin would otherwise perform manually.</p>
+            <p>This design means that any improvements made to the core ingestion pipeline (chunking strategy, embedding model, metadata extraction) automatically apply to web-synced documents without changes to the crawl layer.</p>
+          </section>
+
+          <section class="section-bare" id="scheduler">
+            <h2>Scheduler</h2>
+            <p><code>GuidelineSyncScheduler</code> in <code>web_scheduler.py</code> is an asyncio-based periodic task wrapper around the sync service. It uses <code>asyncio.wait_for()</code> to enforce a per-run timeout so that a slow or unresponsive upstream site cannot block the scheduler indefinitely. Concurrent runs are prevented via <code>asyncio.Lock()</code> — if a sync is already in progress and a second trigger arrives (e.g. a manual API call during a scheduled run), a <code>SyncAlreadyRunningError</code> is raised, which the API layer translates into a 409 response.</p>
+            <p>The scheduler fires once on startup (if <code>GUIDELINE_SYNC_RUN_ON_STARTUP=true</code>) and then on a fixed interval. The startup run ensures that any documents published since the last deployment are ingested immediately rather than waiting for the first scheduled interval.</p>
+          </section>
+
+          <section class="section-bare" id="configuration">
+            <h2>Configuration</h2>
+            <p>All sync behaviour is controlled via environment variables. The feature is off by default — setting <code>GUIDELINE_SYNC_ENABLED=false</code> in a deployment environment means no crawl requests are ever sent, which is appropriate for development and CI environments.</p>
+            <table class="impl-table">
+              <thead><tr><th>Variable</th><th>Default</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>GUIDELINE_SYNC_ENABLED</code></td><td><code>false</code></td><td>Must be set to <code>true</code> to activate the scheduler and crawl.</td></tr>
+                <tr><td><code>GUIDELINE_SYNC_INTERVAL_MINUTES</code></td><td><code>10080</code> (weekly)</td><td>How often the scheduler fires a sync run.</td></tr>
+                <tr><td><code>GUIDELINE_SYNC_RUN_ON_STARTUP</code></td><td><code>true</code></td><td>Whether to run a sync immediately when the RAG service starts.</td></tr>
+                <tr><td><code>GUIDELINE_SYNC_TIMEOUT_SECONDS</code></td><td><code>900</code></td><td>Maximum wall-clock time allowed for a single sync run before it is cancelled.</td></tr>
+              </tbody>
+            </table>
+            <p>The interval default was changed from 720 minutes (12 hours) to 10080 minutes (weekly) in a follow-up commit, reflecting the observation that clinical guidelines are not published at high frequency and a weekly check is sufficient to keep the index current without generating unnecessary crawl traffic.</p>
+          </section>
+
+          <section class="section-bare" id="api-endpoints">
+            <h2>API Endpoints</h2>
+            <p>Two routes are registered on the RAG service to expose sync control and visibility without requiring shell or container access:</p>
+            <pre><code># rag_service/src/api/routes.py
+
+POST /guidelines/sync
+# Triggers an immediate sync run.
+# Optional body: { source_names: [...], dry_run: bool }
+
+GET /guidelines/sync/status
+# Returns current sync state:
+# { running, enabled, last_started_at, last_finished_at, last_error, last_result }</code></pre>
+            <p><code>POST /guidelines/sync</code> accepts an optional <code>source_names</code> filter so a single source can be re-synced without running the full crawl. The <code>dry_run</code> flag triggers discovery and HEAD-checks without downloading or ingesting — useful for estimating how many documents would be affected before committing to a full run.</p>
+            <p><code>GET /guidelines/sync/status</code> exposes the scheduler's live state. The <code>running</code> flag allows the admin UI to show whether a sync is currently in progress. <code>last_result</code> includes a per-source breakdown of documents downloaded, skipped, and failed on the most recent run, giving operational visibility without requiring log access.</p>
+          </section>
+
+          <section class="section-bare" id="cli">
+            <h2>CLI Command</h2>
+            <p>A CLI entry point is provided for manual invocation outside of the scheduler:</p>
+            <pre><code>python -m src.ingestion.cli sync-web \
+  --source NICE \
+  --dry-run        # discover + evaluate without downloading</code></pre>
+            <p>The <code>--source</code> flag restricts the run to a named publisher. Without it, all registered sources are crawled. The CLI is primarily used for one-off investigations and for verifying the crawler configuration in a development environment where the scheduler is not running.</p>
+          </section>
+
+          <section class="section-bare" id="dry-run">
+            <h2>Dry Run Mode</h2>
+            <p>In dry-run mode the crawler still fetches listing and category pages and sends <code>HEAD</code> requests to PDFs to evaluate their change status, but skips the actual download and ingestion steps. The output is a count of documents that would be downloaded (new or changed) versus skipped (unchanged), broken down by source.</p>
+            <p>Dry run is useful before a first sync on a new deployment to confirm that the crawler can reach all configured sources and that the expected number of documents are discoverable. It is also used after adding a new source to the registry to validate the crawl depth and link extraction logic before any files are written to disk.</p>
+          </section>
+
+          <section class="section-bare" id="design-decisions">
+            <h2>Key Design Decisions</h2>
+            <p><strong>robots.txt compliance.</strong> The crawler checks <code>robots.txt</code> before any page fetch and identifies itself with a real user-agent string (<code>AmbienceRAGGuidelineSync/1.0</code>). This is not just a courtesy — NICE and BSR are authoritative clinical publishers whose continued availability depends on not being overloaded by automated clients, and compliant crawling reduces the risk of IP blocks.</p>
+            <p><strong>Atomic file writes.</strong> Files are written to a <code>.tmp</code> path and renamed on completion. If the process is interrupted mid-download the temp file is left on disk but never passed to the ingestion pipeline. A subsequent sync attempt will re-download the file cleanly.</p>
+            <p><strong>State file as source of truth.</strong> Storing sync state as a JSON file on disk rather than in the database keeps the crawl subsystem self-contained. The state file can be inspected, backed up, or deleted independently of the application database. Deleting it forces a full re-ingest on the next run.</p>
+            <p><strong>No automatic deletion of stale documents.</strong> Documents that disappear from a source's listing page are marked <code>stale: true</code> in state but are not removed from the pgvector index. Clinical guidelines are sometimes temporarily removed from listing pages due to review or update processes and may reappear. Silent automatic deletion of indexed clinical content is considered a higher risk than retaining a stale document until an admin explicitly removes it.</p>
+            <p><strong>Disabled by default.</strong> The feature requires <code>GUIDELINE_SYNC_ENABLED=true</code> to activate. This prevents unintended crawl traffic in development, CI, and staging environments where the environment variable is not set.</p>
+          </section>
+
+        </div>
+        <aside class="toc-panel">
+          <div id="page-toc"></div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+    <script src="../assets/site.js?v=20260325ag"></script>
+  </body>
+</html>
