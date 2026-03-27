@@ -4,54 +4,73 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>README · Ambience-AI-1.5</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260326h" />
+  <link rel="stylesheet" href="assets/styles.css?v=20260327readme2" />
   <style>
     body[data-page="readme"] .content-stack {
       max-width: 900px;
+      gap: 0;
+    }
+    body[data-page="readme"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section {
+      background: #f4f4f5 !important;
+    }
+    body[data-page="readme"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even) {
+      background: #ffffff !important;
+    }
+    body[data-page="readme"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section::before {
+      background: #f4f4f5 !important;
+    }
+    body[data-page="readme"]:not([data-page="home"]):not([data-page="requirements"]):not([data-page="ui-design"]) .page-grid .content-stack > section:nth-of-type(even)::before {
+      background: #ffffff !important;
+    }
+    body[data-page="readme"] .report-page-subtitle a {
+      color: var(--nhs-blue);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    body[data-page="readme"] .report-page-subtitle a:hover {
+      text-decoration: underline;
     }
     .readme-content h2 {
-      margin-top: 2em;
-      margin-bottom: 0.6em;
-      font-size: 1.55rem;
+      margin: 0 0 14px;
+      font-size: 1.85rem;
       font-weight: 700;
-      color: #0f172a;
-      border-top: 1px solid #e2e8f0;
-      padding-top: 1.2em;
-    }
-    .readme-content h2:first-of-type {
-      border-top: none;
-      margin-top: 0;
-      padding-top: 0;
+      line-height: 1.12;
+      color: var(--heading);
     }
     .readme-content h3 {
-      margin-top: 1.4em;
-      margin-bottom: 0.6em;
+      margin: 22px 0 10px;
       font-size: 1.15rem;
       font-weight: 700;
-      color: #1f2937;
+      color: var(--heading);
     }
     .readme-content h4 {
-      margin-top: 1em;
-      margin-bottom: 0.4em;
+      margin: 16px 0 8px;
       font-size: 0.95rem;
       font-weight: 700;
-      color: #374151;
+      color: var(--heading);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .readme-content p {
-      margin-bottom: 1em;
-      color: #475569;
-      line-height: 1.7;
+      margin: 0 0 16px;
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.65;
     }
-    .readme-content ul, .readme-content ol {
-      margin-bottom: 1em;
-      padding-left: 1.8em;
-      color: #475569;
-      line-height: 1.7;
+    .readme-content > p:first-of-type {
+      font-size: 1.05rem;
+      color: var(--muted);
+    }
+    .readme-content ul,
+    .readme-content ol {
+      margin: 10px 0 16px;
+      padding-left: 20px;
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.65;
     }
     .readme-content li {
-      margin-bottom: 0.5em;
+      margin: 8px 0;
     }
     .readme-content code {
       font-family: "SF Mono", "Monaco", "Courier New", monospace;
@@ -71,6 +90,11 @@
       font-size: 0.85em;
       font-family: "SF Mono", "Monaco", "Courier New", monospace;
       line-height: 1.6;
+    }
+    .readme-content a {
+      color: var(--nhs-blue);
+      text-decoration: underline;
+      text-underline-offset: 0.14em;
     }
     .readme-content pre code {
       background: transparent;
@@ -104,11 +128,12 @@
   <main class="page-shell">
     <div class="report-page-header">
       <h1 class="report-page-title">README</h1>
-      <p class="report-page-subtitle">Installation, quick start, and development guide</p>
+      <p class="report-page-subtitle">Installation, quick start, and development guide · <a href="appendices.html#readme">Back to Appendices</a></p>
     </div>
 
     <div class="page-grid">
-      <div class="content-stack readme-content">
+      <div class="content-stack">
+        <section class="section-card readme-content" id="overview">
         <h2>Ambience-AI-1.5</h2>
         <p>Ambience AI 1.5 is a multi-role clinical decision-support platform with three core services:</p>
         <ul>
@@ -117,6 +142,8 @@
           <li><code>rag_service/</code> retrieval-augmented generation (RAG) service for grounded clinical responses</li>
         </ul>
 
+        </section>
+        <section class="section-card readme-content" id="repository-structure">
         <h2>Repository structure</h2>
         <pre><code>backend/       FastAPI backend and business workflows
 frontend/      React frontend
@@ -124,6 +151,8 @@ rag_service/   RAG ingestion/retrieval/generation service
 nginx/         Optional TLS reverse proxy (production profile)
 </code></pre>
 
+        </section>
+        <section class="section-card readme-content" id="role-workflows">
         <h2>Role workflows (implemented)</h2>
         <h3>GP workflow</h3>
         <ol>
@@ -202,6 +231,8 @@ nginx/         Optional TLS reverse proxy (production profile)
           </li>
         </ol>
 
+        </section>
+        <section class="section-card readme-content" id="clinician-usage-guide">
         <h2>Effective usage guide for clinicians</h2>
         <h3>GP playbook (recommended)</h3>
         <ol>
@@ -269,6 +300,8 @@ nginx/         Optional TLS reverse proxy (production profile)
           <li>Clinical accountability remains with licensed clinicians at point of care.</li>
         </ul>
 
+        </section>
+        <section class="section-card readme-content" id="quick-start">
         <h2>Quick start (Docker, recommended)</h2>
         <h3>Prerequisites</h3>
         <ul>
@@ -331,6 +364,8 @@ ollama serve</code></pre>
           <li>Mailpit UI (local mail capture): <code>http://localhost:8025</code></li>
         </ul>
 
+        </section>
+        <section class="section-card readme-content" id="demo-users">
         <h2>Demo users (optional)</h2>
         <p>If <code>AUTH_BOOTSTRAP_DEMO_USERS=true</code>, backend startup seeds GP/Specialist/Admin users using:</p>
         <ul>
@@ -366,6 +401,8 @@ ollama serve</code></pre>
           </li>
         </ol>
 
+        </section>
+        <section class="section-card readme-content" id="validated-example-queries">
         <h2>Validated example queries (recommended)</h2>
         <p>The following prompts were tested repeatedly on March 27, 2026 against the current seeded corpus and consistently returned grounded responses with citations.</p>
         <ol>
@@ -388,6 +425,8 @@ ollama serve</code></pre>
     "top_k": 5
   }'</code></pre>
 
+        </section>
+        <section class="section-card readme-content" id="database-bootstrap-notes">
         <h2>Database bootstrap notes</h2>
         <ul>
           <li>The root Compose stack mounts SQL bootstrap assets from <code>rag_service/scripts/db/migrations/</code>.</li>
@@ -395,6 +434,8 @@ ollama serve</code></pre>
           <li>If you already have existing local DB data, seed/init scripts are not re-run automatically.</li>
         </ul>
 
+        </section>
+        <section class="section-card readme-content" id="local-service-development">
         <h2>Local service-level development</h2>
         <p>For deep service-specific workflows and commands:</p>
         <ul>
@@ -403,6 +444,8 @@ ollama serve</code></pre>
           <li><a href="https://github.com/hyardim/Ambience-AI-1.5/blob/main/rag_service/README.md">rag_service/README.md</a></li>
         </ul>
 
+        </section>
+        <section class="section-card readme-content" id="ci-quality-gates">
         <h2>CI quality gates</h2>
         <h3>Frontend CI (<code>.github/workflows/ci-frontend.yml</code>)</h3>
         <ul>
@@ -431,6 +474,8 @@ ollama serve</code></pre>
           <li><code>pytest --cov=src --cov-fail-under=90</code></li>
         </ul>
 
+        </section>
+        <section class="section-card readme-content" id="current-constraints">
         <h2>Current constraints and implementation notes</h2>
         <ul>
           <li>Primary clinical specialties currently surfaced in core workflows: neurology and rheumatology.</li>
@@ -440,6 +485,8 @@ ollama serve</code></pre>
           <li>New-user login behavior depends on email-verification settings (<code>NEW_USERS_REQUIRE_EMAIL_VERIFICATION</code>).</li>
         </ul>
 
+        </section>
+        <section class="section-card readme-content" id="priority-roadmap">
         <h2>Priority roadmap (important features to implement)</h2>
         <ol>
           <li>In-app role onboarding and contextual help: GP/Specialist/Admin guided tours and workflow tips directly in the product.</li>
@@ -451,6 +498,7 @@ ollama serve</code></pre>
           <li>Operational observability and runbooks: service SLO dashboards, alert routing, and failure playbooks for backend/RAG workflows.</li>
           <li>Data governance improvements: configurable retention windows, safer archival/export flows, and clearer audit event taxonomy.</li>
         </ol>
+        </section>
       </div>
 
       <aside class="toc-panel">
