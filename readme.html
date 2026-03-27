@@ -334,7 +334,11 @@ nginx/         Optional TLS reverse proxy (production profile)
 
         <h3>1) Configure environment</h3>
         <pre><code>cp .env.example .env</code></pre>
-        <p>Set required values in <code>.env</code> at minimum:</p>
+        <p>
+          The checked-in <code>.env.example</code> is intentionally runnable for local development
+          and assessment. You can start with it as-is.
+        </p>
+        <p>Before any production/staging deployment, replace at least:</p>
         <ul>
           <li><code>POSTGRES_PASSWORD</code></li>
           <li><code>SECRET_KEY</code></li>
@@ -343,10 +347,11 @@ nginx/         Optional TLS reverse proxy (production profile)
           <li><code>RAG_INTERNAL_API_KEY</code></li>
           <li><code>VITE_STORAGE_KEY</code></li>
         </ul>
-        <p>For local development, ensure:</p>
+        <p>For local development, keep:</p>
         <ul>
           <li><code>COOKIE_SECURE=false</code></li>
           <li><code>FRONTEND_BASE_URL=http://localhost:3000</code></li>
+          <li>cloud model vars blank unless you intentionally enable cloud routing</li>
         </ul>
 
         <h3>2) Start Ollama and model</h3>
@@ -443,6 +448,14 @@ ollama serve</code></pre>
           <li><a href="https://github.com/hyardim/Ambience-AI-1.5/blob/main/frontend/README.md">frontend/README.md</a></li>
           <li><a href="https://github.com/hyardim/Ambience-AI-1.5/blob/main/rag_service/README.md">rag_service/README.md</a></li>
         </ul>
+        <p>Service-level env files are also scaffolded:</p>
+        <ul>
+          <li><code>backend/.env.example</code></li>
+          <li><code>frontend/.env.example</code></li>
+          <li><code>rag_service/.env.example</code></li>
+        </ul>
+        <p>Each can be copied with:</p>
+        <pre><code>cp &lt;service&gt;/.env.example &lt;service&gt;/.env</code></pre>
 
         </section>
         <section class="section-card readme-content" id="ci-quality-gates">
