@@ -174,6 +174,89 @@
         line-height: 1.5;
       }
 
+      /* Contribution matrix */
+      .ev-contrib-matrix {
+        margin: 18px 0 28px;
+      }
+      .ev-contrib-heading {
+        margin: 0;
+        font-size: 1.06rem;
+        font-weight: 700;
+        color: var(--heading);
+      }
+      .ev-contrib-accent {
+        height: 3px;
+        margin: 10px 0 14px;
+        border-radius: 999px;
+        background: linear-gradient(
+          90deg,
+          var(--nhs-dark-blue) 0%,
+          var(--nhs-blue) 55%,
+          var(--nhs-bright-blue) 100%
+        );
+      }
+      .ev-contrib-scroll {
+        overflow-x: auto;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+      .ev-contrib-table {
+        width: 100%;
+        min-width: 860px;
+        border-collapse: collapse;
+      }
+      .ev-contrib-table--wide {
+        min-width: 1080px;
+      }
+      .ev-contrib-table th,
+      .ev-contrib-table td {
+        padding: 11px 14px;
+        border: 1px solid var(--line);
+        font-size: 0.92rem;
+        line-height: 1.35;
+      }
+      .ev-contrib-table thead th {
+        background: var(--nhs-dark-blue);
+        color: #fff;
+        font-weight: 700;
+        text-align: center;
+      }
+      .ev-contrib-table thead th:first-child {
+        text-align: left;
+        min-width: 280px;
+      }
+      .ev-contrib-table tbody td {
+        text-align: center;
+        color: var(--text);
+      }
+      .ev-contrib-table tbody td:first-child {
+        background: var(--nhs-blue);
+        color: #fff;
+        text-align: left;
+        font-weight: 700;
+      }
+      .ev-contrib-table tbody tr:nth-child(odd) td:not(:first-child) {
+        background: #f7faff;
+      }
+      .ev-contrib-table tbody tr:nth-child(even) td:not(:first-child) {
+        background: #eef4fb;
+      }
+      .ev-contrib-table tbody tr:last-child td:not(:first-child) {
+        background: var(--nhs-pale-blue);
+        font-weight: 700;
+      }
+      @media (max-width: 700px) {
+        .ev-contrib-heading {
+          font-size: 1rem;
+        }
+        .ev-contrib-table th,
+        .ev-contrib-table td {
+          font-size: 0.88rem;
+          padding: 10px 12px;
+        }
+      }
+
       /* Future work cards */
       .ev-future-grid {
         display: grid;
@@ -653,8 +736,211 @@
             <h2 id="team-contributions">Team contributions</h2>
             <p>
               The project was delivered by a team of five, each with a distinct ownership area.
-              Percentages are equal at 20% each.
+              The matrix below shows work-package splits, while overall contribution remains equal
+              at 20% each.
             </p>
+
+            <div class="ev-contrib-matrix ev-reveal">
+              <h3 class="ev-contrib-heading">Individual contribution table for system artefacts</h3>
+              <div class="ev-contrib-accent" aria-hidden="true"></div>
+              <div class="ev-contrib-scroll">
+                <table class="ev-contrib-table">
+                  <thead>
+                    <tr>
+                      <th>Work packages</th>
+                      <th>Kavin</th>
+                      <th>Hakan</th>
+                      <th>Daniel</th>
+                      <th>William</th>
+                      <th>Ivan</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Research and experiments</td>
+                      <td>30%</td>
+                      <td>10%</td>
+                      <td>10%</td>
+                      <td>35%</td>
+                      <td>15%</td>
+                    </tr>
+                    <tr>
+                      <td>Backend and infrastructure</td>
+                      <td>10%</td>
+                      <td>35%</td>
+                      <td>25%</td>
+                      <td>20%</td>
+                      <td>10%</td>
+                    </tr>
+                    <tr>
+                      <td>Frontend and UI design</td>
+                      <td>5%</td>
+                      <td>5%</td>
+                      <td>10%</td>
+                      <td>10%</td>
+                      <td>70%</td>
+                    </tr>
+                    <tr>
+                      <td>Testing and quality assurance</td>
+                      <td>30%</td>
+                      <td>20%</td>
+                      <td>15%</td>
+                      <td>15%</td>
+                      <td>20%</td>
+                    </tr>
+                    <tr>
+                      <td>Overall contribution</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="ev-contrib-matrix ev-reveal">
+              <h3 class="ev-contrib-heading">Individual contribution table for website</h3>
+              <div class="ev-contrib-accent" aria-hidden="true"></div>
+              <div class="ev-contrib-scroll">
+                <table class="ev-contrib-table ev-contrib-table--wide">
+                  <thead>
+                    <tr>
+                      <th>Work packages</th>
+                      <th>Kavin</th>
+                      <th>Hakan</th>
+                      <th>Daniel</th>
+                      <th>William</th>
+                      <th>Ivan</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Website template and setup</td>
+                      <td>5%</td>
+                      <td>25%</td>
+                      <td>20%</td>
+                      <td>10%</td>
+                      <td>40%</td>
+                    </tr>
+                    <tr>
+                      <td>Home page</td>
+                      <td>10%</td>
+                      <td>15%</td>
+                      <td>20%</td>
+                      <td>15%</td>
+                      <td>40%</td>
+                    </tr>
+                    <tr>
+                      <td>Video section</td>
+                      <td>15%</td>
+                      <td>15%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>30%</td>
+                    </tr>
+                    <tr>
+                      <td>Requirements page</td>
+                      <td>20%</td>
+                      <td>15%</td>
+                      <td>20%</td>
+                      <td>30%</td>
+                      <td>15%</td>
+                    </tr>
+                    <tr>
+                      <td>Research page</td>
+                      <td>30%</td>
+                      <td>10%</td>
+                      <td>10%</td>
+                      <td>40%</td>
+                      <td>10%</td>
+                    </tr>
+                    <tr>
+                      <td>Algorithms page</td>
+                      <td>35%</td>
+                      <td>10%</td>
+                      <td>10%</td>
+                      <td>35%</td>
+                      <td>10%</td>
+                    </tr>
+                    <tr>
+                      <td>UI design page</td>
+                      <td>5%</td>
+                      <td>5%</td>
+                      <td>10%</td>
+                      <td>10%</td>
+                      <td>70%</td>
+                    </tr>
+                    <tr>
+                      <td>System design page</td>
+                      <td>10%</td>
+                      <td>30%</td>
+                      <td>20%</td>
+                      <td>30%</td>
+                      <td>10%</td>
+                    </tr>
+                    <tr>
+                      <td>Implementation pages</td>
+                      <td>10%</td>
+                      <td>20%</td>
+                      <td>30%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                    </tr>
+                    <tr>
+                      <td>Testing pages</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>10%</td>
+                      <td>30%</td>
+                    </tr>
+                    <tr>
+                      <td>Evaluation and future work</td>
+                      <td>15%</td>
+                      <td>10%</td>
+                      <td>30%</td>
+                      <td>25%</td>
+                      <td>20%</td>
+                    </tr>
+                    <tr>
+                      <td>User and deployment manuals</td>
+                      <td>10%</td>
+                      <td>25%</td>
+                      <td>30%</td>
+                      <td>25%</td>
+                      <td>10%</td>
+                    </tr>
+                    <tr>
+                      <td>Legal issues</td>
+                      <td>0%</td>
+                      <td>20%</td>
+                      <td>60%</td>
+                      <td>20%</td>
+                      <td>0%</td>
+                    </tr>
+                    <tr>
+                      <td>Blog and monthly video</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                    </tr>
+                    <tr>
+                      <td>Overall contribution</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                      <td>20%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
             <div class="ev-team-grid ev-reveal">
 
